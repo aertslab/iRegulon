@@ -1,0 +1,342 @@
+package cisTargetOutput;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import java.awt.Container;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+
+import javax.swing.*;
+import javax.swing.table.*;
+import javax.swing.text.JTextComponent;
+
+import java.util.Comparator;
+import java.util.List;
+import javax.swing.event.*;
+
+import saveCisTarget.SaveLoadDialogs;
+import saveCisTarget.SaveResults;
+
+import cisTargetDrawActions.DrawEdgesAction;
+import cisTargetDrawActions.DrawNetworkAction;
+import cisTargetDrawActions.DrawRegulonsAndEdgesAction;
+import cisTargetExeptions.CreationException;
+import cisTargetX.CisTargetResourceBundle;
+
+
+import cytoscape.Cytoscape;
+import cytoscape.view.CytoscapeDesktop;
+import cytoscape.view.cytopanels.CytoPanel;
+import cytoscape.view.cytopanels.CytoPanelState;
+import domainModel.Motif;
+
+public class CisTargetXOutputView extends CisTargetResourceBundle{
+
+	private JTable table;
+	private List<Motif> motifList;
+	private String runName;
+	private JButton buttonDrawEdges;
+	private JButton buttonDrawNetwork;
+	private TFComboBox tfcmbBox;
+	private JButton buttonSave;
+	private JButton buttonClose;
+	private SelectedRegulatoryTree selectedTFRegulons;
+	private JSplitPane splitPane;
+	private CytoPanel cytoPanel;
+	
+	
+	public CisTargetXOutputView(String runName){
+		this.runName = runName;
+	}
+	
+	
+	public void drawPanel(List<Motif> MotifList){
+		this.motifList = MotifList;
+		CytoscapeDesktop desktop = Cytoscape.getDesktop();
+		this.cytoPanel = desktop.getCytoPanel (SwingConstants.EAST);
+		cytoPanel.setState(CytoPanelState.DOCK);
+		//addCytoPanelListener(CytoPanelListener);
+
+
+
+		
+		this.selectedTFRegulons = new SelectedRegulatoryTree();
+		
+		//JPanel panel = new JPanel(layout);
+		JPanel panel = this.createMasterPanel();
+		TargetGenesPanel tgPanel = new TargetGenesPanel(this.tfcmbBox);
+		this.selectedTFRegulons.registerListener(tgPanel);
+
+			
+
+		//Create a split pane with the two scroll panes in it.
+		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+			                           panel, tgPanel);
+		this.splitPane.setOneTouchExpandable(true);
+		this.splitPane.setDividerLocation(200);
+
+		//Provide minimum sizes for the two components in the split pane
+		Dimension minimumSize = new Dimension(100, 50);
+		panel.setMinimumSize(minimumSize);
+		tgPanel.setMinimumSize(minimumSize);
+			
+		//JScrollPane panelScrollPane = new JScrollPane(table);
+		//JScrollPane tgPanelScrollPane = new JScrollPane(tgPanel);
+			
+		//Container contentPane = frame.getContentPane();
+		String panelName = getBundle().getString("plugin_visual_name") + " " + runName;
+		//add the panel to Cytoscape
+		this.cytoPanel.add(panelName, this.splitPane);
+		//set this pannel as active
+		int index = cytoPanel.indexOfComponent(this.splitPane);
+		cytoPanel.setSelectedIndex(index);
+		
+		
+	}
+	
+	/**
+	 * 
+	 * @return the JTable that contains the list of TFRegulons
+	 */
+	protected JTable getTable(){
+		return this.table;
+	}
+	
+	/**
+	 * 
+	 * @return all the TFRegulons found
+	 */
+	protected List<Motif> getRegulatoryTreeList(){
+		return this.motifList;
+	}
+	
+	protected JPanel createMasterPanel(){
+		
+		//JPanel panel = new JPanel(layout);
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		
+		JLabel label = new JLabel(this.runName);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx=0;
+		c.weighty=0;
+		c.gridwidth = 6;
+		c.gridheight = 1;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(label, c);
+		
+		
+		//add buttons for drawing, and selecting transcription factor
+
+		
+		
+		//Container for the selected regulons
+		try{
+			
+			
+			//add buttons for drawing, and selecting transcription factor
+			
+			DrawRegulonsAndEdgesAction drawNodesAndEdgesAction = new DrawRegulonsAndEdgesAction(selectedTFRegulons);
+			this.buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
+			this.buttonDrawEdges.setText("+");
+			
+			DrawNetworkAction drawNetworkAction = new DrawNetworkAction(selectedTFRegulons);
+			this.buttonDrawNetwork = new JButton(drawNetworkAction);
+			this.buttonDrawNetwork.setText("N");
+			
+			JLabel labelTF = new JLabel("Transcription Factor");
+			this.tfcmbBox = new TFComboBox(selectedTFRegulons);
+			this.tfcmbBox.setEditable(true);
+			
+			final JTextComponent tc = (JTextComponent) this.tfcmbBox.getEditor().getEditorComponent();
+			tc.getDocument().addDocumentListener(drawNodesAndEdgesAction);
+			tc.getDocument().addDocumentListener(drawNetworkAction);
+			
+			String pathSave = "/icons/save.png";
+			java.net.URL imgURLSave = getClass().getResource(pathSave);
+			ImageIcon iconSave = new ImageIcon(imgURLSave, "Save");
+			this.buttonSave = new JButton(iconSave);
+			this.buttonSave.setToolTipText("Save these results");
+			this.buttonSave.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					SaveResults results = new SaveResults();
+					String xml = results.saveResults(motifList);
+					SaveLoadDialogs.saveDialogue(xml, runName);
+				}
+			});
+			
+			String pathClose = "/icons/close.png";
+			java.net.URL imgURLClose = getClass().getResource(pathClose);
+			ImageIcon iconClose = new ImageIcon(imgURLClose, "Save");
+			this.buttonClose = new JButton(iconClose);
+			this.buttonClose.setToolTipText("Close these results");
+			this.buttonClose.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					cytoPanel.remove(splitPane);
+					if (cytoPanel.getCytoPanelComponentCount() == 0){
+						cytoPanel.setState(CytoPanelState.HIDE);
+					}
+				}
+			});
+			
+			c.gridwidth = 1;
+			c.gridheight = 1;
+			c.gridx = 0;
+			c.gridy = 1;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(this.buttonDrawEdges, c);
+			
+			
+			c.gridx = 1;
+			c.gridy = 1;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(this.buttonDrawNetwork, c);
+			
+			
+			c.gridx = 2;
+			c.gridy = 1;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(labelTF, c);
+			
+			
+			c.gridx = 3;
+			c.gridy = 1;
+			c.weightx=0.5;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(this.tfcmbBox, c);
+			
+			c.gridx = 4;
+			c.gridy = 1;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(this.buttonSave, c);
+			
+			c.gridx = 5;
+			c.gridy = 1;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(this.buttonClose, c);
+			
+			
+			//add a table model
+			RegulatoryTreeTableModel tableModel = new RegulatoryTreeTableModel(this.motifList);
+			JTable table = new JTable(tableModel);
+			tableModel.initColumnSizes(table);
+			//add mouse and selection listeners
+			MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedTFRegulons, tc);
+			table.addMouseListener(new MotifPopUpMenu(table, selectedTFRegulons, tc));
+			ListSelectionModel listSelectionModel = table.getSelectionModel();
+			TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedTFRegulons);
+			listSelectionModel.addListSelectionListener(tableSelectListener);
+	   	
+			
+			//colors of the table
+			ColorRenderer cr=new ColorRenderer("ClusterCode");
+			
+			//setting the table renderer
+			for (int i=0; i < table.getModel().getColumnCount(); i++){
+				CombinedRenderer renderer = new CombinedRenderer();
+				// the float renderer
+				switch(i){
+				case 2 : renderer.addRenderer(new FloatRenderer("0.000")); //float renderer NEScore
+						break;
+				case 3 : renderer.addRenderer(new FloatRenderer("0.000")); //float renderer AUCValue
+						break;
+				}
+				//the column renderer
+				renderer.addRenderer(cr);
+				TableColumn col = table.getColumnModel().getColumn(i);
+				col.setCellRenderer(renderer);
+			}
+			
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			table.setAutoCreateRowSorter(true);
+			/*
+			TableRowSorter trs = new TableRowSorter(tableModel);
+
+	        class IntComparator implements Comparator {
+	            public int compare(Object o1, Object o2) {
+	                Integer int1 = (Integer)o1;
+	                Integer int2 = (Integer)o2;
+	                return int1.compareTo(int2);
+	            }
+
+	            public boolean equals(Object o2) {
+	                return this.equals(o2);
+	            }
+	        }
+	        trs.setComparator(0, new IntComparator());
+	        trs.setComparator(4, new IntComparator());
+	        trs.setComparator(5, new IntComparator());
+	        trs.setComparator(6, new IntComparator());
+
+	        table.setRowSorter(trs);
+			*/
+	        
+			
+			
+			//panel.add(table, BorderLayout.CENTER);
+			
+			JScrollPane scrollPane = new JScrollPane(table);
+		    panel.add(scrollPane);
+		    c.gridx = 0;
+			c.gridy = 2;
+			c.weightx=1;
+			c.weighty=0.8;
+			c.gridwidth = 6;
+			c.gridheight = 0;
+			c.ipadx = 0;
+			c.ipady = 100;
+			panel.add(scrollPane, c);
+			
+			return panel;
+		
+		}catch (CreationException creatione){
+	    	JOptionPane.showMessageDialog(Cytoscape.getDesktop(), creatione.toString());
+	    }
+		return null;
+	}
+	
+	
+	
+
+	
+	
+}

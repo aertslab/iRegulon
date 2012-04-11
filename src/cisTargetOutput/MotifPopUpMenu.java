@@ -22,7 +22,7 @@ public class MotifPopUpMenu extends MouseAdapter{
 	private PopupMenu menu;
 	
 	
-	public MotifPopUpMenu(JTable table, SelectedRegulatoryTree selectedTFRegulons, JTextComponent tc) 
+	public MotifPopUpMenu(JTable table, SelectedMotif selectedTFRegulons, JTextComponent tc) 
 			throws CreationException{
 		if (table == null || selectedTFRegulons == null){
 			throw new CreationException("Couldn't create TableInteractions");

@@ -11,12 +11,12 @@ import javax.swing.JComboBox;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 
-public class TFComboBox extends JComboBox implements SelectedRegulatoryListener, ActionListener{
+public class TFComboBox extends JComboBox implements MotifListener, ActionListener{
 
-	private SelectedRegulatoryTree selectedMotif;
+	private SelectedMotif selectedMotif;
 	private Collection<TranscriptionFactor> tfCollection;
 	
-	public TFComboBox(SelectedRegulatoryTree selectedTFRegulons){
+	public TFComboBox(SelectedMotif selectedTFRegulons){
 		super();
 		this.selectedMotif = selectedTFRegulons;
 		selectedTFRegulons.registerListener(this);

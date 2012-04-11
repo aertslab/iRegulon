@@ -16,12 +16,12 @@ import domainModel.Motif;
 import domainModel.SpeciesNomenclature;
 import domainModel.TranscriptionFactor;
 
-public abstract class ComboboxAction extends CisTargetXAction implements ListSelectionListener, DocumentListener, SelectedRegulatoryListener {
+public abstract class ComboboxAction extends CisTargetXAction implements ListSelectionListener, DocumentListener, MotifListener {
 
-	private SelectedRegulatoryTree selectedRegulatoryTree;
+	private SelectedMotif selectedRegulatoryTree;
 	private TranscriptionFactor transcriptionFactor;
 	
-	public ComboboxAction(SelectedRegulatoryTree selectedRegulatoryTree){
+	public ComboboxAction(SelectedMotif selectedRegulatoryTree){
 		this.setEnabled(false);
 		this.selectedRegulatoryTree = selectedRegulatoryTree;
 		this.transcriptionFactor = null;
@@ -117,7 +117,7 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 	 * 
 	 * @return the container of the selectedTFRegulons
 	 */
-	public SelectedRegulatoryTree getSelectedRegulatoryTree(){
+	public SelectedMotif getSelectedRegulatoryTree(){
 		return this.selectedRegulatoryTree;
 	}
 	

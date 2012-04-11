@@ -7,16 +7,18 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import cisTargetExeptions.*;
+import cisTargetOutput.MotifTableModels.GlobalMotifTableModel;
+import cisTargetOutput.MotifTableModels.MotifTableModel;
 import domainModel.Motif;
 
 
 public class TableSelectionListener implements ListSelectionListener {
 
 	private JTable table;
-	private SelectedRegulatoryTree selectedTFRegulons;
+	private SelectedMotif selectedTFRegulons;
 	
 	
-	public TableSelectionListener(JTable table, SelectedRegulatoryTree selectedTFRegulons) 
+	public TableSelectionListener(JTable table, SelectedMotif selectedTFRegulons) 
 			throws CreationException{
 		// TODO Auto-generated constructor stub
 		if (table == null || selectedTFRegulons == null){
@@ -31,7 +33,7 @@ public class TableSelectionListener implements ListSelectionListener {
 	 * @return all the regulons shown in the table
 	 */
 	public List<Motif> getAllRegulonsInTable(){
-		RegulatoryTreeTableModel model = (RegulatoryTreeTableModel) this.table.getModel();
+		MotifTableModel model = (MotifTableModel) this.table.getModel();
 		return model.getRegulatoryTree();
 	}
 	
@@ -50,7 +52,7 @@ public class TableSelectionListener implements ListSelectionListener {
 	 * 		regulatoryTree, the second element of the array is the regulatoryLink
 	 */
 	public Motif getTFRegulonSelected(JTable table){
-		final RegulatoryTreeTableModel model = (RegulatoryTreeTableModel) table.getModel();
+		final GlobalMotifTableModel model = (GlobalMotifTableModel) table.getModel();
 		//Object[] selected = new Object[2];
 		int[] rowsSelected = table.getSelectedRows();
 		if (rowsSelected.length == 0){

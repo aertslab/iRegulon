@@ -14,7 +14,7 @@ import javax.swing.event.ListSelectionListener;
 
 import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
-import cisTargetOutput.SelectedRegulatoryTree;
+import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetVisualStyle;
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
@@ -36,7 +36,7 @@ public class DrawNetworkAction extends ComboboxAction implements ListSelectionLi
 
 private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 	
-	public DrawNetworkAction(SelectedRegulatoryTree selectedRegulatoryTree) throws CreationException{
+	public DrawNetworkAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
 			throw new CreationException("Couldn't create NetworkAction");

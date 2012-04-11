@@ -33,6 +33,16 @@ import cisTargetDrawActions.DrawEdgesAction;
 import cisTargetDrawActions.DrawNetworkAction;
 import cisTargetDrawActions.DrawRegulonsAndEdgesAction;
 import cisTargetExeptions.CreationException;
+import cisTargetOutput.DetailPanel.TFandMotifSelected;
+import cisTargetOutput.DetailPanel.TGPanel;
+import cisTargetOutput.MotifTableModels.FilteredMotifModel;
+import cisTargetOutput.MotifTableModels.FilteredPatternDocumentListener;
+import cisTargetOutput.MotifTableModels.MotifTableModel;
+import cisTargetOutput.renderers.BooleanRenderer;
+import cisTargetOutput.renderers.ColumnWidthRenderer;
+import cisTargetOutput.renderers.ColorRenderer;
+import cisTargetOutput.renderers.CombinedRenderer;
+import cisTargetOutput.renderers.FloatRenderer;
 import cisTargetX.CisTargetResourceBundle;
 
 
@@ -52,10 +62,10 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 	private TFComboBox tfcmbBox;
 	private JButton buttonSave;
 	private JButton buttonClose;
-	private SelectedRegulatoryTree selectedTFRegulons;
+	private SelectedMotif selectedTFRegulons;
 	private JSplitPane splitPane;
 	private CytoPanel cytoPanel;
-	
+	private final String[] filteringPossibilities = {"motif", "transcription factor"};
 	
 	public CisTargetXOutputView(String runName){
 		this.runName = runName;
@@ -72,11 +82,11 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 
 
 		
-		this.selectedTFRegulons = new SelectedRegulatoryTree();
+		this.selectedTFRegulons = new SelectedMotif();
 		
 		//JPanel panel = new JPanel(layout);
 		JPanel panel = this.createMasterPanel();
-		TargetGenesPanel tgPanel = new TargetGenesPanel(this.tfcmbBox);
+		TGPanel tgPanel = new TGPanel(this.tfcmbBox);
 		this.selectedTFRegulons.registerListener(tgPanel);
 
 			
@@ -254,13 +264,52 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 			c.ipady = 0;
 			panel.add(this.buttonClose, c);
 			
+			//the filtering options
+			JLabel labelFilter = new JLabel("Filtering on: ");
+			JComboBox filteringOn = new JComboBox(this.filteringPossibilities);
+			JTextField textFilter = new JTextField();
+			
+			c.gridx = 0;
+			c.gridy = 2;
+			c.gridwidth = 2;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(labelFilter, c);
+			
+			c.gridx = 2;
+			c.gridy = 2;
+			c.gridwidth = 1;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(filteringOn, c);
+			
+			c.gridx = 3;
+			c.gridy = 2;
+			c.gridwidth = 3;
+			c.weightx=0.1;
+			c.weighty=0;
+			c.ipadx = 0;
+			c.ipady = 0;
+			panel.add(textFilter, c);
 			
 			//add a table model
-			RegulatoryTreeTableModel tableModel = new RegulatoryTreeTableModel(this.motifList);
-			JTable table = new JTable(tableModel);
-			tableModel.initColumnSizes(table);
+			MotifTableModel tableModel = new MotifTableModel(this.motifList);
+			//filtering table model
+			FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, false, "");
+			JTable table = new JTable(filteredModel);
+			
+			//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
+			filteringOn.addActionListener(new FilteringOnComboBoxAction(filteredModel));
+			filteringOn.setSelectedIndex(0);
+			textFilter.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
+			
+			//tableModel.initColumnSizes(table);
 			//add mouse and selection listeners
-			MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedTFRegulons, tc);
+			//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedTFRegulons, tc);
 			table.addMouseListener(new MotifPopUpMenu(table, selectedTFRegulons, tc));
 			ListSelectionModel listSelectionModel = table.getSelectionModel();
 			TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedTFRegulons);
@@ -274,11 +323,11 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 			for (int i=0; i < table.getModel().getColumnCount(); i++){
 				CombinedRenderer renderer = new CombinedRenderer();
 				// the float renderer
-				switch(i){
-				case 2 : renderer.addRenderer(new FloatRenderer("0.000")); //float renderer NEScore
-						break;
-				case 3 : renderer.addRenderer(new FloatRenderer("0.000")); //float renderer AUCValue
-						break;
+				if (table.getModel().getColumnClass(i).equals(Float.class)){
+					renderer.addRenderer(new FloatRenderer("0.000"));
+				}
+				if (table.getModel().getColumnClass(i).equals(Boolean.class)){
+					renderer.addRenderer(new BooleanRenderer());
 				}
 				//the column renderer
 				renderer.addRenderer(cr);
@@ -286,6 +335,8 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 				col.setCellRenderer(renderer);
 			}
 			
+			ColumnWidthRenderer columnWidth = new ColumnWidthRenderer(table);
+			columnWidth.widthSetter();
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setAutoCreateRowSorter(true);
 			/*
@@ -317,7 +368,7 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 			JScrollPane scrollPane = new JScrollPane(table);
 		    panel.add(scrollPane);
 		    c.gridx = 0;
-			c.gridy = 2;
+			c.gridy = 3;
 			c.weightx=1;
 			c.weighty=0.8;
 			c.gridwidth = 6;
@@ -325,7 +376,6 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 			c.ipadx = 0;
 			c.ipady = 100;
 			panel.add(scrollPane, c);
-			
 			return panel;
 		
 		}catch (CreationException creatione){

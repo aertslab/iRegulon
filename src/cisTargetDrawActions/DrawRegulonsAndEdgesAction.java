@@ -21,7 +21,7 @@ import javax.swing.event.ListSelectionListener;
 
 import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
-import cisTargetOutput.SelectedRegulatoryTree;
+import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetVisualStyle;
 import domainModel.CandidateTargetGene;
 import domainModel.GeneIdentifier;
@@ -31,7 +31,7 @@ import domainModel.TranscriptionFactor;
 public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSelectionListener{
 
 	
-	public DrawRegulonsAndEdgesAction(SelectedRegulatoryTree selectedRegulatoryTree) throws CreationException{
+	public DrawRegulonsAndEdgesAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
 			throw new CreationException("Couldn't create DrawRegulonsAndEdges");

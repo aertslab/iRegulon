@@ -14,7 +14,7 @@ import javax.swing.event.ListSelectionListener;
 
 import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
-import cisTargetOutput.SelectedRegulatoryTree;
+import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetXNodes;
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
@@ -30,7 +30,7 @@ import domainModel.TranscriptionFactor;
 
 public class DrawNodesAction extends ComboboxAction implements ListSelectionListener{
 		
-		public DrawNodesAction(SelectedRegulatoryTree selectedRegulatoryTree) throws CreationException{
+		public DrawNodesAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
 			super(selectedRegulatoryTree);
 			if (selectedRegulatoryTree == null){
 				throw new CreationException("Couldn't create DrawNodes");

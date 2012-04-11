@@ -22,7 +22,7 @@ import javax.swing.text.View;
 
 import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
-import cisTargetOutput.SelectedRegulatoryTree;
+import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetVisualStyle;
 import cisTargetX.CisTargetXNodes;
 import cytoscape.CyEdge;
@@ -46,7 +46,7 @@ public class DrawMergedEdgesNetworkAction extends ComboboxAction implements List
 
 private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 	
-	public DrawMergedEdgesNetworkAction(SelectedRegulatoryTree selectedRegulatoryTree) throws CreationException{
+	public DrawMergedEdgesNetworkAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
 			throw new CreationException("Couldn't create DrawMergedEdgesNetworkAction");

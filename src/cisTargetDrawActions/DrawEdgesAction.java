@@ -27,7 +27,7 @@ import giny.view.*;
 
 import cisTargetExeptions.*;
 import cisTargetOutput.ComboboxAction;
-import cisTargetOutput.SelectedRegulatoryTree;
+import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetVisualStyle;
 import cisTargetX.CisTargetXNodes;
 import domainModel.GeneIdentifier;
@@ -36,7 +36,7 @@ import domainModel.TranscriptionFactor;
 
 public class DrawEdgesAction extends ComboboxAction implements ListSelectionListener {
 	
-	public DrawEdgesAction(SelectedRegulatoryTree selectedRegulatoryTree) throws CreationException{
+	public DrawEdgesAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
 			throw new CreationException("Couldn't create DrawEdges");

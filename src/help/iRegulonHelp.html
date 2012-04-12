@@ -1,0 +1,191 @@
+<html>
+<body>
+<h1><font color=#0000FF><I> i</font><font color=#000000>Regulon Help</font></I>  </h1>
+<br/>
+<h2><font size=6>Install instructions</font></h2>
+<p>
+1.	Place the jar (iRegulon_fat.jar) in the plugin folder of your Cytoscape installation (usely Cytoscape_v2.8.2 > plugins). <br/>
+2.	Start or restart Cytoscape <br/>
+3.	You can find the plugin in the menu: Plugins > iRegulon <br/>
+<p/>
+
+<h2><font size=6>User instructions</font></h2>
+<p>
+iRegulon is a Cytoscape plugin for visualizing a predicted gene regulatory network (GRN). The target of iRegulon is to visualize the output of the different flavors of CisTarget in Cytoscape.
+<br/>
+CisTargetX and i-cisTarget predicts transcription factors (TFs), enhancers and target genes (TGs). The computational prediction of transcription factor binding sites (TFBSs) gives a large amount of false-positive predictions. To improve these predictions cisTarget uses the adventage of the clustering behavior of TFBSs in cis-regulatory modules (CRMs), the evolutionary conservation of binding sites and the presence of particular chromatin marks in CRMs.
+<br/>
+Two types of approaches are used for the experimental validations of cisTarget. The first approach constructs well-defined enhancer models by using high-quality training sets of similar CRMs. The second approach combines gene expression data with genome-wide scoring to perform motif discovery and CRM prediction. These two methods combine motif clustering in CRMs, comparative genomics, genome-wide CRM scoring, gene co-expression, and use large collections of candidate position weight matrices (PWMs). The performance of correct identification of TF/TG interactions is high enough to allow resource-effective experimental validation.
+<br/>
+For further information about how cisTarget works: <br/>
+Potier, D., Atak, Z.K., Sanchez, M.N., Herrmann, C. and Aerts S. (2012). Methods in Molecular Biology vol. 786, Chapter 18: Using cisTargetX to Predict Transcriptional Targets and Networks in Drosophila. France: Springer Science
+<p/>
+
+<h3>Input of the parameters</h3>
+The genes (nodes) that iRegulon need as input are selected as usual in Cytoscape.  <br/>
+The plugin can be started in two different ways: <br/>
+<ul>
+<li>Via the Control panel (Get the Panel)</li>
+<li>Via the input frame (Classical)</li>
+</ul>
+<br/>
+Both types of input has there advantages. And it's up to the user to decides the kind that suits him the best.
+<br/>
+<h4>The input parameters</h4>
+<p>
+The following parameters can be filled in:
+<ul>
+<li>The name of the job</li>
+<li>The enrichment score threshold</li>
+<li>The ROC threshold for AUC</li>
+<li>The threshold for visualisation</li>
+<li>The species and the nomenclature</li>
+<li>The minimal orthologous</li>
+<li>The maximal motif similarity FDR</li>
+<li>The attribute that is the gene name</li>
+</ul>
+<p/>
+<h5>The name of the job</h5>
+<p>
+The name given here will also be the name that the results will have. This name is also the name that will be suggested for saving.
+<p/>
+<h5>The enrichment score threshold</h5>
+<p>
+This is the minimal score threshold to consider a motif as being relevant. The best option for these score threshold is to choose between 2 or 2.5.
+</p>
+<h5>The ROC threshold for AUC</h5>
+<p>
+The Area Under the Curve (AUC) values are computed on 3% of the receiver-operating curve (ROC) curve. This corresponds to the first 420 genes. In these genes is expected to find the given genes.
+</p>
+<h5>The threshold for visualisation</h5>
+<p>
+his is the x-axis cutoff for visualization of the ROC curve. This value corresponds with the top genes shown on the results.
+</p>
+<h5>The species and the nomenclature</h5>
+<p>
+This is the species and the gene nomenclature. All the possible species and there nomenclature that can be used is shown here. Currently these are:
+<ul>
+<li>Homo sapiens, HGNC</li>
+<li>Mus musculus, MGI</li>
+<li>Drosophila melanogaster, FlyBase</li>
+</ul>
+</p>
+<h5>The minimal orthologous</h5>
+<p>
+This is a score for the gene orthology. How closer this score to 0, how more ortholog genes will be shown. This score must be between 0 and 1.
+</p>
+<h5>The maximal motif similarity FDR</h5>
+<p>
+This is the score for the similarity of the motifs. How closer to 0, the more similar the transcription factor will be. The score must be between 0 and 1.
+</p>
+<h5>The attribute that is the gene name</h5>
+<p>
+Here the gene name can be selected. Every attribute of the nodes can be selected besides lists. The selected gene name must have the selected nomenclature.
+</p>
+<h4>The standard Control panel</h4>
+<img src="./images/standardPanel.png" alt="The standard Control panel"/> 
+<p/>
+The image above is a print screen of the standard control panel, extended with the plugin. The big different with the other screens is that on this panel it's possible to choose between the different flavours of iRegulon.
+<br/>
+The mean advantage of this input screen is that the parameters are kept. So if there are other parameters used in the analysis, these parameters are kept until changed or the panel is closed.
+<p/>
+<br/>
+<h4>The standard input frame</h4>
+<img src="./images/standardFrame.png" alt="The standard input frame"/> 
+<br/>
+<p>
+The image above is the input frame.
+<br/>
+The mean advantage of this input screen is that the name is automaticly changed to the name that the currently selected has.
+<p/>
+
+<h3>Submit the job</h3>
+<p>
+The job is submited by pressing the submit button. By this action your request is send to the KU Leuven server. Your motifs and transcription factors will be calculated there.
+<br/>
+The progressbar will monitor the progress of your request. By pressing cancel will stop your request. 
+<p/>
+<img src="./images/progressbar1.png" alt="The progressbar send request"/>
+<img src="./images/progressbar2.png" alt="The progressbar running"/>
+<br/>
+
+<h3>The results</h3>
+<p>
+The results are shown in the results panel. This panel will be added to the left of your Cytoscape screen.
+<br/>
+The panel is divided into two. The part above is the master part. This part starts with the title of the job (your job name).
+<br/>
+Under the title the toolbar is visible. Here there are 2 buttons that aren't click-able. This is because no motif is selected yet. The same for the box of the transcription factor. Furter there are 2 button clickable. These are the save button (saves this results, only these results as a .ctf) and the close button (closes this tab of the results panel, doesn't save your results).
+<br/>
+Under this toolbar the searchbar is visible. With the combobox it's possible to select the search-mode: search on motifs or on there transcription factors. The next box is the search-field. The search-pattern typed here is used for the filtering. When the pattern is in the motif or transcription factor, a green check is visible in the table (otherwise a red cross). The search pattern isn't case sensitive, but doesn't support wildcards (like *).
+<br/>
+Under this toolbar a colorfull table is visible. This table is the motif table. Each row represents a motif, motifs with the same color are part of the same cluster. The columns are:
+<ul>
+<li>Filtered (a check is that the motif or a transcription factor has the search pattern)</li>
+<li>Rank (how higher how beter)</li>
+<li>enriched motif ID (the motif name)</li>
+<li>NES (normilased Enrichement score)</li>
+<li>AUC (the Area under the curve)</li>
+<li>clustercode (the number of the cluster where this motif is in)</li>
+<li>#TG (the amount of target genes)</li>
+<li>#TF (the amount of transcription factors)</li>
+</ul>
+<p/>
+<img src="./images/resultsPanel.png" alt="The master panel of the results"/>
+<br/>
+<p>
+When a motif is selected the view is updated. Started with the master panel. If there is a transcription factor, the first 2 buttons of the toolbar becomes click-able. Also, when right-clicked on the table, a pupop menu is shown. These all are draw options (see drawing TFs and TGs). The box of the transcription factor is also selectable. In this box you can select the needed transcription factor or type your own.
+<br/> <br/>
+The panel below the master panel is called the detail panel. This panel shows a detail of the selected motif (motif that is selected in the table of the master panel). In this panel is seperated into 3 columns. 
+<br/>
+The first one has 3 rows. The first row is the motif name. The second row is the description of the motif. The third row is the LOGO of the motif. Each row has a tooltip that pops up when the mouse stands on them. This tooltip shows a better readable version of the information.
+<br/>
+The second column is a table of the transcription factors. Each transcription factor has a name, a orthologous identifier and a motif similarity FDR. Moving the mouse on the orthologous identifier or the motif similarity FDR will provide more information in a toolbox (if more info is available). Right-clicking on the selected transcription factor will give a summary of the motif, and the transcription factor. If this transcription factor has a similar motif, comparison between the motifs can be done here.
+<br/>
+The third column is a table of the target genes. These target genes has a rank and a name.
+<br/>
+Gray rows in the transcription factor and the target gene table indicates genes that are in the current selected network.
+<p/>
+
+<img src="./images/resultsPanelDetail.png" alt="The detail panel of the results"/>
+
+<h3>drawing TFs and TGs</h3>
+<p>
+For visualising the transcription factors(TFs) and the target genes(TGs) there are three possibilities:
+<ul>
+<li>add regulator and target genes with there interactions on the current network</li>
+<li>create a new network with the selected regulator - target genes</li>
+<li>draw regulator interactions on current network</li>
+</ul>
+The first two options are selectable in the toolbar and in the pop-up menu. The last option is only possible in the pop-up menu.
+<p/>
+
+<h4>add regulator and target genes with there interactions on the current network</h4>
+<p>
+This option will add all the target genes and the selected transcription factor to the current network. Edges will be add to the network between the transcription factor and the target genes. The selected view won't be changed.
+<p/>
+
+
+<h4>create a new network with the selected regulator - target genes</h4>
+<p>
+This option will create a new window in the view, and create a new network. The name of the new network is the name of the selected transcription factor with the name of the selected motif. The selected transcription factor and all target genes will be shown. Also the interaction between these (between the TF and the TG) is drawn. This is visualised in the iRegulon Visual Style. This style draws all TGs as a with square. The TF is shown as a green eclipse. The interactions are drawn with an arrow from the TF to the TG. Edges with the same color has the same motif.
+<p/>
+<img src="./images/VisualStyle.png" alt="The detail panel of the results"/>
+
+<h4>draw regulator interactions on current network</h4>
+<p>
+This option will only draw interactions (edges) on the current network. There won't be added any nodes. If the selected transcription factor isn't in the current network then no edges will be drawn. The selected view won't be changed.
+<p/>
+
+<hr/>
+
+iRegulon was developed in the Laboratory of Computational Biology (S. Aerts lab), University of Leuven, Belgium.
+<br/>
+Developers: Koen Herten & Bram Van de Sande.
+<br/>
+
+Copyright 2012 Katholieke Universiteit Leuven.
+<br/>
+
+</body>
+</html>

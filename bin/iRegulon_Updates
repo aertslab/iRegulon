@@ -1,0 +1,18 @@
+Version 0.1 (release 03 29 2012)
+Version 0.2 (release 04 04 2012)
+	Updated about section
+	Updated fault in the species (Home sapies to Homo sapiens)
+	Update the standard name (CisTarget name to iRegulon name)
+	Update the name of the visual style (CisTarget Visual Style to iRegulon Visual Style)
+	Added help
+Version 0.3 (release 04 06 2012)
+	Updated decimal support . and , (please as parameter use .)
+	add orthologous and motif similarity information (as tooltip in the transcription factor table)
+Version 0.4 (release 04 06 2012)
+	Add draw option: merge the edges of regulaters to 1 edge
+Version 0.5 (release 04 12 2012)
+	Add search function for motifs and transcription factors. With search-bar.
+	Update motif tables models.
+	Update table with extra column for the search function: a green check for available, otherwise a cross
+	Add summary for motif and transcription factor: right clicking on selected transcription factor in table (possibility to view parameters of the motif and transcription factor. If transcription factor has a similar motif, possible to compair here)
+	Update the help with the new features (not updated: the print-screens)

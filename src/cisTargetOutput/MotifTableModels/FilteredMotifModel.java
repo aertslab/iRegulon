@@ -22,7 +22,7 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	public FilteredMotifModel(MotifTableModel model, boolean filterOnMotif, String pattern){
 		this.model = model;
 		String[] colnames = new String[this.model.getColumnCount() +1];
-		colnames[0] = "Selected";
+		colnames[0] = "Filtered";
 		for (int index=0; index<this.model.getColumnCount(); index++){
 			colnames[index + 1] = this.model.getColumnName(index);
 		}

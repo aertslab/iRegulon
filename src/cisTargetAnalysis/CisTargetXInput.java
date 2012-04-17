@@ -10,7 +10,7 @@ import domainModel.SpeciesNomenclature;
 public class CisTargetXInput {
 
 	
-	//alle input variabelen
+	//all input variables
 	private Collection<GeneIdentifier> genes;
 	private float eScore;
 	private int thresholdForVisualisation;
@@ -20,6 +20,14 @@ public class CisTargetXInput {
 	private String name;
 	private float minOrthologous;
 	private float maxMotifSimilarityFDR;
+	
+	//Database
+	private boolean isRegionBased;
+	private String database;
+	private float overlap;
+	private String delineation;
+	private int upstream;
+	private int downstream;
 	
 	
 	
@@ -105,6 +113,63 @@ public class CisTargetXInput {
 	public float getMaxMotifSimilarityFDR(){
 		return this.maxMotifSimilarityFDR;
 	}
+	
+	/**
+	 * 
+	 * @return true if region based
+	 */
+	public boolean isRegionBased(){
+		return this.isRegionBased;
+	}
+	
+	/**
+	 * 
+	 * @return true if gene based
+	 */
+	public boolean isGeneBased(){
+		return ! this.isRegionBased;
+	}
+	
+	/**
+	 * 
+	 * @return the database
+	 */
+	public String getDatabase(){
+		return this.database;
+	}
+	
+	/**
+	 * 
+	 * @return the percentage of overlap (only regionbased)
+	 */
+	public float getOverlap(){
+		return this.overlap;
+	}
+	
+	/**
+	 * 
+	 * @return the name of the delineation (only regionbased)
+	 */
+	public String getDelineation(){
+		return this.delineation;
+	}
+	
+	/**
+	 * 
+	 * @return the bp upstream (only regionbased)
+	 */
+	public int getUpstream(){
+		return this.upstream;
+	}
+	
+	/**
+	 * 
+	 * @return the bp downstream (only regionbased)
+	 */
+	public int getDownstream(){
+		return this.downstream;
+	}
+	
 	
 	/**
 	 * 

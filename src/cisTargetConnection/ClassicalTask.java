@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.ResourceBundle;
 
+import cisTargetAnalysis.CisTargetXInput;
+
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import domainModel.GeneIdentifier;
@@ -14,31 +16,18 @@ import domainModel.Motif;
 public class ClassicalTask implements Task {
 	private cytoscape.task.TaskMonitor taskMonitor;
 	
-	private Collection<GeneIdentifier> geneIDs;
-	private float AUCThreshold;
-	private int rankThreshold;
-	private float NESThreshold;
 	private Collection<Motif> motifs;
 	private State state = State.ERROR;
 	private boolean interrupted = false;
 	private Service service;
 	private String errorMessage = "No error has occured";
-	private String name;
-	private float minOrthologous;
-	private float maxMotifSimilarityFDR;
+
+	private CisTargetXInput input;
 
 	
-	public ClassicalTask(Service service, String name, Collection<GeneIdentifier> geneIDs, float AUCThreshold, 
-			int rankThreshold, float NESThreshold, float minOrthologous, float maxMotifSimilarityFDR) {
-		this.geneIDs = geneIDs;
-		this.AUCThreshold = AUCThreshold;
-		this.rankThreshold = rankThreshold;
-		this.NESThreshold = NESThreshold;
-		this.motifs = Collections.EMPTY_LIST;
+	public ClassicalTask(Service service, CisTargetXInput input) {
 		this.service = service;
-		this.name = name;
-		this.minOrthologous = minOrthologous;
-		this.maxMotifSimilarityFDR = maxMotifSimilarityFDR;
+		this.input = input;
 	}
 	
 	public void halt() {
@@ -55,8 +44,7 @@ public class ClassicalTask implements Task {
 		taskMonitor.setStatus("Starting Request");
 		taskMonitor.setPercentCompleted(progress);
 		
-		int jobID = this.service.sentJob(this.name, this.geneIDs, this.AUCThreshold, 
-						this.rankThreshold, this.NESThreshold, this.minOrthologous, this.maxMotifSimilarityFDR);
+		int jobID = this.service.sentJob(this.input);
 		progress = 10;
 		if (jobID == -1){
 			this.interrupted = true;

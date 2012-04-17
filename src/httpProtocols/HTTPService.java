@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import cisTargetAnalysis.CisTargetXInput;
 import cisTargetX.CisTargetResourceBundle;
 
 import domainModel.CandidateTargetGene;
@@ -32,8 +33,14 @@ public class HTTPService extends CisTargetResourceBundle implements Service{
 	 * @param NESThreshold
 	 * @return the id of the job
 	 */
-	public int sentJob(String name, Collection<GeneIdentifier> geneIDs, float AUCThreshold, int rankThreshold, float NESThreshold, 
-			float minOrthologous, float maxMotifSimilarityFDR){
+	public int sentJob(CisTargetXInput input){
+		String name = input.getName();
+		Collection<GeneIdentifier> geneIDs = input.getGenes();
+		float AUCThreshold = input.getROCthresholdAUC();
+		int rankThreshold = input.getThresholdForVisualisation();
+		float NESThreshold = input.getEScore();
+		float minOrthologous = input.getMinOrthologous();
+		float maxMotifSimilarityFDR = input.getMaxMotifSimilarityFDR();
 		try {
 			//creating the data
 			String data = "jobName=" + name + "&AUCThreshold=" + AUCThreshold + "&rankThreshold=" 

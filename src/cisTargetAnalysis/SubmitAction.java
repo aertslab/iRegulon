@@ -56,9 +56,7 @@ public class SubmitAction extends AbstractAction {
 			ComputationalService analyse = new ComputationalServiceHTTP();
 			//type oproepen
 			
-			List<Motif> motifList = analyse.findPredictedRegulators(input.getName(), input.getGenes(), input.getROCthresholdAUC(), 
-					input.getThresholdForVisualisation(), input.getEScore(), input.getMinOrthologous(), 
-					input.getMaxMotifSimilarityFDR());
+			List<Motif> motifList = analyse.findPredictedRegulators(input);
 		
 			if (! motifList.isEmpty()){
 				CisTargetXOutputView outputView = new CisTargetXOutputView(input.getName());

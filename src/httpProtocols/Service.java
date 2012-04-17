@@ -2,12 +2,14 @@ package httpProtocols;
 
 import java.util.Collection;
 
+import cisTargetAnalysis.CisTargetXInput;
+
 import domainModel.GeneIdentifier;
 import domainModel.Motif;
 
 public interface Service {
 
-	public int sentJob(String name, Collection<GeneIdentifier> geneIDs, float AUCThreshold, int rankThreshold, float NESThreshold, float minOrthologous, float maxMotifSimilarityFDR);
+	public int sentJob(CisTargetXInput input);
 	
 	public State getState(int jobID);
 	

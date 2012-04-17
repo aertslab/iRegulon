@@ -37,7 +37,12 @@ public class BooleanRenderer extends JLabel implements TableCellRenderer, Canvas
 	@Override
 	public JLabel updateCanvas(JTable table, Object value, JLabel canvas,
 			boolean isSelected, int row) {
-		boolean checked = (Boolean) value;
+		boolean checked;
+		if (value == null){
+			checked = false;
+		}else{
+			checked  = (Boolean) value;
+		}
 		if (checked){
 			canvas.setIcon(this.checkIcon);
 		}else{

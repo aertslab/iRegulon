@@ -18,11 +18,10 @@ public class TableSelectionListener implements ListSelectionListener {
 	private SelectedMotif selectedTFRegulons;
 	
 	
-	public TableSelectionListener(JTable table, SelectedMotif selectedTFRegulons) 
-			throws CreationException{
+	public TableSelectionListener(JTable table, SelectedMotif selectedTFRegulons){
 		// TODO Auto-generated constructor stub
 		if (table == null || selectedTFRegulons == null){
-			throw new CreationException("One of the parameters are null!");
+			throw new IllegalArgumentException();
 		}
 		this.table = table;
 		this.selectedTFRegulons = selectedTFRegulons;

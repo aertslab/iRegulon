@@ -22,44 +22,37 @@ public class MotifPopUpMenu extends MouseAdapter{
 	private PopupMenu menu;
 	
 	
-	public MotifPopUpMenu(JTable table, SelectedMotif selectedTFRegulons, JTextComponent tc) 
-			throws CreationException{
+	public MotifPopUpMenu(JTable table, SelectedMotif selectedTFRegulons, JTextComponent tc){
 		if (table == null || selectedTFRegulons == null){
-			throw new CreationException("Couldn't create TableInteractions");
+			throw new IllegalArgumentException();
 		}
-		try{
-			menu = new PopupMenu();
+		menu = new PopupMenu();
 			
 			
-			final DrawNetworkAction networkAction = new DrawNetworkAction(selectedTFRegulons);
-			table.getSelectionModel().addListSelectionListener(networkAction);
-			//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-			tc.getDocument().addDocumentListener(networkAction);
-			menu.addAction(networkAction);
+		final DrawNetworkAction networkAction = new DrawNetworkAction(selectedTFRegulons);
+		//table.getSelectionModel().addListSelectionListener(networkAction);
+		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
+		tc.getDocument().addDocumentListener(networkAction);
+		menu.addAction(networkAction);
 			
-			final DrawRegulonsAndEdgesAction drawRegulonsAndEdgesAction = new DrawRegulonsAndEdgesAction(selectedTFRegulons);
-			table.getSelectionModel().addListSelectionListener(drawRegulonsAndEdgesAction);
-			//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-			tc.getDocument().addDocumentListener(drawRegulonsAndEdgesAction);
-			menu.addAction(drawRegulonsAndEdgesAction);
+		final DrawRegulonsAndEdgesAction drawRegulonsAndEdgesAction = new DrawRegulonsAndEdgesAction(selectedTFRegulons);
+		//table.getSelectionModel().addListSelectionListener(drawRegulonsAndEdgesAction);
+		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
+		tc.getDocument().addDocumentListener(drawRegulonsAndEdgesAction);
+		menu.addAction(drawRegulonsAndEdgesAction);
 			
-			final DrawEdgesAction drawEdgesAction = new DrawEdgesAction(selectedTFRegulons);
-			table.getSelectionModel().addListSelectionListener(drawEdgesAction);
-			//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-			tc.getDocument().addDocumentListener(drawEdgesAction);
-			menu.addAction(drawEdgesAction);
-			
-			
-			final DrawMergedEdgesNetworkAction drawMergedAction = new DrawMergedEdgesNetworkAction(selectedTFRegulons);
-			table.getSelectionModel().addListSelectionListener(drawMergedAction);
-			//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-			tc.getDocument().addDocumentListener(drawMergedAction);
-			menu.addAction(drawMergedAction);
+		final DrawEdgesAction drawEdgesAction = new DrawEdgesAction(selectedTFRegulons);
+		//table.getSelectionModel().addListSelectionListener(drawEdgesAction);
+		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
+		tc.getDocument().addDocumentListener(drawEdgesAction);
+		menu.addAction(drawEdgesAction);
 			
 			
-		}catch (CreationException ce){
-			throw ce;
-		}
+		final DrawMergedEdgesNetworkAction drawMergedAction = new DrawMergedEdgesNetworkAction(selectedTFRegulons);
+		//table.getSelectionModel().addListSelectionListener(drawMergedAction);
+		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
+		tc.getDocument().addDocumentListener(drawMergedAction);
+		menu.addAction(drawMergedAction);
 	}
 
 

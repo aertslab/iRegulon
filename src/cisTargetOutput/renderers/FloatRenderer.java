@@ -31,6 +31,9 @@ public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUp
 	
 	public JLabel updateCanvas(JTable table, Object value, JLabel canvas, boolean isSelected, int row) {
 		final Float number =(Float) value;
+		if (value == null){
+			canvas.setText("");
+		}
 		if (Float.isNaN(number)) { 
 		    canvas.setText("-");
 		} else {

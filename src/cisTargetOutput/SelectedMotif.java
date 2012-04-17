@@ -43,7 +43,7 @@ public class SelectedMotif {
 	 * 
 	 *@return all regulatoryTree that is selected in the JTable
 	 */
-	public Motif getMotifs(){
+	public Motif getMotif(){
 		return this.motifs;
 	}
 	

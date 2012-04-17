@@ -36,10 +36,10 @@ import domainModel.TranscriptionFactor;
 
 public class DrawEdgesAction extends ComboboxAction implements ListSelectionListener {
 	
-	public DrawEdgesAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
+	public DrawEdgesAction(SelectedMotif selectedRegulatoryTree){
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
-			throw new CreationException("Couldn't create DrawEdges");
+			throw new IllegalArgumentException();
 		}
 		putValue(Action.NAME, getBundle().getString("action_draw_edges_name"));
 		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_draw_edges_name"));
@@ -62,7 +62,7 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 	 * @return a list of all selected Transcription factor regulons
 	 */
 	public Motif getListSelectedRegulatoryTree(){
-		return this.getSelectedRegulatoryTree().getMotifs();
+		return this.getSelectedRegulatoryTree().getMotif();
 	}
 	
 	public TranscriptionFactor getSelectedTranscriptionFactor(){
@@ -71,7 +71,6 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(this.getSelectedRegulatoryTree());
 		/*List<Object[]> TFRegulons = this.getListSelectedRegulatoryTree();
 		System.out.println("Regulons to Draw: " + TFRegulons.size());
 		CyNode node1 = null;
@@ -106,24 +105,26 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 		CyNode node1 = null;
 		CyNode node2 = null;
 		ArrayList<CyNode> nodes = CisTargetXNodes.getAllNodes();
-		node1 = this.getCyNode(this.getSelectedTranscriptionFactor().getGeneID(), nodes);
-		if (node1 != null){
-			for (domainModel.CandidateTargetGene child : tree.getCandidateTargetGenes()){
-				GeneIdentifier childID = child.getGeneID();
-				node2 = this.getCyNode(childID, nodes);
-				if (node2 != null){
-					CyEdge edge;
-					edge = addEdge(node1, node2, tree.getEnrichedMotifID());
-					this.addAtribute(edge, "Regulator Gene", this.getSelectedTranscriptionFactor().getGeneID().getGeneName());
-					this.addAtribute(edge, "Target Gene", childID.getGeneName());
-					this.addAtribute(edge, "Regulatory function", "Predicted");
-					this.addAtribute(edge, "Motif", tree.getEnrichedMotifID());
-				}
-			}	
+		if (nodes.size() != 0){
+			node1 = this.getCyNode(this.getSelectedTranscriptionFactor().getGeneID(), nodes);
+			if (node1 != null){
+				for (domainModel.CandidateTargetGene child : tree.getCandidateTargetGenes()){
+					GeneIdentifier childID = child.getGeneID();
+					node2 = this.getCyNode(childID, nodes);
+					if (node2 != null){
+						CyEdge edge;
+						edge = addEdge(node1, node2, tree.getEnrichedMotifID());
+						this.addAtribute(edge, "Regulator Gene", this.getSelectedTranscriptionFactor().getGeneID().getGeneName());
+						this.addAtribute(edge, "Target Gene", childID.getGeneName());
+						this.addAtribute(edge, "Regulatory function", "Predicted");
+						this.addAtribute(edge, "Motif", tree.getEnrichedMotifID());
+					}
+				}	
+			}
+			CisTargetVisualStyle vsStyle = new CisTargetVisualStyle();
+			CyNetworkView view = Cytoscape.getCurrentNetworkView();
+			view.redrawGraph(true,true);
 		}
-		CisTargetVisualStyle vsStyle = new CisTargetVisualStyle();
-		CyNetworkView view = Cytoscape.getCurrentNetworkView();
-		view.redrawGraph(true,true);
 	}
 	
 	/**

@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.View;
@@ -34,6 +35,8 @@ import cytoscape.data.Semantics;
 import cytoscape.layout.CyLayoutAlgorithm;
 import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
+import cytoscape.view.CytoscapeDesktop;
+import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.CalculatorCatalog;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
@@ -46,10 +49,10 @@ public class DrawMergedEdgesNetworkAction extends ComboboxAction implements List
 
 private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 	
-	public DrawMergedEdgesNetworkAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
+	public DrawMergedEdgesNetworkAction(SelectedMotif selectedRegulatoryTree){
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
-			throw new CreationException("Couldn't create DrawMergedEdgesNetworkAction");
+			throw new IllegalArgumentException();
 		}
 		//putValue(Action.NAME, "NetworkCreate");
 		//putValue(Action.NAME, getBundle().getString("action_draw_edges_name"));
@@ -196,58 +199,14 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 			
 		}
 		cyView.updateView();
-		
-		
-		
-		
-		/*
-		Motif tree = this.getSelectedRegulatoryTree().getMotifs();
-		TranscriptionFactor tf = this.getTranscriptionFactor();
-		CyNetwork network = this.createNetwork(tree, tf);
-		CyNetworkView view = Cytoscape.createNetworkView(network, "MyNetwork");
-		CyNode nodeParent = DrawNodesAction.addNode(tf.getName(), network, view);
-		DrawNodesAction.setAtribute(nodeParent, "ID", tf.getName());
-		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
-		//System.out.println("Draw Parent Node");
-		//System.out.println("Children " + tree.getCandidateTargetGenes().size());
-		for (CandidateTargetGene geneID : tree.getCandidateTargetGenes()){
-			CyNode nodeChild = DrawNodesAction.addNode(geneID.getGeneName(), network, view);
-			DrawNodesAction.setAtribute(nodeChild, "ID", tf.getName());
-			//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
-			CyEdge edge;
-			edge = DrawEdgesAction.addEdge(nodeParent, nodeChild, network, view, tree.getEnrichedMotifID());
-			DrawEdgesAction.addAtribute(edge, "Regulator Gene", tf.getName());
-			DrawEdgesAction.addAtribute(edge, "Target Gene", geneID.getGeneName());
-			DrawEdgesAction.addAtribute(edge, "Regulatory function", "Predicted");
-			DrawEdgesAction.addAtribute(edge, "Motif", tree.getEnrichedMotifID());
-		}
-		//if the node is a regulator and target at the same time, it must say regulator
-		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
-		DrawNodesAction.addAtribute(nodeParent, "Motif", tree.getEnrichedMotifID());
-		*/
-		
-		//
-		/*final CyLayoutAlgorithm hierarchicalLayout = CyLayouts.getLayout(HIERARCHICAL_LAYOUT);
-		if (hierarchicalLayout != null){
-			System.out.println("Hierarchical");
-		    view.applyLayout(hierarchicalLayout);
+		CytoscapeDesktop desktop = Cytoscape.getDesktop();
+		CytoPanel cytoPanel = desktop.getCytoPanel (SwingConstants.WEST);
+		if (cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")) == -1){
+			cytoPanel.setSelectedIndex(0);
 		}else{
-			System.out.println("default");
-			view.applyLayout(CyLayouts.getDefaultLayout());
-		}*/
-		//this.addAtribute(network, "Enriched Motif", tree.getEnrichedMotifID());
-		
-		/*
-		CisTargetVisualStyle vsStyle = new CisTargetVisualStyle();
-		view.applyLayout(CyLayouts.getDefaultLayout());
-		VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-		CalculatorCatalog catalog = manager.getCalculatorCatalog();
-		VisualStyle vs = catalog.getVisualStyle(ResourceBundle.getBundle("cistargetx").getString("vizmap_name"));
-		if (vs != null){
-			manager.setVisualStyle(vs);
+			cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")));
 		}
-		view.redrawGraph(true,true);
-		*/
+		
 	}
 	
 	/**

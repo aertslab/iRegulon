@@ -4,6 +4,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
@@ -18,13 +19,7 @@ public class AttributeComboBox  extends JComboBox implements FocusListener{
 
 	public AttributeComboBox(){
 		super();
-		String [] attr = Cytoscape.getNodeAttributes().getAttributeNames();
-		ArrayList<CyNode> nodes = CisTargetXNodes.getAllNodes();
-		for (String atName : attr){
-			if (Cytoscape.getNodeAttributes().getType(atName) == Cytoscape.getNodeAttributes().TYPE_STRING){
-				this.addItem(atName);
-			}
-		}
+		this.focusGained(null);
 		this.addFocusListener(this);
 	}
 	
@@ -43,12 +38,21 @@ public class AttributeComboBox  extends JComboBox implements FocusListener{
 		boolean contains = false;
 		this.removeAllItems();
 		String [] attr = Cytoscape.getNodeAttributes().getAttributeNames();
-		ArrayList<CyNode> nodes = CisTargetXNodes.getAllNodes();
+		ArrayList<CyNode> nodes = CisTargetXNodes.getSelectedNodes();
 		for (String atName : attr){
-			if (Cytoscape.getNodeAttributes().getType(atName) == Cytoscape.getNodeAttributes().TYPE_STRING){
-				this.addItem(atName);
-				if (!contains && atName.equals(selected)){
-					contains = true;
+			if (Cytoscape.getNodeAttributes().getType(atName) == Cytoscape.getNodeAttributes().TYPE_STRING
+					&& ! atName.equals("ID") && ! atName.equals("hiddenLabel")){
+				int amountNull = 0;
+				for (CyNode node : nodes){
+					if (Cytoscape.getNodeAttributes().getStringAttribute(node.getIdentifier(), atName) == null){
+						amountNull++;
+					}
+				}
+				if (amountNull < (nodes.size() * Float.parseFloat(ResourceBundle.getBundle("cistargetx").getString("percentage_nodes_not_null")))){
+					this.addItem(atName);
+					if (!contains && atName.equals(selected)){
+						contains = true;
+					}
 				}
 			}
 		}

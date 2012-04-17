@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -24,6 +25,8 @@ import cytoscape.data.CyAttributes;
 import cytoscape.layout.CyLayoutAlgorithm;
 import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
+import cytoscape.view.CytoscapeDesktop;
+import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.CalculatorCatalog;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
@@ -36,10 +39,10 @@ public class DrawNetworkAction extends ComboboxAction implements ListSelectionLi
 
 private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 	
-	public DrawNetworkAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
+	public DrawNetworkAction(SelectedMotif selectedRegulatoryTree){
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
-			throw new CreationException("Couldn't create NetworkAction");
+			throw new IllegalArgumentException();
 		}
 		//putValue(Action.NAME, "NetworkCreate");
 		//putValue(Action.NAME, getBundle().getString("action_draw_edges_name"));
@@ -58,6 +61,7 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 	public void valueChanged(ListSelectionEvent e) {
 		final ListSelectionModel model = (ListSelectionModel) e.getSource();
 		setEnabled(! model.isSelectionEmpty());
+		//this.setEnabled(this.getSelectedRegulatoryTree() != null && this.getTranscriptionFactor() != null);
 	}
 	
 	public CyNetwork createNetwork(Motif mtf, TranscriptionFactor tf){
@@ -77,7 +81,7 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		Motif tree = this.getSelectedRegulatoryTree().getMotifs();
+		Motif tree = this.getSelectedRegulatoryTree().getMotif();
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network = this.createNetwork(tree, tf);
 		CyNetworkView view = Cytoscape.createNetworkView(network, "MyNetwork");
@@ -118,6 +122,13 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 			manager.setVisualStyle(vs);
 		}
 		view.redrawGraph(true,true);
+		CytoscapeDesktop desktop = Cytoscape.getDesktop();
+		CytoPanel cytoPanel = desktop.getCytoPanel (SwingConstants.WEST);
+		if (cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")) == -1){
+			cytoPanel.setSelectedIndex(0);
+		}else{
+			cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")));
+		}
 	}
 	
 	/**

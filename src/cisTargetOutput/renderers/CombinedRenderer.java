@@ -37,12 +37,12 @@ public class CombinedRenderer extends JLabel implements TableCellRenderer{
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		int i=0;
-		JLabel label = new JLabel(value.toString());
+		//setText(value == null ? "" : value.toString());
 		for (CanvasUpdater updater : this.renderList){
 			i++;
-			label = updater.updateCanvas(table, value, label, isSelected, row);
+			updater.updateCanvas(table, value, this, isSelected, row);
 		}
-		return label;
+		return this;
 	}
 
 }

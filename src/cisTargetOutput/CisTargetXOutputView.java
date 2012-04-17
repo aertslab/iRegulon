@@ -42,6 +42,7 @@ import cisTargetOutput.renderers.BooleanRenderer;
 import cisTargetOutput.renderers.ColumnWidthRenderer;
 import cisTargetOutput.renderers.ColorRenderer;
 import cisTargetOutput.renderers.CombinedRenderer;
+import cisTargetOutput.renderers.DefaultRenderer;
 import cisTargetOutput.renderers.FloatRenderer;
 import cisTargetX.CisTargetResourceBundle;
 
@@ -157,33 +158,31 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 		
 		
 		//Container for the selected regulons
-		try{
+		
+		//add buttons for drawing, and selecting transcription factor
 			
+		DrawRegulonsAndEdgesAction drawNodesAndEdgesAction = new DrawRegulonsAndEdgesAction(selectedTFRegulons);
+		this.buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
+		this.buttonDrawEdges.setText("+");
 			
-			//add buttons for drawing, and selecting transcription factor
+		DrawNetworkAction drawNetworkAction = new DrawNetworkAction(selectedTFRegulons);
+		this.buttonDrawNetwork = new JButton(drawNetworkAction);
+		this.buttonDrawNetwork.setText("N");
 			
-			DrawRegulonsAndEdgesAction drawNodesAndEdgesAction = new DrawRegulonsAndEdgesAction(selectedTFRegulons);
-			this.buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
-			this.buttonDrawEdges.setText("+");
+		JLabel labelTF = new JLabel("Transcription Factor");
+		this.tfcmbBox = new TFComboBox(selectedTFRegulons);
+		this.tfcmbBox.setEditable(true);
+		
+		final JTextComponent tc = (JTextComponent) this.tfcmbBox.getEditor().getEditorComponent();
+		tc.getDocument().addDocumentListener(drawNodesAndEdgesAction);
+		tc.getDocument().addDocumentListener(drawNetworkAction);
 			
-			DrawNetworkAction drawNetworkAction = new DrawNetworkAction(selectedTFRegulons);
-			this.buttonDrawNetwork = new JButton(drawNetworkAction);
-			this.buttonDrawNetwork.setText("N");
-			
-			JLabel labelTF = new JLabel("Transcription Factor");
-			this.tfcmbBox = new TFComboBox(selectedTFRegulons);
-			this.tfcmbBox.setEditable(true);
-			
-			final JTextComponent tc = (JTextComponent) this.tfcmbBox.getEditor().getEditorComponent();
-			tc.getDocument().addDocumentListener(drawNodesAndEdgesAction);
-			tc.getDocument().addDocumentListener(drawNetworkAction);
-			
-			String pathSave = "/icons/save.png";
-			java.net.URL imgURLSave = getClass().getResource(pathSave);
-			ImageIcon iconSave = new ImageIcon(imgURLSave, "Save");
-			this.buttonSave = new JButton(iconSave);
-			this.buttonSave.setToolTipText("Save these results");
-			this.buttonSave.addActionListener(new ActionListener() {
+		String pathSave = "/icons/save.png";
+		java.net.URL imgURLSave = getClass().getResource(pathSave);
+		ImageIcon iconSave = new ImageIcon(imgURLSave, "Save");
+		this.buttonSave = new JButton(iconSave);
+		this.buttonSave.setToolTipText("Save these results");
+		this.buttonSave.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -192,14 +191,14 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 					String xml = results.saveResults(motifList);
 					SaveLoadDialogs.saveDialogue(xml, runName);
 				}
-			});
+		});
 			
-			String pathClose = "/icons/close.png";
-			java.net.URL imgURLClose = getClass().getResource(pathClose);
-			ImageIcon iconClose = new ImageIcon(imgURLClose, "Save");
-			this.buttonClose = new JButton(iconClose);
-			this.buttonClose.setToolTipText("Close these results");
-			this.buttonClose.addActionListener(new ActionListener() {
+		String pathClose = "/icons/close.png";
+		java.net.URL imgURLClose = getClass().getResource(pathClose);
+		ImageIcon iconClose = new ImageIcon(imgURLClose, "Save");
+		this.buttonClose = new JButton(iconClose);
+		this.buttonClose.setToolTipText("Close these results");
+		this.buttonClose.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -211,134 +210,138 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 				}
 			});
 			
-			c.gridwidth = 1;
-			c.gridheight = 1;
-			c.gridx = 0;
-			c.gridy = 1;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(this.buttonDrawEdges, c);
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(this.buttonDrawEdges, c);
 			
 			
-			c.gridx = 1;
-			c.gridy = 1;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(this.buttonDrawNetwork, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(this.buttonDrawNetwork, c);
 			
 			
-			c.gridx = 2;
-			c.gridy = 1;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(labelTF, c);
+		c.gridx = 2;
+		c.gridy = 1;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(labelTF, c);
 			
+		
+		c.gridx = 3;
+		c.gridy = 1;
+		c.weightx=0.5;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(this.tfcmbBox, c);
 			
-			c.gridx = 3;
-			c.gridy = 1;
-			c.weightx=0.5;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(this.tfcmbBox, c);
+		c.gridx = 4;
+		c.gridy = 1;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(this.buttonSave, c);
 			
-			c.gridx = 4;
-			c.gridy = 1;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(this.buttonSave, c);
+		c.gridx = 5;
+		c.gridy = 1;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(this.buttonClose, c);
 			
-			c.gridx = 5;
-			c.gridy = 1;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(this.buttonClose, c);
+		//the filtering options
+		JLabel labelFilter = new JLabel("Filtering on: ");
+		JComboBox filteringOn = new JComboBox(this.filteringPossibilities);
+		JTextField textFilter = new JTextField();
 			
-			//the filtering options
-			JLabel labelFilter = new JLabel("Filtering on: ");
-			JComboBox filteringOn = new JComboBox(this.filteringPossibilities);
-			JTextField textFilter = new JTextField();
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(labelFilter, c);
 			
-			c.gridx = 0;
-			c.gridy = 2;
-			c.gridwidth = 2;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(labelFilter, c);
+		c.gridx = 2;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(filteringOn, c);
+		
+		c.gridx = 3;
+		c.gridy = 2;
+		c.gridwidth = 3;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		panel.add(textFilter, c);
 			
-			c.gridx = 2;
-			c.gridy = 2;
-			c.gridwidth = 1;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(filteringOn, c);
+		//add a table model
+		MotifTableModel tableModel = new MotifTableModel(this.motifList);
+		//filtering table model
+		FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, false, "");
+		JTable table = new JTable(filteredModel);
 			
-			c.gridx = 3;
-			c.gridy = 2;
-			c.gridwidth = 3;
-			c.weightx=0.1;
-			c.weighty=0;
-			c.ipadx = 0;
-			c.ipady = 0;
-			panel.add(textFilter, c);
+		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
+		filteringOn.addActionListener(new FilteringOnComboBoxAction(filteredModel));
+		filteringOn.setSelectedIndex(0);
+		textFilter.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
 			
-			//add a table model
-			MotifTableModel tableModel = new MotifTableModel(this.motifList);
-			//filtering table model
-			FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, false, "");
-			JTable table = new JTable(filteredModel);
-			
-			//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
-			filteringOn.addActionListener(new FilteringOnComboBoxAction(filteredModel));
-			filteringOn.setSelectedIndex(0);
-			textFilter.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
-			
-			//tableModel.initColumnSizes(table);
-			//add mouse and selection listeners
-			//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedTFRegulons, tc);
-			table.addMouseListener(new MotifPopUpMenu(table, selectedTFRegulons, tc));
-			ListSelectionModel listSelectionModel = table.getSelectionModel();
-			TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedTFRegulons);
-			listSelectionModel.addListSelectionListener(tableSelectListener);
+		//tableModel.initColumnSizes(table);
+		//add mouse and selection listeners
+		//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedTFRegulons, tc);
+		table.addMouseListener(new MotifPopUpMenu(table, selectedTFRegulons, 
+				(JTextComponent) this.tfcmbBox.getEditor().getEditorComponent()));
+		ListSelectionModel listSelectionModel = table.getSelectionModel();
+		TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedTFRegulons);
+		listSelectionModel.addListSelectionListener(tableSelectListener);
 	   	
 			
-			//colors of the table
-			ColorRenderer cr=new ColorRenderer("ClusterCode");
+		//colors of the table
+		ColorRenderer cr=new ColorRenderer("ClusterCode");
 			
-			//setting the table renderer
-			for (int i=0; i < table.getModel().getColumnCount(); i++){
-				CombinedRenderer renderer = new CombinedRenderer();
-				// the float renderer
-				if (table.getModel().getColumnClass(i).equals(Float.class)){
-					renderer.addRenderer(new FloatRenderer("0.000"));
-				}
+		//setting the table renderer
+		for (int i=0; i < table.getModel().getColumnCount(); i++){
+			CombinedRenderer renderer = new CombinedRenderer();
+			// the float renderer
+			if (table.getModel().getColumnClass(i).equals(Float.class)){
+				renderer.addRenderer(new FloatRenderer("0.000"));
+			}else{
 				if (table.getModel().getColumnClass(i).equals(Boolean.class)){
 					renderer.addRenderer(new BooleanRenderer());
+				}else{
+					renderer.addRenderer(new DefaultRenderer());
 				}
-				//the column renderer
-				renderer.addRenderer(cr);
-				TableColumn col = table.getColumnModel().getColumn(i);
-				col.setCellRenderer(renderer);
 			}
-			
-			ColumnWidthRenderer columnWidth = new ColumnWidthRenderer(table);
-			columnWidth.widthSetter();
-			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setAutoCreateRowSorter(true);
+			//the column renderer
+			renderer.addRenderer(cr);
+			TableColumn col = table.getColumnModel().getColumn(i);
+			col.setCellRenderer(renderer);
+		}
+		
+		ColumnWidthRenderer columnWidth = new ColumnWidthRenderer(table);
+		columnWidth.widthSetter();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setAutoCreateRowSorter(true);
 			/*
 			TableRowSorter trs = new TableRowSorter(tableModel);
 
@@ -365,23 +368,19 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 			
 			//panel.add(table, BorderLayout.CENTER);
 			
-			JScrollPane scrollPane = new JScrollPane(table);
-		    panel.add(scrollPane);
-		    c.gridx = 0;
-			c.gridy = 3;
-			c.weightx=1;
-			c.weighty=0.8;
-			c.gridwidth = 6;
-			c.gridheight = 0;
-			c.ipadx = 0;
-			c.ipady = 100;
-			panel.add(scrollPane, c);
-			return panel;
-		
-		}catch (CreationException creatione){
-	    	JOptionPane.showMessageDialog(Cytoscape.getDesktop(), creatione.toString());
-	    }
-		return null;
+		JScrollPane scrollPane = new JScrollPane(table);
+	    panel.add(scrollPane);
+	    c.gridx = 0;
+		c.gridy = 3;
+		c.weightx=1;
+		c.weighty=0.8;
+		c.gridwidth = 6;
+		c.gridheight = 0;
+		c.ipadx = 0;
+		c.ipady = 100;
+		panel.add(scrollPane, c);
+		return panel;
+
 	}
 	
 	

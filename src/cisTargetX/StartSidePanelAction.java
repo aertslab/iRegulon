@@ -10,6 +10,7 @@ public class StartSidePanelAction implements ActionListener{
 		// TODO Auto-generated method stub
 		final CisTargetXInputViewSidePanel inputView = new CisTargetXInputViewSidePanel();
 		inputView.DrawWindow();
+		
 	}
 
 }

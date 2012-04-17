@@ -67,7 +67,10 @@ public class CisTargetXInputViewSidePanel extends CisTargetResourceBundle implem
 		//Dimension preferredSize = new Dimension(600, fontPoints*37);
 		//panel.setPreferredSize(preferredSize);
 		//Container contentPane = frame.getContentPane();
-		cytoPanel.add(getBundle().getString("plugin_visual_name"), panel);
+		if (cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")) == -1){
+			cytoPanel.add(getBundle().getString("plugin_visual_name"), panel);
+		}
+		cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")));
 		
 		//this.addComponentsToPane(panel);
 		

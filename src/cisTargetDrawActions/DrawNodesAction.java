@@ -50,7 +50,7 @@ public class DrawNodesAction extends ComboboxAction implements ListSelectionList
 		 * @return a list of all selected Transcription factor regulons
 		 */
 		public Motif getListSelectedRegulatoryTree(){
-			return this.getSelectedRegulatoryTree().getMotifs();
+			return this.getSelectedRegulatoryTree().getMotif();
 		}
 		
 		@Override

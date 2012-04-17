@@ -26,6 +26,7 @@ import javax.swing.table.TableColumn;
 import cisTargetOutput.MotifListener;
 import cisTargetOutput.TFComboBox;
 import cisTargetOutput.renderers.CombinedRenderer;
+import cisTargetOutput.renderers.DefaultRenderer;
 import cisTargetOutput.renderers.FloatRenderer;
 import cisTargetOutput.renderers.HighLightColorRenderer;
 import cisTargetOutput.renderers.UpDateHighLightRenderer;
@@ -295,6 +296,7 @@ public class TGPanel extends JPanel implements MotifListener{
 					break;
 			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0")); //float renderer
 					break;
+			default : renderer.addRenderer(new DefaultRenderer());
 			}
 			//the column renderer
 			renderer.addRenderer(this.hlcrtf);

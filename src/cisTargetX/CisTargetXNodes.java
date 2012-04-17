@@ -38,20 +38,13 @@ public class CisTargetXNodes {
 	 * @pre this.nodesSelected() == true
 	 * @return an array filled with the selected CyNodes
 	 */
-	static public CyNode[] getSelectedNodes(){
+	static public ArrayList<CyNode> getSelectedNodes(){
 		CyNetwork current_network = Cytoscape.getCurrentNetwork();
 		Set selectedNodes = current_network.getSelectedNodes();	
 		//create array for storing the nodes
-		CyNode[] nodesArray = new CyNode[selectedNodes.size()];
-		int indexNodesArray = 0;
-		//put every node into the array
-		for (final Object index_as_object : selectedNodes) {
-			final CyNode cynode = (CyNode) index_as_object; 
-			nodesArray[indexNodesArray] = cynode;
-			indexNodesArray++;
-		}
+		ArrayList<CyNode> nodesList = new ArrayList<CyNode>(selectedNodes);
 		//return the array
-		return nodesArray;
+		return nodesList;
 	}
 	
 	
@@ -95,13 +88,15 @@ public class CisTargetXNodes {
 	 */
 	static public Collection<GeneIdentifier> getGenes(String attributeName, SpeciesNomenclature spnc){
 		if (CisTargetXNodes.nodesSelected()){
-			CyNode[] nodes = CisTargetXNodes.getSelectedNodes();
+			ArrayList<CyNode> nodes = CisTargetXNodes.getSelectedNodes();
 			Collection<GeneIdentifier> genes = new ArrayList<GeneIdentifier>();
 			for(CyNode node : nodes){
 				CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
 				String geneName = cyNodeAttrs.getStringAttribute(node.getIdentifier(), attributeName);
-				GeneIdentifier gene = new GeneIdentifier(geneName, spnc);
-				genes.add(gene);
+				if (geneName != null){
+					GeneIdentifier gene = new GeneIdentifier(geneName, spnc);
+					genes.add(gene);
+				}
 			}
 			return genes;
 		}

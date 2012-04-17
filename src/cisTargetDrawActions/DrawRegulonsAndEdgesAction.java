@@ -31,10 +31,10 @@ import domainModel.TranscriptionFactor;
 public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSelectionListener{
 
 	
-	public DrawRegulonsAndEdgesAction(SelectedMotif selectedRegulatoryTree) throws CreationException{
+	public DrawRegulonsAndEdgesAction(SelectedMotif selectedRegulatoryTree){
 		super(selectedRegulatoryTree);
 		if (selectedRegulatoryTree == null){
-			throw new CreationException("Couldn't create DrawRegulonsAndEdges");
+			throw new IllegalArgumentException();
 		}
 		putValue(Action.NAME, getBundle().getString("action_draw_edges_and_nodes_name"));
 		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_draw_edges_and_nodes_name"));
@@ -56,33 +56,35 @@ public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSe
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
-		Motif tree = this.getSelectedRegulatoryTree().getMotifs();
+		Motif tree = this.getSelectedRegulatoryTree().getMotif();
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network =  Cytoscape.getCurrentNetwork();
 		CyNetworkView view = Cytoscape.getCurrentNetworkView();
-		CyNode nodeParent = DrawNodesAction.addNode(tf.getName(), network, view);
-		DrawNodesAction.setAtribute(nodeParent, "ID", tf.getName());
-		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
-		//System.out.println("Draw Parent Node");
-		//System.out.println("Children " + tree.getCandidateTargetGenes().size());
-		for (CandidateTargetGene geneID : tree.getCandidateTargetGenes()){
-			CyNode nodeChild = DrawNodesAction.addNode(geneID.getGeneName(), network, view);
-			DrawNodesAction.setAtribute(nodeChild, "ID", tf.getName());
-			//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
-			CyEdge edge;
-			edge = DrawEdgesAction.addEdge(nodeParent, nodeChild, network, view, tree.getEnrichedMotifID());
-			DrawEdgesAction.addAtribute(edge, "Regulator Gene", tf.getName());
-			DrawEdgesAction.addAtribute(edge, "Target Gene", geneID.getGeneName());
-			DrawEdgesAction.addAtribute(edge, "Regulatory function", "Predicted");
-			DrawEdgesAction.addAtribute(edge, "Motif", tree.getEnrichedMotifID());
+		if (network != null && view != null){
+			CyNode nodeParent = DrawNodesAction.addNode(tf.getName(), network, view);
+			DrawNodesAction.setAtribute(nodeParent, "ID", tf.getName());
+			DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
+			//System.out.println("Draw Parent Node");
+			//System.out.println("Children " + tree.getCandidateTargetGenes().size());
+			for (CandidateTargetGene geneID : tree.getCandidateTargetGenes()){
+				CyNode nodeChild = DrawNodesAction.addNode(geneID.getGeneName(), network, view);
+				DrawNodesAction.setAtribute(nodeChild, "ID", tf.getName());
+				//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
+				CyEdge edge;
+				edge = DrawEdgesAction.addEdge(nodeParent, nodeChild, network, view, tree.getEnrichedMotifID());
+				DrawEdgesAction.addAtribute(edge, "Regulator Gene", tf.getName());
+				DrawEdgesAction.addAtribute(edge, "Target Gene", geneID.getGeneName());
+				DrawEdgesAction.addAtribute(edge, "Regulatory function", "Predicted");
+				DrawEdgesAction.addAtribute(edge, "Motif", tree.getEnrichedMotifID());
+			}
+			//if the node is a regulator and target at the same time, it must say regulator
+			DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
+			DrawNodesAction.addAtribute(nodeParent, "Motif", tree.getEnrichedMotifID());
+			
+			//visual style
+			CisTargetVisualStyle vsStyle = new CisTargetVisualStyle();
+			view.redrawGraph(true,true);
 		}
-		//if the node is a regulator and target at the same time, it must say regulator
-		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
-		DrawNodesAction.addAtribute(nodeParent, "Motif", tree.getEnrichedMotifID());
-		
-		//visual style
-		CisTargetVisualStyle vsStyle = new CisTargetVisualStyle();
-		view.redrawGraph(true,true);
 	}
 	
 	

@@ -30,12 +30,14 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		final ListSelectionModel model = (ListSelectionModel) e.getSource();
+		
 		setEnabled(! model.isSelectionEmpty());
 	}
 
@@ -83,7 +85,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 			this.setEnabled(true);
 			try {
 				//this.addNewTF(e.getDocument().getText(e.getDocument().getStartPosition().getOffset(), e.getDocument().getEndPosition().getOffset() - e.getDocument().getStartPosition().getOffset()));
-				
 				this.addNewTF(e.getDocument().getText(0, e.getDocument().getLength()));
 				//System.out.println(e.getDocument().getText(0, e.getDocument().getLength()));
 			} catch (BadLocationException e1) {

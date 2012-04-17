@@ -161,7 +161,8 @@ public class CisTargetXStart extends CytoscapePlugin {
 							"<br/> <br/>" +
 							ResourceBundle.getBundle("cistargetx").getString("plugin_name") +
 							"<br/>" +
-							"Version 0.1" + 
+							"Version " + 
+							ResourceBundle.getBundle("cistargetx").getString("version") +
 							"<br/>" + 
 							"Build ID 1" +
 							"<br/> <br/> <br/>" +

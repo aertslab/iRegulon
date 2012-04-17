@@ -20,6 +20,9 @@ import cytoscape.Cytoscape;
 
 import cisTargetAnalysis.CisTargetXInput;
 import cisTargetAnalysis.SubmitAction;
+import cisTargetX.databaseSelection.BasedComboBox;
+import cisTargetX.databaseSelection.DBCombobox;
+import cisTargetX.databaseSelection.DatabaseListener;
 import domainModel.SpeciesNomenclature;
 
 public class InputView extends CisTargetResourceBundle implements Parameters{
@@ -28,7 +31,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	private JComboBox jcbSpecieAndNomenclature;
 	private JTextField jtfROC;
 	private JTextField jtfVisualisation;
-	private CisTargetXInput m_input = null;
+	private CisTargetXInput input = null;
 	private int fontPoints = 12;
 	private CisTargetType cisTargetType = CisTargetType.PREDICTED_REGULATORS;
 	private JTextField jtfName;
@@ -37,12 +40,19 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	private JComboBox jcbGeneName;
 	//needed for control panel
 	private JPanel detailpanel;
+	private BasedComboBox jcbBased;
+	private DBCombobox jcbdatabase;
+	private JTextField txtOverlap;
+	private JComboBox jcbDelation;
+	private JTextField txtUpStream;
+	private JTextField txtDownStream;
+	
 	
 	
 	private String standardJobName;
 	private float standardEscore;
 	private float standardROC;
-	private int standardVisualistion;
+	private int standardVisualisation;
 	private float standardminOrthologous;
 	private float standardMaxMotifSimilarityFDR;
 	private final JFrame frame;
@@ -50,26 +60,26 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	public InputView(){
 		this.standardJobName = Cytoscape.getCurrentNetwork().getTitle();
 		if (this.standardJobName == null || this.standardJobName.equals("0")){
-			this.standardJobName = "iRegulon name";
+			this.standardJobName = this.getBundle().getString("plugin_name") + " name";
 		}
-		this.standardEscore = 2.5f;
-		this.standardROC = 0.01f;
-		this.standardVisualistion = 5000;
-		this.standardminOrthologous = 0f;
-		this.standardMaxMotifSimilarityFDR = 0.05f;
+		this.standardEscore = Float.parseFloat(this.getBundle().getString("standard_escore"));
+		this.standardROC =Float.parseFloat(this.getBundle().getString("standard_ROC"));
+		this.standardVisualisation = Integer.parseInt(this.getBundle().getString("standard_visualisation"));
+		this.standardminOrthologous = Float.parseFloat(this.getBundle().getString("standard_minOrthologous"));
+		this.standardMaxMotifSimilarityFDR = Float.parseFloat(this.getBundle().getString("standard_maxMotifSimilarityFDR"));
 		this.frame = null;
 	}
 	
 	public InputView(JFrame frame){
 		this.standardJobName = Cytoscape.getCurrentNetwork().getTitle();
 		if (this.standardJobName == null || this.standardJobName.equals("0")){
-			this.standardJobName = "CisTarget name";
+			this.standardJobName = this.getBundle().getString("plugin_name") + " name";
 		}
-		this.standardEscore = 2.5f;
-		this.standardROC = 0.01f;
-		this.standardVisualistion = 5000;
-		this.standardminOrthologous = 0f;
-		this.standardMaxMotifSimilarityFDR = 0.05f;
+		this.standardEscore = Float.parseFloat(this.getBundle().getString("standard_escore"));
+		this.standardROC =Float.parseFloat(this.getBundle().getString("standard_ROC"));
+		this.standardVisualisation = Integer.parseInt(this.getBundle().getString("standard_visualisation"));
+		this.standardminOrthologous = Float.parseFloat(this.getBundle().getString("standard_minOrthologous"));
+		this.standardMaxMotifSimilarityFDR = Float.parseFloat(this.getBundle().getString("standard_maxMotifSimilarityFDR"));
 		this.frame = frame;
 	}
 	
@@ -118,7 +128,14 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         
         f = new Font("Serif", 0, fontPoints);
         
-        //Name of the 
+        //Name of the analysis
+        /*
+         * nnn    nn				eeee
+         * nn n   nn    a			e
+         * nn  n  nn   a a   mmmmm 	eeee
+         * nn   n nn  aaaaa  m m m 	e
+         * nn    nnn a     a m m m 	eeee
+         */
         jtl = new JLabel("Choose a name:");
         jtl.setFont(f);
         jtl.setToolTipText("<html> Choose a name for your analysis. </html>");
@@ -129,17 +146,26 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         jtl.setVisible(true);
         panel.add(jtl, c);
         
-        jtfName = new JTextField(this.standardJobName);
-        jtfName.setFont(f);
-        jtfName.setVisible(true);
+        this.jtfName = new JTextField(this.standardJobName);
+        this.jtfName.setFont(f);
+        this.jtfName.setVisible(true);
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-        jtfName.setVisible(true);
-        panel.add(jtfName, c);
+        this.jtfName.setVisible(true);
+        panel.add(this.jtfName, c);
         yPos += 1;
 		
         // Escore
+        /*
+         * EEEEEEE
+         * EE
+         * EE
+         * EEEEE
+         * EE
+         * EE
+         * EEEEEEE
+         */
         jtl = new JLabel("Choose an Enrichment score threshold");
         jtl.setFont(f);
         c.gridx = 0;
@@ -150,18 +176,25 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         		"a motif as being relevant. </html>");
         panel.add(jtl, c);
         
-        String[] values = {"2.5", "2.0"};
-        jtfEscore = new JTextField("" + this.standardEscore);
-        jtfEscore.setFont(f);
-        jtfEscore.setVisible(true);
+        this.jtfEscore = new JTextField("" + this.standardEscore);
+        this.jtfEscore.setFont(f);
+        this.jtfEscore.setVisible(true);
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-        jtfEscore.setVisible(true);
-        panel.add(jtfEscore, c);
+		this.jtfEscore.setVisible(true);
+        panel.add(this.jtfEscore, c);
         yPos += 1;
         
         // ROCthresholdAUC
+        /* RRRRRRR
+         * RR	RR
+         * RRRRRRR	OOOOOO	  ccc
+         * RRRR		OO	OO	 cc
+         * RR RR	OO	OO	cc
+         * RR  RR	OO	OO	 cc
+         * RR   RR	OOOOOO	  ccc
+         */
         jtl = new JLabel("Choose the ROC threshold for AUC.");
         f = new Font("Serif", 0, fontPoints);
         jtl.setFont(f);
@@ -175,18 +208,26 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         jtl.setVisible(true);
         panel.add(jtl, c);
         
-        jtfROC = new JTextField("" + this.standardROC);
-        jtfROC.setFont(f);
-        jtfROC.setEditable(true);
+        this.jtfROC = new JTextField("" + this.standardROC);
+        this.jtfROC.setFont(f);
+        this.jtfROC.setEditable(true);
         
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-        jtfROC.setVisible(true);
-        panel.add(jtfROC, c);
+		this.jtfROC.setVisible(true);
+        panel.add(this.jtfROC, c);
         yPos += 1;
 
         // threshold for visualisation
+        /*
+         * v       v
+         *  v     v
+         *   v   v
+         *    v v
+         *     v
+         * 
+         */
         jtl = new JLabel("Choose the Threshold for visualisation.");
         f = new Font("Serif", 0, fontPoints);
         jtl.setFont(f);
@@ -200,18 +241,24 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         jtl.setVisible(true);
         panel.add(jtl, c);
         
-        jtfVisualisation = new JTextField("" + this.standardVisualistion);
-        jtfVisualisation.setFont(f);
-        jtfVisualisation.setEditable(true);
+        this.jtfVisualisation = new JTextField("" + this.standardVisualisation);
+        this.jtfVisualisation.setFont(f);
+        this.jtfVisualisation.setEditable(true);
         
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-        jtfVisualisation.setVisible(true);
-        panel.add(jtfVisualisation, c);
+		this.jtfVisualisation.setVisible(true);
+        panel.add(this.jtfVisualisation, c);
         yPos += 1;
 		
         // Species and nomenclature
+        /* SSSSSSS
+         * SS
+         * SSSSSSS
+         * 		SS
+         * SSSSSSS
+         */
         jtl = new JLabel("Choose the species and the nomenclature");
         jtl.setFont(f);
         jtl.setToolTipText("<html> Choose the species and the nomenclature of the genes </html>");
@@ -222,17 +269,134 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         jtl.setVisible(true);
         panel.add(jtl, c);
         
-        jcbSpecieAndNomenclature = new JComboBox(values);
-        jcbSpecieAndNomenclature.setModel(new javax.swing.DefaultComboBoxModel(SpeciesNomenclature.getSelectableNomenclatures().toArray()));
-        jcbSpecieAndNomenclature.setFont(f);
-        jcbSpecieAndNomenclature.setVisible(true);
+        this.jcbSpecieAndNomenclature = new JComboBox();
+        this.jcbSpecieAndNomenclature.setModel(new javax.swing.DefaultComboBoxModel(SpeciesNomenclature.getSelectableNomenclatures().toArray()));
+        this.jcbSpecieAndNomenclature.setFont(f);
+        this.jcbSpecieAndNomenclature.setVisible(true);
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-		panel.add(jcbSpecieAndNomenclature, c);
+		panel.add(this.jcbSpecieAndNomenclature, c);
 		yPos += 1;
 		
-		//Minimal Orthologou id
+		//Choose the database system
+		/* DDDDD
+		 * DD	DD
+		 * DD	 D
+		 * DD	 D
+		 * DD	DD
+		 * DDDDD
+		 */
+		jtl = new JLabel("Choose the database system");
+        jtl.setToolTipText("<html> Choose the base of the database. Region or Gene Based </html>");
+        c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+		c.fill=GridBagConstraints.HORIZONTAL;
+		panel.add(jtl, c);
+		
+		this.jcbBased = new BasedComboBox();
+		c.gridx = 2;
+		c.gridy = yPos;
+		c.gridwidth = 3;
+		panel.add(this.jcbBased, c);
+		yPos += 1;
+		
+		jtl = new JLabel("Choose the database");
+        jtl.setToolTipText("<html> Choose the database. </html>");
+        c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+		panel.add(jtl, c);
+
+		
+		this.jcbdatabase = new DBCombobox();
+		c.gridx = 2;
+		c.gridy = yPos;
+		c.gridwidth = 3;
+		panel.add(this.jcbdatabase, c);
+		yPos += 1;
+		
+		jtl = new JLabel("Choose the Overlap");
+        jtl.setToolTipText("<html> Percentage of the gene that must fall into the intreval to motif/gene. Must between 0 and 1. </html>");
+        c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+		panel.add(jtl, c);
+
+		this.txtOverlap = new JTextField();
+		this.txtOverlap.setText(this.getBundle().getString("standard_overlap"));
+		c.gridx = 2;
+		c.gridy = yPos;
+		c.gridwidth = 3;
+		panel.add(this.txtOverlap, c);
+		yPos += 1;
+		
+		JRadioButton rbtnDelineation = new JRadioButton();
+		rbtnDelineation.setEnabled(true);
+		
+		JRadioButton rbtnConversion = new JRadioButton();
+		rbtnConversion.setEnabled(true);
+		
+        ButtonGroup group = new ButtonGroup();
+        group.add(rbtnDelineation);
+        group.add(rbtnConversion);
+        
+        this.jcbDelation = new JComboBox();
+		
+        c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 1;
+        panel.add(rbtnDelineation, c);
+        
+        c.gridx = 1;
+		c.gridy = yPos;
+		c.gridwidth = 4;
+		panel.add(jcbDelation, c);
+        yPos+=1;
+        
+        c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 1;
+        panel.add(rbtnConversion, c);
+        
+        jtl = new JLabel("Upstream");
+        jtl.setToolTipText("<html> Choose the amount of bp upstream of the conversion. </html>");
+        c.gridx = 1;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+		panel.add(jtl, c);
+        
+        this.txtUpStream = new JTextField();
+        this.txtUpStream.setText(this.getBundle().getString("standard_upstream"));
+        c.gridx = 3;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+		panel.add(this.txtUpStream, c);
+		yPos+=1;
+        
+        jtl = new JLabel("Downstream");
+        jtl.setToolTipText("<html> Choose the amount of bp downstream of the conversion. </html>");
+        c.gridx = 1;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+		panel.add(jtl, c);
+        
+        this.txtDownStream = new JTextField();
+        this.txtDownStream.setText(this.getBundle().getString("standard_downstream"));
+        c.gridx = 3;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+		panel.add(this.txtDownStream, c);
+        yPos+=1;
+        
+		//Minimal Orthologous id
+		/* OOOOOOO
+		 * OO	OO
+		 * OO	OO
+		 * OO	OO
+		 * OOOOOOO
+		 */
 		jtl = new JLabel("Choose the minimal orthologous.");
         f = new Font("Serif", 0, fontPoints);
         jtl.setFont(f);
@@ -245,17 +409,23 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         jtl.setVisible(true);
         panel.add(jtl, c);
         
-        jtfMinOrthologous = new JTextField("" + this.standardminOrthologous);
-        jtfMinOrthologous.setFont(f);
-        jtfMinOrthologous.setEditable(true);
-        jtfMinOrthologous.setVisible(true);
+        this.jtfMinOrthologous = new JTextField("" + this.standardminOrthologous);
+        this.jtfMinOrthologous.setFont(f);
+        this.jtfMinOrthologous.setEditable(true);
+        this.jtfMinOrthologous.setVisible(true);
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-		panel.add(jtfMinOrthologous, c);
+		panel.add(this.jtfMinOrthologous, c);
 		yPos += 1;
 		
 		//max motif similarity FDR
+		/* SSSSSSS
+		 * SS
+		 * SSSSSSS
+		 * 		SS
+		 * SSSSSSS
+		 */
 		jtl = new JLabel("Choose the maximal motif similarity FDR.");
         f = new Font("Serif", 0, fontPoints);
         jtl.setFont(f);
@@ -268,18 +438,24 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         jtl.setVisible(true);
         panel.add(jtl, c);
         
-        jtfMaxMotifSimilarityFDR = new JTextField("" + this.standardMaxMotifSimilarityFDR);
-        jtfMaxMotifSimilarityFDR.setFont(f);
-        jtfMaxMotifSimilarityFDR.setEditable(true);
-        jtfMaxMotifSimilarityFDR.setVisible(true);
+        this.jtfMaxMotifSimilarityFDR = new JTextField("" + this.standardMaxMotifSimilarityFDR);
+        this.jtfMaxMotifSimilarityFDR.setFont(f);
+        this.jtfMaxMotifSimilarityFDR.setEditable(true);
+        this.jtfMaxMotifSimilarityFDR.setVisible(true);
         
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-		panel.add(jtfMaxMotifSimilarityFDR, c);
+		panel.add(this.jtfMaxMotifSimilarityFDR, c);
 		yPos += 1;
 		
 		// Choose attribute as name
+		/* NNN   NN
+		 * NN N  NN
+		 * NN  N NN
+		 * NN   NNN
+		 * NN    NN
+		 */
         jtl = new JLabel("Choose the attribute that is the gene name");
         jtl.setFont(f);
         jtl.setToolTipText("<html> Choose the attribute that represents the gene name. </html>");
@@ -290,18 +466,47 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         jtl.setVisible(true);
         panel.add(jtl, c);
         
-        //jcbGeneName = new JComboBox(values);
-        //jcbGeneName.setModel(new javax.swing.DefaultComboBoxModel(Cytoscape.getNodeAttributes().getAttributeNames()));
-        jcbGeneName = new AttributeComboBox();
-        jcbGeneName.setFont(f);
-        jcbGeneName.setVisible(true);
+        this.jcbGeneName = new AttributeComboBox();
+        this.jcbGeneName.setFont(f);
+        this.jcbGeneName.setVisible(true);
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
-		panel.add(jcbGeneName, c);
+		panel.add(this.jcbGeneName, c);
 		yPos += 1;
 		
+		 
+        jtl = new JLabel("Amount of valid genes (nodes).");
+        f = new Font("Serif", 0, fontPoints);
+        jtl.setFont(f);
+		jtl.setToolTipText("<html>These is the amount of nodes that have a name that can be used for the analysis." + "<P>" +
+        		"This doesn't mean that all nodes has valid names! </html>");
+		c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+        jtl.setVisible(true);
+        panel.add(jtl, c);
+        
+        JTextField amountNodes = new JTextField("0");
+        amountNodes.setFont(f);
+        amountNodes.setEditable(false);
+        amountNodes.setVisible(true);
+        
+        c.gridx = 2;
+		c.gridy = yPos;
+		c.gridwidth = 3;
+		panel.add(amountNodes, c);
+		yPos += 1;
+		
+		
+		
 		//Button
+		/* BBBBBB
+		 * BB  BB
+		 * BBBBBB
+		 * BB  BB
+		 * BBBBBB
+		 */
         JButton jbtn = new JButton("Submit");
         jbtn.setFont(f);
         
@@ -337,6 +542,42 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 		});
         panel.add(jbtn, c);
         
+
+        DatabaseListener dbListener = new DatabaseListener(this.jtfName, 
+        		this.jtfEscore, this.jtfROC, this.jtfVisualisation, 
+        		this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR, 
+        		this.jcbSpecieAndNomenclature, this.jcbBased, this.jcbdatabase, 
+        		this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
+        		this.txtUpStream, this.txtDownStream, this.jcbGeneName, amountNodes, 
+        		jbtn);
+        this.jtfName.addActionListener(dbListener);
+        this.jtfName.getDocument().addDocumentListener(dbListener);
+        this.jtfEscore.addActionListener(dbListener);
+        this.jtfEscore.getDocument().addDocumentListener(dbListener);
+        this.jtfROC.addActionListener(dbListener);
+        this.jtfROC.getDocument().addDocumentListener(dbListener);
+        this.jtfVisualisation.addActionListener(dbListener);
+        this.jtfVisualisation.getDocument().addDocumentListener(dbListener);
+        this.jtfMinOrthologous.addActionListener(dbListener);
+        this.jtfMinOrthologous.getDocument().addDocumentListener(dbListener);
+        this.jtfMaxMotifSimilarityFDR.addActionListener(dbListener);
+        this.jtfMaxMotifSimilarityFDR.getDocument().addDocumentListener(dbListener);
+		this.jcbSpecieAndNomenclature.addActionListener(dbListener);
+		this.jcbBased.addActionListener(dbListener);
+		this.jcbdatabase.addActionListener(dbListener);
+		this.txtOverlap.addActionListener(dbListener);
+		this.txtOverlap.getDocument().addDocumentListener(dbListener);
+		rbtnDelineation.addActionListener(dbListener);
+		this.jcbDelation.addActionListener(dbListener);
+		rbtnConversion.addActionListener(dbListener);
+		this.txtUpStream.addActionListener(dbListener);
+		this.txtUpStream.getDocument().addDocumentListener(dbListener);
+		this.txtDownStream.addActionListener(dbListener);
+		this.txtDownStream.getDocument().addDocumentListener(dbListener);
+		this.jcbGeneName.addActionListener(dbListener);
+		amountNodes.addActionListener(dbListener);
+		dbListener.refresh();
+        
         if (frame != null){
         	//Button Cancel
         	jbtn = new JButton("Cancel");
@@ -359,9 +600,9 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         	});
         	panel.add(jbtn, c);
         }
-		
 		return panel;
 	}
+	
 	
 	
 	/**
@@ -390,7 +631,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         f = new Font("Serif", 0, fontPoints);
         
         //Change the kind of cisTarget action
-        jtl = new JLabel("Choose the type of the cisTarget action: ");
+        jtl = new JLabel("Choose the type of the " + this.getBundle().getString("plugin_name") + " action: ");
         jtl.setFont(f);
         jtl.setToolTipText("<html> Choose the type for your analysis. </html>");
         c.gridx = 0;
@@ -429,7 +670,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         group.add(databaseForTargetome);
         group.add(databaseNetworkAnnotations);
 
-        detailpanel = CreateClassicalInputView();
+        this.detailpanel = CreateClassicalInputView();
         //Register a listener for the radio buttons.
         predictedRegulators.addActionListener(new SubmitAction(this) {
 			
@@ -505,7 +746,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * @return the total input in a input class
 	 */
 	public CisTargetXInput getInput(){
-		return m_input;
+		return this.input;
 	}
 	
 	
@@ -519,7 +760,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * @return the e score as a float
 	 */
 	public float getNESThreshold(){
-		return Float.parseFloat(((String) jtfEscore.getText()));
+		return Float.parseFloat(((String) this.jtfEscore.getText()));
 	}
 	
 	/**
@@ -527,7 +768,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * @return the ROC threshold for AUC
 	 */
 	public float getAUCThreshold(){
-		return Float.parseFloat((String) jtfROC.getText());
+		return Float.parseFloat((String) this.jtfROC.getText());
 	}
 	
 	/**
@@ -535,7 +776,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * @return the Threshold for visualisation.
 	 */
 	public int getRankThreshold(){
-		return Integer.parseInt((String) jtfVisualisation.getText());
+		return Integer.parseInt((String) this.jtfVisualisation.getText());
 	}
 	
 	/**
@@ -543,7 +784,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * @return the species and the nomenclature of this network
 	 */
 	public SpeciesNomenclature getSpeciesNomenclature(){
-		return (SpeciesNomenclature) jcbSpecieAndNomenclature.getSelectedItem();
+		return (SpeciesNomenclature) this.jcbSpecieAndNomenclature.getSelectedItem();
 	}
 	
 	/**
@@ -558,7 +799,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * @return the name of the run
 	 */
 	private String getName(){
-		return (String) jtfName.getText();
+		return (String) this.jtfName.getText();
 	}
 	
 	
@@ -568,7 +809,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * 			
 	 */
 	public void generateInput(){
-		m_input = new CisTargetXInput(CisTargetXNodes.getGenes(this.getAttributeName(), this.getSpeciesNomenclature()), 
+		this.input = new CisTargetXInput(CisTargetXNodes.getGenes(this.getAttributeName(), this.getSpeciesNomenclature()), 
 				this.getNESThreshold(), this.getAUCThreshold(), this.getRankThreshold(), 
 				this.getSpeciesNomenclature(), this.cisTargetType, this.getName(), 
 				this.getMinOrthologous(), this.getMaxMotifSimilarityFDR());
@@ -586,7 +827,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 
 	@Override
 	public String getAttributeName() {
-		return (String) jcbGeneName.getSelectedItem();
+		return (String) this.jcbGeneName.getSelectedItem();
 	}
 	
 	

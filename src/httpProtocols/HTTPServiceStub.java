@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import cisTargetAnalysis.CisTargetXInput;
+
 import domainModel.GeneIdentifier;
 import domainModel.Motif;
 import domainModel.SpeciesNomenclature;
@@ -20,8 +22,7 @@ public class HTTPServiceStub implements Service{
 	}
 	
 	@Override
-	public int sentJob(String name, Collection<GeneIdentifier> geneIDs, float AUCThreshold,
-			int rankThreshold, float NESThreshold, float minOrthologous, float maxMotifSimilarityFDR) {
+	public int sentJob(CisTargetXInput input) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

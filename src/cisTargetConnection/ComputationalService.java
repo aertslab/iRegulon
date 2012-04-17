@@ -2,6 +2,8 @@ package cisTargetConnection;
 
 import java.util.*;
 
+import cisTargetAnalysis.CisTargetXInput;
+
 import domainModel.GeneIdentifier;
 import domainModel.Motif;
 
@@ -10,8 +12,7 @@ import domainModel.Motif;
 
 
 public interface ComputationalService {
-	public List<Motif> findPredictedRegulators(String name, Collection<GeneIdentifier> geneIDs, float AUCThreshold, int rankThreshold, float NESThreshold, float minOrthologous, 
-			float maxMotifSimilarityFDR);
+	public List<Motif> findPredictedRegulators(CisTargetXInput input);
 	
 	public List<Motif> queryDatabaseForRegulators(GeneIdentifier geneID, float minNEScore, float minOrthologousIdentity, float minSimilarityFDR);
 	

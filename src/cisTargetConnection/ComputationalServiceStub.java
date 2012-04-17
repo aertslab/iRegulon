@@ -2,6 +2,8 @@ package cisTargetConnection;
 
 import java.util.*;
 
+import cisTargetAnalysis.CisTargetXInput;
+
 import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
@@ -14,9 +16,7 @@ import domainModel.TranscriptionFactor;
 public class ComputationalServiceStub implements ComputationalService {
 
 	@Override
-	public List<Motif> findPredictedRegulators(String name, Collection<GeneIdentifier> geneIDs,
-			float AUCThreshold, int rankThreshold, float NESThreshold, float minOrthologous, 
-			float maxMotifSimilarityFDR) {
+	public List<Motif> findPredictedRegulators(CisTargetXInput input) {
 		
 		
 		String[] proteinen = {"603627", "603626", "555135", "603627", "603627"};

@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import cisTargetAnalysis.CisTargetXInput;
+
 import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
@@ -19,14 +21,10 @@ import domainModel.Motif;
 public class ComputationalServiceHTTP implements ComputationalService{
 
 	@Override
-	public List<Motif> findPredictedRegulators(String name,
-			Collection<GeneIdentifier> geneIDs, float AUCThreshold,
-			int rankThreshold, float NESThreshold, float minOrthologous, 
-			float maxMotifSimilarityFDR) {
+	public List<Motif> findPredictedRegulators(CisTargetXInput input) {
 		// TODO Auto-generated method stub
 		Service service = new HTTPService();
-		ClassicalTask task = new ClassicalTask(service, name, geneIDs, AUCThreshold, rankThreshold, 
-				NESThreshold, minOrthologous, maxMotifSimilarityFDR);
+		ClassicalTask task = new ClassicalTask(service, input);
 		
 		// Configure JTask Dialog Pop-Up Box
 		JTaskConfig jTaskConfig = new JTaskConfig();

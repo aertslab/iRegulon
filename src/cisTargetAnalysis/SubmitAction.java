@@ -1,7 +1,6 @@
 package cisTargetAnalysis;
 
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
@@ -10,14 +9,11 @@ import cytoscape.Cytoscape;
 
 import java.util.*;
 
-import cisTargetAnalysis.*;
 import cisTargetConnection.ComputationalService;
 import cisTargetConnection.ComputationalServiceHTTP;
-import cisTargetConnection.ComputationalServiceStub;
 import cisTargetOutput.CisTargetXOutputView;
 import cisTargetX.CisTargetType;
 import cisTargetX.Parameters;
-import domainModel.GeneIdentifier;
 import domainModel.Motif;
 
 

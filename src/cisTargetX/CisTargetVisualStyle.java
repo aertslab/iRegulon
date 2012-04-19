@@ -2,28 +2,18 @@ package cisTargetX;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
-import cytoscape.generated.Edge;
-import cytoscape.layout.CyLayouts;
-import cytoscape.view.CyNetworkView;
 import cytoscape.visual.*;
 import cytoscape.visual.calculators.*;
-import cytoscape.visual.mappings.BoundaryRangeValues;
-import cytoscape.visual.mappings.ContinuousMapping;
 import cytoscape.visual.mappings.DiscreteMapping;
-import cytoscape.visual.mappings.Interpolator;
-import cytoscape.visual.mappings.LinearNumberToColorInterpolator;
 import cytoscape.visual.mappings.ObjectMapping;
 import cytoscape.visual.mappings.PassThroughMapping;
-import cytoscape.visual.properties.EdgeColorProp;
 
 public class CisTargetVisualStyle extends CisTargetResourceBundle{
 
@@ -48,7 +38,6 @@ public class CisTargetVisualStyle extends CisTargetResourceBundle{
 	public void createVizMap(){
 		// get the network and view
 		CyNetwork network = Cytoscape.getCurrentNetwork();
-		CyNetworkView networkView = Cytoscape.getCurrentNetworkView();
 
         // get the VisualMappingManager and CalculatorCatalog
         VisualMappingManager manager = Cytoscape.getVisualMappingManager();

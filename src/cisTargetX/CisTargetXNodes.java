@@ -1,28 +1,14 @@
 package cisTargetX;
 
-import java.awt.*;
-import javax.swing.*;
-
-import com.lowagie.text.List;
 
 import java.util.*;
-//import com.lowagie.text.List;
-
-
 
 import cytoscape.Cytoscape;
-import cytoscape.plugin.CytoscapePlugin;
-import cytoscape.util.CytoscapeAction;
 import cytoscape.CyNetwork;
 import cytoscape.data.CyAttributes;
-import cytoscape.generated.*;
 import cytoscape.*;
 import domainModel.GeneIdentifier;
 import domainModel.SpeciesNomenclature;
-import giny.model.*;
-import giny.model.Node;
-
-
 
 public class CisTargetXNodes {
 
@@ -40,7 +26,8 @@ public class CisTargetXNodes {
 	 */
 	static public ArrayList<CyNode> getSelectedNodes(){
 		CyNetwork current_network = Cytoscape.getCurrentNetwork();
-		Set selectedNodes = current_network.getSelectedNodes();	
+		@SuppressWarnings("unchecked")
+		Set<CyNode> selectedNodes = current_network.getSelectedNodes();	
 		//create array for storing the nodes
 		ArrayList<CyNode> nodesList = new ArrayList<CyNode>(selectedNodes);
 		//return the array
@@ -54,7 +41,8 @@ public class CisTargetXNodes {
 	 */
 	static public boolean nodesSelected(){
 		CyNetwork current_network = Cytoscape.getCurrentNetwork();
-		Set selectedNodes = current_network.getSelectedNodes();	
+		@SuppressWarnings("unchecked")
+		Set<CyNode> selectedNodes = current_network.getSelectedNodes();	
 		boolean selected;
 		if (selectedNodes.isEmpty()) {
 			selected = false;
@@ -71,10 +59,11 @@ public class CisTargetXNodes {
 	 */
 	static public ArrayList<CyNode> getAllNodes(){
 		CyNetwork current_network = Cytoscape.getCurrentNetwork();
-		Iterator it = current_network.nodesIterator();
+		@SuppressWarnings("unchecked")
+		Iterator<CyNode> it = current_network.nodesIterator();
 		ArrayList<CyNode> cynodes = new ArrayList<CyNode>();
 		while(it.hasNext()){
-			cynodes.add((CyNode) it.next());
+			cynodes.add(it.next());
 		}
 		return cynodes;
 	}

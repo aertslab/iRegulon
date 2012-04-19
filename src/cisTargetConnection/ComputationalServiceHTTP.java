@@ -38,15 +38,15 @@ public class ComputationalServiceHTTP implements ComputationalService{
 
 		// Execute Task in New Thread; pops open JTask Dialog Box.
 		TaskManager.executeTask(task, jTaskConfig);
-		
-		Collection<Motif> motifColl = task.getMotifs();
 		List<Motif> motifs = new ArrayList<Motif>();
-		for (Motif mtf : motifColl){
-			motifs.add(mtf);
-		}
 		if (task.getFinishedState().equals(State.ERROR) && ! task.getIsInterupted()){
 			JOptionPane.showMessageDialog(Cytoscape.getDesktop(), task.getErrorMessage());
 			motifs = Collections.EMPTY_LIST;
+		}else{
+			Collection<Motif> motifColl = task.getMotifs();
+			for (Motif mtf : motifColl){
+				motifs.add(mtf);
+			}
 		}
 		return motifs;
 	}

@@ -1,19 +1,9 @@
 package cisTargetX.databaseSelection;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.swing.JComboBox;
-
-import cisTargetX.CisTargetResourceBundle;
-
-import domainModel.SpeciesNomenclature;
 
 public class DBCombobox extends JComboBox{
 

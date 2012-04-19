@@ -1,14 +1,11 @@
 package saveCisTarget;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -81,9 +78,7 @@ public class SaveLoadDialogs {
 					output = new BufferedWriter(new FileWriter(selFile));
 					output.write(xml);
 					output.close();
-					//System.out.println("file saved");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
 							"<html> " +
@@ -94,7 +89,6 @@ public class SaveLoadDialogs {
 				}
 			}
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
 					"<html> " +
@@ -121,13 +115,10 @@ public class SaveLoadDialogs {
 		fc.addChoosableFileFilter(ctfFilter);
 		fc.showOpenDialog(frame);
 		File selFile = fc.getSelectedFile();
-		//System.out.println("file found");
 		if (selFile != null){
 			if (ctfFilter.accept(selFile)){
 				String name = selFile.getName();
-				//System.out.println(name);
 				String[] names = name.split("\\.");
-				//System.out.println(names);
 				this.saveName = names[0];
 				try {
 					/*
@@ -205,9 +196,7 @@ public class SaveLoadDialogs {
 		@Override
 		public boolean accept(File f) {
 			String name = f.getName();
-			//System.out.println(name);
 			String[] names = name.split("\\.");
-			//System.out.println(names);
 			if (names[names.length -1].equals("ctf")){
 				return true;
 			}
@@ -216,7 +205,6 @@ public class SaveLoadDialogs {
 
 		@Override
 		public String getDescription() {
-			// TODO Auto-generated method stub
 			return "CisTarget files";
 		}
 		

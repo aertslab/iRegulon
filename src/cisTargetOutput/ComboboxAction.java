@@ -29,13 +29,12 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		// nothing
 		
 	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
 		final ListSelectionModel model = (ListSelectionModel) e.getSource();
 		
 		setEnabled(! model.isSelectionEmpty());
@@ -43,7 +42,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
 		if (e.getDocument().getLength() <= 0){
 			this.setEnabled(false);
 		}else{
@@ -52,7 +50,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 				this.addNewTF(e.getDocument().getText(0, e.getDocument().getLength()));
 				//System.out.println(e.getDocument().getText(0, e.getDocument().getLength()));
 			} catch (BadLocationException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -61,7 +58,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
 		if (e.getDocument().getLength() <= 0){
 			this.setEnabled(false);
 		}else{
@@ -69,7 +65,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 				this.addNewTF(e.getDocument().getText(0, e.getDocument().getLength()));
 				//System.out.println(e.getDocument().getText(0, e.getDocument().getLength()));
 			} catch (BadLocationException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -78,7 +73,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
 		if (e.getDocument().getLength() <= 0){
 			this.setEnabled(false);
 		}else{
@@ -88,7 +82,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 				this.addNewTF(e.getDocument().getText(0, e.getDocument().getLength()));
 				//System.out.println(e.getDocument().getText(0, e.getDocument().getLength()));
 			} catch (BadLocationException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
@@ -108,7 +101,6 @@ public abstract class ComboboxAction extends CisTargetXAction implements ListSel
 
 	@Override
 	public void newRegTree(Motif currentSelection) {
-		// TODO Auto-generated method stub
 		//this.setEnabled(true);
 		//System.out.println("comboboxaction enabled");
 	}

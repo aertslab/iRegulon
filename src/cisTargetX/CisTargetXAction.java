@@ -4,7 +4,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
-import javax.swing.event.ListSelectionListener;
 
 public abstract class CisTargetXAction extends AbstractAction {
 

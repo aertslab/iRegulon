@@ -1,11 +1,9 @@
 package cisTargetOutput.DetailPanel;
 
-import java.text.DecimalFormat;
 import java.util.Collection;
 
 import javax.swing.table.AbstractTableModel;
 
-import domainModel.CandidateTargetGene;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 

@@ -24,7 +24,6 @@ public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUp
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		// TODO Auto-generated method stub
 		updateCanvas(table, value, this, isSelected, row);
 		return this;
 	}

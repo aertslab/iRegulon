@@ -2,24 +2,16 @@ package cisTargetOutput.DetailPanel;
 
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
-
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
@@ -30,11 +22,6 @@ import cisTargetOutput.renderers.DefaultRenderer;
 import cisTargetOutput.renderers.FloatRenderer;
 import cisTargetOutput.renderers.HighLightColorRenderer;
 import cisTargetOutput.renderers.UpDateHighLightRenderer;
-import cisTargetX.CisTargetXNodes;
-import cytoscape.CyNetwork;
-import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-import cytoscape.data.CyAttributes;
 
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
@@ -236,7 +223,6 @@ public class TGPanel extends JPanel implements MotifListener{
 
 	@Override
 	public void newRegTree(Motif currentSelection) {
-		// TODO Auto-generated method stub
 		this.refresh(currentSelection);
 	}
 	
@@ -261,7 +247,7 @@ public class TGPanel extends JPanel implements MotifListener{
 		}else{
 			this.jlbMotif.setText(motif.getEnrichedMotifID());
 			this.jlbMotif.setToolTipText("Motif name: " + motif.getEnrichedMotifID());
-			float score = motif.getNeScore();
+			//float score = motif.getNeScore();
 			this.jlbDescription.setText(motif.getDescription());
 			this.jlbDescription.setToolTipText("Description: " + motif.getDescription());
 			//this.jtfNEScore.setText("" + score);

@@ -8,8 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import cisTargetX.InputView;
-
 public class DetailFrameTFandMotif {
 	
 	private TFandMotifSelected tfMotif;
@@ -19,8 +17,6 @@ public class DetailFrameTFandMotif {
 		this.tfMotif = tfMotif;
 		String title = tfMotif.getMotif().getEnrichedMotifID() + " " + tfMotif.getTranscriptionFactor().getName();
 		JFrame frame = new JFrame(title);
-		GridBagLayout layout = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
 		frame.add(this.getDetailPane());
 		
 		frame.pack();

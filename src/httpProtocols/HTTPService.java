@@ -5,10 +5,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 import cisTargetAnalysis.CisTargetXInput;
 import cisTargetX.CisTargetResourceBundle;
@@ -41,13 +39,32 @@ public class HTTPService extends CisTargetResourceBundle implements Service{
 		float NESThreshold = input.getEScore();
 		float minOrthologous = input.getMinOrthologous();
 		float maxMotifSimilarityFDR = input.getMaxMotifSimilarityFDR();
+		
+		boolean isRegionBased = input.isRegionBased();
+		String database = input.getDatabase();
+		float overlap = input.getOverlap();
+		String delineation = input.getDelineation();
+		int upstream = input.getUpstream();
+		int downstream = input.getDownstream();
 		try {
 			//creating the data
-			String data = "jobName=" + name + "&AUCThreshold=" + AUCThreshold + "&rankThreshold=" 
-					+ rankThreshold + "&NESThreshold=" + NESThreshold + 
-					"&minOrthologous=" + minOrthologous + "&maxMotifSimilarityFDR=" + maxMotifSimilarityFDR;
-		    //System.out.println("orth=" + minOrthologous);
-		    //System.out.println("msFDR=" + maxMotifSimilarityFDR);
+			String data = "jobName=" + name 
+					+ "&AUCThreshold=" + AUCThreshold 
+					+ "&rankThreshold=" + rankThreshold 
+					+ "&NESThreshold=" + NESThreshold 
+					+ "&minOrthologous=" + minOrthologous 
+					+ "&maxMotifSimilarityFDR=" + maxMotifSimilarityFDR
+					+ "&selectedDatabase=" + database;
+			if (isRegionBased){
+				if(delineation != null){
+					data += "&conversionFractionOfOverlap=" + overlap 
+							+ "&conversionDelineation=" + delineation;
+				}else{
+					data += "&conversionFractionOfOverlap=" + overlap 
+							+ "&conversionUpstreamRegionInBp=" + upstream 
+							+ "&conversionDownstreamRegionInBp=" + downstream;
+				}
+			}
 			
 			GeneIdentifier[] geneIDArray = new GeneIdentifier[geneIDs.size()];
 		    int geneIDIndex = 0;
@@ -63,6 +80,7 @@ public class HTTPService extends CisTargetResourceBundle implements Service{
 		    		data = data + ";" + geneIDArray[index].getGeneName();
 		    	}
 		    }
+		    System.out.println(data);
 			// Send data
 		    URL url = new URL(this.getBundle().getString("URL_submit"));
 		    URLConnection conn = url.openConnection();
@@ -81,6 +99,7 @@ public class HTTPService extends CisTargetResourceBundle implements Service{
 		    	//System.out.println(line);
 		        jobID = Integer.parseInt(line);
 		    }
+		    System.out.println(jobID);
 		    wr.close();
 		    rd.close();
 		    return jobID;
@@ -349,11 +368,11 @@ public class HTTPService extends CisTargetResourceBundle implements Service{
 		    // Get the response
 		    BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 		    String line;
-		    String error = "Error: could not get the error message";
+		    String error = "";
 		    while ((line = rd.readLine()) != null) {
 		    	String[] jobValues = line.split("\t");
 		        //System.out.println(line);
-		        error = jobValues[0];
+		        error += jobValues[0] + "\n";
 		    }
 		    wr.close();
 		    rd.close();

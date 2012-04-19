@@ -3,19 +3,16 @@ package cisTargetX;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.event.ListDataListener;
 
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 
 
 public class AttributeComboBox  extends JComboBox implements FocusListener{
+
 
 	public AttributeComboBox(){
 		super();
@@ -33,7 +30,6 @@ public class AttributeComboBox  extends JComboBox implements FocusListener{
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
 		String selected = (String) this.getSelectedItem();
 		boolean contains = false;
 		this.removeAllItems();
@@ -64,7 +60,7 @@ public class AttributeComboBox  extends JComboBox implements FocusListener{
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		// TODO Auto-generated method stub
+		// TODO nothing
 		
 	}
 

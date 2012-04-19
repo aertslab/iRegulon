@@ -30,13 +30,13 @@ class ImageMouseListener  implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// nothinh
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// nothing
 		
 	}
 
@@ -57,11 +57,11 @@ class ImageMouseListener  implements MouseListener{
 		}
 		
 		if (this.im != null){
-			int expand = 5;
-			Rectangle rectangle = new Rectangle((int) (im.getX() - expand), 
-					(int) (im.getY() - expand), 
-					(int) (im.getBounds().getWidth() + (expand * 2)), 
-					(int) (im.getBounds().getHeight() + (expand * 2)));
+			//int expand = 5;
+			//Rectangle rectangle = new Rectangle((int) (im.getX() - expand), 
+			//		(int) (im.getY() - expand), 
+			//		(int) (im.getBounds().getWidth() + (expand * 2)), 
+			//		(int) (im.getBounds().getHeight() + (expand * 2)));
 			//System.out.println("X on screen  " + e.getXOnScreen());
 			//System.out.println("y on screen " + e.getYOnScreen());
 			//System.out.println("X rect " + (im.getBounds().getX() - expand));

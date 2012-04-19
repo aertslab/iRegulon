@@ -1,7 +1,5 @@
 package cisTargetDrawActions;
 
-import giny.model.GraphPerspective;
-import giny.view.EdgeView;
 import giny.view.NodeView;
 
 import java.awt.event.ActionEvent;
@@ -11,20 +9,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.View;
 
-import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
 import cisTargetOutput.SelectedMotif;
-import cisTargetX.CisTargetVisualStyle;
 import cisTargetX.CisTargetXNodes;
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
@@ -32,16 +25,9 @@ import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
 import cytoscape.data.Semantics;
-import cytoscape.layout.CyLayoutAlgorithm;
-import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.visual.CalculatorCatalog;
-import cytoscape.visual.VisualMappingManager;
-import cytoscape.visual.VisualStyle;
-import domainModel.CandidateTargetGene;
-import domainModel.GeneIdentifier;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 

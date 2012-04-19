@@ -2,7 +2,6 @@ package cisTargetDrawActions;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -13,7 +12,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
 import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetVisualStyle;
@@ -22,7 +20,6 @@ import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
-import cytoscape.layout.CyLayoutAlgorithm;
 import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.CytoscapeDesktop;
@@ -31,7 +28,6 @@ import cytoscape.visual.CalculatorCatalog;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
 import domainModel.CandidateTargetGene;
-import domainModel.GeneIdentifier;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 

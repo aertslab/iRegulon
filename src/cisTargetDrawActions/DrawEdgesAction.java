@@ -3,11 +3,8 @@ package cisTargetDrawActions;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.*;
-
-import java.util.*;
 
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -18,14 +15,9 @@ import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
 import cytoscape.data.Semantics;
-import cytoscape.layout.CyLayouts;
 import cytoscape.view.*;
-import cytoscape.visual.CalculatorCatalog;
-import cytoscape.visual.VisualMappingManager;
-import cytoscape.visual.VisualStyle;
 import giny.view.*;
 
-import cisTargetExeptions.*;
 import cisTargetOutput.ComboboxAction;
 import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetVisualStyle;

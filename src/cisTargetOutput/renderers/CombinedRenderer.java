@@ -2,8 +2,6 @@ package cisTargetOutput.renderers;
 
 import java.awt.Component;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -36,10 +34,10 @@ public class CombinedRenderer extends JLabel implements TableCellRenderer{
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
-		int i=0;
+		//int i=0;
 		//setText(value == null ? "" : value.toString());
 		for (CanvasUpdater updater : this.renderList){
-			i++;
+			//i++;
 			updater.updateCanvas(table, value, this, isSelected, row);
 		}
 		return this;

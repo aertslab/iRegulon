@@ -5,8 +5,6 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTable;
 
-
-import cisTargetDrawActions.DrawNetworkAction;
 import cisTargetOutput.PopupMenu;
 
 public class TFMouseListener extends MouseAdapter{

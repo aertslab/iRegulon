@@ -3,14 +3,12 @@ package cisTargetConnection;
 import httpProtocols.*;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.ResourceBundle;
 
 import cisTargetAnalysis.CisTargetXInput;
 
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
-import domainModel.GeneIdentifier;
 import domainModel.Motif;
 
 public class ClassicalTask implements Task {
@@ -84,7 +82,7 @@ public class ClassicalTask implements Task {
 		if (! this.interrupted){
 			progress = progress + 10;
 			taskMonitor.setPercentCompleted(progress);
-			State state = this.service.getState(jobID);
+			this.state = this.service.getState(jobID);
 			if (this.service.getState(jobID).equals(State.FINISHED)){
 				taskMonitor.setStatus("Recalculating your motifs");
 				Collection<Motif> motifs = this.service.getMotifs(jobID);

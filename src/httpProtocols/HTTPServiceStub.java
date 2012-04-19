@@ -72,8 +72,8 @@ public class HTTPServiceStub implements Service{
 	@Override
 	public Collection<Motif> getMotifs(int jobID) {
 
-		String[] proteinen = {"603627", "603626", "555135", "603627", "603627"};
-		String[] proteinen2 = {"603627", "555134", "603627", "555134", "555135"};
+		//String[] proteinen = {"603627", "603626", "555135", "603627", "603627"};
+		//String[] proteinen2 = {"603627", "555134", "603627", "555134", "555135"};
 		
 		
 		GeneIdentifier geneID0 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HGNC);

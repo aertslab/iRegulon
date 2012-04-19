@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -24,7 +23,6 @@ public class TFDetailFrameAction extends AbstractAction implements ListSelection
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		DetailFrameTFandMotif frame = new DetailFrameTFandMotif(tfMotif);
 	}
 

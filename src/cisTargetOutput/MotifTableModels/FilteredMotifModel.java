@@ -1,7 +1,5 @@
 package cisTargetOutput.MotifTableModels;
 
-import java.util.List;
-
 import javax.swing.table.AbstractTableModel;
 
 

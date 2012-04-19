@@ -1,6 +1,5 @@
 package saveCisTarget;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -45,9 +44,8 @@ public class SaveResults {
 	 * @return the motifs in a Collection of the given xml
 	 */
 	public ArrayList<Motif> loadResults(String xml){
-		//System.out.println("xml to motifs");
+		@SuppressWarnings("unchecked")
 		ArrayList<Motif> motifs = (ArrayList<Motif>) this.xstream.fromXML(xml);
-		//System.out.println("xml to motifs completed");
 		return motifs;	
 	}
 	

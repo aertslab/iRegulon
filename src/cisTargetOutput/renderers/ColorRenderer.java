@@ -3,7 +3,6 @@ package cisTargetOutput.renderers;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.table.*;
 
 
@@ -34,7 +33,6 @@ public class ColorRenderer extends JLabel implements TableCellRenderer, CanvasUp
 
 	@Override
 	public JLabel updateCanvas(JTable table, Object value, JLabel canvas, boolean isSelected, int row) {
-		// TODO Auto-generated method stub
 		Object columnValue=table.getValueAt(row,table.getColumnModel().getColumnIndex(columnName));
         
         

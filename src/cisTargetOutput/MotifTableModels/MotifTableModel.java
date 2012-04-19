@@ -1,17 +1,10 @@
 package cisTargetOutput.MotifTableModels;
 
-import cisTargetAnalysis.*;
 
-import java.awt.Component;
-import java.text.DecimalFormat;
 import java.util.*;
 
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
-import domainModel.GeneIdentifier;
 import domainModel.Motif;
 
 public class MotifTableModel extends AbstractTableModel implements GlobalMotifTableModel{

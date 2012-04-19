@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -46,6 +45,8 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	private JComboBox jcbDelation;
 	private JTextField txtUpStream;
 	private JTextField txtDownStream;
+	private JRadioButton rbtnDelineation;
+	private JRadioButton rbtnConversion;
 	
 	
 	
@@ -332,33 +333,33 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 		panel.add(this.txtOverlap, c);
 		yPos += 1;
 		
-		JRadioButton rbtnDelineation = new JRadioButton();
-		rbtnDelineation.setEnabled(true);
+		this.rbtnDelineation = new JRadioButton();
+		this.rbtnDelineation.setEnabled(true);
 		
-		JRadioButton rbtnConversion = new JRadioButton();
-		rbtnConversion.setEnabled(true);
+		this.rbtnConversion = new JRadioButton();
+		this.rbtnConversion.setEnabled(true);
 		
         ButtonGroup group = new ButtonGroup();
-        group.add(rbtnDelineation);
-        group.add(rbtnConversion);
+        group.add(this.rbtnDelineation);
+        group.add(this.rbtnConversion);
         
         this.jcbDelation = new JComboBox();
 		
         c.gridx = 0;
 		c.gridy = yPos;
 		c.gridwidth = 1;
-        panel.add(rbtnDelineation, c);
+        panel.add(this.rbtnDelineation, c);
         
         c.gridx = 1;
 		c.gridy = yPos;
 		c.gridwidth = 4;
-		panel.add(jcbDelation, c);
+		panel.add(this.jcbDelation, c);
         yPos+=1;
         
         c.gridx = 0;
 		c.gridy = yPos;
 		c.gridwidth = 1;
-        panel.add(rbtnConversion, c);
+        panel.add(this.rbtnConversion, c);
         
         jtl = new JLabel("Upstream");
         jtl.setToolTipText("<html> Choose the amount of bp upstream of the conversion. </html>");
@@ -809,10 +810,22 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	 * 			
 	 */
 	public void generateInput(){
-		this.input = new CisTargetXInput(CisTargetXNodes.getGenes(this.getAttributeName(), this.getSpeciesNomenclature()), 
-				this.getNESThreshold(), this.getAUCThreshold(), this.getRankThreshold(), 
-				this.getSpeciesNomenclature(), this.cisTargetType, this.getName(), 
-				this.getMinOrthologous(), this.getMaxMotifSimilarityFDR());
+		this.input = new CisTargetXInput(CisTargetXNodes.getGenes(this.getAttributeName(), 
+				this.getSpeciesNomenclature()), 
+				this.getNESThreshold(), 
+				this.getAUCThreshold(), 
+				this.getRankThreshold(), 
+				this.getSpeciesNomenclature(), 
+				this.cisTargetType, 
+				this.getName(), 
+				this.getMinOrthologous(), 
+				this.getMaxMotifSimilarityFDR(), 
+				this.isRegionBased(), 
+				this.getDatabase(), 
+				this.getOverlap(), 
+				this.getDelation(), 
+				this.getUpStream(), 
+				this.getDownStream());
 	}
 
 	@Override
@@ -830,7 +843,52 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 		return (String) this.jcbGeneName.getSelectedItem();
 	}
 	
+	public boolean isRegionBased(){
+		return (boolean) this.jcbBased.isRegionBased();
+	}
 	
+	public String getDatabase(){
+		if (this.isRegionBased()){
+			return this.getSpeciesNomenclature().getRegionDatabaseOf(
+					(String) this.jcbdatabase.getSelectedItem());
+		}else{
+			return this.getSpeciesNomenclature().getGeneDatabaseOf(
+					(String) this.jcbdatabase.getSelectedItem());
+		}
+	}
+	
+	public Float getOverlap(){
+		if (this.isRegionBased()){
+			return Float.parseFloat((String) this.txtOverlap.getText());
+		}else{
+			return -1f;
+		}
+	}
+	
+	public String getDelation(){
+		if (this.isRegionBased() && this.rbtnDelineation.isSelected()){
+			return this.getSpeciesNomenclature().getDelineationOf(
+					(String) this.jcbDelation.getSelectedItem());
+		}else{
+			return null;
+		}
+	}
+	
+	public int getUpStream(){
+		if (this.isRegionBased() && this.rbtnConversion.isSelected()){
+			return Integer.parseInt((String) this.txtUpStream.getText());
+		}else{
+			return -1;
+		}
+	}
+	
+	public int getDownStream(){
+		if (this.isRegionBased() && this.rbtnConversion.isSelected()){
+			return Integer.parseInt((String) this.txtDownStream.getText());
+		}else{
+			return -1;
+		}
+	}
 	
 	
 }

@@ -6,7 +6,6 @@ import javax.swing.event.ListSelectionListener;
 
 import cisTargetOutput.TFComboBox;
 
-import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 
 public class TFTableSelectionListen implements ListSelectionListener{
@@ -22,8 +21,7 @@ public class TFTableSelectionListen implements ListSelectionListener{
 	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
-		final TFTableModel tftModel = (TFTableModel) table.getModel();
+		//final TFTableModel tftModel = (TFTableModel) table.getModel();
 		TranscriptionFactor tf = this.getSelectedTranscriptionFactor();
 		this.tfcombobox.setSelectedItem(tf);
 	}

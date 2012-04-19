@@ -1,6 +1,5 @@
 package cisTargetDrawActions;
 
-import giny.view.EdgeView;
 import giny.view.NodeView;
 
 import java.awt.event.ActionEvent;
@@ -16,12 +15,10 @@ import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
 import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetXNodes;
-import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
-import cytoscape.data.Semantics;
 import cytoscape.view.CyNetworkView;
 import domainModel.CandidateTargetGene;
 import domainModel.GeneIdentifier;

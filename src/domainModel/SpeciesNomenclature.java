@@ -115,4 +115,30 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 	public HashMap<String, String> getRegionsDelineation(){
 		return this.regionsDelineation;
 	}
+	
+	public String getGeneDatabaseOf(String key){
+		if (this.geneDatabase.keySet().contains(key)){
+			return this.geneDatabase.get(key);
+		}else{
+			return null;
+		}
+	}
+	
+	public String getRegionDatabaseOf(String key){
+		if (this.regionsDatabase.keySet().contains(key)){
+			return this.regionsDatabase.get(key);
+		}else{
+			return null;
+		}
+	}
+	
+	public String getDelineationOf(String key){
+		if (this.regionsDelineation.keySet().contains(key)){
+			return this.regionsDelineation.get(key);
+		}else{
+			return null;
+		}
+	}
+	
+	
 }

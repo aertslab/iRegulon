@@ -2,13 +2,10 @@ package junitTests;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
 import org.junit.Test;
 

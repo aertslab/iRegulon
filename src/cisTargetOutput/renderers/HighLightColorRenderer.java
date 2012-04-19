@@ -3,18 +3,11 @@ package cisTargetOutput.renderers;
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.table.*;
 
-import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-import cytoscape.data.CyAttributes;
-
-import cisTargetX.CisTargetXNodes;
 
 public class HighLightColorRenderer extends JLabel implements TableCellRenderer, CanvasUpdater
     {
@@ -45,7 +38,6 @@ public class HighLightColorRenderer extends JLabel implements TableCellRenderer,
 	@Override
 	public JLabel updateCanvas(JTable table, Object value, JLabel canvas,
 			boolean isSelected, int row) {
-		// TODO Auto-generated method stub
 		Object columnValue=table.getValueAt(row,table.getColumnModel().getColumnIndex(columnName));
         //if (value != null) setText(value.toString());
         

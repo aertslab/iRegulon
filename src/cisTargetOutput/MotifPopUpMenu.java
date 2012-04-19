@@ -4,16 +4,11 @@ import cisTargetDrawActions.DrawEdgesAction;
 import cisTargetDrawActions.DrawMergedEdgesNetworkAction;
 import cisTargetDrawActions.DrawNetworkAction;
 import cisTargetDrawActions.DrawRegulonsAndEdgesAction;
-import cisTargetExeptions.CreationException;
 
 import java.awt.event.*;
 
 import javax.swing.JTable;
 import javax.swing.text.JTextComponent;
-
-import java.util.*;
-
-import domainModel.Motif;
 
 
 public class MotifPopUpMenu extends MouseAdapter{

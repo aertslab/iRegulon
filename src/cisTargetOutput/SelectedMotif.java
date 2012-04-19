@@ -1,11 +1,9 @@
 package cisTargetOutput;
 
-import cisTargetAnalysis.*;
 
 import java.util.*;
 
 import domainModel.Motif;
-import domainModel.TranscriptionFactor;
 
 
 public class SelectedMotif {

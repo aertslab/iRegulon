@@ -4,10 +4,6 @@ import java.util.*;
 
 import cisTargetAnalysis.CisTargetXInput;
 
-import cytoscape.Cytoscape;
-import cytoscape.task.ui.JTaskConfig;
-import cytoscape.task.util.TaskManager;
-
 import domainModel.GeneIdentifier;
 import domainModel.Motif;
 import domainModel.SpeciesNomenclature;
@@ -19,8 +15,8 @@ public class ComputationalServiceStub implements ComputationalService {
 	public List<Motif> findPredictedRegulators(CisTargetXInput input) {
 		
 		
-		String[] proteinen = {"603627", "603626", "555135", "603627", "603627"};
-		String[] proteinen2 = {"603627", "555134", "603627", "555134", "555135"};
+		//String[] proteinen = {"603627", "603626", "555135", "603627", "603627"};
+		//String[] proteinen2 = {"603627", "555134", "603627", "555134", "555135"};
 		
 		
 		GeneIdentifier geneID0 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HGNC);

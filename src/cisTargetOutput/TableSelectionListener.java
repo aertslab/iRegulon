@@ -6,7 +6,6 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import cisTargetExeptions.*;
 import cisTargetOutput.MotifTableModels.GlobalMotifTableModel;
 import cisTargetOutput.MotifTableModels.MotifTableModel;
 import domainModel.Motif;

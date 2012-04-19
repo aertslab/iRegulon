@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import httpProtocols.HTTPService;
-import httpProtocols.State;
 
 import org.junit.Test;
 

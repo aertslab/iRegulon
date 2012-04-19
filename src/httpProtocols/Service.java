@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import cisTargetAnalysis.CisTargetXInput;
 
-import domainModel.GeneIdentifier;
 import domainModel.Motif;
 
 public interface Service {

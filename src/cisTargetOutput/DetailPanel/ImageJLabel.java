@@ -1,18 +1,10 @@
 package cisTargetOutput.DetailPanel;
 
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-
-import java.awt.Rectangle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ImageJLabel extends JLabel{
 	

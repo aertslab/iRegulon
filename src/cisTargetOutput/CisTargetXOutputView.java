@@ -1,39 +1,26 @@
 package cisTargetOutput;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import java.awt.Container;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.text.JTextComponent;
 
-import java.util.Comparator;
 import java.util.List;
-import javax.swing.event.*;
 
 import saveCisTarget.SaveLoadDialogs;
 import saveCisTarget.SaveResults;
 
-import cisTargetDrawActions.DrawEdgesAction;
 import cisTargetDrawActions.DrawNetworkAction;
 import cisTargetDrawActions.DrawRegulonsAndEdgesAction;
-import cisTargetExeptions.CreationException;
-import cisTargetOutput.DetailPanel.TFandMotifSelected;
 import cisTargetOutput.DetailPanel.TGPanel;
 import cisTargetOutput.MotifTableModels.FilteredMotifModel;
 import cisTargetOutput.MotifTableModels.FilteredPatternDocumentListener;
@@ -186,7 +173,6 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
 					SaveResults results = new SaveResults();
 					String xml = results.saveResults(motifList);
 					SaveLoadDialogs.saveDialogue(xml, runName);
@@ -202,7 +188,6 @@ public class CisTargetXOutputView extends CisTargetResourceBundle{
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
 					cytoPanel.remove(splitPane);
 					if (cytoPanel.getCytoPanelComponentCount() == 0){
 						cytoPanel.setState(CytoPanelState.HIDE);

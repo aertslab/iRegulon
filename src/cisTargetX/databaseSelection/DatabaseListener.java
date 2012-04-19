@@ -12,7 +12,6 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import cisTargetX.AttributeComboBox;
 import cisTargetX.CisTargetResourceBundle;
 import cisTargetX.CisTargetXNodes;
 
@@ -341,20 +340,17 @@ public class DatabaseListener extends CisTargetResourceBundle implements ActionL
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
 		this.refresh();
 		
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
 		this.refresh();
 	}
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		// TODO Auto-generated method stub
 		this.refresh();
 	}
 	

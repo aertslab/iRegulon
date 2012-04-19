@@ -10,7 +10,6 @@ import saveCisTarget.SaveResults;
 
 import java.util.*;
 
-import cisTargetAnalysis.*;
 import cisTargetOutput.CisTargetXOutputView;
 
 import cytoscape.view.CyHelpBroker;
@@ -21,9 +20,6 @@ import java.net.URL;
 import cytoscape.Cytoscape;
 import cytoscape.plugin.CytoscapePlugin;
 import cytoscape.util.CytoscapeAction;
-import cytoscape.*;
-import cytoscape.view.*;
-import cytoscape.view.cytopanels.*;
 import domainModel.Motif;
 
 
@@ -138,7 +134,7 @@ public class CisTargetXStart extends CytoscapePlugin {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
+					// The help is already added to this menuitem
 					
 				}
 			});
@@ -153,7 +149,6 @@ public class CisTargetXStart extends CytoscapePlugin {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
 					JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
 							"<html> " +
 							"<body>" +
@@ -170,7 +165,7 @@ public class CisTargetXStart extends CytoscapePlugin {
 							" was developed in the Laboratory of Computational Biology (S. Aerts lab), University of Leuven, Belgium." +
 							"<br/>" +
 							"Developers: Koen Herten & Bram Van de Sande." + "<br/>" +
-							"Copyright 2012 Katholieke Universiteit Leuven." + "<br/>" +
+							"Copyright 2012 KU Leuven." + "<br/>" +
 							"</body>" +
 							"</html>");
 				}

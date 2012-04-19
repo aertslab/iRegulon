@@ -1,30 +1,21 @@
 package cisTargetDrawActions;
 
 import cytoscape.*;
-import cytoscape.data.Semantics;
-import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
-import cytoscape.visual.*;
 
 
 import java.awt.event.ActionEvent;
-import java.util.*;
-import java.util.List;
-import java.awt.*;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import cisTargetExeptions.CreationException;
 import cisTargetOutput.ComboboxAction;
 import cisTargetOutput.SelectedMotif;
 import cisTargetX.CisTargetVisualStyle;
 import domainModel.CandidateTargetGene;
-import domainModel.GeneIdentifier;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 

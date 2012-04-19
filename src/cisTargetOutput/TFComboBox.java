@@ -13,12 +13,12 @@ import domainModel.TranscriptionFactor;
 
 public class TFComboBox extends JComboBox implements MotifListener, ActionListener{
 
-	private SelectedMotif selectedMotif;
+	//private SelectedMotif selectedMotif;
 	private Collection<TranscriptionFactor> tfCollection;
 	
 	public TFComboBox(SelectedMotif selectedTFRegulons){
 		super();
-		this.selectedMotif = selectedTFRegulons;
+		//this.selectedMotif = selectedTFRegulons;
 		selectedTFRegulons.registerListener(this);
 		this.tfCollection = Collections.EMPTY_LIST;
 		this.setEnabled(false);

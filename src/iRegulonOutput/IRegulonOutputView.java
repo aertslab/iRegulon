@@ -60,8 +60,7 @@ public class IRegulonOutputView extends CisTargetResourceBundle{
 	private SelectedMotif selectedTFRegulons;
 	private JSplitPane splitPane;
 	private CytoPanel cytoPanel;
-	private final String[] filteringPossibilities = {"motif", "transcription factor"};
-	
+
 	private boolean isSaved;
 	
 	private Results result;
@@ -338,7 +337,7 @@ public class IRegulonOutputView extends CisTargetResourceBundle{
 			
 		//the filtering options
 		JLabel labelFilter = new JLabel("Filtering on: ");
-		JComboBox filteringOn = new JComboBox(this.filteringPossibilities);
+		JComboBox filteringOn = new JComboBox(FilteringOn.values());
 		JTextField textFilter = new JTextField();
 			
 		c.gridx = 0;
@@ -371,12 +370,12 @@ public class IRegulonOutputView extends CisTargetResourceBundle{
 		//add a table model
 		MotifTableModel tableModel = new MotifTableModel(this.motifList);
 		//filtering table model
-		FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, false, "");
+		FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, FilteringOn.MOTIF, "");
 		JTable table = new JTable(filteredModel);
 			
 		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
 		filteringOn.addActionListener(new FilteringOnComboBoxAction(filteredModel));
-		filteringOn.setSelectedIndex(0);
+		filteringOn.setSelectedItem(FilteringOn.MOTIF);
 		textFilter.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
 			
 		//tableModel.initColumnSizes(table);

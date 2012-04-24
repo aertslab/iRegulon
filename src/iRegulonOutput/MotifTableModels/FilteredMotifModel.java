@@ -1,8 +1,11 @@
 package iRegulonOutput.MotifTableModels;
 
+import iRegulonOutput.FilteringOn;
+
 import javax.swing.table.AbstractTableModel;
 
 
+import domainModel.CandidateTargetGene;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 
@@ -11,13 +14,11 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	
 	private final MotifTableModel model;
 	private final String[] m_colNames;
-	private final double[] collumnWidthPercentage = {0.04, 0.05, 0.5, 0.1, 0.1, 
-			0.05, 0.07, 0.07};
-	private boolean isFilteringOnMotif;
 	private String pattern;
+	private FilteringOn filter;
 	
 	
-	public FilteredMotifModel(MotifTableModel model, boolean filterOnMotif, String pattern){
+	public FilteredMotifModel(MotifTableModel model, FilteringOn filterOn, String pattern){
 		this.model = model;
 		String[] colnames = new String[this.model.getColumnCount() +1];
 		colnames[0] = "Filtered";
@@ -25,7 +26,7 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 			colnames[index + 1] = this.model.getColumnName(index);
 		}
 		this.m_colNames = colnames;
-		this.isFilteringOnMotif = filterOnMotif;
+		this.filter = filterOn;
 		this.pattern = pattern;
 	}
 	
@@ -53,13 +54,21 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	
 	public boolean hasPattern(int rowIndex){
 		Motif motif = this.getRegulatoryTreeAtRow(rowIndex);
-		if (this.isFilteringOnMotif){
+		if (this.filter == FilteringOn.MOTIF){
 			if (motif.getEnrichedMotifID().toLowerCase().contains(this.pattern.toLowerCase())){
 				return true;
 			}
-		}else{
+		}
+		if (this.filter == FilteringOn.TRANSCRIPTION_FACTOR){
 			for (TranscriptionFactor tf : motif.getTranscriptionFactors()){
 				if (tf.getName().toLowerCase().contains(this.pattern.toLowerCase())){
+					return true;
+				}
+			}
+		}
+		if (this.filter == FilteringOn.TARGET_GENE){
+			for (CandidateTargetGene tg : motif.getCandidateTargetGenes()){
+				if (tg.getGeneName().toLowerCase().contains(this.pattern.toLowerCase())){
 					return true;
 				}
 			}
@@ -72,7 +81,7 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	 * @return true if this model filters on the transcription factor
 	 */
 	public boolean isFilteringOnTF(){
-		return ! this.isFilteringOnMotif;
+		return this.filter == FilteringOn.TRANSCRIPTION_FACTOR;
 	}
 	
 	/**
@@ -80,14 +89,30 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	 * @return true if this model filters on the motif
 	 */
 	public boolean isFilteringOnMotif(){
-		return this.isFilteringOnMotif;
+		return this.filter == FilteringOn.MOTIF;
+	}
+	
+	/**
+	 * 
+	 * @return true if this model filters on the target gene
+	 */
+	public boolean isFilteringOnTG(){
+		return this.filter == FilteringOn.TARGET_GENE;
+	}
+	
+	/**
+	 * 
+	 * @return the filter that is used in this model
+	 */
+	public FilteringOn getFilter(){
+		return this.filter;
 	}
 	
 	/**
 	 * @post sets the filtering on the motif
 	 */
 	public void setFilteringOnMotif(){
-		this.isFilteringOnMotif = true;
+		this.filter = FilteringOn.MOTIF;
 		this.fireTableDataChanged();
 	}
 	
@@ -95,9 +120,29 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	 * @post sets the filtering on the transcription factor
 	 */
 	public void setFilteringOnTF(){
-		this.isFilteringOnMotif = false;
+		this.filter = FilteringOn.TRANSCRIPTION_FACTOR;
 		this.fireTableDataChanged();
 	}
+	
+	/**
+	 * @post sets the filtering on the target gene
+	 */
+	public void setFilteringOnTG(){
+		this.filter = FilteringOn.TARGET_GENE;
+		this.fireTableDataChanged();
+	}
+	
+	/**
+	 * 
+	 * @param filter
+	 * @post the model will be filtered on the given filter
+	 */
+	public void setFilteringOn(FilteringOn filter){
+		this.filter = filter;
+		this.fireTableDataChanged();
+	}
+	
+	
 	
 	/**
 	 * 

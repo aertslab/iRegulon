@@ -20,11 +20,7 @@ public class FilteringOnComboBoxAction implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		JComboBox box = (JComboBox) e.getSource();
-		if (box.getSelectedItem().equals("motif")){
-			this.model.setFilteringOnMotif();
-		}else{
-			this.model.setFilteringOnTF();
-		}
+		this.model.setFilteringOn((FilteringOn) box.getSelectedItem());
 	}
 
 	

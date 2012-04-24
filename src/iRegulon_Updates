@@ -16,3 +16,10 @@ Version 0.5 (release 04 12 2012)
 	Update table with extra column for the search function: a green check for available, otherwise a cross
 	Add summary for motif and transcription factor: right clicking on selected transcription factor in table (possibility to view parameters of the motif and transcription factor. If transcription factor has a similar motif, possible to compair here)
 	Update the help with the new features (not updated: the print-screens)
+Version 0.6 (Release on 24 April 2012 (DEVELOPERS ONLY))
+	Added input possibility: the chose of database.
+	Update the save functionality (the input parameters are saved to).
+	Add: the input parameters are visible as a tooltip of the jobname or in the detail frame.
+	Update: About section.
+	Update the help.
+	Add: search on target gene

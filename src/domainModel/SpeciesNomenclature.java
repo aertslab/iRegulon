@@ -101,10 +101,6 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 		return this.code;
 	}
 	
-	private String getDatabaseName(){
-		return this.databaseName;
-	}
-	
 	public HashMap<String, String> getGeneDatabase(){
 		return this.geneDatabase;
 	}

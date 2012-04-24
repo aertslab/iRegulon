@@ -1,8 +1,9 @@
 package domainModel;
 
+import iRegulonInput.CisTargetResourceBundle;
+
 import java.util.*;
 
-import cisTargetX.CisTargetResourceBundle;
 
 public final class SpeciesNomenclature extends CisTargetResourceBundle{
 	private static final Map<Integer,SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer,SpeciesNomenclature>();
@@ -100,7 +101,7 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 		return this.code;
 	}
 	
-	public String getDatabaseName(){
+	private String getDatabaseName(){
 		return this.databaseName;
 	}
 	
@@ -140,5 +141,32 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 		}
 	}
 	
+	public String getDatabaseNameOf(String database){
+		if (this.geneDatabase.containsValue(database)){
+			for (String key : this.geneDatabase.keySet()){
+				if (database.equals(this.geneDatabase.get(key))){
+					return key;
+				}
+			}
+		}else{
+			for (String key : this.regionsDatabase.keySet()){
+				if (database.equals(this.regionsDatabase.get(key))){
+					return key;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public String getDelineationNameOf(String delineation){
+		if (this.regionsDelineation.containsValue(delineation)){
+			for (String key : this.regionsDelineation.keySet()){
+				if (delineation.equals(this.regionsDelineation.get(key))){
+					return key;
+				}
+			}
+		}
+		return null;
+	}
 	
 }

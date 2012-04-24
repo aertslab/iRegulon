@@ -1,14 +1,15 @@
 package httpProtocols;
 
+import iRegulonAnalysis.Input;
+
 import java.util.Collection;
 
-import cisTargetAnalysis.CisTargetXInput;
 
 import domainModel.Motif;
 
 public interface Service {
 
-	public int sentJob(CisTargetXInput input);
+	public int sentJob(Input input);
 	
 	public State getState(int jobID);
 	

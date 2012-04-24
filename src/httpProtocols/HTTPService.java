@@ -1,5 +1,8 @@
 package httpProtocols;
 
+import iRegulonAnalysis.Input;
+import iRegulonInput.CisTargetResourceBundle;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -8,8 +11,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import cisTargetAnalysis.CisTargetXInput;
-import cisTargetX.CisTargetResourceBundle;
 
 import domainModel.CandidateTargetGene;
 import domainModel.GeneIdentifier;
@@ -31,7 +32,7 @@ public class HTTPService extends CisTargetResourceBundle implements Service{
 	 * @param NESThreshold
 	 * @return the id of the job
 	 */
-	public int sentJob(CisTargetXInput input){
+	public int sentJob(Input input){
 		String name = input.getName();
 		Collection<GeneIdentifier> geneIDs = input.getGenes();
 		float AUCThreshold = input.getROCthresholdAUC();

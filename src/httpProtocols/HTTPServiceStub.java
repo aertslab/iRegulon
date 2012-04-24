@@ -1,10 +1,11 @@
 package httpProtocols;
 
+import iRegulonAnalysis.Input;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import cisTargetAnalysis.CisTargetXInput;
 
 import domainModel.GeneIdentifier;
 import domainModel.Motif;
@@ -22,7 +23,7 @@ public class HTTPServiceStub implements Service{
 	}
 	
 	@Override
-	public int sentJob(CisTargetXInput input) {
+	public int sentJob(Input input) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

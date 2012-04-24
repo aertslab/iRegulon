@@ -1,0 +1,94 @@
+package saveActions;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
+import com.thoughtworks.xstream.XStream;
+
+import domainModel.*;
+
+public class SaveResults {
+
+	private XStream xstream;
+	
+	/**
+	 * creates a new stream for loading motifs in xml
+	 */
+	public SaveResults(){
+		//Set-up of the XStream
+		this.xstream = new XStream();
+		this.xstream.alias("motif", Motif.class);
+		this.xstream.alias("candidateTargetGene", CandidateTargetGene.class);
+		this.xstream.alias("geneIdentifier", GeneIdentifier.class);
+		this.xstream.alias("transcriptionFactor", TranscriptionFactor.class);
+
+		
+		this.xstream.setMode(XStream.NO_REFERENCES);
+		this.xstream.registerConverter(new SpeciesNomenclatureConverter());
+	}
+	
+	/**
+	 * transforms the given collection of motifs to xml
+	 * @param motifs
+	 * @return String xml
+	 */
+	public String saveResultsAsXML(Results result){
+		String xml = this.xstream.toXML(result);
+		//System.out.println(xml);
+		return xml;
+	}
+	
+	/**
+	 * transforms the given xml to a collection of motifs
+	 * @param String xml
+	 * @return the motifs in a Collection of the given xml
+	 */
+	public Results loadResultsFromXML(String xml){
+		@SuppressWarnings("unchecked")
+		Results result = (Results) this.xstream.fromXML(xml);
+		//Results result = new Results(motifs, null);
+		return result;	
+	}
+	
+	public String saveResultsAsTabDelimited(Collection<Motif> motifs){
+		//Header
+		String tabfile = "Rank" + "\t"
+						+ "Motif id" + "\t"
+						+ "AUC" + "\t"
+						+ "NES" + "\t"
+						+ "ClusterCode" + "\t"
+						+ "Transcription factor" + "\t"
+						+ "Target genes" + "\n";
+		for (Motif motif : motifs){
+			//Motif specifications
+			tabfile += motif.getRank() + "\t"
+					+ motif.getEnrichedMotifID() + "\t"
+					+ motif.getAucValue() + "\t"
+					+ motif.getNeScore() + "\t"
+					+ motif.getClusterCode() + "\t";
+			// a komma seperated list of TFs
+			Iterator<TranscriptionFactor> tfIterator = motif.getTranscriptionFactors().iterator();
+			while (tfIterator.hasNext()){
+				tabfile += tfIterator.next().getName();
+				if (tfIterator.hasNext()){
+					tabfile += ",";
+				}
+			}
+			tabfile += "\t";
+			// a komma seperated list of TGs
+			Iterator<CandidateTargetGene> tgIterator = motif.getCandidateTargetGenes().iterator();
+			while (tgIterator.hasNext()){
+				tabfile += tgIterator.next().getGeneName();
+				if (tgIterator.hasNext()){
+					tabfile += ",";
+				}
+			}
+			// end of the line (of the motif)
+			tabfile += "\n";
+		}
+		return tabfile;
+	}
+	
+	
+}

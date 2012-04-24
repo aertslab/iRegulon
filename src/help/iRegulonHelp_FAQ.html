@@ -1,0 +1,159 @@
+<html>
+<body>
+<h1><font color=#0000FF><I> i</font><font color=#000000>Regulon Help</font></I>  </h1>
+<br/>
+<a name="FAQ"><h2><font size=6>FAQ</font></h2></a>
+
+
+<br/>
+<a href="#cite"> How to cite? </a>
+<br/>
+<a href="#HGNC">I use HGNC numbers for the homo sapiens and it doesn't work.</a>
+<br/>
+<a href="#MGI"> I use MGI numbers for the Mus musculus and it doesn't work.</a>
+<br/>
+<a href="#Flybase"> I use Flybase numbers for the Drosophila and it doesn't work.</a>
+<br/>
+<a href="#backgroundcolors"> Wherefore stands the backgroundcolors of motifs?</a>
+<br/>
+<a href="#search"> I'm searching for a motif or a transcription factor. Only the checks in the first column changes. I want to see only the ones which contains the search pattern.</a>
+<br/>
+<a href="#TF_cluster"> I find the same transcription factors in 2 different clusters.</a>
+<br/>
+<a href="#clustercode"> The transcription factor or motif I'm looking for has a low ranking, but has clustercode 1. Is this a good result?</a>
+<br/>
+<a href="#tf_table"> What does - mean in the transcription factor table?</a>
+<br/>
+<a href="#tfRanking"> A motif has different transcription factors, wich one has the highest rank?</a>
+<br/>
+<a href="#tf_motif"> A transcription factor has orthologous and the motif below that (same cluster) has a perfect match, is the second transcription factor better?</a>
+<br/>
+<br/>
+<a href="#create">Who created iRegulon</a>
+<br/>
+<a href="#contact">How to contact?</a>
+<br/>
+
+
+<a name="cite"><h3> How to cite? </h3></a>
+	This work is under writing process. For the moment please cite the webpage (lab description) and the Methods paper.
+	<br/>
+	<br/>
+	<a href="http://med.kuleuven.be/cme/subpage.html?section=laboratories&subsection=laboratory-of-computational-biology">http://med.kuleuven.be/cme/subpage.html?section=laboratories&subsection=laboratory-of-computational-biology</a>
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="HGNC"><h3> I use HGNC numbers for the homo sapiens and it doesn't work. </h3></a>
+	This is because iRegulon uses the symbols and not the numbers.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="MGI"><h3> I use MGI numbers for the Mus musculus and it doesn't work. </h3></a>
+	This is because iRegulon uses the symbols and not the numbers.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="Flybase"><h3> I use Flybase numbers for the Drosophila and it doesn't work. </h3></a>
+	This is because iRegulon uses the symbols and not the numbers.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="backgroundcolors"><h3> Wherefore stands the backgroundcolors of motifs? </h3></a>
+	The color of the background indicates the cluster in which the motif is (like the clustercode). But with the color it's faster to recognize motifs that are part of the same cluster. Bewhere there is a limited amount of colors used (so check the clustercode if you go down the list).
+	<br/>
+	Motif clustering is done by STAMP.
+	(Mahony, S., and Benos, P.V. (2007) STAMP: a web tool for exploring DNA-binding motif similarities, Nucleic Acids Research 35, W253-W258).
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="search"><h3> I'm searching for a motif or a transcription factor. Only the checks in the first column changes. I want to see only the ones which contains the search pattern.</h3></a>
+	All columns in the table are sortable, so also the search column (the one with the checks and the crosses). So this means when you click on the header this column will be sorted for your need.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="TF_cluster"><h3> I find the same transcription factors in 2 different clusters.</h3></a>
+	First of all one of the transcription factors will not be matched for 100%. The transcription factor is a orthologous gene, has a similar motif, or both.
+	So the transcription factor is found from an other species or a different motif.
+	<br/>
+	Second, if motifs are found for the given gene set, they are clustered by STAMP 
+	(Mahony, S., and Benos, P.V. (2007) STAMP: a web tool for exploring DNA-binding motif similarities, Nucleic Acids Research 35, W253-W258).
+	There afther, motif similarity is done by tomtom
+	(Shobhit Gupta, JA Stamatoyannopolous, Timothy Bailey and William Stafford Noble, "Quantifying similarity between motifs", Genome Biology, 8(2):R24, 2007).<br/>
+	So it can be that STAMP decides that the motifs belong to a different cluster (for some particular resons), but tomtom decides that the motifs are similar.
+	<br/>
+	The solution of this is to change the parameters, so that there are less orthologous genes, the motif similarity must be better, or both.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="clustercode"><h3> The transcription factor or motif I'm looking for has a low ranking, but has clustercode 1. Is this a good result? </h3></a>
+	This depends of your research. A low ranking doesn't give a bad result. Like here the clustercode is 1, so the motif of this transcription factor is clustered in the same cluster as the top motif. This means that the motifs has a lot in common, and that is a good result.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="tf_table"><h3> What does - mean in the transcription factor table?</h3></a>
+	For each transcription factor there are 2 variables:
+	<ul>
+		<li>The orthologous identifier</li>
+		<li>The motif similarity</li>
+	</ul>
+	<br/>
+	The orthologous identifier gives an idee of how orthologous the transcription factor is. If this is a value, the transcription factor is found in an other species. If the mouse is on this value, the species appear in a tooltip. If this value is a -, than no tooltip appears. This is because the transcription factor is found in the same species as the gene set.
+	<br/>
+	The motif similarity gives how much the motif of the transcription factor is similar to the found motif. If this is a value, the motif of the transcription factor is an other motif. These motifs can be compaired with eachother by right clicking on the transcription factor in the table and selecting show detail frame. This will give a new frame, with the 2 motifs under eachother. If this value is a -, the motif of the transcription factor is the found motif (100% match).
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="tfRanking"><h3> A motif has different transcription factors, wich one has the highest rank?</h3></a>
+	Transcription factors, that are perfect matching, are those that has no orthologous (the value is -), and no motif similarity (the value is -). For the rest of the ranking the orthologous is more important than the motif similarity.
+	<br/>
+	<a href="#tf_motif">Up</a>
+
+<a name="tf_motif"><h3> A transcription factor has orthologous and the motif below that (same cluster) has a perfect match, is the second transcription factor better? </h3></a>
+	No, the NEScore of the motif decides the rank. Transcription factors are ranked for each motif. So the motifs are ranked and not the transcription factors. It is very difficult to decide if the second transcription factor is better or not. But it's certain that the highest motif is beter than the second.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="create"><h3> How to contact? </h3></a>
+	iRegulon was developed by:
+	<ul>
+		<li>Koen Herten</li>
+		<li>Bram Van de Sande</li>
+	</ul>
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="update"><h3> When was the last update of the help? </h3></a>
+	The help of iRegulon was last updated with iRegulon version 0.6.
+	<a href="#FAQ">Up</a>
+
+<a name="contact"><h3> How to contact? </h3></a>
+	If you don't find the answer on your questions in the help you can always send us a mail.
+	<br/>
+	<ul>
+		<li> Bram Van de Sande 
+			<a href="mailto:Bram.VandeSande@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">Bram.VandeSande@med.kuleuven.be </a> 
+		</li> 
+		<li> Stein Aerts 
+			<a href="mailto:Stein.Aerts@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">Stein.Aerts@med.kuleuven.be </a> 
+		</li>
+	</ul>
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<hr/>
+<br/>
+<a href="Topic.html">Back to index</a> 
+<br/>
+<hr/>
+Last update: iRegulon version 0.6
+<hr/>
+
+iRegulon was developed in <a href="http://med.kuleuven.be/cme/subpage.html?section=laboratories&subsection=laboratory-of-computational-biology">the Laboratory of Computational Biology</a> (<a href="mailto:Stein.Aerts@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">S. Aerts lab</a>), University of Leuven, Belgium.
+<br/>
+Developers: Koen Herten & <a href="mailto:Bram.VandeSande@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">Bram Van de Sande.</a> 
+<br/>
+
+Copyright 2012 KU Leuven.
+<br/>
+</body>
+</html>

@@ -12,20 +12,23 @@ import org.junit.Test;
 
 import domainModel.GeneIdentifier;
 import domainModel.Motif;
+import domainModel.Results;
 import domainModel.SpeciesNomenclature;
 import domainModel.TranscriptionFactor;
 
-import saveCisTarget.SaveLoadDialogs;
-import saveCisTarget.SaveResults;
+import saveActions.SaveLoadDialogs;
+import saveActions.SaveResults;
 
 public class SaveTest {
 
 	@Test
 	public void test() {
 		SaveResults save = new SaveResults();
-		String xml = save.saveResults(getMotifs(0));
+		Results resultS = new Results(getMotifs(0), null);
+		String xml = save.saveResultsAsXML(resultS);
 		
-		Collection<Motif> motifs = save.loadResults(xml);
+		Results result = save.loadResultsFromXML(xml);
+		Collection<Motif> motifs = result.getMotifs();
 		
 		Motif[] motifsArr = new Motif[motifs.size()];
 		int index = 0;
@@ -52,15 +55,17 @@ public class SaveTest {
 		
 		
 		SaveResults save = new SaveResults();
-		String xml = save.saveResults(getMotifs(0));
+		Results resultS = new Results(getMotifs(0), null);
+		String xml = save.saveResultsAsXML(resultS);
 		
-		dialog.saveDialogue(xml, "test");
+		dialog.saveDialogue(xml, "test", ".ctf");
 		
 		String fileInput = dialog.openDialogue();
 		if (fileInput == null){
 			System.out.println("fileInput is null");
 		}
-		Collection<Motif> motifs = save.loadResults(xml);
+		Results result = save.loadResultsFromXML(xml);
+		Collection<Motif> motifs = result.getMotifs();
 		
 		Motif[] motifsArr = new Motif[motifs.size()];
 		int index = 0;

@@ -1,98 +1,126 @@
 <html>
 <body>
-<h1><font color=#0000FF><I> i</font><font color=#000000>Regulon Help</font></I>  </h1>
+<a name="up"><h1><font color=#0000FF><I> i</font><font color=#000000>Regulon Help</font></I>  </h1></a>
 <br/>
+<h2>Input</h2>
+  <br/>
+  <a href="#input">Input of the parameters</a>
+  </br>
+  <a href="#parameters">The input parameters</a>
+  <ul>
+	<li><a href="#name">The name of the job</a></li>
+	<li><a href="#Escore">The enrichment score threshold</a></li>
+	<li><a href="#AUC">The ROC threshold for AUC</a></li>
+	<li><a href="#visualisation">The threshold for visualisation</a></li>
+	<li><a href="#species">The species and the nomenclature</a></li>
+	<li><a href="#minOrthologous">The minimal orthologous</a></li>
+	<li><a href="#maxSimilarity">The maximal motif similarity FDR</a></li>
+	<li><a href="#geneName">The attribute that is the gene name</a></li>
+  </ul>
+  </br>
+  <a href="#standard_input_frame">The standard input frame</a>
+  </br>
+  <a href="#standard_input_frame">The standard input frame</a>
 
-<h2>Input of the parameters</h2>
-The genes (nodes) that iRegulon need as input are selected as usual in Cytoscape.  <br/>
-The plugin can be started in two different ways: <br/>
-<ul>
-<li>Via the Control panel (Get the Panel)</li>
-<li>Via the input frame (Classical)</li>
-</ul>
-<br/>
-Both types of input has there advantages. And it's up to the user to decides the kind that suits him the best.
-<br/>
-<h3>The input parameters</h3>
-<p>
-The following parameters can be filled in:
-<ul>
-<li>The name of the job</li>
-<li>The enrichment score threshold</li>
-<li>The ROC threshold for AUC</li>
-<li>The threshold for visualisation</li>
-<li>The species and the nomenclature</li>
-<li>The minimal orthologous</li>
-<li>The maximal motif similarity FDR</li>
-<li>The attribute that is the gene name</li>
-</ul>
-<p/>
-<h4>The name of the job</h4>
-<p>
-The name given here will also be the name that the results will have. This name is also the name that will be suggested for saving.
-<p/>
-<h4>The enrichment score threshold</h4>
-<p>
-This is the minimal score threshold to consider a motif as being relevant. The best option for these score threshold is to choose between 2 or 2.5.
-</p>
-<h4>The ROC threshold for AUC</h4>
-<p>
-The Area Under the Curve (AUC) values are computed on 3% of the receiver-operating curve (ROC) curve. This corresponds to the first 420 genes. In these genes is expected to find the given genes.
-</p>
-<h4>The threshold for visualisation</h4>
-<p>
-his is the x-axis cutoff for visualization of the ROC curve. This value corresponds with the top genes shown on the results.
-</p>
-<h4>The species and the nomenclature</h4>
-<p>
-This is the species and the gene nomenclature. All the possible species and there nomenclature that can be used is shown here. Currently these are:
-<ul>
-<li>Homo sapiens, HGNC</li>
-<li>Mus musculus, MGI</li>
-<li>Drosophila melanogaster, FlyBase</li>
-</ul>
-</p>
-<h4>The minimal orthologous</h4>
-<p>
-This is a score for the gene orthology. How closer this score to 0, how more ortholog genes will be shown. This score must be between 0 and 1.
-</p>
-<h4>The maximal motif similarity FDR</h4>
-<p>
-This is the score for the similarity of the motifs. How closer to 0, the more similar the transcription factor will be. The score must be between 0 and 1.
-</p>
-<h4>The attribute that is the gene name</h4>
-<p>
-Here the gene name can be selected. Every attribute of the nodes can be selected besides lists. The selected gene name must have the selected nomenclature.
-</p>
-<h3>The standard Control panel</h3>
-<img src="./images/standardPanel.png" alt="The standard Control panel"/> 
-<p/>
-The image above is a print screen of the standard control panel, extended with the plugin. The big different with the other screens is that on this panel it's possible to choose between the different flavours of iRegulon.
-<br/>
-The mean advantage of this input screen is that the parameters are kept. So if there are other parameters used in the analysis, these parameters are kept until changed or the panel is closed.
-<p/>
-<br/>
-<h3>The standard input frame</h3>
-<img src="./images/standardFrame.png" alt="The standard input frame"/> 
-<br/>
-<p>
-The image above is the input frame.
-<br/>
-The mean advantage of this input screen is that the name is automaticly changed to the name that the currently selected has.
-<p/>
+<a name="input"><h2>Input of the parameters</h2></a>
+  The genes (nodes) that iRegulon need as input are selected as usual in Cytoscape.  <br/>
+  The plugin can be started in two different ways: <br/>
+  <ul>
+	<li>Via the Control panel (Get the Panel)</li>
+	<li>Via the input frame (Classical)</li>
+  </ul>
+  <br/>
+  Both types of input has there advantages. And it's up to the user to decides the kind that suits him the best.
+  <br/>
+  <a name="parameters"><h3>The input parameters</h3></a>
+  <p>
+  The following parameters can be filled in:
+  <ul>
+	<li><a href="#name">The name of the job</a></li>
+	<li><a href="#Escore">The enrichment score threshold</a></li>
+	<li><a href="#AUC">The ROC threshold for AUC</a></li>
+	<li><a href="#visualisation">The threshold for visualisation</a></li>
+	<li><a href="#species">The species and the nomenclature</a></li>
+	<li><a href="#minOrthologous">The minimal orthologous</a></li>
+	<li><a href="#maxSimilarity">The maximal motif similarity FDR</a></li>
+	<li><a href="#geneName">The attribute that is the gene name</a></li>
+  </ul>
+  <p/>
+  <a name="name"><h4>The name of the job</h4></a>
+  <p>
+  The name given here will also be the name that the results will have. This name is also the name that will be suggested for saving.
+  <p/>
+  <a name="Escore"><h4>The enrichment score threshold</h4></a>
+  <p>
+  This is the minimal score threshold to consider a motif as being relevant. The best option for these score threshold is to choose between 2 or 2.5.
+  </p>
+<a name="AUC"><h4>The ROC threshold for AUC</h4></a>
+  <p>
+  The Area Under the Curve (AUC) values are computed on 3% of the receiver-operating curve (ROC) curve. This corresponds to the first 420 genes. In   these genes is expected to find the given genes.
+  </p>
+<a name="visualisation"><h4>The threshold for visualisation</h4></a>
+  <p>
+  This is the x-axis cutoff for visualization of the ROC curve. This value corresponds with the top genes shown on the results.
+  </p>
+<a name="species"><h4>The species and the nomenclature</h4></a>
+  <p>
+  This is the species and the gene nomenclature. All the possible species and there nomenclature that can be used is shown here. Currently these are:
+  <ul>
+	<li>Homo sapiens, HGNC</li>
+	<li>Mus musculus, MGI</li>
+	<li>Drosophila melanogaster, FlyBase</li>
+  </ul>
+  </p>
+<a name="minOrthologous"><h4>The minimal orthologous</h4></a>
+  <p>
+  This is a score for the gene orthology. How closer this score to 0, how more ortholog genes will be shown. This score must be between 0 and 1.
+  </p>
+  <a name="maxSimilarity"><h4>The maximal motif similarity FDR</h4></a>
+  <p>
+  This is the score for the similarity of the motifs. How closer to 0, the more similar the transcription factor will be. The score must be between 0 and 1.
+  </p>
+<a name="geneName"><h4>The attribute that is the gene name</h4></a>
+  <p>
+  Here the gene name can be selected. Every attribute of the nodes can be selected besides lists. The selected gene name must have the selected nomenclature.
+  </p>
+  </br>
+  <a href="#up">Up</a>
+<a name="control_panel"><h3>The standard Control panel</h3></a>
+  <img src="./images/standardPanel.png" alt="The standard Control panel"/> 
+  <p/>
+  The image above is a print screen of the standard control panel, extended with the plugin. The big different with the other screens is that on this panel it's possible to choose between the different flavours of iRegulon.
+  <br/>
+  The mean advantage of this input screen is that the parameters are kept. So if there are other parameters used in the analysis, these parameters are kept until changed or the panel is closed.
+  <p/>
+  </br>
+  <a href="#up">Up</a>
+  <br/>
+<a name="standard_input_frame"><h3>The standard input frame</h3></a>
+  <img src="./images/standardFrame.png" alt="The standard input frame"/> 
+  <br/>
+  <p>
+  The image above is the input frame.
+  <br/>
+  The mean advantage of this input screen is that the name is automaticly changed to the name that the currently selected has.
+  <p/>
+  </br>
+  <a href="#up">Up</a>
+
 
 <hr/>
 <br/>
 <a href="Topic.html">Back to index</a> 
 <br/>
 <hr/>
+Last update: iRegulon version 0.2
+<hr/>
 
-iRegulon was developed in the Laboratory of Computational Biology (S. Aerts lab), University of Leuven, Belgium.
+iRegulon was developed in <a href="http://med.kuleuven.be/cme/subpage.html?section=laboratories&subsection=laboratory-of-computational-biology">the Laboratory of Computational Biology</a> (<a href="mailto:Stein.Aerts@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">S. Aerts lab</a>), University of Leuven, Belgium.
 <br/>
-Developers: Koen Herten & Bram Van de Sande.
+Developers: Koen Herten & <a href="mailto:Bram.VandeSande@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">Bram Van de Sande.</a> 
 <br/>
 
-Copyright 2012 Katholieke Universiteit Leuven.
+Copyright 2012 KU Leuven.
 <br/>
 
 </body>

@@ -6,14 +6,15 @@
 # -- The following properties are REQUIRED -- #
 
 # The plugin name that will be displayed to users, white space within name is not allowed
-pluginName=iRegulon_0.3
+pluginName=iRegulon_0.6
 
 # Description used to give users information about the plugin such as what it does.
 # Html tags are encouraged for formatting purposes.
-pluginDescription=Information about the plugin that will be displayed to users.<br>Please use html tags for all formatting and do not add newlines.<p>
+pluginDescription=<p> iRegulon will predict the transcription factors and the motif of your genes. </br> </br> As output a table will appear with a nice representation for all motifs, with as detail the LOGO of the motif, the transcription factors and the target genes. </br> It's possible to create networks from these results, save them or export as a tab-delimited file.</p>
+
 
 # Plugin version number, this must be two numbers separated by a decimlal.  Ex. 0.2, 14.03
-pluginVersion=0.3
+pluginVersion=0.6
 
 # Compatible Cytoscape version. If there are more than one version, seperate by ",".
 cytoscapeVersion=2.8
@@ -31,7 +32,7 @@ projectURL=http://my-lab-site.org/myCytoscapePlugin
 pluginAuthorsInstitutions=Koen Herten and Bram Van De Sande:LCB
 
 # Date this plugin/plugin version was released
-releaseDate=April 6, 2012
+releaseDate=April 24, 2012
 
 # If this plugin is never meant to be downloaded except as part of a plugin (not common) add this property.  Default is "no"
 themeOnly=no

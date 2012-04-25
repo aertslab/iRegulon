@@ -107,10 +107,10 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 					if (node2 != null){
 						CyEdge edge;
 						edge = addEdge(node1, node2, tree.getEnrichedMotifID());
-						this.addAtribute(edge, "Regulator Gene", this.getSelectedTranscriptionFactor().getGeneID().getGeneName());
-						this.addAtribute(edge, "Target Gene", childID.getGeneName());
-						this.addAtribute(edge, "Regulatory function", "Predicted");
-						this.addAtribute(edge, "Motif", tree.getEnrichedMotifID());
+						this.setAtribute(edge, "Regulator Gene", this.getSelectedTranscriptionFactor().getGeneID().getGeneName());
+						this.setAtribute(edge, "Target Gene", childID.getGeneName());
+						this.setAtribute(edge, "Regulatory function", "Predicted");
+						this.setAtribute(edge, "Motif", tree.getEnrichedMotifID());
 					}
 				}	
 			}
@@ -128,10 +128,8 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 	 */
 	static public void addAtribute(CyEdge edge, String attributeName, String attributeValue){
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
-		List<Object> edgeAtr = cyEdgeAttrs.getListAttribute(edge.getIdentifier(), attributeName);
-		if (edgeAtr == null){
-			edgeAtr = new ArrayList<Object>();
-		}
+		List<Object> edgeAtr = new ArrayList<Object>();
+		edgeAtr.add(cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), attributeName));
 		boolean isIn = false;
 		String atrString;
 		for (Object atr : edgeAtr){
@@ -181,6 +179,7 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 	 */
 	static public void setAtribute(CyEdge edge, String attributeName, String attributeValue){
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
+		//System.out.println(cyEdgeAttrs.getType(attributeName));
 		cyEdgeAttrs.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
 		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
 	}

@@ -7,6 +7,8 @@ import javax.swing.SwingConstants;
 import cytoscape.*;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
+import cytoscape.view.cytopanels.CytoPanelListener;
+import cytoscape.view.cytopanels.CytoPanelState;
 
 public class InputViewSidePanel extends CisTargetResourceBundle{
 	
@@ -25,7 +27,7 @@ public class InputViewSidePanel extends CisTargetResourceBundle{
 		//addCytoPanelListener(CytoPanelListener);
 
 		
-		InputView input = new InputView();
+		final InputView input = new InputView();
 		JPanel panel = input.CreateGeneralInputView();
 		//JPanel panel = new JPanel(layout);
 		//JPanel panel = new JPanel();
@@ -36,6 +38,29 @@ public class InputViewSidePanel extends CisTargetResourceBundle{
 			cytoPanel.add(getBundle().getString("plugin_visual_name"), panel);
 		}
 		cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")));
+		cytoPanel.addCytoPanelListener(new CytoPanelListener() {
+			
+			@Override
+			public void onStateChange(CytoPanelState newState) {
+				// This will update the panel when it becomes selected
+				input.getListenerForClassicInput().refresh();
+			}
+			
+			@Override
+			public void onComponentSelected(int componentIndex) {
+				// nothing to do
+			}
+			
+			@Override
+			public void onComponentRemoved(int count) {
+				// nothing to do
+			}
+			
+			@Override
+			public void onComponentAdded(int count) {
+				// nothing to do
+			}
+		});
 	}
 	
 }

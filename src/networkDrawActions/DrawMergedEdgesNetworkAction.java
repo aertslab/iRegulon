@@ -43,8 +43,8 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 		}
 		//putValue(Action.NAME, "NetworkCreate");
 		//putValue(Action.NAME, getBundle().getString("action_draw_edges_name"));
-		putValue(Action.NAME, getBundle().getString("action_create_new_network_name"));
-		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_create_new_network_name"));
+		putValue(Action.NAME, getBundle().getString("action_draw_merged_edges_network_name"));
+		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_draw_merged_edges_network_name"));
 		//String pathNetwork = "/icons/node-select.png";
 		//java.net.URL imgURLNetwork = getClass().getResource(pathNetwork);
 		//ImageIcon iconNetwork = new ImageIcon(imgURLNetwork, "Draw new network");
@@ -88,7 +88,7 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 		}
 		
 		public void addMotif(List<String> motif){
-			this.motifs.addAll(motifs);
+			motifs.addAll(motif);
 		}
 		
 		public String getTF(){
@@ -107,17 +107,17 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		// get all the information of the old network
 		CyNetwork oldNetwork = Cytoscape.getCurrentNetwork();
 		CyNetworkView oldView = Cytoscape.getCurrentNetworkView();
 		
-		
+		//Create a new network
 		//CyNetwork network = Cytoscape.createNetwork(CisTargetXNodes.getAllNodes(), this.getAllEdges(), "test");
 		CyNetwork network2 = Cytoscape.createNetwork(NodesActions.getAllNodes(), this.getAllEdges(), "Merged iRegulon network", Cytoscape.getCurrentNetwork());
 		Cytoscape.setCurrentNetwork(network2.getIdentifier());
 		CyNetworkView cyView = Cytoscape.createNetworkView(network2, "merged iRegulon network view");
 		
-		
+		//copy the place of all nodes on the old network to the new network
 		Iterator it = oldNetwork.nodesIterator();
 		while(it.hasNext()){
 			CyNode node = (CyNode) it.next();
@@ -131,32 +131,59 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 				network2.addNode(node);
 			}
 		}
+		/*
+		 * run over all edges
+		 */
 		it = network2.edgesIterator();
+		//get the edge attributes
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
+		//hashmap, first argument the transcription factor, the second all the motifs
 		HashMap<String, NewEdgeAttr> edgesAttr = new HashMap<String, DrawMergedEdgesNetworkAction.NewEdgeAttr>();
+		//list of all unmapped edges
+		ArrayList<CyEdge> unmappedEdges = new ArrayList<CyEdge>();
+		//iterate over the edges
 		while(it.hasNext()){
 			CyEdge edge = (CyEdge) it.next();
-			if (cyEdgeAttrs.getAttribute(edge.getIdentifier(), "interaction").toString().contains("regulates")){
-				String TF = (String) cyEdgeAttrs.getListAttribute(edge.getIdentifier(), "Regulator Gene").get(0);
-				String TG = (String) cyEdgeAttrs.getListAttribute(edge.getIdentifier(), "Target Gene").get(0);
-				List<String> motifs = (List<String>) cyEdgeAttrs.getListAttribute(edge.getIdentifier(), "Motif");
+			//check if edge is a regulates interaction, from a valid regulator gene to a target gene
+			if (cyEdgeAttrs.getAttribute(edge.getIdentifier(), "interaction").toString().contains("regulates")
+					&& cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Regulator Gene") != null
+					&& cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Target Gene") != null){
+				//take the atributes
+				String TF = (String) cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Regulator Gene");
+				String TG = (String) cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Target Gene");
+				List<String> motifs = new ArrayList<String>();
+				motifs.add(cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Motif"));
+				if (motifs.size() == 0){
+					motifs = (List<String>) cyEdgeAttrs.getListAttribute(edge.getIdentifier(), "Motifs");
+				}
 				String name = TF + " regulates " + TG;
 				if (edgesAttr.containsKey(name)){
+					//if there is already an interaction between the 2
 					NewEdgeAttr edgeattr = edgesAttr.get(name);
+					// add the motifs to the interaction
 					edgeattr.addMotif(motifs);
 				}else{
+					//create a new interaction between the 2
 					NewEdgeAttr edgeattr = new NewEdgeAttr(TF, TG, motifs);
 					edgesAttr.put(name, edgeattr);
 				}
 				network2.removeEdge(edge.getRootGraphIndex(), true);
+			}else{
+				//unmapped edge
+				unmappedEdges.add(edge);
 			}
 		}
+		/*
+		 * draw all edges
+		 */
 		for (String key : edgesAttr.keySet()){
+			//every new edge
 			NewEdgeAttr edgeattr = edgesAttr.get(key);
 			CyNode node1 = null;
 			CyNode node2 = null;
 			it = network2.nodesIterator();
 			while(it.hasNext()){
+				//get the nodes for the TF and the TG
 				CyNode node = (CyNode) it.next();
 				if (node.getIdentifier().equals(edgeattr.getTF())){
 					node1 = node;
@@ -165,15 +192,16 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 					node2 = node;
 				}
 			}
+			//if the nodes are matched, the edge can been drawn
 			if (node1 != null && node2 != null){
 				CyEdge edge = Cytoscape.getCyEdge(node1, node2, Semantics.INTERACTION, 
 					"regulates", true);
 				network2.addEdge(edge);
-				System.out.println("Edge identifier=" + edge.getIdentifier());
-				System.out.println("TF=" + edgeattr.getTF());
-				DrawEdgesAction.setAtribute(edge, "Transcription_Factor", edgeattr.getTF());
-				System.out.println("TG=" + edgeattr.getTG());
-				DrawEdgesAction.setAtribute(edge, "Target_Gene", edgeattr.getTG());
+				//System.out.println("Edge identifier=" + edge.getIdentifier());
+				//System.out.println("TF=" + edgeattr.getTF());
+				DrawEdgesAction.setAtribute(edge, "Regulator Gene", edgeattr.getTF());
+				//System.out.println("TG=" + edgeattr.getTG());
+				DrawEdgesAction.setAtribute(edge, "Target Gene", edgeattr.getTG());
 				List<String> motifs = new ArrayList<String>();
 				Iterator<String> motifit = edgeattr.getMotifs().iterator();
 				while(motifit.hasNext()){

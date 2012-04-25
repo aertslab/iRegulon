@@ -48,6 +48,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	private JTextField txtDownStream;
 	private JRadioButton rbtnDelineation;
 	private JRadioButton rbtnConversion;
+	private DatabaseListener dbListener;
 	
 	
 	
@@ -70,6 +71,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 		this.standardminOrthologous = Float.parseFloat(this.getBundle().getString("standard_minOrthologous"));
 		this.standardMaxMotifSimilarityFDR = Float.parseFloat(this.getBundle().getString("standard_maxMotifSimilarityFDR"));
 		this.frame = null;
+		this.dbListener = null;
 	}
 	
 	public InputView(JFrame frame){
@@ -83,6 +85,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 		this.standardminOrthologous = Float.parseFloat(this.getBundle().getString("standard_minOrthologous"));
 		this.standardMaxMotifSimilarityFDR = Float.parseFloat(this.getBundle().getString("standard_maxMotifSimilarityFDR"));
 		this.frame = frame;
+		this.dbListener = null;
 	}
 	
 	
@@ -545,39 +548,39 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         panel.add(jbtn, c);
         
 
-        DatabaseListener dbListener = new DatabaseListener(this.jtfName, 
+        this.dbListener = new DatabaseListener(this.jtfName, 
         		this.jtfEscore, this.jtfROC, this.jtfVisualisation, 
         		this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR, 
         		this.jcbSpecieAndNomenclature, this.jcbBased, this.jcbdatabase, 
         		this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
         		this.txtUpStream, this.txtDownStream, this.jcbGeneName, amountNodes, 
         		jbtn);
-        this.jtfName.addActionListener(dbListener);
-        this.jtfName.getDocument().addDocumentListener(dbListener);
-        this.jtfEscore.addActionListener(dbListener);
-        this.jtfEscore.getDocument().addDocumentListener(dbListener);
-        this.jtfROC.addActionListener(dbListener);
-        this.jtfROC.getDocument().addDocumentListener(dbListener);
-        this.jtfVisualisation.addActionListener(dbListener);
-        this.jtfVisualisation.getDocument().addDocumentListener(dbListener);
-        this.jtfMinOrthologous.addActionListener(dbListener);
-        this.jtfMinOrthologous.getDocument().addDocumentListener(dbListener);
-        this.jtfMaxMotifSimilarityFDR.addActionListener(dbListener);
-        this.jtfMaxMotifSimilarityFDR.getDocument().addDocumentListener(dbListener);
-		this.jcbSpecieAndNomenclature.addActionListener(dbListener);
-		this.jcbBased.addActionListener(dbListener);
-		this.jcbdatabase.addActionListener(dbListener);
-		this.txtOverlap.addActionListener(dbListener);
-		this.txtOverlap.getDocument().addDocumentListener(dbListener);
-		rbtnDelineation.addActionListener(dbListener);
-		this.jcbDelation.addActionListener(dbListener);
-		rbtnConversion.addActionListener(dbListener);
-		this.txtUpStream.addActionListener(dbListener);
-		this.txtUpStream.getDocument().addDocumentListener(dbListener);
-		this.txtDownStream.addActionListener(dbListener);
-		this.txtDownStream.getDocument().addDocumentListener(dbListener);
-		this.jcbGeneName.addActionListener(dbListener);
-		amountNodes.addActionListener(dbListener);
+        this.jtfName.addActionListener(this.dbListener);
+        this.jtfName.getDocument().addDocumentListener(this.dbListener);
+        this.jtfEscore.addActionListener(this.dbListener);
+        this.jtfEscore.getDocument().addDocumentListener(this.dbListener);
+        this.jtfROC.addActionListener(this.dbListener);
+        this.jtfROC.getDocument().addDocumentListener(this.dbListener);
+        this.jtfVisualisation.addActionListener(this.dbListener);
+        this.jtfVisualisation.getDocument().addDocumentListener(this.dbListener);
+        this.jtfMinOrthologous.addActionListener(this.dbListener);
+        this.jtfMinOrthologous.getDocument().addDocumentListener(this.dbListener);
+        this.jtfMaxMotifSimilarityFDR.addActionListener(this.dbListener);
+        this.jtfMaxMotifSimilarityFDR.getDocument().addDocumentListener(this.dbListener);
+		this.jcbSpecieAndNomenclature.addActionListener(this.dbListener);
+		this.jcbBased.addActionListener(this.dbListener);
+		this.jcbdatabase.addActionListener(this.dbListener);
+		this.txtOverlap.addActionListener(this.dbListener);
+		this.txtOverlap.getDocument().addDocumentListener(this.dbListener);
+		rbtnDelineation.addActionListener(this.dbListener);
+		this.jcbDelation.addActionListener(this.dbListener);
+		rbtnConversion.addActionListener(this.dbListener);
+		this.txtUpStream.addActionListener(this.dbListener);
+		this.txtUpStream.getDocument().addDocumentListener(this.dbListener);
+		this.txtDownStream.addActionListener(this.dbListener);
+		this.txtDownStream.getDocument().addDocumentListener(this.dbListener);
+		this.jcbGeneName.addActionListener(this.dbListener);
+		amountNodes.addActionListener(this.dbListener);
 		dbListener.refresh();
         
         if (frame != null){
@@ -889,6 +892,10 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 		}else{
 			return -1;
 		}
+	}
+	
+	public DatabaseListener getListenerForClassicInput(){
+		return this.dbListener;
 	}
 	
 	

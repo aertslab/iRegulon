@@ -93,10 +93,10 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 			//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
 			CyEdge edge;
 			edge = DrawEdgesAction.addEdge(nodeParent, nodeChild, network, view, tree.getEnrichedMotifID());
-			DrawEdgesAction.addAtribute(edge, "Regulator Gene", tf.getName());
-			DrawEdgesAction.addAtribute(edge, "Target Gene", geneID.getGeneName());
-			DrawEdgesAction.addAtribute(edge, "Regulatory function", "Predicted");
-			DrawEdgesAction.addAtribute(edge, "Motif", tree.getEnrichedMotifID());
+			DrawEdgesAction.setAtribute(edge, "Regulator Gene", tf.getName());
+			DrawEdgesAction.setAtribute(edge, "Target Gene", geneID.getGeneName());
+			DrawEdgesAction.setAtribute(edge, "Regulatory function", "Predicted");
+			DrawEdgesAction.setAtribute(edge, "Motif", tree.getEnrichedMotifID());
 		}
 		//if the node is a regulator and target at the same time, it must say regulator
 		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");

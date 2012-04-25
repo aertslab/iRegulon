@@ -42,6 +42,7 @@ import saveActions.SaveResults;
 import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
+import cytoscape.view.cytopanels.CytoPanelListener;
 import cytoscape.view.cytopanels.CytoPanelState;
 import domainModel.Motif;
 import domainModel.Results;
@@ -79,9 +80,7 @@ public class IRegulonOutputView extends CisTargetResourceBundle{
 		this.cytoPanel = desktop.getCytoPanel (SwingConstants.EAST);
 		cytoPanel.setState(CytoPanelState.DOCK);
 		//addCytoPanelListener(CytoPanelListener);
-
-
-
+		
 		
 		this.selectedTFRegulons = new SelectedMotif();
 		

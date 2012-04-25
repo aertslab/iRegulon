@@ -28,11 +28,20 @@
 <br/>
 <a href="#tf_motif"> A transcription factor has orthologous and the motif below that (same cluster) has a perfect match, is the second transcription factor better?</a>
 <br/>
+<a href="#query">Is it possible to insert a gene list, so I don't need to start from a network?</a>
+<br/>
+<a href="#colorEdges">Is it possible to color all edges from the same motif or cluster in the same color.</a>
+<br/>
+<a href="#weblogo_behind_panel">The LOGO does appear behind the panel.</a>
+<br/>
+<br/>
 <br/>
 <a href="#create">Who created iRegulon</a>
 <br/>
 <a href="#contact">How to contact?</a>
 <br/>
+
+
 
 
 <a name="cite"><h3> How to cite? </h3></a>
@@ -112,6 +121,35 @@
 	No, the NEScore of the motif decides the rank. Transcription factors are ranked for each motif. So the motifs are ranked and not the transcription factors. It is very difficult to decide if the second transcription factor is better or not. But it's certain that the highest motif is beter than the second.
 	<br/>
 	<a href="#FAQ">Up</a>
+
+<a name="query"><h3> Is it possible to insert a gene list, so I don't need to start from a network? </h3></a>
+	No, if you have a gene list, just past it in a .txt. You can import it simply into Cytoscape by choosing "File" > "Import" > "Network from Table". Then select your file and as "Source Interaction" your collum that is the gene list (can be the only collumn). Then push the Import button. Now you can start your analysis from that list.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="colorEdges"> <h3> Is it possible to color all edges from the same motif or cluster in the same color. </h3></a>
+	Yes, simply go to the VizMapper in the Control Panel (usely left of the screen). There you can choose Edge Color. Select as Edge Color Motif coloring the edges with the color. Then choose for Mapping Type "Discrete Mapping". Now a list of all motifs will be visible here you can give each motif an other color. 
+	<br/> 
+	<br/>
+	For the cluster color it's more difficult. This because if multiple analysis are displayed on the same network, the clusters will be different, yet the code will be the same. This is because the code just the rank of the cluster. So multiple clusters will have the same code for different analysis. If the edges must need to have the same color for the same cluster this needs to be done manualy.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+<a name="weblogo_behind_panel"><h3> The LOGO does appear behind the panel. </h3></a>
+	This is a known issue. It (normaly) only occures when the Results panel isn't docked into the Cytoscape screen. When it occures otherwise, please contact the developers.
+	<br/>
+	<a href="#FAQ">Up</a>
+
+
+
+
+
+
+
+
+
+
+
 
 <a name="create"><h3> How to contact? </h3></a>
 	iRegulon was developed by:

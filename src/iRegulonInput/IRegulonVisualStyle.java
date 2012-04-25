@@ -157,10 +157,8 @@ public class IRegulonVisualStyle extends CisTargetResourceBundle{
     		for (int index = 0; index < edgesAmount; index++){
     			CyEdge edge = (CyEdge) network.getEdge(indices[index]);
     			//System.out.println(edge.getIdentifier());
-    			List<Object> edgeAtr = cyEdgeAttrs.getListAttribute(edge.getIdentifier(), "Motif");
-    			if (edgeAtr == null){
-    				edgeAtr = new ArrayList<Object>();
-    			}
+    			List<Object> edgeAtr = new ArrayList<Object>();
+    			edgeAtr.add(cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Motif"));
     			boolean isIn = false;
     			for (Object edgeMotif : edgeAtr){
     				String motifString = "";

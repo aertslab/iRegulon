@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import cytoscape.Cytoscape;
+
 
 import domainModel.SpeciesNomenclature;
 
@@ -110,6 +112,13 @@ public class DatabaseListener extends CisTargetResourceBundle implements ActionL
 				this.txtName.getText().toLowerCase().equalsIgnoreCase(this.getBundle().getString("plugin_name") + " name")){
 			this.canSubmit = false;
 			this.txtName.setBackground(Color.RED);
+		}
+		if (this.txtName.getText().toLowerCase().equalsIgnoreCase(this.getBundle().getString("plugin_name") + " name")){
+			if (!(Cytoscape.getCurrentNetwork().getTitle() == null || Cytoscape.getCurrentNetwork().getTitle().equals("0"))){
+				this.txtName.setText(Cytoscape.getCurrentNetwork().getTitle());
+				this.txtName.setBackground(Color.WHITE);
+				this.canSubmit = true;
+			}
 		}
 	}
 	
@@ -326,6 +335,7 @@ public class DatabaseListener extends CisTargetResourceBundle implements ActionL
 			}
 			this.txtAmountNodes.setText("" + amountNodes);
 		}else{
+			this.txtAmountNodes.setText("0");
 			this.txtAmountNodes.setBackground(Color.RED);
 			this.canSubmit = false;
 		}

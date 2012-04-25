@@ -89,7 +89,8 @@ public class NodesActions {
 			}
 			return genes;
 		}
-		return null;
+		Collection<GeneIdentifier> emptyGene = new ArrayList<GeneIdentifier>();
+		return emptyGene;
 	}
 	
 	

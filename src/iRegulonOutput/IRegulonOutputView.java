@@ -1,6 +1,6 @@
 package iRegulonOutput;
 
-import iRegulonInput.CisTargetResourceBundle;
+import iRegulonInput.IRegulonResourceBundle;
 import iRegulonOutput.DetailPanel.TGPanel;
 import iRegulonOutput.MotifTableModels.FilteredMotifModel;
 import iRegulonOutput.MotifTableModels.FilteredPatternDocumentListener;
@@ -47,7 +47,7 @@ import cytoscape.view.cytopanels.CytoPanelState;
 import domainModel.Motif;
 import domainModel.Results;
 
-public class IRegulonOutputView extends CisTargetResourceBundle{
+public class IRegulonOutputView extends IRegulonResourceBundle{
 
 	private JTable table;
 	private List<Motif> motifList;

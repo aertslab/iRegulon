@@ -2,6 +2,7 @@ package httpConnection;
 
 import httpProtocols.*;
 import iRegulonAnalysis.Input;
+import iRegulonInput.IRegulonResourceBundle;
 
 import java.util.Collection;
 import java.util.ResourceBundle;
@@ -11,7 +12,7 @@ import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import domainModel.Motif;
 
-public class ClassicalTask implements Task {
+public class ClassicalTask extends IRegulonResourceBundle implements Task {
 	private cytoscape.task.TaskMonitor taskMonitor;
 	
 	private Collection<Motif> motifs;
@@ -34,7 +35,7 @@ public class ClassicalTask implements Task {
 	}
 
 	public String getTitle() {
-		return "Classical " + ResourceBundle.getBundle("cistargetx").getString("plugin_name");
+		return "Classical " + this.getBundle().getString("plugin_name");
 	}
 
 	public void run() {

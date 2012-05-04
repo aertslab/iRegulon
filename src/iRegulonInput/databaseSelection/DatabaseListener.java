@@ -1,11 +1,13 @@
 package iRegulonInput.databaseSelection;
 
-import iRegulonInput.CisTargetResourceBundle;
+import iRegulonInput.IRegulonResourceBundle;
 import iRegulonInput.NodesActions;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JButton;
@@ -20,7 +22,7 @@ import cytoscape.Cytoscape;
 
 import domainModel.SpeciesNomenclature;
 
-public class DatabaseListener extends CisTargetResourceBundle implements ActionListener, DocumentListener{
+public class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener{
 
 	private final JTextField txtName;
 	private final JTextField txtEscore;
@@ -210,13 +212,14 @@ public class DatabaseListener extends CisTargetResourceBundle implements ActionL
 	
 	private void refreshDatabase(){
 		String database = (String) this.jcbDatabase.getSelectedItem();
+		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
 		if (this.jcbBased.isGeneBased()){
-			SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-			this.jcbDatabase.updateDatabases(species.getGeneDatabase().keySet());
+			Map<String, String> linkedhash = species.getGeneDatabase();
+			this.jcbDatabase.updateDatabases(linkedhash.keySet());
 		}else{
 			if(this.jcbBased.isRegionBased()){
-				SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-				this.jcbDatabase.updateDatabases(species.getRegionsDatabase().keySet());
+				Map<String, String> linkedhash = species.getRegionsDatabase();
+				this.jcbDatabase.updateDatabases(linkedhash.keySet());
 			}
 		}
 		if (this.jcbDatabase.canBeSelected(database)){

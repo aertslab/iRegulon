@@ -114,7 +114,7 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 		view.applyLayout(CyLayouts.getDefaultLayout());
 		VisualMappingManager manager = Cytoscape.getVisualMappingManager();
 		CalculatorCatalog catalog = manager.getCalculatorCatalog();
-		VisualStyle vs = catalog.getVisualStyle(ResourceBundle.getBundle("cistargetx").getString("vizmap_name"));
+		VisualStyle vs = catalog.getVisualStyle(getBundle().getString("vizmap_name"));
 		if (vs != null){
 			manager.setVisualStyle(vs);
 		}

@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-public class StartClasicalFrameAction extends CisTargetResourceBundle implements ActionListener{
+public class StartClasicalFrameAction extends IRegulonResourceBundle implements ActionListener{
 	
 	
 	@Override

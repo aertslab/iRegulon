@@ -15,8 +15,8 @@ public class TFDetailFrameAction extends AbstractAction implements ListSelection
 	private TFandMotifSelected tfMotif;
 	
 	public TFDetailFrameAction(TFandMotifSelected tfMotif){
-		putValue(Action.NAME, ResourceBundle.getBundle("cistargetx").getString("action_detail_frame"));
-		putValue(Action.SHORT_DESCRIPTION, ResourceBundle.getBundle("cistargetx").getString("action_detail_frame"));
+		putValue(Action.NAME, ResourceBundle.getBundle("iRegulon").getString("action_detail_frame"));
+		putValue(Action.SHORT_DESCRIPTION, ResourceBundle.getBundle("iRegulon").getString("action_detail_frame"));
 		setEnabled(false);
 		this.tfMotif = tfMotif;
 	}

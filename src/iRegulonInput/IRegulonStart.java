@@ -66,7 +66,7 @@ public class IRegulonStart extends CytoscapePlugin {
 		 * Show the plugin in the plugins menu in Cytoscape
 		 */
 		public MyPluginMenuAction(IRegulonStart myPlugin) {
-			//super(ResourceBundle.getBundle("cistargetx").getString("plugin_visual_name"));
+			//super(ResourceBundle.getBundle("iRegulon").getString("plugin_visual_name"));
 			//setPreferredMenu("Plugins");
 			final IRegulonVisualStyle style = new IRegulonVisualStyle();
 			
@@ -75,18 +75,18 @@ public class IRegulonStart extends CytoscapePlugin {
 			 //set-up menu options in plugin menu
 	        JMenu menu=Cytoscape.getDesktop().getCyMenus().getOperationsMenu();
 	        JMenuItem item;
-	        //CisTarget submenu
-	        JMenu submenu = new JMenu(ResourceBundle.getBundle("cistargetx").getString("plugin_name"));
+	        //iRegulon submenu
+	        JMenu submenu = new JMenu(ResourceBundle.getBundle("iRegulon").getString("plugin_name"));
 	        submenu.setToolTipText("Plugin for prediction of motifs, there transcription factors and there target genes.");
 
-	        //CisTarget panel
+	        //iRegulon panel
 	        item = new JMenuItem("Classical");
 	        item.setToolTipText("Do a classical  analysis.");
 	        item.addActionListener(new StartClasicalFrameAction());
 	        submenu.add(item);
 	        
 	        item = new JMenuItem("Other flavors");
-	        item.setToolTipText("Do other flavors of CisTarget: like CisTargetDB");
+	        item.setToolTipText("Do other flavors of iRegulon: like iRegulonDB");
 	        item.addActionListener(new ActionListener() {
 				
 				@Override
@@ -156,26 +156,26 @@ public class IRegulonStart extends CytoscapePlugin {
 							"<body>" +
 							"" +
 							"<br/> <br/>" +
-							ResourceBundle.getBundle("cistargetx").getString("plugin_name") +
+							ResourceBundle.getBundle("iRegulon").getString("plugin_name") +
 							"<br/>" +
 							"Version " + 
-							ResourceBundle.getBundle("cistargetx").getString("version") +
+							ResourceBundle.getBundle("iRegulon").getString("version") +
 							"<br/>" + 
-							"Build ID " + ResourceBundle.getBundle("cistargetx").getString("build_ID") +
+							"Build ID " + ResourceBundle.getBundle("iRegulon").getString("build_ID") +
 							"<br/>" + 
-							"Released: " + ResourceBundle.getBundle("cistargetx").getString("release_date") +
+							"Released: " + ResourceBundle.getBundle("iRegulon").getString("release_date") +
 							"<br/> <br/> <br/>" +
-							ResourceBundle.getBundle("cistargetx").getString("plugin_name") + 
+							ResourceBundle.getBundle("iRegulon").getString("plugin_name") + 
 							" was developed in the Laboratory of Computational Biology (S. Aerts lab), University of Leuven, Belgium." +
 							"<br/>" +
 							"<br/>" +
 							"This work is under writing process. For the moment please cite the webpage (lab description) and the Methods paper." +
 							"<br/>" +
 							"<br/>" +
-							ResourceBundle.getBundle("cistargetx").getString("labsite") +
+							ResourceBundle.getBundle("iRegulon").getString("labsite") +
 							"<br/>" +
 							"<br/>" +
-							ResourceBundle.getBundle("cistargetx").getString("paper") +
+							ResourceBundle.getBundle("iRegulon").getString("paper") +
 							"<br/>" +
 							"<br/>" +
 							"<br/>" +
@@ -183,7 +183,7 @@ public class IRegulonStart extends CytoscapePlugin {
 							"Copyright 2012 KU Leuven." + "<br/>" +
 							"<br/>" +
 							"<br/>" +
-							"Contact: " + ResourceBundle.getBundle("cistargetx").getString("contact") +
+							"Contact: " + ResourceBundle.getBundle("iRegulon").getString("contact") +
 							"<br/>" +
 							"</body>" +
 							"</html>", "About...", JOptionPane.INFORMATION_MESSAGE);
@@ -203,7 +203,7 @@ public class IRegulonStart extends CytoscapePlugin {
 		 */
 		public void actionPerformed(ActionEvent e) {
 			//Debug: Draw a messagebox for showing that the plugin works
-			//JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"CisTargetX is selected!");
+			//JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"iRegulon is selected!");
 			final IRegulonVisualStyle style = new IRegulonVisualStyle();
 			//style.createVizMap();
 			//Draws the input window (Already working!)

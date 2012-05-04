@@ -1,6 +1,6 @@
 package iRegulonAnalysis;
 
-import iRegulonInput.CisTargetType;
+import iRegulonInput.IRegulonType;
 
 import java.util.Collection;
 
@@ -16,7 +16,7 @@ public class Input {
 	private final int thresholdForVisualisation;
 	private final float rocThresholdAUC;
 	private final SpeciesNomenclature speciesNomenclature;
-	private final CisTargetType cisCisTargetType;
+	private final IRegulonType iRegulonType;
 	private final String name;
 	private final float minOrthologous;
 	private final float maxMotifSimilarityFDR;
@@ -33,7 +33,7 @@ public class Input {
 	
 	public Input(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC, 
 			int visualisationThreshold, SpeciesNomenclature speciesNomenclature, 
-			CisTargetType cisTargetType, String runName, float minOrthologous,
+			IRegulonType iRegulonType, String runName, float minOrthologous,
 			float maxMotifSimilarityFDR, boolean isRegionBased, String database, 
 			float overlap, String delineation, int upstream, int downstream){
 		this.genes = genes;
@@ -41,7 +41,7 @@ public class Input {
 		this.thresholdForVisualisation = visualisationThreshold;
 		this.rocThresholdAUC = ROCthresholdAUC;
 		this.speciesNomenclature = speciesNomenclature;
-		this.cisCisTargetType = cisTargetType;
+		this.iRegulonType = iRegulonType;
 		this.name = runName;
 		this.minOrthologous = minOrthologous;
 		this.maxMotifSimilarityFDR = maxMotifSimilarityFDR;
@@ -91,10 +91,10 @@ public class Input {
 	
 	/**
 	 * 
-	 * @return the type of the cisTarget action
+	 * @return the type of the iRegulon action
 	 */
-	public CisTargetType getCisTargetType(){
-		return this.cisCisTargetType;
+	public IRegulonType getIRegulonType(){
+		return this.iRegulonType;
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public class Input {
 			parametersAreOkay = false;
 		}
 		if (this.getName().isEmpty() || 
-				this.getName().toLowerCase().equalsIgnoreCase("CisTarget name")){
+				this.getName().toLowerCase().equalsIgnoreCase("iRegulon name")){
 			parametersAreOkay = false;
 		}
 		return parametersAreOkay;
@@ -246,7 +246,7 @@ public class Input {
 					"of your motifs and transcription factors will take a lot of time. <br /> <br />";
 		}
 		if (this.getName().isEmpty() || 
-				this.getName().toLowerCase().equalsIgnoreCase("CisTarget name")){
+				this.getName().toLowerCase().equalsIgnoreCase("iRegulon name")){
 			parametersAreOkay = false;
 			message = message + "You must choose a name for your research. <br /> <br />";
 		}

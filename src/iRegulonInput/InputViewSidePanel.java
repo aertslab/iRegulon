@@ -10,7 +10,7 @@ import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelListener;
 import cytoscape.view.cytopanels.CytoPanelState;
 
-public class InputViewSidePanel extends CisTargetResourceBundle{
+public class InputViewSidePanel extends IRegulonResourceBundle{
 	
 	
 	public InputViewSidePanel(){

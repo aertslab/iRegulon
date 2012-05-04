@@ -1,18 +1,18 @@
 package domainModel;
 
-import iRegulonInput.CisTargetResourceBundle;
+import iRegulonInput.IRegulonResourceBundle;
 
 import java.util.*;
 
 
-public final class SpeciesNomenclature extends CisTargetResourceBundle{
+public final class SpeciesNomenclature extends IRegulonResourceBundle{
 	private static final Map<Integer,SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer,SpeciesNomenclature>();
 	
 	public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC", "Hsapiens_HGNC_database");
 	public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI", "Mmusculus_MGI_database");
 	public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase", "Dmelanogaster_FlyBase_database");
-	//public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature (4, "Drosophila melanogaster, CG-numbers");
-	//public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn");
+	public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature (4, "Drosophila melanogaster, CG-numbers", "Dmelanogaster_CG_database");
+	//public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn", "Dmelanogaster_FBgn_database");
 	public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature(-1, "?", "?");
 	
 	public static SpeciesNomenclature getNomenclature(final int code) {
@@ -35,9 +35,9 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 	private final int code;
 	private final String name;
 	private final String databaseName;
-	private HashMap<String, String> geneDatabase;
-	private HashMap<String, String> regionsDatabase;
-	private HashMap<String, String> regionsDelineation;
+	private Map<String, String> geneDatabase;
+	private Map<String, String> regionsDatabase;
+	private Map<String, String> regionsDelineation;
 	
 	private SpeciesNomenclature(final int code, final String name, final String databaseName) {
 		this.code = code;
@@ -46,8 +46,8 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 		
 		//RegionsDatabase
 		try{
-			String databasesString = ResourceBundle.getBundle("cistargetx").getString(databaseName.concat("_RegionBased"));
-			this.regionsDatabase = new HashMap<String, String>();
+			String databasesString = this.getBundle().getString(databaseName.concat("_RegionBased"));
+			this.regionsDatabase = new LinkedHashMap<String, String>();
 			String[] databasesArray = databasesString.split(";");
 			for (String database : databasesArray){
 				String[] databaseSplit = database.split("\\|");
@@ -57,12 +57,12 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 			}
 		}catch (MissingResourceException e){
 			System.err.println("Missing resource for regions of " + databaseName);
-			this.regionsDatabase = new HashMap<String, String>();
+			this.regionsDatabase = new LinkedHashMap<String, String>();
 		} 
 		//GeneDatabase
 		try{
 			String databasesString = this.getBundle().getString(this.databaseName.concat("_GeneBased"));
-			this.geneDatabase = new HashMap<String, String>();
+			this.geneDatabase = new LinkedHashMap<String, String>();
 			String[] databasesArray = databasesString.split(";");
 			for (String database : databasesArray){
 				String[] databaseSplit = database.split("\\|");
@@ -72,12 +72,12 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 			}
 		}catch (MissingResourceException e){
 			System.err.println("Missing resource for genes " + this.databaseName);
-			this.geneDatabase = new HashMap<String, String>();
+			this.geneDatabase = new LinkedHashMap<String, String>();
 		} 
 		//RegionsDelineation
 		try{
 			String databasesString = this.getBundle().getString(this.databaseName.concat("_Delineation"));
-			this.regionsDelineation = new HashMap<String, String>();
+			this.regionsDelineation = new LinkedHashMap<String, String>();
 			String[] databasesArray = databasesString.split(";");
 			for (String database : databasesArray){
 				String[] databaseSplit = database.split("\\|");
@@ -87,7 +87,7 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 			}
 		}catch (MissingResourceException e){
 			System.err.println("Missing resource for region Delineation " + this.databaseName);
-			this.regionsDelineation = new HashMap<String, String>();
+			this.regionsDelineation = new LinkedHashMap<String, String>();
 		} 
 		
 		CODE2NOMENCLATURE.put(code, this);
@@ -101,15 +101,15 @@ public final class SpeciesNomenclature extends CisTargetResourceBundle{
 		return this.code;
 	}
 	
-	public HashMap<String, String> getGeneDatabase(){
+	public Map<String, String> getGeneDatabase(){
 		return this.geneDatabase;
 	}
 	
-	public HashMap<String, String> getRegionsDatabase(){
+	public Map<String, String> getRegionsDatabase(){
 		return this.regionsDatabase;
 	}
 	
-	public HashMap<String, String> getRegionsDelineation(){
+	public Map<String, String> getRegionsDelineation(){
 		return this.regionsDelineation;
 	}
 	

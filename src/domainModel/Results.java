@@ -1,7 +1,7 @@
 package domainModel;
 
 import iRegulonAnalysis.Input;
-import iRegulonInput.CisTargetType;
+import iRegulonInput.IRegulonType;
 
 import java.util.Collection;
 
@@ -62,10 +62,10 @@ public class Results {
 	
 	/**
 	 * 
-	 * @return the type of the cisTarget action
+	 * @return the type of the iRegulon action
 	 */
-	public CisTargetType getCisTargetType(){
-		return this.inputParameters.getCisTargetType();
+	public IRegulonType getIRegulonType(){
+		return this.inputParameters.getIRegulonType();
 	}
 	
 	/**

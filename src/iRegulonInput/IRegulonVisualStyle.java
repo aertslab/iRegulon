@@ -15,7 +15,7 @@ import cytoscape.visual.mappings.DiscreteMapping;
 import cytoscape.visual.mappings.ObjectMapping;
 import cytoscape.visual.mappings.PassThroughMapping;
 
-public class IRegulonVisualStyle extends CisTargetResourceBundle{
+public class IRegulonVisualStyle extends IRegulonResourceBundle{
 
 	public final String vsName;
 	
@@ -74,7 +74,7 @@ public class IRegulonVisualStyle extends CisTargetResourceBundle{
             // Passthrough Mapping - set node label
             //PassThroughMapping pm = new PassThroughMapping(new String(), "attr2");
             PassThroughMapping pm = new PassThroughMapping(new String(), "ID");
-            Calculator nlc = new BasicCalculator("CisTarget Visual Style Node Label Calculator",
+            Calculator nlc = new BasicCalculator("iRegulon Visual Style Node Label Calculator",
                                                  pm, VisualPropertyType.NODE_LABEL);
             nodeAppCalc.setCalculator(nlc);
 
@@ -87,7 +87,7 @@ public class IRegulonVisualStyle extends CisTargetResourceBundle{
             //disMapping.putMapValue(new String(""), NodeShape.ELLIPSE);
             //disMapping.putMapValue(new Integer(3), NodeShape.TRIANGLE);
 
-            Calculator shapeCalculator = new BasicCalculator("CisTarget Visual Style Node Shape Calculator",
+            Calculator shapeCalculator = new BasicCalculator("iRegulon Visual Style Node Shape Calculator",
                                                               disMapping, VisualPropertyType.NODE_SHAPE);
             nodeAppCalc.setCalculator(shapeCalculator);
 
@@ -97,7 +97,7 @@ public class IRegulonVisualStyle extends CisTargetResourceBundle{
             disMapping.putMapValue(new String("Regulator"), Color.GREEN);
             disMapping.putMapValue(new String(""), Color.BLUE);
 
-            Calculator nodColorCalculator = new BasicCalculator("CisTarget Visual Style Node Shape Calculator",
+            Calculator nodColorCalculator = new BasicCalculator("iRegulon Visual Style Node Shape Calculator",
                                                               disMapping, VisualPropertyType.NODE_FILL_COLOR);
             nodeAppCalc.setCalculator(nodColorCalculator);
             
@@ -126,7 +126,7 @@ public class IRegulonVisualStyle extends CisTargetResourceBundle{
             continuousMapping.addPoint(1.0, bv1);
             continuousMapping.addPoint(2.0, bv2);
 
-            Calculator nodeColorCalculator = new BasicCalculator("CisTarget Visual Style Node Color Calc",
+            Calculator nodeColorCalculator = new BasicCalculator("iRegulon Visual Style Node Color Calc",
                                                             continuousMapping, VisualPropertyType.NODE_FILL_COLOR);
             nodeAppCalc.setCalculator(nodeColorCalculator);
 			*/
@@ -138,7 +138,7 @@ public class IRegulonVisualStyle extends CisTargetResourceBundle{
             arrowMapping.putMapValue("Predicted", ArrowShape.ARROW);
             //arrowMapping.putMapValue("pd", ArrowShape.CIRCLE);
 
-            Calculator edgeArrowCalculator = new BasicCalculator("CisTarget Visual Style Edge Arrow Shape Calculator",
+            Calculator edgeArrowCalculator = new BasicCalculator("iRegulon Visual Style Edge Arrow Shape Calculator",
                                           arrowMapping, VisualPropertyType.EDGE_TGTARROW_SHAPE);
             edgeAppCalc.setCalculator(edgeArrowCalculator);
             
@@ -196,9 +196,9 @@ public class IRegulonVisualStyle extends CisTargetResourceBundle{
     			//index++;
     		}
 
-    		Calculator edgeColorCalculator = new BasicCalculator("CisTarget Visual Style Edge Color Calculator",
+    		Calculator edgeColorCalculator = new BasicCalculator("iRegulon Visual Style Edge Color Calculator",
     				edgeColorMapping, VisualPropertyType.EDGE_COLOR);
-    		Calculator arrowColorCalc = new BasicCalculator("CisTarget Visual Style Edge Color Calculator",
+    		Calculator arrowColorCalc = new BasicCalculator("iRegulon Visual Style Edge Color Calculator",
     				edgeColorMapping, VisualPropertyType.EDGE_TGTARROW_COLOR);
     		edgeAppCalc.setCalculator(edgeColorCalculator);
     		edgeAppCalc.setCalculator(arrowColorCalc);

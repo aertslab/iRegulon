@@ -1,5 +1,8 @@
 package saveActions;
 
+import iRegulonAnalysis.Input;
+import iRegulonInput.IRegulonType;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -22,7 +25,8 @@ public class SaveResults {
 		this.xstream.alias("candidateTargetGene", CandidateTargetGene.class);
 		this.xstream.alias("geneIdentifier", GeneIdentifier.class);
 		this.xstream.alias("transcriptionFactor", TranscriptionFactor.class);
-
+		this.xstream.alias("iRegulonType", IRegulonType.class);
+		this.xstream.alias("CisTargetType", IRegulonType.class);
 		
 		this.xstream.setMode(XStream.NO_REFERENCES);
 		this.xstream.registerConverter(new SpeciesNomenclatureConverter());
@@ -34,6 +38,18 @@ public class SaveResults {
 	 * @return String xml
 	 */
 	public String saveResultsAsXML(Results result){
+		//Set-up of the XStream
+		this.xstream = new XStream();
+		this.xstream.alias("motif", Motif.class);
+		this.xstream.alias("candidateTargetGene", CandidateTargetGene.class);
+		this.xstream.alias("geneIdentifier", GeneIdentifier.class);
+		this.xstream.alias("transcriptionFactor", TranscriptionFactor.class);
+		this.xstream.alias("inputParameters", Input.class);
+		this.xstream.alias("iRegulonType", IRegulonType.class);
+				
+		this.xstream.setMode(XStream.NO_REFERENCES);
+		this.xstream.registerConverter(new SpeciesNomenclatureConverter());
+		
 		String xml = this.xstream.toXML(result);
 		//System.out.println(xml);
 		return xml;
@@ -45,6 +61,33 @@ public class SaveResults {
 	 * @return the motifs in a Collection of the given xml
 	 */
 	public Results loadResultsFromXML(String xml){
+		this.xstream = new XStream();
+		
+		//this.xstream.aliasField("iRegulonType", IRegulonType.class, "iRegulonType");
+		
+		//this.xstream.aliasField("iRegulonType", IRegulonType.class, "cisCisTargetType");
+		//this.xstream.aliasField("CisTargetType", IRegulonType.class, "iRegulonType");
+		//this.xstream.aliasType("iRegulonType", IRegulonType.class);
+		//this.xstream.aliasType("cisCisTargetType", IRegulonType.class);
+		//this.xstream.aliasType("CisTargetType", IRegulonType.class);
+		//this.xstream.aliasAttribute("iRegulonType", "iRegulonType");
+		//this.xstream.aliasAttribute("cisCisTargetType", "iRegulonType");
+		//this.xstream.aliasAttribute("CisTargetType", "iRegulonType");
+		
+		this.xstream.alias("motif", Motif.class);
+		this.xstream.alias("candidateTargetGene", CandidateTargetGene.class);
+		this.xstream.alias("geneIdentifier", GeneIdentifier.class);
+		this.xstream.alias("transcriptionFactor", TranscriptionFactor.class);
+		this.xstream.alias("inputParameters", Input.class);
+		this.xstream.alias("iRegulonType", IRegulonType.class);
+		this.xstream.aliasField("cisCisTargetType", Input.class, "iRegulonType");
+		//this.xstream.alias("cisCisTargetType", IRegulonType.class);
+		//this.xstream.alias("CisTargetType", IRegulonType.class);
+
+		
+		
+		//this.xstream.setMode(XStream.NO_REFERENCES);
+		this.xstream.registerConverter(new SpeciesNomenclatureConverter());
 		@SuppressWarnings("unchecked")
 		Results result = (Results) this.xstream.fromXML(xml);
 		//Results result = new Results(motifs, null);

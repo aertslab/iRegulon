@@ -1,7 +1,7 @@
 package httpProtocols;
 
 import iRegulonAnalysis.Input;
-import iRegulonInput.CisTargetResourceBundle;
+import iRegulonInput.IRegulonResourceBundle;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,14 +18,14 @@ import domainModel.Motif;
 import domainModel.SpeciesNomenclature;
 import domainModel.TranscriptionFactor;
 
-public class HTTPService extends CisTargetResourceBundle implements Service{
+public class HTTPService extends IRegulonResourceBundle implements Service{
 
 	public HTTPService(){
 		
 	}
 	
 	/**
-	 * Sent a request for a job in CisTarget
+	 * Sent a request for a job in iRegulon
 	 * @param geneIDs
 	 * @param AUCThreshold
 	 * @param rankThreshold

@@ -44,8 +44,10 @@ public class ComputationalServiceHTTP implements ComputationalService{
 			motifs = Collections.EMPTY_LIST;
 		}else{
 			Collection<Motif> motifColl = task.getMotifs();
-			for (Motif mtf : motifColl){
-				motifs.add(mtf);
+			if (motifColl != null){
+				for (Motif mtf : motifColl){
+					motifs.add(mtf);
+				}
 			}
 		}
 		return motifs;

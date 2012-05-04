@@ -7,7 +7,7 @@ import javax.swing.Icon;
 
 public abstract class IRegulonAction extends AbstractAction {
 
-	private final ResourceBundle bundle = ResourceBundle.getBundle("cistargetx");
+	private final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
 
 	public IRegulonAction() {
 		super();

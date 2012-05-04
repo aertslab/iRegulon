@@ -2,7 +2,7 @@ package iRegulonAnalysis;
 
 import httpConnection.ComputationalService;
 import httpConnection.ComputationalServiceHTTP;
-import iRegulonInput.CisTargetType;
+import iRegulonInput.IRegulonType;
 import iRegulonInput.Parameters;
 import iRegulonOutput.IRegulonOutputView;
 
@@ -49,7 +49,7 @@ public class SubmitAction extends AbstractAction {
 			geneIDs.add(geneID);
 		}*/
 		
-		if (input.getCisTargetType().equals(CisTargetType.PREDICTED_REGULATORS)){
+		if (input.getIRegulonType().equals(IRegulonType.PREDICTED_REGULATORS)){
 			//Stub aanroepen
 			ComputationalService analyse = new ComputationalServiceHTTP();
 			//type oproepen

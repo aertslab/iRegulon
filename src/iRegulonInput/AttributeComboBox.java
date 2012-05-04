@@ -44,7 +44,7 @@ public class AttributeComboBox  extends JComboBox implements FocusListener{
 						amountNull++;
 					}
 				}
-				if (amountNull < (nodes.size() * Float.parseFloat(ResourceBundle.getBundle("cistargetx").getString("percentage_nodes_not_null")))){
+				if (amountNull < (nodes.size() * Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null")))){
 					this.addItem(atName);
 					if (!contains && atName.equals(selected)){
 						contains = true;

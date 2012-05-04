@@ -1,6 +1,7 @@
 package iRegulonInput.databaseSelection;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.JComboBox;
@@ -17,7 +18,7 @@ public class DBCombobox extends JComboBox{
 	public void updateDatabases(Set<String> newDatabase){
 		this.database = new ArrayList<String>(newDatabase);
 		this.removeAllItems();
-		for (String db : this.database){
+		for (String db : newDatabase){
 			this.addItem(db);
 		}
 	}

@@ -25,7 +25,7 @@ import cytoscape.Cytoscape;
 
 import domainModel.SpeciesNomenclature;
 
-public class InputView extends CisTargetResourceBundle implements Parameters{
+public class InputView extends IRegulonResourceBundle implements Parameters{
 
 	private JTextField jtfEscore;
 	private JComboBox jcbSpecieAndNomenclature;
@@ -33,7 +33,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	private JTextField jtfVisualisation;
 	private Input input = null;
 	private int fontPoints = 12;
-	private CisTargetType cisTargetType = CisTargetType.PREDICTED_REGULATORS;
+	private IRegulonType iRegulonType = IRegulonType.PREDICTED_REGULATORS;
 	private JTextField jtfName;
 	private JTextField jtfMinOrthologous;
 	private JTextField jtfMaxMotifSimilarityFDR;
@@ -339,6 +339,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 		
 		this.rbtnDelineation = new JRadioButton();
 		this.rbtnDelineation.setEnabled(true);
+		this.rbtnDelineation.setSelected(true);
 		
 		this.rbtnConversion = new JRadioButton();
 		this.rbtnConversion.setEnabled(true);
@@ -635,7 +636,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
         
         f = new Font("Serif", 0, fontPoints);
         
-        //Change the kind of cisTarget action
+        //Change the kind of iRegulon action
         jtl = new JLabel("Choose the type of the " + this.getBundle().getString("plugin_name") + " action: ");
         jtl.setFont(f);
         jtl.setToolTipText("<html> Choose the type for your analysis. </html>");
@@ -681,7 +682,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				cisTargetType = CisTargetType.PREDICTED_REGULATORS;
+				iRegulonType = IRegulonType.PREDICTED_REGULATORS;
 				detailpanel = CreateClassicalInputView();
 			}
 		});
@@ -689,7 +690,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				cisTargetType = CisTargetType.DATABASE_FOR_REGULATORS;
+				iRegulonType = IRegulonType.DATABASE_FOR_REGULATORS;
 				detailpanel = new JPanel();
 			}
 		});
@@ -697,7 +698,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				cisTargetType = CisTargetType.DATABASE_FOR_TARGETOME;
+				iRegulonType = IRegulonType.DATABASE_FOR_TARGETOME;
 				detailpanel = new JPanel();
 			}
 		});
@@ -705,7 +706,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				cisTargetType = CisTargetType.DATABASE_NETWORK_ANNOTATIONS;
+				iRegulonType = IRegulonType.DATABASE_NETWORK_ANNOTATIONS;
 				detailpanel = new JPanel();
 			}
 		});
@@ -793,10 +794,10 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 	}
 	
 	/**
-	 * @return the type of the cisTarget that must be executed
+	 * @return the type of the iRegulon that must be executed
 	 */
-	public CisTargetType getCisTargetType(){
-		return this.cisTargetType;
+	public IRegulonType getiRegulonType(){
+		return this.iRegulonType;
 	}
 	
 	/**
@@ -820,7 +821,7 @@ public class InputView extends CisTargetResourceBundle implements Parameters{
 				this.getAUCThreshold(), 
 				this.getRankThreshold(), 
 				this.getSpeciesNomenclature(), 
-				this.cisTargetType, 
+				this.iRegulonType, 
 				this.getName(), 
 				this.getMinOrthologous(), 
 				this.getMaxMotifSimilarityFDR(), 

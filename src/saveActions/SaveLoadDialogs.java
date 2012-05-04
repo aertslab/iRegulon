@@ -210,7 +210,7 @@ public class SaveLoadDialogs {
 
 		@Override
 		public String getDescription() {
-			return "CisTarget files";
+			return "iRegulon files";
 		}
 		
 	}

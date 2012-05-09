@@ -42,14 +42,14 @@ public class SaveLoadDialogs {
 		// Create a file chooser
 		String filename = System.getProperty("user.home");
 		JFileChooser fc = new JFileChooser(new File(filename));
-		ctfFileFilter ctfFilter = new ctfFileFilter();
-		fc.addChoosableFileFilter(ctfFilter);
+		irfFileFilter irfFilter = new irfFileFilter();
+		fc.addChoosableFileFilter(irfFilter);
 		fc.setSelectedFile(new File(name + extension));
 		fc.showSaveDialog(frame);
 		File selFile = fc.getSelectedFile();
 		
-		if (! ctfFilter.accept(fc.getSelectedFile())){
-			if (extension == ".ctf"){
+		if (! irfFilter.accept(fc.getSelectedFile())){
+			if (extension == ".irf"){
 				selFile = new File(selFile.getAbsoluteFile() + extension);
 			}else{
 				selFile = new File(selFile.getAbsoluteFile() + "");
@@ -117,11 +117,15 @@ public class SaveLoadDialogs {
 		String filename = System.getProperty("user.home");
 		JFileChooser fc = new JFileChooser(new File(filename));
 		ctfFileFilter ctfFilter = new ctfFileFilter();
+		irfFileFilter irfFilter = new irfFileFilter();
+		irfOrctfFileFilter irfOrctfFilter = new irfOrctfFileFilter();
 		fc.addChoosableFileFilter(ctfFilter);
+		fc.addChoosableFileFilter(irfFilter);
+		fc.addChoosableFileFilter(irfOrctfFilter);
 		fc.showOpenDialog(frame);
 		File selFile = fc.getSelectedFile();
 		if (selFile != null){
-			if (ctfFilter.accept(selFile)){
+			if (irfOrctfFilter.accept(selFile)){
 				String name = selFile.getName();
 				String[] names = name.split("\\.");
 				this.saveName = names[0];
@@ -210,7 +214,45 @@ public class SaveLoadDialogs {
 
 		@Override
 		public String getDescription() {
-			return "iRegulon files";
+			return "old iRegulon files (ctf)";
+		}
+		
+	}
+	
+	private static class irfFileFilter extends FileFilter{
+
+		@Override
+		public boolean accept(File f) {
+			String name = f.getName();
+			String[] names = name.split("\\.");
+			if (names[names.length -1].equals("irf")){
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public String getDescription() {
+			return "iRegulon files (irf)";
+		}
+		
+	}
+	
+	private static class irfOrctfFileFilter extends FileFilter{
+
+		@Override
+		public boolean accept(File f) {
+			String name = f.getName();
+			String[] names = name.split("\\.");
+			if (names[names.length -1].equals("irf") || names[names.length -1].equals("ctf")){
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public String getDescription() {
+			return "all kind of iRegulon files (ctf and irf)";
 		}
 		
 	}

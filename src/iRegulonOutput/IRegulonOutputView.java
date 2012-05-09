@@ -220,7 +220,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 				public void actionPerformed(ActionEvent e) {
 					SaveResults results = new SaveResults();
 					String xml = results.saveResultsAsXML(result);
-					String extention = ".ctf";
+					String extention = ".irf";
 					boolean saved = SaveLoadDialogs.saveDialogue(xml, runName, extention);
 					if (! isSaved){
 						isSaved = saved;
@@ -262,7 +262,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 						if (n == 0){
 							SaveResults results = new SaveResults();
 							String xml = results.saveResultsAsXML(result);
-							String extention = ".ctf";
+							String extention = ".irf";
 							SaveLoadDialogs.saveDialogue(xml, runName, extention);
 						}
 					}

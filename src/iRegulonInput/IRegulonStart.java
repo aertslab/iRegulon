@@ -87,8 +87,8 @@ public class IRegulonStart extends CytoscapePlugin {
 	        item.addActionListener(new StartClasicalFrameAction());
 	        submenu.add(item);
 	        
-	        item = new JMenuItem("Other flavors");
-	        item.setToolTipText("Do other flavors of iRegulon: like iRegulonDB");
+	        item = new JMenuItem("Other iRegulon options");
+	        item.setToolTipText("Do other options of iRegulon: like iRegulonDB");
 	        item.addActionListener(new ActionListener() {
 				
 				@Override

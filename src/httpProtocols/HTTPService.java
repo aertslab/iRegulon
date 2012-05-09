@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 import domainModel.CandidateTargetGene;
@@ -17,6 +18,7 @@ import domainModel.GeneIdentifier;
 import domainModel.Motif;
 import domainModel.SpeciesNomenclature;
 import domainModel.TranscriptionFactor;
+import exceptions.SentRequestException;
 
 public class HTTPService extends IRegulonResourceBundle implements Service{
 
@@ -31,8 +33,9 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 	 * @param rankThreshold
 	 * @param NESThreshold
 	 * @return the id of the job
+	 * @throws SentRequestException 
 	 */
-	public int sentJob(Input input){
+	public int sentJob(Input input) throws SentRequestException{
 		String name = input.getName();
 		Collection<GeneIdentifier> geneIDs = input.getGenes();
 		float AUCThreshold = input.getROCthresholdAUC();
@@ -42,11 +45,13 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 		float maxMotifSimilarityFDR = input.getMaxMotifSimilarityFDR();
 		
 		boolean isRegionBased = input.isRegionBased();
-		String database = input.getDatabase();
+		String database = input.getDatabase().getCode();
 		float overlap = input.getOverlap();
-		String delineation = input.getDelineation();
+		String delineation = input.getDelineation().getCode();
 		int upstream = input.getUpstream();
 		int downstream = input.getDownstream();
+
+	    String lines = "";
 		try {
 			//creating the data
 			String data = "jobName=" + name 
@@ -81,7 +86,7 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 		    		data = data + ";" + geneIDArray[index].getGeneName();
 		    	}
 		    }
-		    System.out.println(data);
+		    //System.out.println(data);
 			// Send data
 		    URL url = new URL(this.getBundle().getString("URL_submit"));
 		    URLConnection conn = url.openConnection();
@@ -97,17 +102,21 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 		    String line;
 		    int jobID = 0;
 		    while ((line = rd.readLine()) != null) {
-		    	//System.out.println(line);
-		        jobID = Integer.parseInt(line);
+		    	//Systoutem.out.println(line);
+		    	lines+=line;
 		    }
-		    System.out.println(jobID);
+		    jobID = Integer.parseInt(lines);
+		    //System.out.println(jobID);
 		    wr.close();
 		    rd.close();
 		    return jobID;
 		} catch (Exception e) {
-			System.out.println(e.toString());
+			System.err.println(lines);
+			if (lines.isEmpty()){
+				lines = e.getMessage();
+			}
+			throw new SentRequestException(lines, e);
 		}
-		return -1;
 	}
 	
 	/**
@@ -252,7 +261,7 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 		        SpeciesNomenclature sn = SpeciesNomenclature.getNomenclature(Integer.parseInt(motifVariables[0])); 
 		        
 		        //Make all the CandidateTargetGenes
-		        Collection<CandidateTargetGene> candidateTargetGenes = new ArrayList<CandidateTargetGene>();
+		        List<CandidateTargetGene> candidateTargetGenes = new ArrayList<CandidateTargetGene>();
 		        //the IDs
 		        String[] candidateTargetGeneIDs = motifVariables[8].split(";");
 		        //there ranks
@@ -264,7 +273,7 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 		        }
 
 		        //Make all the transcriptionFactors
-		        Collection<TranscriptionFactor> transcriptionFactors = new ArrayList<TranscriptionFactor>();
+		        List<TranscriptionFactor> transcriptionFactors = new ArrayList<TranscriptionFactor>();
 		        if (motifVariables.length > 10){
 		        	//the names
 		        	String[] transcriptionFactorNames = motifVariables[10].split(";");

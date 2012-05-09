@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 
 import cytoscape.Cytoscape;
 
+import domainModel.Database;
+import domainModel.Delineation;
 import domainModel.SpeciesNomenclature;
 
 public class InputView extends IRegulonResourceBundle implements Parameters{
@@ -161,101 +163,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panel.add(this.jtfName, c);
         yPos += 1;
 		
-        // Escore
-        /*
-         * EEEEEEE
-         * EE
-         * EE
-         * EEEEE
-         * EE
-         * EE
-         * EEEEEEE
-         */
-        jtl = new JLabel("Choose an Enrichment score threshold");
-        jtl.setFont(f);
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        jtl.setToolTipText("<html> Choose the minimal score threshold to consider " +
-        		"a motif as being relevant. </html>");
-        panel.add(jtl, c);
         
-        this.jtfEscore = new JTextField("" + this.standardEscore);
-        this.jtfEscore.setFont(f);
-        this.jtfEscore.setVisible(true);
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		this.jtfEscore.setVisible(true);
-        panel.add(this.jtfEscore, c);
-        yPos += 1;
-        
-        // ROCthresholdAUC
-        /* RRRRRRR
-         * RR	RR
-         * RRRRRRR	OOOOOO	  ccc
-         * RRRR		OO	OO	 cc
-         * RR RR	OO	OO	cc
-         * RR  RR	OO	OO	 cc
-         * RR   RR	OOOOOO	  ccc
-         */
-        jtl = new JLabel("Choose the ROC threshold for AUC.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> The x-axis (region rank) cut-off at which <P> " +
-				"to calculate the Area Under the Curve. This <P>" +
-				"measure is used to compare and rank all motifs. </html>");
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jtfROC = new JTextField("" + this.standardROC);
-        this.jtfROC.setFont(f);
-        this.jtfROC.setEditable(true);
-        
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		this.jtfROC.setVisible(true);
-        panel.add(this.jtfROC, c);
-        yPos += 1;
-
-        // threshold for visualisation
-        /*
-         * v       v
-         *  v     v
-         *   v   v
-         *    v v
-         *     v
-         * 
-         */
-        jtl = new JLabel("Choose the Threshold for visualisation.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>The x-axis cut-off for visualisation. " + "<P>" +
-        		"When set to 5000, the recovery curve on the top 5000 " + "<P>" +
-        		"regions is shown. </html>");
-        
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jtfVisualisation = new JTextField("" + this.standardVisualisation);
-        this.jtfVisualisation.setFont(f);
-        this.jtfVisualisation.setEditable(true);
-        
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		this.jtfVisualisation.setVisible(true);
-        panel.add(this.jtfVisualisation, c);
-        yPos += 1;
 		
         // Species and nomenclature
         /* SSSSSSS
@@ -366,12 +274,12 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		c.gridwidth = 1;
         panel.add(this.rbtnConversion, c);
         
-        jtl = new JLabel("Upstream");
-        jtl.setToolTipText("<html> Choose the amount of bp upstream of the conversion. </html>");
+        JLabel labelUp = new JLabel("Upstream");
+        labelUp.setToolTipText("<html> Choose the amount of bp upstream of the conversion. </html>");
         c.gridx = 1;
 		c.gridy = yPos;
 		c.gridwidth = 2;
-		panel.add(jtl, c);
+		panel.add(labelUp, c);
         
         this.txtUpStream = new JTextField();
         this.txtUpStream.setText(this.getBundle().getString("standard_upstream"));
@@ -381,12 +289,12 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		panel.add(this.txtUpStream, c);
 		yPos+=1;
         
-        jtl = new JLabel("Downstream");
-        jtl.setToolTipText("<html> Choose the amount of bp downstream of the conversion. </html>");
+        JLabel labelDown = new JLabel("Downstream");
+        labelDown.setToolTipText("<html> Choose the amount of bp downstream of the conversion. </html>");
         c.gridx = 1;
 		c.gridy = yPos;
 		c.gridwidth = 2;
-		panel.add(jtl, c);
+		panel.add(labelDown, c);
         
         this.txtDownStream = new JTextField();
         this.txtDownStream.setText(this.getBundle().getString("standard_downstream"));
@@ -395,6 +303,102 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		c.gridwidth = 2;
 		panel.add(this.txtDownStream, c);
         yPos+=1;
+        
+     // Escore
+        /*
+         * EEEEEEE
+         * EE
+         * EE
+         * EEEEE
+         * EE
+         * EE
+         * EEEEEEE
+         */
+        jtl = new JLabel("Choose an Enrichment score threshold");
+        jtl.setFont(f);
+        c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+        jtl.setVisible(true);
+        jtl.setToolTipText("<html> Choose the minimal score threshold to consider " +
+        		"a motif as being relevant. </html>");
+        panel.add(jtl, c);
+        
+        this.jtfEscore = new JTextField("" + this.standardEscore);
+        this.jtfEscore.setFont(f);
+        this.jtfEscore.setVisible(true);
+        c.gridx = 2;
+		c.gridy = yPos;
+		c.gridwidth = 3;
+		this.jtfEscore.setVisible(true);
+        panel.add(this.jtfEscore, c);
+        yPos += 1;
+        
+        // ROCthresholdAUC
+        /* RRRRRRR
+         * RR	RR
+         * RRRRRRR	OOOOOO	  ccc
+         * RRRR		OO	OO	 cc
+         * RR RR	OO	OO	cc
+         * RR  RR	OO	OO	 cc
+         * RR   RR	OOOOOO	  ccc
+         */
+        jtl = new JLabel("Choose the ROC threshold for AUC.");
+        f = new Font("Serif", 0, fontPoints);
+        jtl.setFont(f);
+        jtl.setToolTipText("<html> The x-axis (region rank) cut-off at which <P> " +
+				"to calculate the Area Under the Curve. This <P>" +
+				"measure is used to compare and rank all motifs. </html>");
+        
+        c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+        jtl.setVisible(true);
+        panel.add(jtl, c);
+        
+        this.jtfROC = new JTextField("" + this.standardROC);
+        this.jtfROC.setFont(f);
+        this.jtfROC.setEditable(true);
+        
+        c.gridx = 2;
+		c.gridy = yPos;
+		c.gridwidth = 3;
+		this.jtfROC.setVisible(true);
+        panel.add(this.jtfROC, c);
+        yPos += 1;
+
+        // threshold for visualisation
+        /*
+         * v       v
+         *  v     v
+         *   v   v
+         *    v v
+         *     v
+         * 
+         */
+        jtl = new JLabel("Choose the Threshold for visualisation.");
+        f = new Font("Serif", 0, fontPoints);
+        jtl.setFont(f);
+		jtl.setToolTipText("<html>The x-axis cut-off for visualisation. " + "<P>" +
+        		"When set to 5000, the recovery curve on the top 5000 " + "<P>" +
+        		"regions is shown. </html>");
+        
+		c.gridx = 0;
+		c.gridy = yPos;
+		c.gridwidth = 2;
+        jtl.setVisible(true);
+        panel.add(jtl, c);
+        
+        this.jtfVisualisation = new JTextField("" + this.standardVisualisation);
+        this.jtfVisualisation.setFont(f);
+        this.jtfVisualisation.setEditable(true);
+        
+        c.gridx = 2;
+		c.gridy = yPos;
+		c.gridwidth = 3;
+		this.jtfVisualisation.setVisible(true);
+        panel.add(this.jtfVisualisation, c);
+        yPos += 1;
         
 		//Minimal Orthologous id
 		/* OOOOOOO
@@ -554,7 +558,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         		this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR, 
         		this.jcbSpecieAndNomenclature, this.jcbBased, this.jcbdatabase, 
         		this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
-        		this.txtUpStream, this.txtDownStream, this.jcbGeneName, amountNodes, 
+        		this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.jcbGeneName, amountNodes, 
         		jbtn);
         this.jtfName.addActionListener(this.dbListener);
         this.jtfName.getDocument().addDocumentListener(this.dbListener);
@@ -852,13 +856,11 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		return (boolean) this.jcbBased.isRegionBased();
 	}
 	
-	public String getDatabase(){
+	public Database getDatabase(){
 		if (this.isRegionBased()){
-			return this.getSpeciesNomenclature().getRegionDatabaseOf(
-					(String) this.jcbdatabase.getSelectedItem());
+			return (Database) this.jcbdatabase.getSelectedItem();
 		}else{
-			return this.getSpeciesNomenclature().getGeneDatabaseOf(
-					(String) this.jcbdatabase.getSelectedItem());
+			return (Database) this.jcbdatabase.getSelectedItem();
 		}
 	}
 	
@@ -870,12 +872,11 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		}
 	}
 	
-	public String getDelineation(){
+	public Delineation getDelineation(){
 		if (this.isRegionBased() && this.rbtnDelineation.isSelected()){
-			return this.getSpeciesNomenclature().getDelineationOf(
-					(String) this.jcbDelation.getSelectedItem());
+			return (Delineation) this.jcbDelation.getSelectedItem();
 		}else{
-			return null;
+			return new Delineation(null, null);
 		}
 	}
 	

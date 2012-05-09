@@ -111,6 +111,9 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 						this.setAtribute(edge, "Target Gene", childID.getGeneName());
 						this.setAtribute(edge, "Regulatory function", "Predicted");
 						this.setAtribute(edge, "Motif", tree.getEnrichedMotifID());
+						this.setAtribute(edge, "featureID", "" + tree.getFeatureID());
+						CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
+						cyEdgeAttrs.setUserVisible("featureID", false);
 					}
 				}	
 			}

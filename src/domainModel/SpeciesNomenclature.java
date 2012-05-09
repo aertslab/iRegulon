@@ -35,59 +35,114 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle{
 	private final int code;
 	private final String name;
 	private final String databaseName;
-	private Map<String, String> geneDatabase;
-	private Map<String, String> regionsDatabase;
-	private Map<String, String> regionsDelineation;
+	private List<Database> geneDatabase;
+	private List<Database> regionsDatabase;
+	private List<Delineation> regionsDelineation;
 	
 	private SpeciesNomenclature(final int code, final String name, final String databaseName) {
 		this.code = code;
 		this.name = name;
 		this.databaseName = databaseName;
+		this.geneDatabase = new ArrayList<Database>();
+		this.regionsDatabase = new ArrayList<Database>();
+		
+		LinkedHashMap AUCmap = new LinkedHashMap<String, String>();
+		LinkedHashMap VisualisationMap = new LinkedHashMap<String, String>();
+		//the AUCmap
+		try{
+			String databasesString = this.getBundle().getString("special_ROC");
+			String[] databasesArray = databasesString.split(";");
+			for (String database : databasesArray){
+				String[] databaseSplit = database.split("\\|");
+				if (databaseSplit.length == 2){
+					AUCmap.put(databaseSplit[0], databaseSplit[1]);
+				}
+			}
+		}catch (MissingResourceException e){
+			System.err.println("Missing resource for special ROC");
+		} 
+		//the AUCmap
+		try{
+			String databasesString = this.getBundle().getString("special_visualisation");
+			String[] databasesArray = databasesString.split(";");
+			for (String database : databasesArray){
+				String[] databaseSplit = database.split("\\|");
+				if (databaseSplit.length == 2){
+					VisualisationMap.put(databaseSplit[0], databaseSplit[1]);
+				}
+			}
+		}catch (MissingResourceException e){
+			System.err.println("Missing resource for special visualisation");
+		} 
+		
 		
 		//RegionsDatabase
 		try{
 			String databasesString = this.getBundle().getString(databaseName.concat("_RegionBased"));
-			this.regionsDatabase = new LinkedHashMap<String, String>();
 			String[] databasesArray = databasesString.split(";");
 			for (String database : databasesArray){
 				String[] databaseSplit = database.split("\\|");
 				if (databaseSplit.length == 2){
-					this.regionsDatabase.put(databaseSplit[0], databaseSplit[1]);
+					float AUC = Float.parseFloat(this.getBundle().getString("standard_ROC"));
+					if (AUCmap.containsKey(databaseSplit[1])){
+						AUC = Float.parseFloat((String) AUCmap.get(databaseSplit[1]));
+					}
+					int visualisation = Integer.parseInt(this.getBundle().getString("standard_visualisation"));
+					if (VisualisationMap.containsKey(databaseSplit[1])){
+						visualisation = Integer.parseInt((String) VisualisationMap.get(databaseSplit[1]));
+					}
+					Database aDatabase = new Database(databaseSplit[1], 
+							databaseSplit[0], 
+							AUC, 
+							visualisation);
+					this.regionsDatabase.add(aDatabase);
 				}
 			}
 		}catch (MissingResourceException e){
 			System.err.println("Missing resource for regions of " + databaseName);
-			this.regionsDatabase = new LinkedHashMap<String, String>();
 		} 
 		//GeneDatabase
 		try{
-			String databasesString = this.getBundle().getString(this.databaseName.concat("_GeneBased"));
-			this.geneDatabase = new LinkedHashMap<String, String>();
+			String databasesString = this.getBundle().getString(databaseName.concat("_GeneBased"));
 			String[] databasesArray = databasesString.split(";");
 			for (String database : databasesArray){
 				String[] databaseSplit = database.split("\\|");
 				if (databaseSplit.length == 2){
-					this.geneDatabase.put(databaseSplit[0], databaseSplit[1]);
+					float AUC = Float.parseFloat(this.getBundle().getString("standard_ROC"));
+					if (AUCmap.containsKey(databaseSplit[1])){
+						AUC = Float.parseFloat((String) AUCmap.get(databaseSplit[1]));
+					}
+					int visualisation = Integer.parseInt(this.getBundle().getString("standard_visualisation"));
+					if (VisualisationMap.containsKey(databaseSplit[1])){
+						visualisation = Integer.parseInt((String) VisualisationMap.get(databaseSplit[1]));
+					}
+					Database aDatabase = new Database(databaseSplit[1], 
+							databaseSplit[0], 
+							AUC, 
+							visualisation);
+					this.geneDatabase.add(aDatabase);
 				}
 			}
 		}catch (MissingResourceException e){
-			System.err.println("Missing resource for genes " + this.databaseName);
-			this.geneDatabase = new LinkedHashMap<String, String>();
+			System.err.println("Missing resource for genes of " + databaseName);
 		} 
+		
+		
 		//RegionsDelineation
+		
+		
 		try{
 			String databasesString = this.getBundle().getString(this.databaseName.concat("_Delineation"));
-			this.regionsDelineation = new LinkedHashMap<String, String>();
+			this.regionsDelineation = new ArrayList<Delineation>();
 			String[] databasesArray = databasesString.split(";");
 			for (String database : databasesArray){
 				String[] databaseSplit = database.split("\\|");
 				if (databaseSplit.length == 2){
-					this.regionsDelineation.put(databaseSplit[0], databaseSplit[1]);
+					this.regionsDelineation.add(new Delineation(databaseSplit[1], databaseSplit[0]));
 				}
 			}
 		}catch (MissingResourceException e){
 			System.err.println("Missing resource for region Delineation " + this.databaseName);
-			this.regionsDelineation = new LinkedHashMap<String, String>();
 		} 
 		
 		CODE2NOMENCLATURE.put(code, this);
@@ -101,68 +156,17 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle{
 		return this.code;
 	}
 	
-	public Map<String, String> getGeneDatabase(){
+	public List<Database> getGeneDatabase(){
 		return this.geneDatabase;
 	}
 	
-	public Map<String, String> getRegionsDatabase(){
+	public List<Database> getRegionsDatabase(){
 		return this.regionsDatabase;
 	}
 	
-	public Map<String, String> getRegionsDelineation(){
+	public List<Delineation> getRegionsDelineation(){
 		return this.regionsDelineation;
 	}
 	
-	public String getGeneDatabaseOf(String key){
-		if (this.geneDatabase.keySet().contains(key)){
-			return this.geneDatabase.get(key);
-		}else{
-			return null;
-		}
-	}
-	
-	public String getRegionDatabaseOf(String key){
-		if (this.regionsDatabase.keySet().contains(key)){
-			return this.regionsDatabase.get(key);
-		}else{
-			return null;
-		}
-	}
-	
-	public String getDelineationOf(String key){
-		if (this.regionsDelineation.keySet().contains(key)){
-			return this.regionsDelineation.get(key);
-		}else{
-			return null;
-		}
-	}
-	
-	public String getDatabaseNameOf(String database){
-		if (this.geneDatabase.containsValue(database)){
-			for (String key : this.geneDatabase.keySet()){
-				if (database.equals(this.geneDatabase.get(key))){
-					return key;
-				}
-			}
-		}else{
-			for (String key : this.regionsDatabase.keySet()){
-				if (database.equals(this.regionsDatabase.get(key))){
-					return key;
-				}
-			}
-		}
-		return null;
-	}
-	
-	public String getDelineationNameOf(String delineation){
-		if (this.regionsDelineation.containsValue(delineation)){
-			for (String key : this.regionsDelineation.keySet()){
-				if (delineation.equals(this.regionsDelineation.get(key))){
-					return key;
-				}
-			}
-		}
-		return null;
-	}
 	
 }

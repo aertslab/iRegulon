@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import domainModel.Motif;
+import exceptions.SentRequestException;
 
 public class ClassicalTask extends IRegulonResourceBundle implements Task {
 	private cytoscape.task.TaskMonitor taskMonitor;
@@ -43,7 +44,18 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 		taskMonitor.setStatus("Starting Request");
 		taskMonitor.setPercentCompleted(progress);
 		
-		int jobID = this.service.sentJob(this.input);
+		int jobID;
+		try {
+			jobID = this.service.sentJob(this.input);
+		} catch (SentRequestException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+			jobID = -1;
+			this.interrupted = true;
+			this.errorMessage = e.getMessage();
+			this.state = State.ERROR;
+		}
 		progress = 10;
 		if (jobID == -1){
 			this.interrupted = true;

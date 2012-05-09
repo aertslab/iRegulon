@@ -109,7 +109,17 @@ public class TranscriptionFactor implements Comparable<TranscriptionFactor>{
 				return 1;
 			}
 		}
-		return -1;
+		//both equal: alphabeticaly
+		if (this.getName().compareToIgnoreCase(tf.getName()) > 0){
+			//this is aphabeticaly afther tf (may have a longer name)
+			return 1;
+		}
+		if (this.getName().compareToIgnoreCase(tf.getName()) < 0){
+			// this is aphabeticaly before tg (may have a shorter name)
+						return -1;
+		}
+		//both equal
+		return 0;
 	}
 	
 	public String toString(){

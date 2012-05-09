@@ -3,14 +3,15 @@ package domainModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class Motif {
 
 	final private String enrichedMotifID;
 	final private int clusterCode;
 	final private float neScore;
-	final private Collection<CandidateTargetGene> candidateTargetGenes;
-	final private Collection<TranscriptionFactor> transcriptionFactors;
+	final private List<CandidateTargetGene> candidateTargetGenes;
+	final private List<TranscriptionFactor> transcriptionFactors;
 	final private float aucValue;
 	final private int rank;
 	final private String description;
@@ -26,11 +27,12 @@ public class Motif {
 	 * @param clusterCode
 	 * @param AUCValue
 	 */
-	public Motif(String enrichedMotifID, Collection<CandidateTargetGene> candidateTargetGenes,
-			Collection<TranscriptionFactor> transcriptionFactors, float neScore, int clusterCode
+	public Motif(String enrichedMotifID, List<CandidateTargetGene> candidateTargetGenes,
+			List<TranscriptionFactor> transcriptionFactors, float neScore, int clusterCode
 			, float aucValue, int rank, String description, int featureID, int jobID){
 		this.enrichedMotifID = enrichedMotifID;
 		this.candidateTargetGenes = candidateTargetGenes;
+		Collections.sort(new ArrayList<CandidateTargetGene>(this.candidateTargetGenes));
 		this.transcriptionFactors = transcriptionFactors;
 		Collections.sort(new ArrayList<TranscriptionFactor>(this.transcriptionFactors));
 		this.neScore = neScore;
@@ -57,11 +59,11 @@ public class Motif {
 		return this.neScore;
 	}
 	
-	public Collection<CandidateTargetGene> getCandidateTargetGenes(){
+	public List<CandidateTargetGene> getCandidateTargetGenes(){
 		return this.candidateTargetGenes;
 	}
 	
-	public Collection<TranscriptionFactor> getTranscriptionFactors(){
+	public List<TranscriptionFactor> getTranscriptionFactors(){
 		return this.transcriptionFactors;
 	}
 	

@@ -1,6 +1,7 @@
 package iRegulonOutput.DetailPanel;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -57,16 +58,10 @@ public class TGTableModel extends AbstractTableModel{
 		  /*if (this.regulatoryTree == null){
 			  return "?";
 		  }*/
-		  Collection<CandidateTargetGene> geneIDs = this.motif.getCandidateTargetGenes();
-		  CandidateTargetGene[] geneArray = new CandidateTargetGene[geneIDs.size()];
-		  int index = 0;
-		  for (CandidateTargetGene gene : geneIDs){
-			  geneArray[index] = gene;
-			  ++index;
-		  }
+		  List<CandidateTargetGene> geneIDs = this.motif.getCandidateTargetGenes();
 		  switch (column){
-		  case 0 : return geneArray[row].getRank();
-		  case 1 : return geneArray[row].getGeneName();
+		  case 0 : return geneIDs.get(row).getRank();
+		  case 1 : return geneIDs.get(row).getGeneName();
 		  }
 		  return null;
 	  }

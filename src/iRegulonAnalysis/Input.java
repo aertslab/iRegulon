@@ -4,6 +4,8 @@ import iRegulonInput.IRegulonType;
 
 import java.util.Collection;
 
+import domainModel.Database;
+import domainModel.Delineation;
 import domainModel.GeneIdentifier;
 import domainModel.SpeciesNomenclature;
 
@@ -23,9 +25,9 @@ public class Input {
 	
 	//Database
 	private final boolean isRegionBased;
-	private final String database;
+	private final Database database;
 	private final float overlap;
-	private final String delineation;
+	private final Delineation delineation;
 	private final int upstream;
 	private final int downstream;
 	
@@ -34,8 +36,8 @@ public class Input {
 	public Input(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC, 
 			int visualisationThreshold, SpeciesNomenclature speciesNomenclature, 
 			IRegulonType iRegulonType, String runName, float minOrthologous,
-			float maxMotifSimilarityFDR, boolean isRegionBased, String database, 
-			float overlap, String delineation, int upstream, int downstream){
+			float maxMotifSimilarityFDR, boolean isRegionBased, Database database, 
+			float overlap, Delineation delineation, int upstream, int downstream){
 		this.genes = genes;
 		this.eScore = escore;
 		this.thresholdForVisualisation = visualisationThreshold;
@@ -141,7 +143,7 @@ public class Input {
 	 * 
 	 * @return the database
 	 */
-	public String getDatabase(){
+	public Database getDatabase(){
 		return this.database;
 	}
 	
@@ -158,7 +160,7 @@ public class Input {
 	 * @return the name of the delineation (only regionbased)
 	 * null when no delineation
 	 */
-	public String getDelineation(){
+	public Delineation getDelineation(){
 		return this.delineation;
 	}
 	

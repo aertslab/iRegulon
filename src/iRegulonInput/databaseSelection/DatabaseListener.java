@@ -8,10 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
@@ -20,6 +22,8 @@ import javax.swing.event.DocumentListener;
 import cytoscape.Cytoscape;
 
 
+import domainModel.Database;
+import domainModel.Delineation;
 import domainModel.SpeciesNomenclature;
 
 public class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener{
@@ -38,7 +42,9 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private final JRadioButton rbtnDelineation;
 	private final JComboBox jcbDelineation;
 	private final JRadioButton rbtnConversion;
+	private final JLabel labelUp;
 	private final JTextField txtUp;
+	private final JLabel labelDown;
 	private final JTextField txtDown;
 	private final JComboBox jcbGeneNameAttr;
 	private final JTextField txtAmountNodes;
@@ -47,16 +53,28 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	
 	private boolean canSubmit;
 	private boolean isBussy;
+	private boolean changedDatabase;
 	
-	public DatabaseListener(JTextField txtName, JTextField txtEscore, 
-			JTextField txtAUCvalue, JTextField txtVisualisation, 
-			JTextField txtMinOrthologous, JTextField txtMaxSimilarity, 
-			JComboBox jcbSpecies, BasedComboBox jcbBased, 
-			DBCombobox jcbDatabase, JTextField txtOverlap, 
-			JRadioButton rbtnDelineation,
-			JComboBox jcbDelineation, JRadioButton rbtnConversion, JTextField txtUp, 
-			JTextField txtDown, JComboBox jcbGeneNameAttr, 
-			JTextField txtAmountNodes, JButton btnSubmit){
+	public DatabaseListener(JTextField txtName, 
+								JTextField txtEscore, 
+								JTextField txtAUCvalue, 
+								JTextField txtVisualisation, 
+								JTextField txtMinOrthologous, 
+								JTextField txtMaxSimilarity, 
+								JComboBox jcbSpecies, 
+								BasedComboBox jcbBased, 
+								DBCombobox jcbDatabase, 
+								JTextField txtOverlap, 
+								JRadioButton rbtnDelineation,
+								JComboBox jcbDelineation, 
+								JRadioButton rbtnConversion, 
+								JTextField txtUp, 
+								JLabel labelUp,
+								JTextField txtDown, 
+								JLabel labelDown,
+								JComboBox jcbGeneNameAttr, 
+								JTextField txtAmountNodes, 
+								JButton btnSubmit){
 		this.txtName = txtName;
 		this.txtEscore = txtEscore;
 		this.txtAUCvalue = txtAUCvalue;
@@ -71,11 +89,16 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 		this.jcbDelineation = jcbDelineation;
 		this.rbtnConversion = rbtnConversion;
 		this.txtUp = txtUp;
+		this.labelUp = labelUp;
 		this.txtDown = txtDown;
+		this.labelDown = labelDown;
 		this.jcbGeneNameAttr = jcbGeneNameAttr;
 		this.txtAmountNodes = txtAmountNodes;
 		this.btnSubmit = btnSubmit;
 		this.canSubmit = true;
+		this.isBussy = false;
+		this.changedDatabase = false;
+		
 	}
 	
 	@Override
@@ -87,12 +110,8 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 		if (! this.isBussy){
 			this.isBussy = true;
 			this.canSubmit = true;
+			this.changedDatabase = false;
 			this.refreshName();
-			this.refreshEscore();
-			this.refreshAUC();
-			this.refreshVisualisation();
-			this.refreshMinOrthologous();
-			this.refreshMaxSimilarity();
 			this.refreshBased();
 			this.refreshDatabase();
 			this.refreshOverlap();
@@ -100,6 +119,11 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 			this.refreshDelineation();
 			this.refreshUp();
 			this.refreshDown();
+			this.refreshEscore();
+			this.refreshAUC();
+			this.refreshVisualisation();
+			this.refreshMinOrthologous();
+			this.refreshMaxSimilarity();
 			this.refreshGeneName();
 			this.refreshAmountOfNodes();
 			//Must always be last: refresh the button for the submit
@@ -139,6 +163,10 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	
 	private void refreshAUC(){
 		this.txtAUCvalue.setBackground(Color.WHITE);
+		if (this.changedDatabase){
+			Database dat = (Database) this.jcbDatabase.getSelectedItem();
+			this.txtAUCvalue.setText("" + dat.getAUCvalue());
+		}
 		try{
 			if (this.txtAUCvalue.getText().isEmpty() || 0 > Float.parseFloat(this.txtAUCvalue.getText())
 					|| Float.parseFloat(this.txtAUCvalue.getText()) > 1){
@@ -153,6 +181,11 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	
 	private void refreshVisualisation(){
 		this.txtVisualisation.setBackground(Color.WHITE);
+		if (this.changedDatabase){
+			Database dat = (Database) this.jcbDatabase.getSelectedItem();
+			this.txtVisualisation.setText("" + dat.getVisualisationValue());
+		}
+		
 		try{
 			if (this.txtVisualisation.getText().isEmpty() || 1 > Integer.parseInt(this.txtVisualisation.getText())){
 				this.canSubmit = false;
@@ -211,19 +244,19 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	}
 	
 	private void refreshDatabase(){
-		String database = (String) this.jcbDatabase.getSelectedItem();
+		Database database = (Database) this.jcbDatabase.getSelectedItem();
 		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
 		if (this.jcbBased.isGeneBased()){
-			Map<String, String> linkedhash = species.getGeneDatabase();
-			this.jcbDatabase.updateDatabases(linkedhash.keySet());
+			this.jcbDatabase.updateDatabases(species.getGeneDatabase());
 		}else{
 			if(this.jcbBased.isRegionBased()){
-				Map<String, String> linkedhash = species.getRegionsDatabase();
-				this.jcbDatabase.updateDatabases(linkedhash.keySet());
+				this.jcbDatabase.updateDatabases(species.getRegionsDatabase());
 			}
 		}
 		if (this.jcbDatabase.canBeSelected(database)){
 			this.jcbDatabase.setSelectedItem(database);
+		}else{
+			this.changedDatabase = true;
 		}
 	}
 	
@@ -265,10 +298,14 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 				
 				this.txtDown.setEnabled(false);
 				this.txtUp.setEnabled(false);
+				this.labelDown.setEnabled(false);
+				this.labelUp.setEnabled(false);
 			}
 			if (conversion){
 				this.txtDown.setEnabled(true);
 				this.txtUp.setEnabled(true);
+				this.labelDown.setEnabled(true);
+				this.labelUp.setEnabled(true);
 				
 				this.jcbDelineation.setEnabled(false);
 			}
@@ -278,18 +315,19 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 			this.jcbDelineation.setEnabled(false);
 			this.txtDown.setEnabled(false);
 			this.txtUp.setEnabled(false);
+			this.labelDown.setEnabled(false);
+			this.labelUp.setEnabled(false);
 		}
 	}
 	
 	private void refreshDelineation(){
-		String delineation = (String) this.jcbDelineation.getSelectedItem();
+		Delineation delineation = (Delineation) this.jcbDelineation.getSelectedItem();
 		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-		Set<String> keys = species.getRegionsDelineation().keySet();
 		this.jcbDelineation.removeAllItems();
-		for(String key : keys){
+		for(Delineation key : species.getRegionsDelineation()){
 			this.jcbDelineation.addItem(key);
 		}
-		if (keys.contains(delineation)){
+		if (species.getRegionsDelineation().contains(delineation)){
 			this.jcbDelineation.setSelectedItem(delineation);
 		}
 		

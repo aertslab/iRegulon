@@ -10,6 +10,7 @@ import java.util.Iterator;
 import com.thoughtworks.xstream.XStream;
 
 import domainModel.*;
+import exceptions.LoadException;
 
 public class SaveResults {
 
@@ -59,8 +60,9 @@ public class SaveResults {
 	 * transforms the given xml to a collection of motifs
 	 * @param String xml
 	 * @return the motifs in a Collection of the given xml
+	 * @throws LoadException 
 	 */
-	public Results loadResultsFromXML(String xml){
+	public Results loadResultsFromXML(String xml) throws LoadException{
 		this.xstream = new XStream();
 		
 		//this.xstream.aliasField("iRegulonType", IRegulonType.class, "iRegulonType");
@@ -88,10 +90,14 @@ public class SaveResults {
 		
 		//this.xstream.setMode(XStream.NO_REFERENCES);
 		this.xstream.registerConverter(new SpeciesNomenclatureConverter());
-		@SuppressWarnings("unchecked")
-		Results result = (Results) this.xstream.fromXML(xml);
-		//Results result = new Results(motifs, null);
-		return result;	
+		try{
+			Results result = (Results) this.xstream.fromXML(xml);
+			//Results result = new Results(motifs, null);
+				return result;
+		}catch (Exception e){
+			throw new LoadException("The file can't be loaded: wrong format", e);
+		}
+			
 	}
 	
 	public String saveResultsAsTabDelimited(Collection<Motif> motifs){

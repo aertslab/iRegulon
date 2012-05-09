@@ -15,6 +15,7 @@ import domainModel.Motif;
 import domainModel.Results;
 import domainModel.SpeciesNomenclature;
 import domainModel.TranscriptionFactor;
+import exceptions.LoadException;
 
 import saveActions.SaveLoadDialogs;
 import saveActions.SaveResults;
@@ -27,24 +28,30 @@ public class SaveTest {
 		Results resultS = new Results(getMotifs(0), null);
 		String xml = save.saveResultsAsXML(resultS);
 		
-		Results result = save.loadResultsFromXML(xml);
-		Collection<Motif> motifs = result.getMotifs();
+		Results result;
+		try {
+			result = save.loadResultsFromXML(xml);
+			Collection<Motif> motifs = result.getMotifs();
 		
-		Motif[] motifsArr = new Motif[motifs.size()];
-		int index = 0;
-		for (Motif m : motifs){
-			motifsArr[index] = m;
-			index++;
-		}
-		assertEquals(3, motifsArr.length);
-		TranscriptionFactor[] tf = new TranscriptionFactor[motifsArr[0].getTranscriptionFactors().size()];
-		index = 0;
-		for (TranscriptionFactor t : motifsArr[0].getTranscriptionFactors()){
-			tf[index] = t;
-			index++;
-		}
-		assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
 		
+			Motif[] motifsArr = new Motif[motifs.size()];
+			int index = 0;
+			for (Motif m : motifs){
+				motifsArr[index] = m;
+				index++;
+			}
+			assertEquals(3, motifsArr.length);
+			TranscriptionFactor[] tf = new TranscriptionFactor[motifsArr[0].getTranscriptionFactors().size()];
+			index = 0;
+			for (TranscriptionFactor t : motifsArr[0].getTranscriptionFactors()){
+				tf[index] = t;
+				index++;
+			}
+			assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
+		} catch (LoadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -64,24 +71,30 @@ public class SaveTest {
 		if (fileInput == null){
 			System.out.println("fileInput is null");
 		}
-		Results result = save.loadResultsFromXML(xml);
-		Collection<Motif> motifs = result.getMotifs();
+		Results result;
+		try {
+			result = save.loadResultsFromXML(xml);
 		
-		Motif[] motifsArr = new Motif[motifs.size()];
-		int index = 0;
-		for (Motif m : motifs){
-			motifsArr[index] = m;
-			index++;
+			Collection<Motif> motifs = result.getMotifs();
+			
+			Motif[] motifsArr = new Motif[motifs.size()];
+			int index = 0;
+			for (Motif m : motifs){
+				motifsArr[index] = m;
+				index++;
+			}
+			assertEquals(3, motifsArr.length);
+			TranscriptionFactor[] tf = new TranscriptionFactor[motifsArr[0].getTranscriptionFactors().size()];
+			index = 0;
+			for (TranscriptionFactor t : motifsArr[0].getTranscriptionFactors()){
+				tf[index] = t;
+				index++;
+			}
+			assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
+		} catch (LoadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		assertEquals(3, motifsArr.length);
-		TranscriptionFactor[] tf = new TranscriptionFactor[motifsArr[0].getTranscriptionFactors().size()];
-		index = 0;
-		for (TranscriptionFactor t : motifsArr[0].getTranscriptionFactors()){
-			tf[index] = t;
-			index++;
-		}
-		assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
-		
 		
 	}
 

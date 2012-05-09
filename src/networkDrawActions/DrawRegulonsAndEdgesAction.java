@@ -1,6 +1,7 @@
 package networkDrawActions;
 
 import cytoscape.*;
+import cytoscape.data.CyAttributes;
 import cytoscape.view.CyNetworkView;
 
 
@@ -68,6 +69,9 @@ public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSe
 				DrawEdgesAction.setAtribute(edge, "Target Gene", geneID.getGeneName());
 				DrawEdgesAction.setAtribute(edge, "Regulatory function", "Predicted");
 				DrawEdgesAction.setAtribute(edge, "Motif", tree.getEnrichedMotifID());
+				DrawEdgesAction.setAtribute(edge, "featureID", "" + tree.getFeatureID());
+				CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
+				cyEdgeAttrs.setUserVisible("featureID", false);
 			}
 			//if the node is a regulator and target at the same time, it must say regulator
 			DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");

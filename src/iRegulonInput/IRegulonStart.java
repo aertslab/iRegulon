@@ -19,6 +19,7 @@ import java.net.URL;
 
 
 import cytoscape.Cytoscape;
+import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
 import cytoscape.util.CytoscapeAction;
 import domainModel.Motif;
@@ -34,6 +35,7 @@ public class IRegulonStart extends CytoscapePlugin {
 		MyPluginMenuAction menuAction = new MyPluginMenuAction(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) menuAction);
 		this.addHelp();
+		CytoscapeInit.getProperties().put("edgelinkouturl.iRegulon", "http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hgt.customText=http://med.kuleuven.be/lcb/iregulon/generatebed.php?featureIDandTarget=%featureID%:%Target Gene%:%Regulator Gene%");
 	}
 	
 	/**
@@ -120,9 +122,16 @@ public class IRegulonStart extends CytoscapePlugin {
 					SaveLoadDialogs dia = new SaveLoadDialogs();
 					String xml = dia.openDialogue();
 					if (xml != null){
-						Results result = results.loadResultsFromXML(xml);
-						IRegulonOutputView output = new IRegulonOutputView(dia.getSaveName());
-						output.drawPanel(result);
+						try{
+							Results result = results.loadResultsFromXML(xml);
+							IRegulonOutputView output = new IRegulonOutputView(dia.getSaveName());
+							output.drawPanel(result);
+						}catch(Exception exception){
+							System.err.println(exception.getMessage());
+							exception.printStackTrace();
+							JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+									exception.getMessage());
+						}
 					}
 				}
 			});

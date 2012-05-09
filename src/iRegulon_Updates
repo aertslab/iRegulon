@@ -5,16 +5,26 @@
 ##			##
 ##########################
 
+Version 0.10 (Release on 9 May 2012)
+	Updated safe system (old files aren't supported any more, unless you're lucky)
+	Updated properties and add database specific parameters
+	Added linkout to the UCSC website for REGIONS ONLY
+	Deleted last debug information for the console
+	Added exceptions to inform the user if something went wrong + clear developers information
+
 Version 0.9 (Release on 4 May 2012 (DEVELOPERS ONLY))
 	Updated the save file system
 	Change the following order of the databases as in the properties file
+	Serverside upgrade!
 
 Version 0.8 (Release on 4 May 2012 (DEVELOPERS ONLY))
 	Last references to cisTargetNet (old name) deleted and adapted to iRegulon
 	Updated Properties and database possibilities
+	Serverside upgrade!
 
 Version 0.7 (Release on 4 May 2012 (DEVELOPERS ONLY))
 	Updated properties and databases possibilities
+	Serverside upgrade!
 
 Version 0.6 (Release on 24 April 2012 (DEVELOPERS ONLY))
 	Added input possibility: the chose of database.

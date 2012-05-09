@@ -2,9 +2,12 @@ package iRegulonInput.databaseSelection;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JComboBox;
+
+import domainModel.Database;
 
 public class DBCombobox extends JComboBox{
 
@@ -15,16 +18,15 @@ public class DBCombobox extends JComboBox{
 		this.database = new ArrayList<String>();
 	}
 	
-	public void updateDatabases(Set<String> newDatabase){
-		this.database = new ArrayList<String>(newDatabase);
+	public void updateDatabases(List<Database> newDatabase){
 		this.removeAllItems();
-		for (String db : newDatabase){
+		for (Database db : newDatabase){
 			this.addItem(db);
 		}
 	}
 	
-	public boolean canBeSelected(String aString){
-		return this.database.contains(aString);
+	public boolean canBeSelected(Database aDatabase){
+		return this.database.contains(aDatabase);
 	}
 	
 	

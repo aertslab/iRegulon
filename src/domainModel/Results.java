@@ -113,11 +113,11 @@ public class Results {
 	 * @return the database
 	 */
 	public String getDatabaseName(){
-		return this.getSpeciesNomenclature().getDatabaseNameOf(this.inputParameters.getDatabase());
+		return this.inputParameters.getDatabase().getName();
 	}
 	
 	public String getDatabase(){
-		return this.inputParameters.getDatabase();
+		return this.inputParameters.getDatabase().getCode();
 	}
 	
 	
@@ -135,17 +135,17 @@ public class Results {
 	 */
 	public String getDelineationName(){
 		if (this.isDelineationBased()){
-			this.getSpeciesNomenclature().getDelineationNameOf(this.inputParameters.getDelineation());
+			return this.inputParameters.getDelineation().getName();
 		}
 		return null;
 	}
 	
-	public String getDelineation(){
+	public Delineation getDelineation(){
 		return this.inputParameters.getDelineation();
 	}
 	
 	public String getDelineationDatabase(){
-		return this.inputParameters.getDelineation();
+		return this.inputParameters.getDelineation().getCode();
 	}
 	
 	public boolean isDelineationBased(){

@@ -11,14 +11,15 @@ import domainModel.Database;
 
 public class DBCombobox extends JComboBox{
 
-	private ArrayList<String> database;
+	private List<Database> database;
 	
 	public DBCombobox(){
 		super();
-		this.database = new ArrayList<String>();
+		this.database = new ArrayList<Database>();
 	}
 	
 	public void updateDatabases(List<Database> newDatabase){
+		this.database = newDatabase;
 		this.removeAllItems();
 		for (Database db : newDatabase){
 			this.addItem(db);

@@ -258,6 +258,9 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 		}else{
 			this.changedDatabase = true;
 		}
+		if (this.jcbDatabase.canBeSelected(database)){
+			this.jcbDatabase.setSelectedItem(database);
+		}	
 	}
 	
 	private void refreshOverlap(){

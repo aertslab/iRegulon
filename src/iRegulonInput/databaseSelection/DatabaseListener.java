@@ -38,6 +38,7 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private final JComboBox jcbSpecies;
 	private final BasedComboBox jcbBased;
 	private final DBCombobox jcbDatabase;
+	private final JLabel labelOverlap;
 	private final JTextField txtOverlap;
 	private final JRadioButton rbtnDelineation;
 	private final JComboBox jcbDelineation;
@@ -63,7 +64,8 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 								JTextField txtMaxSimilarity, 
 								JComboBox jcbSpecies, 
 								BasedComboBox jcbBased, 
-								DBCombobox jcbDatabase, 
+								DBCombobox jcbDatabase,
+								JLabel labelOverlap,
 								JTextField txtOverlap, 
 								JRadioButton rbtnDelineation,
 								JComboBox jcbDelineation, 
@@ -84,6 +86,7 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 		this.jcbSpecies = jcbSpecies;
 		this.jcbBased = jcbBased;
 		this.jcbDatabase = jcbDatabase;
+		this.labelOverlap = labelOverlap;
 		this.txtOverlap = txtOverlap;
 		this.rbtnDelineation = rbtnDelineation;
 		this.jcbDelineation = jcbDelineation;
@@ -266,9 +269,11 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private void refreshOverlap(){
 		this.txtOverlap.setBackground(Color.WHITE);
 		if (this.jcbBased.isGeneBased()){
+			this.labelOverlap.setEnabled(false);
 			this.txtOverlap.setEnabled(false);
 		}
 		if (this.jcbBased.isRegionBased()){
+			this.labelOverlap.setEnabled(true);
 			this.txtOverlap.setEnabled(true);
 			try{
 				if (this.txtOverlap.getText().isEmpty() || 0 > Float.parseFloat(this.txtOverlap.getText()) 

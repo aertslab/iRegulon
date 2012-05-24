@@ -13,6 +13,8 @@ public class TGTableModel extends AbstractTableModel{
 	private final Motif motif;
 	private static final int NR_OF_COLUMNS = 2;
 	private final String[] m_colNames = {"Rank", "Target Name"};
+	private final String[] toolTipsCol = {"The rank of the target.",
+					"The name of the predicted target."};
 	
 	public TGTableModel(Motif motif){
 		this.motif = motif;
@@ -70,5 +72,9 @@ public class TGTableModel extends AbstractTableModel{
 	  public String getColumnName(int col) {
 	      return m_colNames[col];
 	   }
+	  
+	  public String[] getTooltips(){
+		  return this.toolTipsCol;
+	  }
 	  
 }

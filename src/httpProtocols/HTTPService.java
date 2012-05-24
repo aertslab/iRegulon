@@ -1,6 +1,5 @@
 package httpProtocols;
 
-import iRegulonAnalysis.Input;
 import iRegulonInput.IRegulonResourceBundle;
 
 import java.io.BufferedReader;
@@ -15,6 +14,7 @@ import java.util.List;
 
 import domainModel.CandidateTargetGene;
 import domainModel.GeneIdentifier;
+import domainModel.Input;
 import domainModel.Motif;
 import domainModel.SpeciesNomenclature;
 import domainModel.TranscriptionFactor;

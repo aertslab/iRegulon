@@ -8,9 +8,9 @@ import java.util.*;
 public final class SpeciesNomenclature extends IRegulonResourceBundle{
 	private static final Map<Integer,SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer,SpeciesNomenclature>();
 	
-	public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC", "Hsapiens_HGNC_database");
-	public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI", "Mmusculus_MGI_database");
-	public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase", "Dmelanogaster_FlyBase_database");
+	public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols", "Hsapiens_HGNC_database");
+	public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI symbols", "Mmusculus_MGI_database");
+	public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase names", "Dmelanogaster_FlyBase_database");
 	public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature (4, "Drosophila melanogaster, CG-numbers", "Dmelanogaster_CG_database");
 	//public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn", "Dmelanogaster_FBgn_database");
 	public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature(-1, "?", "?");

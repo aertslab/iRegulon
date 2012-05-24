@@ -187,6 +187,18 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 		}
 		return newImp;
 	}
+
+	@Override
+	public String[] getTooltips() {
+		// TODO Auto-generated method stub
+		String[] tips = this.model.getTooltips();
+		String[] newTips = new String[tips.length +1];
+		newTips[0] = "Check if the filter expression is found in this motif (the motif, target or transcription factor), cross other wise";
+		for (int i=0; i<tips.length; i++){
+			newTips[i+1] = tips[i];
+		}
+		return newTips;
+	}
 	
 	
 

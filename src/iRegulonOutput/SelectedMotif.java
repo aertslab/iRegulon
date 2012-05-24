@@ -9,10 +9,12 @@ import domainModel.Motif;
 public class SelectedMotif {
 	private List<MotifListener> listeners;
 	private Motif motifs;
+	private String attributeName;
 	
-	public SelectedMotif(){
+	public SelectedMotif(String attributeName){
 		this.motifs = null;
 		this.listeners = new ArrayList<MotifListener>();
+		this.attributeName = attributeName;
 	}
 	
 	/**
@@ -33,7 +35,9 @@ public class SelectedMotif {
 		}
 	}
 	
-	
+	public String getAttributeName(){
+		return this.attributeName;
+	}
 	
 	
 	

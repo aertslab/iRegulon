@@ -1,7 +1,6 @@
 package httpConnection;
 
 import httpProtocols.*;
-import iRegulonAnalysis.Input;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +15,7 @@ import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 
 import domainModel.GeneIdentifier;
+import domainModel.Input;
 import domainModel.Motif;
 
 public class ComputationalServiceHTTP implements ComputationalService{

@@ -1,7 +1,6 @@
 package httpConnection;
 
 import httpProtocols.*;
-import iRegulonAnalysis.Input;
 import iRegulonInput.IRegulonResourceBundle;
 
 import java.util.Collection;
@@ -10,6 +9,7 @@ import java.util.ResourceBundle;
 
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
+import domainModel.Input;
 import domainModel.Motif;
 import exceptions.SentRequestException;
 
@@ -90,7 +90,13 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 			taskMonitor.setStatus("Running your analysis");
 		}
 		while(this.service.getState(jobID).equals(State.RUNNING)  && ! this.interrupted){
-			
+			try {
+				Thread.sleep(3000);
+				//System.out.println("check");
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (! this.interrupted){
 			progress = progress + 10;

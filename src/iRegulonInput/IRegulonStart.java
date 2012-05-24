@@ -15,6 +15,8 @@ import java.util.*;
 
 import cytoscape.view.CyHelpBroker;
 import javax.help.HelpSet;
+
+import java.io.File;
 import java.net.URL;
 
 
@@ -57,6 +59,16 @@ public class IRegulonStart extends CytoscapePlugin {
 	}
 	
 	
+	
+	public void saveSessionStateFiles(List<File> pFileList){
+		System.out.println("save session iRegulon");
+		
+	}
+	
+	public void restoreSessionState(List<File> pStateFileList){
+		System.out.println("restore session iRegulon");
+		
+	}
 	
 	
 	/*

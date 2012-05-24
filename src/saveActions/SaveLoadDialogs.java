@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileFilter;
 
 
 import cytoscape.Cytoscape;
+import cytoscape.CytoscapeInit;
 
 public class SaveLoadDialogs {
 	
@@ -40,14 +41,19 @@ public class SaveLoadDialogs {
 		JFrame frame = new JFrame();
 
 		// Create a file chooser
-		String filename = System.getProperty("user.home");
-		JFileChooser fc = new JFileChooser(new File(filename));
+		File locFile = CytoscapeInit.getMRUD();
+		String location = "";
+		if (locFile == null){
+			location = "user.home";
+		}else{
+			location = locFile.getPath();
+		}
+		JFileChooser fc = new JFileChooser(new File(location));
 		irfFileFilter irfFilter = new irfFileFilter();
 		fc.addChoosableFileFilter(irfFilter);
 		fc.setSelectedFile(new File(name + extension));
 		fc.showSaveDialog(frame);
 		File selFile = fc.getSelectedFile();
-		
 		if (! irfFilter.accept(fc.getSelectedFile())){
 			if (extension == ".irf"){
 				selFile = new File(selFile.getAbsoluteFile() + extension);
@@ -66,6 +72,7 @@ public class SaveLoadDialogs {
 		        // File did not exist and was created
 				write = true;
 			} else {
+				System.out.println(selFile.toString());
 				// File already exists
 				write = false;
 				int n = JOptionPane.showConfirmDialog(frame,
@@ -114,8 +121,14 @@ public class SaveLoadDialogs {
 		JFrame frame = new JFrame();
 
 		// Create a file chooser
-		String filename = System.getProperty("user.home");
-		JFileChooser fc = new JFileChooser(new File(filename));
+		File locFile = CytoscapeInit.getMRUD();
+		String location = "";
+		if (locFile == null){
+			location = "user.home";
+		}else{
+			location = locFile.getPath();
+		}
+		JFileChooser fc = new JFileChooser(new File(location));
 		ctfFileFilter ctfFilter = new ctfFileFilter();
 		irfFileFilter irfFilter = new irfFileFilter();
 		irfOrctfFileFilter irfOrctfFilter = new irfOrctfFileFilter();

@@ -8,7 +8,9 @@ import iRegulonOutput.SelectedMotif;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.ListSelectionModel;
@@ -92,6 +94,49 @@ public class DrawNodesAction extends ComboboxAction implements ListSelectionList
 			}
 			return node1;
 		}
+		
+		/**
+		 * 
+		 * @param geneIdentifier the gene where the node is needed from
+		 * @param nodes all the nodes where there must been shearched in
+		 * @return the node that is gene
+		 */
+		public CyNode getCyNode(String geneName, List<CyNode> nodes, String attributeName){
+			CyNode node1 = null;
+			CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
+			for(CyNode node : nodes){
+				Object attr = cyNodeAttrs.getAttribute(node.getIdentifier(), attributeName);
+				if (attr != null && attr.equals(geneName)){
+					node1 = node;
+				}
+			}
+			return node1;
+		}
+		
+		/**
+		 * 
+		 * @param attributeName
+		 * @param nodes
+		 * @return map of nodes with key = attribute of attributeName and value the node
+		 */
+		public Map<String, List<CyNode>> getNodeMap(String attributeName, List<CyNode> nodes){
+			Map<String, List<CyNode>> map = new HashMap<String, List<CyNode>>();
+			CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
+			for (CyNode node : nodes){
+				String attr = (String) cyNodeAttrs.getAttribute(node.getIdentifier(), attributeName);
+				if (attr != null){
+					if (map.containsKey(attr)){
+						map.get(attr).add(node);
+					}else{
+						List<CyNode> list = new ArrayList<CyNode>();
+						list.add(node);
+						map.put(attr, list);
+					}
+				}
+			}
+			return map;
+		}
+		
 		
 		/**
 		 * 

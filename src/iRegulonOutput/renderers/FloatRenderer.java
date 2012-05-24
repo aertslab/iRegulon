@@ -1,5 +1,6 @@
 package iRegulonOutput.renderers;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JLabel;
@@ -34,7 +35,7 @@ public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUp
 			canvas.setText("");
 		}
 		if (Float.isNaN(number)) { 
-		    canvas.setText("-");
+		    canvas.setText("PERFECT");
 		} else {
 			canvas.setText(format.formatFloat(number));
 			if (number == 0){

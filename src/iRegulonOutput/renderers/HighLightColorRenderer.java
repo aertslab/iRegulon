@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.swing.table.*;
 
+import cytoscape.Cytoscape;
+
 
 public class HighLightColorRenderer extends JLabel implements TableCellRenderer, CanvasUpdater
     {

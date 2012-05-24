@@ -1,6 +1,6 @@
 package iRegulonOutput.DetailPanel;
 
-import iRegulonAnalysis.Input;
+import domainModel.Input;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 

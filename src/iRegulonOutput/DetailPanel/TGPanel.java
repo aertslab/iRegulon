@@ -1,9 +1,10 @@
 package iRegulonOutput.DetailPanel;
 
 
-import iRegulonAnalysis.Input;
 import iRegulonOutput.MotifListener;
 import iRegulonOutput.TFComboBox;
+import iRegulonOutput.MotifTableModels.GlobalMotifTableModel;
+import iRegulonOutput.MotifTableModels.ToolTipHeader;
 import iRegulonOutput.renderers.CombinedRenderer;
 import iRegulonOutput.renderers.DefaultRenderer;
 import iRegulonOutput.renderers.FloatRenderer;
@@ -25,6 +26,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
 
+import domainModel.Input;
 import domainModel.Motif;
 import domainModel.TranscriptionFactor;
 
@@ -220,6 +222,24 @@ public class TGPanel extends JPanel implements MotifListener{
 		this.add(jlbLogo, c);
 		
 		
+		//tooltips in the headers of the tables
+		
+		ToolTipHeader header = new ToolTipHeader(this.transcriptionFactorTable.getColumnModel());
+		TFTableModel modelTable = (TFTableModel) this.transcriptionFactorTable.getModel();
+	    header.setToolTipStrings(modelTable.getTooltips());
+	    header.setToolTipText("");
+	    this.transcriptionFactorTable.setTableHeader(header);
+		
+	    header = new ToolTipHeader(this.targetGeneTable.getColumnModel());
+		TGTableModel TGmodelTable = (TGTableModel) this.targetGeneTable.getModel();
+	    header.setToolTipStrings(TGmodelTable.getTooltips());
+	    header.setToolTipText("");
+	    this.targetGeneTable.setTableHeader(header);
+	    
+	    //Sorting on the table
+	    this.transcriptionFactorTable.setAutoCreateRowSorter(true);
+	    this.targetGeneTable.setAutoCreateRowSorter(true);
+		
 	}
 
 
@@ -267,7 +287,6 @@ public class TGPanel extends JPanel implements MotifListener{
 			//this.jlbLogo.setToolTipText(tooltiptext);
 			
 			//colors of the table
-			
 			if (this.updateHLCR.mustUpdate()){
 				this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getIDs());
 				this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getIDs());

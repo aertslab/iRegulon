@@ -12,6 +12,9 @@ public class TFTableModel extends AbstractTableModel{
 	private final Motif motif;
 	private static final int NR_OF_COLUMNS = 3;
 	private final String[] m_colNames = {"Transcription Factor Name", "Orthologous Identifier", "Motif Similarity FDR"};
+	private final String[] toolTipsCol = {"The name of the predicted transcritpion factor",
+			"<html> The orthologous identifier. <br/> <br/> This is a value between 0 and 1. <br/> If this is 0, transcription factor is not orthologous. <br/> MAX gives the perfect orthologous </html>",
+			"<html> The motif similarity. <br/> <br/> How closer to 0 how more similar the motif of the transcription factor <br/> is with the selected motis.</html>"};
 	
 	public TFTableModel(Motif motif){
 		this.motif = motif;
@@ -69,6 +72,10 @@ public class TFTableModel extends AbstractTableModel{
 	
 	public String getColumnName(int col) {
 		return m_colNames[col];
+	}
+	
+	public String[] getTooltips(){
+		return this.toolTipsCol;
 	}
 
 }

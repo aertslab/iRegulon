@@ -15,6 +15,7 @@ import cytoscape.Cytoscape;
 
 import java.util.*;
 
+import domainModel.Input;
 import domainModel.Motif;
 import domainModel.Results;
 

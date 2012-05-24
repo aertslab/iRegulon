@@ -1,6 +1,5 @@
 package saveActions;
 
-import iRegulonAnalysis.Input;
 import iRegulonInput.IRegulonType;
 
 import java.util.ArrayList;

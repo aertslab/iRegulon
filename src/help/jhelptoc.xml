@@ -10,5 +10,7 @@
 	<tocitem text="iRegulon description." target="description"/>
 	<tocitem text="iRegulon input." target="input"/>
 	<tocitem text="iRegulon results." target="results"/>
+	<tocitem text="iRegulon FAQ." target="FAQ"/>
+	<tocitem text="iRegulon tutorial." target="Tutorial"/>
   </tocitem>
 </toc>

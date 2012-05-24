@@ -5,6 +5,31 @@
 ##			##
 ##########################
 
+Version 0.10.5 (Release on 24 May 2012)
+	Added Tutorial in the help section
+
+Version 0.10.4 (Release on 22 May 2012)
+	overlap label only enabled when region based
+	in transcription factor table dash(-) replaced with PERFECT
+	The duplicates of the Target genes aren't counted anymore (as in region based Drosophila)
+	Added titles in the input screens
+	Target genes are targets
+	Save and load dialogs opens on the last used directory in Cytoscape
+	Added tooltips with description to the output panel
+	Added extra functionality: right click on the textfield of the name (as input) will give the name of the current selected network
+
+Version 0.10.3 (Release on 15 May 2012)
+	Corrected attribute parameters for adding new nodes and edges.
+	Updated the iRegulon visual style
+
+Version 0.10.2 (Release on 11 May 2012)
+	Added lincRNA database
+	rename the HGNC to HGNC symbols, MGI to MGI symbols and Flybase to Flybase names
+
+Version 0.10.1 (Release on 10 May 2012)
+	Updated state-check
+	Updated standard gene based database
+
 Version 0.10 (Release on 9 May 2012)
 	Updated safe system (old files aren't supported any more, unless you're lucky)
 	Updated properties and add database specific parameters

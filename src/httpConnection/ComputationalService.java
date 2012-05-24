@@ -1,11 +1,11 @@
 package httpConnection;
 
-import iRegulonAnalysis.Input;
 
 import java.util.*;
 
 
 import domainModel.GeneIdentifier;
+import domainModel.Input;
 import domainModel.Motif;
 
 

@@ -79,7 +79,7 @@ public class TranscriptionFactor implements Comparable<TranscriptionFactor>{
 				return -1;
 			}
 			if (tf.getMotifSimilarityFDR() < this.getMotifSimilarityFDR()){
-				return -1;
+				return 1;
 			}
 			return 1;
 		}

@@ -1,6 +1,5 @@
 package httpProtocols;
 
-import iRegulonAnalysis.Input;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,6 +7,7 @@ import java.util.List;
 
 
 import domainModel.GeneIdentifier;
+import domainModel.Input;
 import domainModel.Motif;
 import domainModel.SpeciesNomenclature;
 import domainModel.TranscriptionFactor;

@@ -10,4 +10,6 @@
 <mapID target="description" url="iRegulonHelp_Description.html" />
 <mapID target="input" url="iRegulonHelp_Input.html" />
 <mapID target="results" url="iRegulonHelp_Results.html" />
+<mapID target="FAQ" url="iRegulonHelp_FAQ.html" />
+<mapID target="Tutorial" url="iRegulonHelp_Tutorial.html" />
 </map>

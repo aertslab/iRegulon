@@ -35,19 +35,19 @@ public class UpDateHighLightRenderer {
 	 * 
 	 * @return a set of the IDs that must be highlighted
 	 */
-	public Set getIDs() {
-   	 final Set IDs = new HashSet();
+	public Set<String> getIDs() {
+		final Set<String> IDs = new HashSet<String>();
         ArrayList<CyNode> nodes = NodesActions.getAllNodes();
+    	CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
         for (CyNode node : nodes){
-       	 CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
-       	 for (String attributeName : cyNodeAttrs.getAttributeNames()){
-       		 if (cyNodeAttrs.getType(attributeName) == Cytoscape.getNodeAttributes().TYPE_STRING){
-       			 String possibleGeneName = cyNodeAttrs.getStringAttribute(node.getIdentifier(), attributeName);
-       			 if (possibleGeneName != null){
-       			 	IDs.add(possibleGeneName);
-       			 }
-       		 }
-       	 }
+        	for (String attributeName : cyNodeAttrs.getAttributeNames()){
+        		if (cyNodeAttrs.getType(attributeName) == Cytoscape.getNodeAttributes().TYPE_STRING){
+        			String possibleGeneName = cyNodeAttrs.getStringAttribute(node.getIdentifier(), attributeName);
+        			if (possibleGeneName != null){
+       			 		IDs.add(possibleGeneName);
+       			 	}
+       		 	}
+        	}
         }
         return IDs;
     }

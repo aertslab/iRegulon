@@ -4,7 +4,7 @@ public enum FilteringOn {
 
 	MOTIF("motif"),
 	TRANSCRIPTION_FACTOR("transcription factor"),
-	TARGET_GENE("target gene");
+	TARGET_GENE("target");
 	
 	private String name;
 	

@@ -1,10 +1,10 @@
 package httpProtocols;
 
-import iRegulonAnalysis.Input;
 
 import java.util.Collection;
 
 
+import domainModel.Input;
 import domainModel.Motif;
 import exceptions.SentRequestException;
 

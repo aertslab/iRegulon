@@ -5,16 +5,23 @@ import java.util.*;
 
 import javax.swing.table.AbstractTableModel;
 
+import domainModel.CandidateTargetGene;
 import domainModel.Motif;
 
 public class MotifTableModel extends AbstractTableModel implements GlobalMotifTableModel{
 	private static final int NR_OF_COLUMNS = 7;
 	private final List<Motif> motifList; 
-	private final String[] m_colNames = {"Rank", "Enriched Motif ID", 
-			"NES", "AUC", "ClusterCode", "#TG", "#TF"};
+	private final String[] colNames = {"Rank", "Enriched Motif ID", 
+			"NES", "AUC", "ClusterCode", "#Targets", "#TF"};
 	private final int nrOfRows;
 	private final double[] collumnWidthPercentage = {0.06, 0.5, 0.1, 0.1, 0.06, 0.08, 0.08};
 	private int[] collumnImportant = {3,1,2,2,3,2,2};
+	private final String[] tooltipsCol = {"<html> The rank of the motif. <br/> The motif is ranked using the NEScore </html>",
+						"<html>The ID of the motif</html>", "<html>The Normalized Enrichment Score. <br/>How higher the score how better. </html>",
+						"<html>The Area Under the Curve. <br/> This value repressents the area under the ROC curve. </html>",
+						"<html>This Code represents the cluster. <br/> Clusters are numbered as cluster 1 is the cluster with the highest scored motif, <br/> cluster 2 is the secund found cluster. </html>",
+						"<html>The amount of unique targets <br/> (it is possible that multiple targets appear multiple times in the list, <br/> those are only counted once). </html>",
+						"<html>The amount of unique transcription factors for this motif.</html>"};
 	
 	public MotifTableModel(List<Motif> motifList){
 		this.motifList = motifList;
@@ -65,14 +72,16 @@ public class MotifTableModel extends AbstractTableModel implements GlobalMotifTa
 		  case 2: return (Float) curMotif.getNeScore();
 		  case 3: return (Float) curMotif.getAucValue();
 		  case 4: return (Integer) curMotif.getClusterCode();
-		  case 5: return (Integer) curMotif.getCandidateTargetGenes().size();
+		  case 5: Set<CandidateTargetGene> set = new HashSet<CandidateTargetGene>(curMotif.getCandidateTargetGenes());
+		  			return set.size();
+		  			// return (Integer) curMotif.getCandidateTargetGenes().size();
 		  case 6: return (Integer) curMotif.getTranscriptionFactors().size();
 		  }
 		  return null;
 	  }
 	  
 	  public String getColumnName(int col) {
-	      return m_colNames[col];
+	      return colNames[col];
 	   }
 	  
 	  public List<Motif> getRegulatoryTree(){
@@ -97,5 +106,11 @@ public class MotifTableModel extends AbstractTableModel implements GlobalMotifTa
 	  public int[] getCollumnImportance(){
 		  return this.collumnImportant;
 	  }
+
+	@Override
+	public String[] getTooltips() {
+		// TODO Auto-generated method stub
+		return this.tooltipsCol;
+	}
 	  
 }

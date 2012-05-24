@@ -10,4 +10,6 @@ public interface GlobalMotifTableModel {
 	
 	public int[] getCollumnImportance();
 	
+	public String[] getTooltips();
+	
 }

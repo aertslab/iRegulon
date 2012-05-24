@@ -4,7 +4,9 @@ import iRegulonInput.IRegulonResourceBundle;
 import iRegulonOutput.DetailPanel.TGPanel;
 import iRegulonOutput.MotifTableModels.FilteredMotifModel;
 import iRegulonOutput.MotifTableModels.FilteredPatternDocumentListener;
+import iRegulonOutput.MotifTableModels.GlobalMotifTableModel;
 import iRegulonOutput.MotifTableModels.MotifTableModel;
+import iRegulonOutput.MotifTableModels.ToolTipHeader;
 import iRegulonOutput.renderers.BooleanRenderer;
 import iRegulonOutput.renderers.ColorRenderer;
 import iRegulonOutput.renderers.ColumnWidthRenderer;
@@ -36,6 +38,8 @@ import java.util.List;
 
 import saveActions.SaveLoadDialogs;
 import saveActions.SaveResults;
+import summaryTFs.CalculateTFs;
+import summaryTFs.TFOutputView;
 
 
 
@@ -66,14 +70,16 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 	
 	private Results result;
 	
+	private JComponent totalPanel;
+	
 	public IRegulonOutputView(String runName){
 		this.runName = runName;
 		this.isSaved = false;
 	}
 	
 	
-	public void drawPanel(Results result){
-		this.result = result;
+	public void drawPanel(Results results){
+		this.result = results;
 		this.motifList = new ArrayList<Motif>(result.getMotifs());
 		//this.motifList = MotifList;
 		CytoscapeDesktop desktop = Cytoscape.getDesktop();
@@ -82,7 +88,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 		//addCytoPanelListener(CytoPanelListener);
 		
 		
-		this.selectedTFRegulons = new SelectedMotif();
+		this.selectedTFRegulons = new SelectedMotif(result.getInput().getAttributeName());
 		
 		//JPanel panel = new JPanel(layout);
 		JPanel panel = this.createMasterPanel();
@@ -107,11 +113,131 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 			
 		//Container contentPane = frame.getContentPane();
 		String panelName = getBundle().getString("plugin_visual_name") + " " + runName;
+		
+		JTabbedPane tabbedPane = new JTabbedPane();
+		tabbedPane.addTab("Motif view", null, this.splitPane, "The motif oriented view of iRegulon.");
+		
+		/*
+		 * TEST
+		 * 
+		 * 
+		 * 
+		 */
+		
+		TFOutputView tfOutput = new TFOutputView(this.runName, this.result);
+		tabbedPane.addTab("TF view", null, tfOutput.createPanel(), "The transcription factor oriented view of iRegulon.");
+		
+		/*
+		 * 
+		 * 
+		 * 
+		 * END TEST
+		 */
+		
+		
+		this.totalPanel = new JPanel();
+		this.totalPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		
+		JLabel label = new JLabel(this.runName);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx=0.9;
+		c.weighty=0;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.ipadx = 0;
+		c.ipady = 0;
+		this.totalPanel.add(label, c);
+		if (this.result.hasParameters()){
+			label.setText(this.result.getName());
+			String parameters = "<html>" 
+						+ "Name:  " + this.result.getName() 
+						+ "<br/>"
+						+ "Species and nomenclature: " + this.result.getSpeciesNomenclature().toString()
+						+ "<br/>"
+						+ "Minimal NEscore: " + this.result.getEScore()
+						+ "<br/>"
+						+ "Threshold for visualisation: " + this.result.getThresholdForVisualisation()
+						+ "<br/>"
+						+ "ROC threshold AUC: " + this.result.getROCthresholdAUC()
+						+ "<br/>"
+						+ "minimal orthologous: " + this.result.getMinOrthologous()
+						+ "<br/>"
+						+ "maximal motif similarity: " + this.result.getMaxMotifSimilarityFDR()
+						+ "<br/>"
+						+ "<br/>"
+						+ "database: " + this.result.getDatabaseName()
+						+ "<br/>";
+			if (this.result.isRegionBased()){
+				parameters += "overlap: " + this.result.getOverlap()
+						+ "<br/>";
+				if (this.result.isDelineationBased()){
+					parameters += "Delineation: " + this.result.getDelineationName();
+				}else{
+					parameters += "Upstream: " + this.result.getUpstream() + " kb"
+							+ "<br/>"
+							+ "Downstream: " + this.result.getDownstream() + " kb";
+				}
+			}
+			parameters += "</html>";
+			label.setToolTipText(parameters);
+		}
+		String pathClose = "/icons/close.png";
+		java.net.URL imgURLClose = getClass().getResource(pathClose);
+		ImageIcon iconClose = new ImageIcon(imgURLClose, "Save");
+		this.buttonClose = new JButton(iconClose);
+		this.buttonClose.setToolTipText("Close these results");
+		this.buttonClose.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (! isSaved){
+						JFrame frame = new JFrame();
+						int n = JOptionPane.showConfirmDialog(frame,
+						    	"Do you want to save this file?",
+						    	"Save?",
+						    	JOptionPane.YES_NO_OPTION);
+						if (n == 0){
+							SaveResults results = new SaveResults();
+							String xml = results.saveResultsAsXML(result);
+							String extention = ".irf";
+							SaveLoadDialogs.saveDialogue(xml, runName, extention);
+						}
+					}
+					cytoPanel.remove(totalPanel);
+					if (cytoPanel.getCytoPanelComponentCount() == 0){
+						cytoPanel.setState(CytoPanelState.HIDE);
+					}
+				}
+			});
+		c.gridx = 1;
+		c.gridy = 0;
+		c.gridwidth = 1;
+		c.weightx=0.1;
+		c.weighty=0;
+		c.ipadx = 0;
+		c.ipady = 0;
+		this.totalPanel.add(this.buttonClose, c);
+		
+		
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 2;
+		c.weightx=0;
+		c.weighty=0.9;
+		c.ipadx = 0;
+		c.ipady = 0;
+		this.totalPanel.add(tabbedPane, c);
+		
+		
 		//add the panel to Cytoscape
 		this.cytoPanel.add(panelName, this.splitPane);
 		//set this panel as active
 		int index = cytoPanel.indexOfComponent(this.splitPane);
 		cytoPanel.setSelectedIndex(index);
+		
 		
 		
 	}
@@ -145,7 +271,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 		c.gridy = 0;
 		c.weightx=0;
 		c.weighty=0;
-		c.gridwidth = 5;
+		c.gridwidth = 4;
 		c.gridheight = 1;
 		c.ipadx = 0;
 		c.ipady = 0;
@@ -266,7 +392,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 							SaveLoadDialogs.saveDialogue(xml, runName, extention);
 						}
 					}
-					cytoPanel.remove(splitPane);
+					cytoPanel.remove(totalPanel);
 					if (cytoPanel.getCytoPanelComponentCount() == 0){
 						cytoPanel.setState(CytoPanelState.HIDE);
 					}
@@ -371,6 +497,14 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 		//filtering table model
 		FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, FilteringOn.MOTIF, "");
 		JTable table = new JTable(filteredModel);
+		
+		//set the tooltips on the columns
+		ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
+		GlobalMotifTableModel modelTable = (GlobalMotifTableModel) table.getModel();
+	    header.setToolTipStrings(modelTable.getTooltips());
+	    header.setToolTipText("");
+	    table.setTableHeader(header);
+
 			
 		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
 		filteringOn.addActionListener(new FilteringOnComboBoxAction(filteredModel));

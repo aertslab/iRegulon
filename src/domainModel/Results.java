@@ -1,6 +1,5 @@
 package domainModel;
 
-import iRegulonAnalysis.Input;
 import iRegulonInput.IRegulonType;
 
 import java.util.Collection;

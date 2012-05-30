@@ -5,6 +5,12 @@
 ##			##
 ##########################
 
+Version 0.10.7 (Release on 30 May 2012)
+	Bugfix unique targets
+
+Version 0.10.6 (Release on 30 May 2012)
+	Added bed file export for motifs (save and link to UCSC)
+
 Version 0.10.5 (Release on 24 May 2012)
 	Added Tutorial in the help section
 

@@ -102,7 +102,7 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 		    String line;
 		    int jobID = 0;
 		    while ((line = rd.readLine()) != null) {
-		    	//Systoutem.out.println(line);
+		    	//System.out.println(line);
 		    	lines+=line;
 		    }
 		    jobID = Integer.parseInt(lines);

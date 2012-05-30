@@ -124,8 +124,8 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 		 * 
 		 */
 		
-		TFOutputView tfOutput = new TFOutputView(this.runName, this.result);
-		tabbedPane.addTab("TF view", null, tfOutput.createPanel(), "The transcription factor oriented view of iRegulon.");
+		//TFOutputView tfOutput = new TFOutputView(this.runName, this.result);
+		//tabbedPane.addTab("TF view", null, tfOutput.createPanel(), "The transcription factor oriented view of iRegulon.");
 		
 		/*
 		 * 
@@ -233,9 +233,9 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 		
 		
 		//add the panel to Cytoscape
-		this.cytoPanel.add(panelName, this.splitPane);
+		this.cytoPanel.add(panelName, this.totalPanel);
 		//set this panel as active
-		int index = cytoPanel.indexOfComponent(this.splitPane);
+		int index = cytoPanel.indexOfComponent(this.totalPanel);
 		cytoPanel.setSelectedIndex(index);
 		
 		
@@ -515,7 +515,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 		//add mouse and selection listeners
 		//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedTFRegulons, tc);
 		table.addMouseListener(new MotifPopUpMenu(table, selectedTFRegulons, 
-				(JTextComponent) this.tfcmbBox.getEditor().getEditorComponent()));
+				(JTextComponent) this.tfcmbBox.getEditor().getEditorComponent(), this.result.isRegionBased()));
 		ListSelectionModel listSelectionModel = table.getSelectionModel();
 		TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedTFRegulons);
 		listSelectionModel.addListSelectionListener(tableSelectListener);

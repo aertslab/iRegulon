@@ -72,7 +72,11 @@ public class MotifTableModel extends AbstractTableModel implements GlobalMotifTa
 		  case 2: return (Float) curMotif.getNeScore();
 		  case 3: return (Float) curMotif.getAucValue();
 		  case 4: return (Integer) curMotif.getClusterCode();
-		  case 5: Set<CandidateTargetGene> set = new HashSet<CandidateTargetGene>(curMotif.getCandidateTargetGenes());
+		  case 5: List<CandidateTargetGene> listG = curMotif.getCandidateTargetGenes();
+		  			Set<String> set = new HashSet<String>();
+		  			for (CandidateTargetGene tg : listG){
+		  				set.add(tg.getGeneName());
+		  			}
 		  			return set.size();
 		  			// return (Integer) curMotif.getCandidateTargetGenes().size();
 		  case 6: return (Integer) curMotif.getTranscriptionFactors().size();

@@ -9,8 +9,8 @@ import javax.swing.table.AbstractTableModel;
 public class PredictedTFTableModel extends AbstractTableModel{
 
 	private List<PredictedTF> predictedTFs;
-	private String[] colNames = {"TF rank", "TF", "#predicted", "Mean Score", "#perfect", "perfect Score", "No orthologous", "Similar motif", "Recalculate Score"};
-	private static final int NR_OF_COLUMNS = 9;
+	private String[] colNames = {"TF rank", "TF", "#predicted", "Mean Score", "Value", "#perfect", "perfect Mean", "perfect Value"};
+	private static final int NR_OF_COLUMNS = 8;
 	
 	public PredictedTFTableModel(Collection<PredictedTF> predictedTFs){
 		this.predictedTFs = new ArrayList<PredictedTF>(predictedTFs);
@@ -35,11 +35,10 @@ public class PredictedTFTableModel extends AbstractTableModel{
 		case 1 : return (String) tf.getName();
 		case 2 : return (Integer) tf.getTimesPredicted();
 		case 3 : return (Float) tf.calculateMeanScore();
-		case 4 : return (Integer) tf.getTimesPerfectMatch();
-		case 5 : return (Float) tf.calculateMeanPerfectScore();
-		case 6 : return (Integer) tf.getTimesOrthologousMatch();
-		case 7 : return (Integer) tf.getTimesExactMotifMatch();
-		case 8 : return (Float) tf.getTotalScore();
+		case 4 : return (Float) tf.getTotalScore();
+		case 5 : return (Integer) tf.getTimesPerfectMatch();
+		case 6 : return (Float) tf.calculateMeanPerfectScore();
+		case 7 : return (Float) tf.calculatePerfectScore();
 		}
 		return null;
 	}
@@ -53,9 +52,7 @@ public class PredictedTFTableModel extends AbstractTableModel{
 		case 4: return Float.class;
 		case 5: return Integer.class;
 		case 6: return Float.class;
-		case 7: return Integer.class;
-		case 8: return Integer.class;
-		case 9: return Float.class;
+		case 7: return Float.class;
 		}
 		return Object.class;
 	}

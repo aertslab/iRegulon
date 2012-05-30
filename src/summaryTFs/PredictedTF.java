@@ -30,9 +30,9 @@ public class PredictedTF implements Comparable<PredictedTF>{
 	private float scoreRest;
 	
 	private static final float WEIGHT_PERFECT = 1;
-	private static final float WEIGHT_ORTHOLOGOUS = 3/4;
-	private static final float WEIGHT_SIMILAR = 2/4;
-	private static final float WEIGHT_REST = 1/4;
+	private static final float WEIGHT_ORTHOLOGOUS = 0;
+	private static final float WEIGHT_SIMILAR = 1;
+	private static final float WEIGHT_REST = 0;
 	
 	public PredictedTF(GeneIdentifier geneID, int totalMotifs){
 		this.geneID = geneID;
@@ -61,6 +61,7 @@ public class PredictedTF implements Comparable<PredictedTF>{
 				this.score += (motif.getNeScore());
 				if (Float.isNaN(tf.getOrthologousIdentifier())
 						&& Float.isNaN(tf.getMotifSimilarityFDR())){
+					//perfect
 					this.timesPerfect++;
 					this.perfectMotifs.add(motif);
 					this.scorePerfect += (motif.getNeScore());
@@ -70,6 +71,7 @@ public class PredictedTF implements Comparable<PredictedTF>{
 						//this.score += 1;
 						this.noOrthologes+=1;
 						if (! Float.isNaN(tf.getMotifSimilarityFDR())){
+							//ortholog
 							this.timesOrthologous++;
 							this.scoreOrthologous += motif.getNeScore();
 						}
@@ -79,8 +81,9 @@ public class PredictedTF implements Comparable<PredictedTF>{
 							//this.score += 1;
 							this.exactMotif += 1;
 							if (! Float.isNaN(tf.getOrthologousIdentifier())){
+								//motif
 								this.timesSimilar++;
-								this.scoreSimilar += motif.getNeScore();
+								this.scoreSimilar += motif.getNeScore() * tf.getOrthologousIdentifier();
 							}
 						}else{
 							//this.score -= tf.getMotifSimilarityFDR();
@@ -109,6 +112,10 @@ public class PredictedTF implements Comparable<PredictedTF>{
 			return 0;
 		}
 		return this.scorePerfect / this.perfectMotifs.size();
+	}
+	
+	public float calculatePerfectScore(){
+		return this.scorePerfect / this.totalMotifs;
 	}
 	
 	public float calculateMeanScore(){

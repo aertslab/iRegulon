@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all">
+    <property file="build.properties" />
+
     <property name="source.folder" value="src/"/>
     <property name="build.folder" value="bin/"/>
     <property name="lib.folder" value="lib/"/>
@@ -10,8 +12,6 @@
     <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src.zip"/>
     <property name="plugin.package" value="iRegulonInput"/>
     <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
-
-    <property name="webserver.url" value="http://med.kuleuven.be/lcb/iRegulon"/>
 
     <tstamp>
         <format property="TODAY" pattern="dd-MM-yyyy" locale="nl,BE"/>
@@ -162,5 +162,20 @@
     <!-- =================================================================== -->
     <!-- All                                                                 -->
     <!-- =================================================================== -->
-    <target name="all" depends="binary_distribution,source_distribution,generate_installation_file"/>
+    <target name="all" depends="binary_distribution,source_distribution"/>
+
+    <!-- =================================================================== -->
+    <!-- Deploy to web server                                                -->
+    <!-- =================================================================== -->
+    <target name="deploy" depends="binary_distribution,source_distribution,generate_installation_file">
+        <ftp server="${ftp.server}" port="21"
+             remotedir="iRegulon/"
+             userid="${ftp.username}" password="${ftp.password}"
+             action="send" verbose="yes" depends="yes" binary="yes">
+            <fileset file="${build.folder}/${plugin.src.filename}" />
+            <fileset file="${build.folder}/${plugin.bin.filename}" />
+            <fileset file="${build.folder}/installation.xml" />
+            <fileset file="${build.folder}/LICENSE.txt" />
+        </ftp>
+    </target>
 </project>

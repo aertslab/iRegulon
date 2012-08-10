@@ -11,6 +11,8 @@
     <property name="plugin.package" value="iRegulonInput"/>
     <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
 
+    <property name="webserver.url" value="http://med.kuleuven.be/lcb/iRegulon"/>
+
     <tstamp>
         <format property="TODAY" pattern="dd-MM-yyyy" locale="nl,BE"/>
     </tstamp>
@@ -90,6 +92,7 @@
                     <token key="pluginName" value="${plugin.name}"/>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
+                    <token key="webserverUrl" value="${webserver.url}"/>
                 </replacetokens>
             </filterchain>
         </copy>

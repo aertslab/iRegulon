@@ -24,16 +24,15 @@ import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
 import cytoscape.util.CytoscapeAction;
-import domainModel.Motif;
 import domainModel.Results;
 
 
-public class IRegulonStart extends CytoscapePlugin {
+public class IRegulonPlugin extends CytoscapePlugin {
 	
 	/*
 	 * Start the plugin
 	 */
-	public IRegulonStart() {
+	public IRegulonPlugin() {
 		MyPluginMenuAction menuAction = new MyPluginMenuAction(this);
 		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) menuAction);
 		this.addHelp();
@@ -79,7 +78,7 @@ public class IRegulonStart extends CytoscapePlugin {
 		/*
 		 * Show the plugin in the plugins menu in Cytoscape
 		 */
-		public MyPluginMenuAction(IRegulonStart myPlugin) {
+		public MyPluginMenuAction(IRegulonPlugin myPlugin) {
 			//super(ResourceBundle.getBundle("iRegulon").getString("plugin_visual_name"));
 			//setPreferredMenu("Plugins");
 			final IRegulonVisualStyle style = new IRegulonVisualStyle();

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="plugin">
-    <property name="version" value="0.11"/>
     <property name="source.folder" value="src/"/>
     <property name="build.folder" value="bin/"/>
     <property name="lib.folder" value="lib/"/>
+
+    <property name="plugin.name" value="iRegulon"/>
+    <property name="plugin.version" value="0.11"/>
+    <property name="plugin.filename" value="iRegulon-${plugin.version}.jar"/>
+    <property name="plugin.main" value="iRegulonInput.iRegulonPlugin"/>
 
     <!-- =================================================================== -->
     <!-- Clean up                                                            -->
@@ -53,9 +57,9 @@
     <!-- Creates the plugin jar file                                         -->
     <!-- =================================================================== -->
     <target name="jar" depends="copy_resources,help">
-        <jar destfile="${build.folder}/iRegulon-${version}.jar">
+        <jar destfile="${build.folder}/${plugin.filename}">
             <manifest>
-                <attribute name="iRegulon-${version}" value="iRegulonInput.iRegulonStart" />
+                <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
             </manifest>
          <fileset dir="${build.folder}" />
         </jar>
@@ -63,9 +67,9 @@
 
     <target name="plugin" depends="copy_resources,help">
         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
-        <jarjar jarfile="${build.folder}/iRegulon-${version}.jar">
+        <jarjar jarfile="${build.folder}/${plugin.filename}">
             <manifest>
-                <attribute name="iRegulon-${version}" value="iRegulonInput.iRegulonStart" />
+                <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
             </manifest>
             <fileset dir="${build.folder}" />
             <zipfileset src="${lib.folder}/xstream-1.4.3-bin.jar"/>

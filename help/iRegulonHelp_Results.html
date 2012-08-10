@@ -1,85 +1,118 @@
 <html>
 <body>
-<h1><font color=#0000FF><I> i</font><font color=#000000>Regulon Help</font></I>  </h1>
+<a name="up"><h1><font color=#0000FF><I> i</font><font color=#000000>Regulon Help</font></I>  </h1></a>
 <br/>
 
-<h2>The results</h2>
-<p>
-The results are shown in the results panel. This panel will be added to the left of your Cytoscape screen.
-<br/>
-The panel is divided into two. The part above is the master part. This part starts with the title of the job (your job name).
-<br/>
-Under the title the toolbar is visible. Here there are 2 buttons that aren't click-able. This is because no motif is selected yet. The same for the box of the transcription factor. Furter there are 2 button clickable. These are the save button (saves this results, only these results as a .ctf) and the close button (closes this tab of the results panel, doesn't save your results).
-<br/>
-Under this toolbar a colorfull table is visable. This table is the motif table. Each row represents a motif, motifs with the same color are part of the same cluster. The columns are:
-<ul>
-<li>Rank (how higher how beter)</li>
-<li>enriched motif ID (the motif name)</li>
-<li>NES (normilased Enrichement score)</li>
-<li>AUC (the Area under the curve)</li>
-<li>clustercode (the number of the cluster where this motif is in)</li>
-<li>#TG (the amount of target genes)</li>
-<li>#TF (the amount of transcription factors)</li>
-</ul>
-<p/>
-<img src="./images/resultsPanel.png" alt="The master panel of the results"/>
-<br/>
-<p>
-When a motif is selected the view is updated. Started with the master panel. If there is a transcription factor, the first 2 buttons of the toolbar becomes click-able. Also, when right-clicked on the table, a pupop menu is shown. These all are draw options (see drawing TFs and TGs). The box of the transcription factor is also selectable. In this box you can select the needed transcription factor or type your own.
-<br/> <br/>
-The panel below the master panel is called the detail panel. This panel shows a detail of the selected motif (motif that is selected in the table of the master panel). In this panel is seperated into 3 columns. 
-<br/>
-The first one has 3 rows. The first row is the motif name. The second row is the description of the motif. The third row is the LOGO of the motif. Each row has a tooltip that pops up when the mouse stands on them. This tooltip shows a better readable version of the information.
-<br/>
-The second column is a table of the transcription factors. Each transcription factor has a name, a orthologous identifier and a motif similarity FDR.
-<br/>
-The third column is a table of the target genes. These target genes has a rank and a name.
-<br/>
-Gray rows in the transcription factor and the target gene table indicates genes that are in the current selected network.
-<p/>
+<a name="results"><h2>The results</h2></a>
 
-<img src="./images/resultsPanelDetail.png" alt="The detail panel of the results"/>
-
-<h2>drawing TFs and TGs</2>
-<p>
-For visualising the transcription factors(TFs) and the target genes(TGs) there are three possibilities:
-<ul>
-<li>add regulator and target genes with there interactions on the current network</li>
-<li>create a new network with the selected regulator - target genes</li>
-<li>draw regulator interactions on current network</li>
-</ul>
-The first two options are selectable in the toolbar and in the pop-up menu. The last option is only possible in the pop-up menu.
-<p/>
-
-<h3>add regulator and target genes with there interactions on the current network</h3>
-<p>
-This option will add all the target genes and the selected transcription factor to the current network. Edges will be add to the network between the transcription factor and the target genes. The selected view won't be changed.
-<p/>
+	<br/>
+	<a href="#panel">The panel</a>
+	<br/>
+	<a href="#drawing_TF_TG">drawing TFs and TGs</a>
+	<br/>
+	<a href="#addInteractions">add regulator and target genes with there interactions on the current network</a>
+	<br/>
+	<a href="#newNetwork">create a new network with the selected regulator - target genes</a>
+	<br/>
+	<a href="#drawInteractions">draw regulator interactions on current network</a>
+	<br/>
 
 
-<h3>create a new network with the selected regulator - target genes</h3>
-<p>
-This option will create a new window in the view, and create a new network. The name of the new network is the name of the selected transcription factor with the name of the selected motif. The selected transcription factor and all target genes will be shown. Also the interaction between these (between the TF and the TG) is drawn. This is visualised in the iRegulon Visual Style. This style draws all TGs as a with square. The TF is shown as a green eclipse. The interactions are drawn with an arrow from the TF to the TG. Edges with the same color has the same motif.
-<p/>
-<img src="./images/VisualStyle.png" alt="The detail panel of the results"/>
+<a name="panel"><h3>The panel</h3></a>
+	<p>
+	The results are shown in the results panel. This panel will be added to the left of your Cytoscape screen.
+	<br/>
+	The panel is divided into two. The part above is the master part. This part starts with the title of the job (your job name).
+	<br/>
+	Under the title the toolbar is visible. Here there are 2 buttons that aren't click-able. This is because no motif is selected yet. The same for the box of the transcription factor. Furter there are 2 button clickable. These are the save button (saves this results, only these results as a .ctf) and the close button (closes this tab of the results panel, doesn't save your results).
+	<br/>
+	Under this toolbar the searchbar is visible. With the combobox it's possible to select the search-mode: search on motifs or on there transcription factors. The next box is the search-field. The search-pattern typed here is used for the filtering. When the pattern is in the motif or transcription factor, a green check is visible in the table (otherwise a red cross). The search pattern isn't case sensitive, but doesn't support wildcards (like *).
+	<br/>
+	Under this toolbar a colorfull table is visible. This table is the motif table. Each row represents a motif, motifs with the same color are part of the same cluster. The columns are:
+	<ul>
+		<li>Filtered (a check is that the motif or a transcription factor has the search pattern)</li>
+		<li>Rank (how higher how beter)</li>
+		<li>enriched motif ID (the motif name)</li>
+		<li>NES (normilased Enrichement score)</li>
+		<li>AUC (the Area under the curve)</li>
+		<li>clustercode (the number of the cluster where this motif is in)</li>
+		<li>#TG (the amount of target genes)</li>
+		<li>#TF (the amount of transcription factors)</li>
+	</ul>
+	<p/>
+	<img src="images/resultsPanel.png" alt="The master panel of the results"/>
+	<br/>
+	<p>
+	When a motif is selected the view is updated. Started with the master panel. If there is a transcription factor, the first 2 buttons of the 	toolbar becomes click-able. Also, when right-clicked on the table, a pupop menu is shown. These all are draw options (see drawing TFs and TGs). The box of the transcription factor is also selectable. In this box you can select the needed transcription factor or type your own.
+	<br/> <br/>
+	The panel below the master panel is called the detail panel. This panel shows a detail of the selected motif (motif that is selected in the table of the master panel). In this panel is seperated into 3 columns. 
+	<br/>
+	The first one has 3 rows. The first row is the motif name. The second row is the description of the motif. The third row is the LOGO of the 	motif. Each row has a tooltip that pops up when the mouse stands on them. This tooltip shows a better readable version of the information.
+	<br/>
+	The second column is a table of the transcription factors. Each transcription factor has a name, a orthologous identifier and a motif similarity FDR. Moving the mouse on the orthologous identifier or the motif similarity FDR will provide more information in a toolbox (if more info is available). Right-clicking on the selected transcription factor will give a summary of the motif, and the transcription factor. If this transcription factor has a similar motif, comparison between the motifs can be done here.
+	<br/>
+	The third column is a table of the target genes. These target genes has a rank and a name.
+	<br/>
+	Gray rows in the transcription factor and the target gene table indicates genes that are in the current selected network.
+	<p/>
 
-<h3>draw regulator interactions on current network</h3>
-<p>
-This option will only draw interactions (edges) on the current network. There won't be added any nodes. If the selected transcription factor isn't in the current network then no edges will be drawn. The selected view won't be changed.
-<p/>
+	<img src="images/resultsPanelDetail.png" alt="The detail panel of the results"/>
+
+	<br/>
+	<a href="#up">Up</a>
+
+<a name="drawing_TF_TG"><h3>drawing TFs and TGs</h3></a>
+	<p>
+	For visualising the transcription factors(TFs) and the target genes(TGs) there are three possibilities:
+	<ul>
+		<li>add regulator and target genes with there interactions on the current network</li>
+		<li>create a new network with the selected regulator - target genes</li>
+		<li>draw regulator interactions on current network</li>
+	</ul>
+	The first two options are selectable in the toolbar and in the pop-up menu. The last option is only possible in the pop-up menu.
+	<p/>
+
+	<br/>
+	<a href="#up">Up</a>
+
+<a name="addInteractions"><h4>add regulator and target genes with there interactions on the current network</h4></a>
+	<p>
+	This option will add all the target genes and the selected transcription factor to the current network. Edges will be add to the network between the transcription factor and the target genes. The selected view won't be changed.
+	<p/>
+	
+	<br/>
+	<a href="#up">Up</a>
+	
+<a name="newNetwork"><h4>create a new network with the selected regulator - target genes</h4></a>
+	<p>
+	This option will create a new window in the view, and create a new network. The name of the new network is the name of the selected transcription factor with the name of the selected motif. The selected transcription factor and all target genes will be shown. Also the interaction between these (between the TF and the TG) is drawn. This is visualised in the iRegulon Visual Style. This style draws all TGs as a with square. The TF is shown as a green eclipse. The interactions are drawn with an arrow from the TF to the TG. Edges with the same color has the same motif.
+	<p/>
+	<img src="images/VisualStyle.png" alt="The detail panel of the results"/>
+	<br/>
+	<a href="#up">Up</a>
+
+<a name="drawInteractions"><h4>draw regulator interactions on current network</h4></a>
+	<p>
+	This option will only draw interactions (edges) on the current network. There won't be added any nodes. If the selected transcription factor isn't in the current network then no edges will be drawn. The selected view won't be changed.
+	<p/>
+	<br/>
+	<a href="#up">Up</a>
+
 
 <hr/>
 <br/>
 <a href="Topic.html">Back to index</a> 
 <br/>
 <hr/>
+Last update: iRegulon version 0.2
+<hr/>
 
-iRegulon was developed in the Laboratory of Computational Biology (S. Aerts lab), University of Leuven, Belgium.
+iRegulon was developed in <a href="http://med.kuleuven.be/cme/subpage.html?section=laboratories&subsection=laboratory-of-computational-biology">the Laboratory of Computational Biology</a> (<a href="mailto:Stein.Aerts@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">S. Aerts lab</a>), University of Leuven, Belgium.
 <br/>
-Developers: Koen Herten & Bram Van de Sande.
+Developers: Koen Herten & <a href="mailto:Bram.VandeSande@med.kuleuven.be?SUBJECT=Userproblem with iRegulon">Bram Van de Sande.</a> 
 <br/>
 
-Copyright 2012 Katholieke Universiteit Leuven.
+Copyright 2012 KU Leuven.
 <br/>
 
 

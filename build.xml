@@ -7,7 +7,7 @@
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="0.11"/>
     <property name="plugin.filename" value="iRegulon-${plugin.version}.jar"/>
-    <property name="plugin.main" value="iRegulonInput.iRegulonPlugin"/>
+    <property name="plugin.main" value="iRegulonInput.IRegulonPlugin"/>
 
     <!-- =================================================================== -->
     <!-- Clean up                                                            -->
@@ -73,6 +73,7 @@
             </manifest>
             <fileset dir="${build.folder}" />
             <zipfileset src="${lib.folder}/xstream-1.4.3-bin.jar"/>
+            <zipfileset src="${lib.folder}/kxml2-2.3.0-bin.jar"/>
         </jarjar>
     </target>
 </project>

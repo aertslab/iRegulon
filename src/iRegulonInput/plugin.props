@@ -6,15 +6,15 @@
 # -- The following properties are REQUIRED -- #
 
 # The plugin name that will be displayed to users, white space within name is not allowed
-pluginName=iRegulon_0.10.8
+pluginName=iRegulon
 
 # Description used to give users information about the plugin such as what it does.
 # Html tags are encouraged for formatting purposes.
-pluginDescription=<p> iRegulon will predict the transcription factors and the motif of your genes. </br> </br> As output a table will appear with a nice representation for all motifs, with as detail the LOGO of the motif, the transcription factors and the target genes. </br> It's possible to create networks from these results, save them or export as a tab-delimited file.</p>
+pluginDescription=<p>iRegulon will predict the transcription factors and the motif of your genes. </br> </br> As output a table will appear with a nice representation for all motifs, with as detail the LOGO of the motif, the transcription factors and the target genes. </br> It's possible to create networks from these results, save them or export as a tab-delimited file.</p>
 
 
 # Plugin version number, this must be two numbers separated by a decimlal.  Ex. 0.2, 14.03
-pluginVersion=0.10.8
+pluginVersion=0.11
 
 # Compatible Cytoscape version. If there are more than one version, seperate by ",".
 cytoscapeVersion=2.8
@@ -25,14 +25,14 @@ pluginCategory=Scripting/Communication
 # -- The following properties are OPTIONAL -- #
 
 # URL to a website that gives more information about your plugin, Ex. http://my-lab-site.org
-projectURL=http://med.kuleuven.be/cme/subpage.html?section=laboratories&subsection=laboratory-of-computational-biology
+projectURL=http://med.kuleuven.be/lcb/
 
 # List of authors.  Note each author and institution pair are separated by a : (colon)
 # each additional author institution pair must be separated from other pairs bye a ; (semicolon)
 pluginAuthorsInstitutions=Koen Herten and Bram Van De Sande:LCB
 
 # Date this plugin/plugin version was released
-releaseDateJune 1, 2012
+releaseDate=June 1, 2012
 
 # If this plugin is never meant to be downloaded except as part of a plugin (not common) add this property.  Default is "no"
 themeOnly=no

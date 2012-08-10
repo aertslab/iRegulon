@@ -5,6 +5,7 @@
     <property name="source.folder" value="src/"/>
     <property name="build.folder" value="bin/"/>
     <property name="lib.folder" value="lib/"/>
+    <property name="web.folder" value="web/"/>
 
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="0.11"/>
@@ -145,6 +146,11 @@
     </target>
 
     <!-- =================================================================== -->
+    <!-- All                                                                 -->
+    <!-- =================================================================== -->
+    <target name="all" depends="binary_distribution,source_distribution"/>
+
+    <!-- =================================================================== -->
     <!-- Generate plugin installation XML from template                      -->
     <!-- =================================================================== -->
     <target name="generate_installation_file">
@@ -160,14 +166,27 @@
     </target>
 
     <!-- =================================================================== -->
-    <!-- All                                                                 -->
+    <!-- Generate PHP configuration file from template                       -->
     <!-- =================================================================== -->
-    <target name="all" depends="binary_distribution,source_distribution"/>
+    <target name="generate_php_configuration_file">
+        <copy file="${web.folder}/configuration.template.ini" tofile="${build.folder}/configuration.ini" overwrite="true">
+           <filterchain>
+                <replacetokens>
+                    <token key="serverName" value="${sql.server}"/>
+                    <token key="serverPort" value="${sql.port}"/>
+                    <token key="userName" value="${sql.username}"/>
+                    <token key="password" value="${sql.password}"/>
+                    <token key="database" value="${sql.database}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Deploy to web server                                                -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="binary_distribution,source_distribution,generate_installation_file">
+    <!-- TODO: create configuration ini and deploy index.html and PHP scripts -->
+    <target name="deploy" depends="binary_distribution,source_distribution,generate_installation_file,generate_php_configuration_file">
         <ftp server="${ftp.server}" port="21"
              remotedir="iRegulon/"
              userid="${ftp.username}" password="${ftp.password}"
@@ -176,6 +195,8 @@
             <fileset file="${build.folder}/${plugin.bin.filename}" />
             <fileset file="${build.folder}/installation.xml" />
             <fileset file="${build.folder}/LICENSE.txt" />
+            <fileset file="${build.folder}/configuration.ini" />
+            <fileset dir="${web.folder}/"  includes="*.php,*.html,.htaccess"/>
         </ftp>
     </target>
 </project>

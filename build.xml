@@ -5,11 +5,16 @@
     <property name="build.folder" value="bin/"/>
     <property name="lib.folder" value="lib/"/>
 
+    <!-- =================================================================== -->
+    <!-- Clean up                                                            -->
+    <!-- =================================================================== -->
     <target name="clean">
         <delete dir="${build.folder}"/>
     </target>
 
-
+    <!-- =================================================================== -->
+    <!-- Compiles the project                                                -->
+    <!-- =================================================================== -->
     <path id="project.class.path">
         <pathelement path="${lib.folder}/junit-4.10-bin.jar"/>
         <pathelement path="${lib.folder}/xstream-1.4.3-bin.jar"/>
@@ -24,6 +29,20 @@
         </javac>
     </target>
 
+    <!-- =================================================================== -->
+    <!-- Copy the help-related files                                         -->
+    <!-- =================================================================== -->
+    <target name="help">
+        <mkdir dir="${build.folder}/help"/>
+        <copy todir="${build.folder}/help">
+            <fileset dir="${basedir}/help" />
+        </copy>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Copy the resources                                                  -->
+    <!-- =================================================================== -->
     <target name="copy_resources" depends="compile">
         <copy todir="${build.folder}">
             <fileset dir="${source.folder}"
@@ -31,7 +50,10 @@
         </copy>
     </target>
 
-    <target name="jar" depends="copy_resources">
+    <!-- =================================================================== -->
+    <!-- Creates the plugin jar file                                         -->
+    <!-- =================================================================== -->
+    <target name="jar" depends="copy_resources,help">
         <jar destfile="${build.folder}/iRegulon-${version}.jar">
             <manifest>
                 <attribute name="iRegulon-${version}" value="iRegulonInput.iRegulonStart" />

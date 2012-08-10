@@ -1,8 +1,5 @@
 package domainModel;
 
-import org.junit.runner.manipulation.Sortable;
-import org.junit.runner.manipulation.Sorter;
-
 
 public class CandidateTargetGene implements Comparable<CandidateTargetGene>{
 

@@ -16,7 +16,6 @@
     <!-- Compiles the project                                                -->
     <!-- =================================================================== -->
     <path id="project.class.path">
-        <pathelement path="${lib.folder}/junit-4.10-bin.jar"/>
         <pathelement path="${lib.folder}/xstream-1.4.3-bin.jar"/>
         <pathelement path="${lib.folder}/cytoscape-2.8.2-bin.jar"/>
     </path>

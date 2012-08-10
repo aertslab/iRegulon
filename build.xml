@@ -183,10 +183,26 @@
     </target>
 
     <!-- =================================================================== -->
+    <!-- Generate web portal from template                                   -->
+    <!-- =================================================================== -->
+    <target name="generate_html_file">
+        <copy file="${web.folder}/index.template.html" tofile="${build.folder}/index.html" overwrite="true">
+           <filterchain>
+                <replacetokens>
+                    <token key="pluginVersion" value="${plugin.version}"/>
+                    <token key="binaryDistribution" value="${plugin.bin.filename}"/>
+                    <token key="sourceDistribution" value="${plugin.src.filename}"/>
+                    <token key="installationXml" value="installation.xml"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- =================================================================== -->
     <!-- Deploy to web server                                                -->
     <!-- =================================================================== -->
     <!-- TODO: create configuration ini and deploy index.html and PHP scripts -->
-    <target name="deploy" depends="binary_distribution,source_distribution,generate_installation_file,generate_php_configuration_file">
+    <target name="deploy" depends="binary_distribution,source_distribution,generate_installation_file,generate_php_configuration_file,generate_html_file">
         <ftp server="${ftp.server}" port="21"
              remotedir="iRegulon/"
              userid="${ftp.username}" password="${ftp.password}"
@@ -196,7 +212,8 @@
             <fileset file="${build.folder}/installation.xml" />
             <fileset file="${build.folder}/LICENSE.txt" />
             <fileset file="${build.folder}/configuration.ini" />
-            <fileset dir="${web.folder}/"  includes="*.php,*.html,.htaccess"/>
+            <fileset dir="${web.folder}/"  includes="*.css,*.php,*.html,.htaccess"/>
+            <fileset dir="${web.folder}/images/"  includes="*.gif"/>
         </ftp>
     </target>
 </project>

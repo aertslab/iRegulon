@@ -7,7 +7,7 @@
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="0.11"/>
     <property name="plugin.bin.filename" value="iRegulon-${plugin.version}-bin.jar"/>
-    <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src.jar"/>
+    <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src.zip"/>
     <property name="plugin.package" value="iRegulonInput"/>
     <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
 

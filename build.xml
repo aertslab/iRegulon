@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="plugin">
+<project basedir="." default="all">
     <property name="source.folder" value="src/"/>
     <property name="build.folder" value="bin/"/>
     <property name="lib.folder" value="lib/"/>
 
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="0.11"/>
-    <property name="plugin.filename" value="iRegulon-${plugin.version}.jar"/>
-    <property name="plugin.main" value="iRegulonInput.IRegulonPlugin"/>
+    <property name="plugin.bin.filename" value="iRegulon-${plugin.version}-bin.jar"/>
+    <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src.jar"/>
+    <property name="plugin.package" value="iRegulonInput"/>
+    <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
+
+    <tstamp>
+        <format property="TODAY" pattern="dd-MM-yyyy" locale="nl,BE"/>
+    </tstamp>
 
     <!-- =================================================================== -->
     <!-- Clean up                                                            -->
@@ -17,7 +23,7 @@
     </target>
 
     <!-- =================================================================== -->
-    <!-- Compiles the project                                                -->
+    <!-- Compile the project                                                 -->
     <!-- =================================================================== -->
     <path id="project.class.path">
         <pathelement path="${lib.folder}/xstream-1.4.3-bin.jar"/>
@@ -35,13 +41,12 @@
     <!-- =================================================================== -->
     <!-- Copy the help-related files                                         -->
     <!-- =================================================================== -->
-    <target name="help">
+    <target name="copy_help">
         <mkdir dir="${build.folder}/help"/>
         <copy todir="${build.folder}/help">
             <fileset dir="${basedir}/help" />
         </copy>
     </target>
-
 
     <!-- =================================================================== -->
     <!-- Copy the resources                                                  -->
@@ -49,15 +54,33 @@
     <target name="copy_resources" depends="compile">
         <copy todir="${build.folder}">
             <fileset dir="${source.folder}"
-                     includes="**/*.props,**/*.properties,**/*.txt,**/*.png,**/*.jpg,**/*.xml,**/*.html,**/*.hs" />
+                     includes="**/*.properties,**/*.txt,**/*.png,**/*.gif,**/*.jpg" />
         </copy>
     </target>
 
     <!-- =================================================================== -->
-    <!-- Creates the plugin jar file                                         -->
+    <!-- Generate plugin props file from template                            -->
     <!-- =================================================================== -->
-    <target name="jar" depends="copy_resources,help">
-        <jar destfile="${build.folder}/${plugin.filename}">
+    <target name="generate_props_file">
+        <copy file="${source.folder}/plugin.template.props" tofile="${build.folder}/${plugin.package}/plugin.props" overwrite="true">
+           <filterchain>
+                <striplinecomments>
+                    <comment value="!"/>
+                </striplinecomments>
+                <replacetokens>
+                    <token key="pluginName" value="${plugin.name}"/>
+                    <token key="pluginVersion" value="${plugin.version}"/>
+                    <token key="releaseDate" value="${TODAY}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Create the plugin jar file                                          -->
+    <!-- =================================================================== -->
+    <target name="binary_distribution_without_deps" depends="copy_resources,copy_help,generate_props_file">
+        <jar destfile="${build.folder}/${plugin.src.filename}">
             <manifest>
                 <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
             </manifest>
@@ -65,9 +88,9 @@
         </jar>
     </target>
 
-    <target name="plugin" depends="copy_resources,help">
+    <target name="binary_distribution" depends="copy_resources,copy_help,generate_props_file">
         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
-        <jarjar jarfile="${build.folder}/${plugin.filename}">
+        <jarjar jarfile="${build.folder}/${plugin.bin.filename}">
             <manifest>
                 <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
             </manifest>
@@ -76,4 +99,46 @@
             <zipfileset src="${lib.folder}/kxml2-2.3.0-bin.jar"/>
         </jarjar>
     </target>
+
+    <!-- =================================================================== -->
+    <!-- Create the source distribution                                      -->
+    <!-- =================================================================== -->
+    <target name="source_distribution" depends="copy_resources,copy_help">
+        <zip destfile="${build.folder}/${plugin.src.filename}">
+            <fileset dir="${basedir}"
+                     includes="src/**/*.properties,src/**/*.png,src/**/*.gif,src/**/*.jpg" />
+
+            <fileset dir="${basedir}" includes="src/**/*.java"/>
+
+            <fileset dir="${basedir}" includes="src/installation.template.xml,src/plugin.template.props,src/*.txt"/>
+
+            <fileset dir="${basedir}" includes="help/**/*"/>
+
+            <fileset dir="${basedir}" includes="test/**/*.java"/>
+
+            <fileset dir="${basedir}" includes="lib/*.jar"/>
+
+            <fileset dir="${basedir}" includes="build.xml"/>
+        </zip>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Generate plugin installation XML from template                      -->
+    <!-- =================================================================== -->
+    <target name="generate_installation_file">
+        <copy file="${source.folder}/installation.template.xml" tofile="${build.folder}/installation.xml" overwrite="true">
+           <filterchain>
+                <replacetokens>
+                    <token key="pluginName" value="${plugin.name}"/>
+                    <token key="pluginVersion" value="${plugin.version}"/>
+                    <token key="releaseDate" value="${TODAY}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- All                                                                 -->
+    <!-- =================================================================== -->
+    <target name="all" depends="binary_distribution,source_distribution,generate_installation_file"/>
 </project>

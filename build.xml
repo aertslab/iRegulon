@@ -59,10 +59,29 @@
     </target>
 
     <!-- =================================================================== -->
-    <!-- Generate plugin props file from template                            -->
+    <!-- Generate plugin Cytoscape props file from template                  -->
     <!-- =================================================================== -->
-    <target name="generate_props_file">
+    <target name="generate_cytoscape_props_file">
         <copy file="${source.folder}/plugin.template.props" tofile="${build.folder}/${plugin.package}/plugin.props" overwrite="true">
+           <filterchain>
+                <striplinecomments>
+                    <comment value="!"/>
+                </striplinecomments>
+                <replacetokens>
+                    <token key="pluginName" value="${plugin.name}"/>
+                    <token key="pluginVersion" value="${plugin.version}"/>
+                    <token key="releaseDate" value="${TODAY}"/>
+                </replacetokens>
+            </filterchain>
+        </copy>
+    </target>
+
+
+    <!-- =================================================================== -->
+    <!-- Generate plugin JAVA properties file from template                  -->
+    <!-- =================================================================== -->
+    <target name="generate_java_props_file">
+        <copy file="${source.folder}/iRegulon.template.properties" tofile="${build.folder}/iRegulon.properties" overwrite="true">
            <filterchain>
                 <striplinecomments>
                     <comment value="!"/>
@@ -79,7 +98,7 @@
     <!-- =================================================================== -->
     <!-- Create the plugin jar file                                          -->
     <!-- =================================================================== -->
-    <target name="binary_distribution_without_deps" depends="copy_resources,copy_help,generate_props_file">
+    <target name="binary_distribution_without_deps" depends="copy_resources,copy_help,generate_cytoscape_props_file,generate_java_props_file">
         <jar destfile="${build.folder}/${plugin.src.filename}">
             <manifest>
                 <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
@@ -88,7 +107,7 @@
         </jar>
     </target>
 
-    <target name="binary_distribution" depends="copy_resources,copy_help,generate_props_file">
+    <target name="binary_distribution" depends="copy_resources,copy_help,generate_cytoscape_props_file,generate_java_props_file">
         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
         <jarjar jarfile="${build.folder}/${plugin.bin.filename}">
             <manifest>

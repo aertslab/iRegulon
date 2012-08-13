@@ -1,5 +1,8 @@
 package iRegulonInput;
 
+import cytoscape.logger.ConsoleLogger;
+import cytoscape.logger.CyLogHandler;
+import cytoscape.logger.LogLevel;
 import iRegulonOutput.IRegulonOutputView;
 
 import java.awt.event.ActionEvent;
@@ -16,229 +19,168 @@ import java.util.*;
 import cytoscape.view.CyHelpBroker;
 import javax.help.HelpSet;
 
-import java.io.File;
 import java.net.URL;
 
 
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
-import cytoscape.util.CytoscapeAction;
 import domainModel.Results;
 
 
 public class IRegulonPlugin extends CytoscapePlugin {
-	
-	/*
-	 * Start the plugin
-	 */
+    private static final String HELP_SET_NAME = "/help/jhelpset.hs";
+    private static final String IREGULON_LINK_OUT = "edgelinkouturl.iRegulon";
+
+
+    private final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
+    private final CyLogHandler logger = ConsoleLogger.getLogger();
+
+
+    /*
+    * Start the plugin.
+    */
 	public IRegulonPlugin() {
-		MyPluginMenuAction menuAction = new MyPluginMenuAction(this);
-		Cytoscape.getDesktop().getCyMenus().addCytoscapeAction((CytoscapeAction) menuAction);
-		this.addHelp();
-		CytoscapeInit.getProperties().put("edgelinkouturl.iRegulon", "http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hgt.customText=http://med.kuleuven.be/lcb/iregulon/generatebed.php?featureIDandTarget=%featureID%:%Target Gene%:%Regulator Gene%");
+        // 1. Add menu item ...
+        final JMenu menu = Cytoscape.getDesktop().getCyMenus().getOperationsMenu();
+        menu.add(createMenu());
+
+        // 2. Hook plugin help into the Cytoscape main help system ...
+        addHelp();
+
+        // 3. Add linkOut item ...
+        CytoscapeInit.getProperties().put(IREGULON_LINK_OUT, bundle.getString("URL_UCSC_LinkOut"));
+
+        // 4. Install visual style ...
+		final IRegulonVisualStyle style = new IRegulonVisualStyle();
 	}
 	
-	/**
-	*  Hook plugin help into the Cytoscape main help system:                                                                                   
-    */
 	private void addHelp() {
-		final String HELP_SET_NAME = "/help/jhelpset.hs";
-		final ClassLoader classLoader = this.getClass().getClassLoader();
-		URL helpSetURL;
 		try {
-			helpSetURL = HelpSet.findHelpSet(classLoader, HELP_SET_NAME);
-			helpSetURL = getClass().getResource(HELP_SET_NAME);
+            final ClassLoader classLoader = getClass().getClassLoader();
+            final URL helpSetURL = HelpSet.findHelpSet(classLoader, HELP_SET_NAME);
 			final HelpSet newHelpSet = new HelpSet(classLoader, helpSetURL);
 			if (!CyHelpBroker.addHelpSet(newHelpSet))
-				System.err.println("iRegulon: Failed to add help set!");
-		}catch (final Exception e) {
-			System.err.println("iRegulon: Could not find help set: \"" + HELP_SET_NAME + "!");
+				logger.handleLog(LogLevel.LOG_ERROR, "iRegulon: Failed to add help set.");
+		} catch (final Exception e) {
+			logger.handleLog(LogLevel.LOG_ERROR, "iRegulon: Could not find help set: \"" + HELP_SET_NAME + "\".");
 		}
 	}
-	
-	
-	
-	public void saveSessionStateFiles(List<File> pFileList){
-		System.out.println("save session iRegulon");
-		
-	}
-	
-	public void restoreSessionState(List<File> pStateFileList){
-		System.out.println("restore session iRegulon");
-		
-	}
-	
-	
-	/*
-	 * Action of Starting the plugin
-	 */
-	public class MyPluginMenuAction extends CytoscapeAction {
 
-		/*
-		 * Show the plugin in the plugins menu in Cytoscape
-		 */
-		public MyPluginMenuAction(IRegulonPlugin myPlugin) {
-			//super(ResourceBundle.getBundle("iRegulon").getString("plugin_visual_name"));
-			//setPreferredMenu("Plugins");
-			final IRegulonVisualStyle style = new IRegulonVisualStyle();
-			
-			
+    private JMenu createMenu() {
+        //iRegulon submenu
+        final JMenu submenu = new JMenu(bundle.getString("plugin_name"));
+        submenu.setToolTipText("Plugin for prediction of motifs, there transcription factors and there target genes.");
 
-			 //set-up menu options in plugin menu
-	        JMenu menu=Cytoscape.getDesktop().getCyMenus().getOperationsMenu();
-	        JMenuItem item;
-	        //iRegulon submenu
-	        JMenu submenu = new JMenu(ResourceBundle.getBundle("iRegulon").getString("plugin_name"));
-	        submenu.setToolTipText("Plugin for prediction of motifs, there transcription factors and there target genes.");
+        //iRegulon panel
+        JMenuItem item;
+        item = new JMenuItem("Classical");
+        item.setToolTipText("Do a classical  analysis.");
+        item.addActionListener(new StartClasicalFrameAction());
+        submenu.add(item);
 
-	        //iRegulon panel
-	        item = new JMenuItem("Classical");
-	        item.setToolTipText("Do a classical  analysis.");
-	        item.addActionListener(new StartClasicalFrameAction());
-	        submenu.add(item);
-	        
-	        item = new JMenuItem("Other iRegulon options");
-	        item.setToolTipText("Do other options of iRegulon: like iRegulonDB");
-	        item.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-							"<html> " +
-							"<body>" +
-							"Comming soon." +
-							"</body>" +
-							"</html>");
-				}
-			});
-	        submenu.add(item);
-	        
-	        submenu.addSeparator();
-	        
-	        item = new JMenuItem("Get the panel");
-	        item.setToolTipText("Get the control panel.");
-	        item.addActionListener(new StartSidePanelAction());
-	        submenu.add(item);
-	        submenu.addSeparator();
+        item = new JMenuItem("Other iRegulon options");
+        item.setToolTipText("Do other options of iRegulon: like iRegulonDB");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+                        "<html> " +
+                                "<body>" +
+                                "Comming soon." +
+                                "</body>" +
+                                "</html>");
+            }
+        });
+        submenu.add(item);
 
-	        item = new JMenuItem("Load");
-	        item.setToolTipText("Load some previous results.");
-	        item.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SaveResults results = new SaveResults();
-					SaveLoadDialogs dia = new SaveLoadDialogs();
-					String xml = dia.openDialogue();
-					if (xml != null){
-						try{
-							Results result = results.loadResultsFromXML(xml);
-							IRegulonOutputView output = new IRegulonOutputView(dia.getSaveName());
-							output.drawPanel(result);
-						}catch(Exception exception){
-							System.err.println(exception.getMessage());
-							exception.printStackTrace();
-							JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-									exception.getMessage());
-						}
-					}
-				}
-			});
-	        submenu.add(item);
-	        submenu.addSeparator();
-	        
-	        //Help box
-	        item = new JMenuItem("Help");
-	        item.setToolTipText("Get some help");
-	        item.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// The help is already added to this menuitem
-					
-				}
-			});
-	        submenu.add(item);
-	        CyHelpBroker.getHelpBroker().enableHelpOnButton(item, "Topic", null);
+        submenu.addSeparator();
 
+        item = new JMenuItem("Get the panel");
+        item.setToolTipText("Get the control panel.");
+        item.addActionListener(new StartSidePanelAction());
+        submenu.add(item);
+        submenu.addSeparator();
 
-	        //About box
-	        item = new JMenuItem("About...");
-	        item.setToolTipText("About the plugin");
-	        item.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-							"<html> " +
-							"<body>" +
-							"" +
-							"<br/> <br/>" +
-							ResourceBundle.getBundle("iRegulon").getString("plugin_name") +
-							"<br/>" +
-							"Version " + 
-							ResourceBundle.getBundle("iRegulon").getString("version") +
-							"<br/>" + 
-							"Build ID " + ResourceBundle.getBundle("iRegulon").getString("build_ID") +
-							"<br/>" + 
-							"Released: " + ResourceBundle.getBundle("iRegulon").getString("release_date") +
-							"<br/> <br/> <br/>" +
-							ResourceBundle.getBundle("iRegulon").getString("plugin_name") + 
-							" was developed in the Laboratory of Computational Biology (S. Aerts lab), University of Leuven, Belgium." +
-							"<br/>" +
-							"<br/>" +
-							"This work is under writing process. For the moment please cite the webpage (lab description) and the Methods paper." +
-							"<br/>" +
-							"<br/>" +
-							ResourceBundle.getBundle("iRegulon").getString("labsite") +
-							"<br/>" +
-							"<br/>" +
-							ResourceBundle.getBundle("iRegulon").getString("paper") +
-							"<br/>" +
-							"<br/>" +
-							"<br/>" +
-							"Developers: Koen Herten & Bram Van de Sande." + "<br/>" +
-							"Copyright 2012 KU Leuven." + "<br/>" +
-							"<br/>" +
-							"<br/>" +
-							"Contact: " + ResourceBundle.getBundle("iRegulon").getString("contact") +
-							"<br/>" +
-							"</body>" +
-							"</html>", "About...", JOptionPane.INFORMATION_MESSAGE);
-				}
-			});
-	        submenu.add(item);
-	        
-	        //menu.add(submenu);
-	        menu.add(submenu);
-			
-		}
+        item = new JMenuItem("Load");
+        item.setToolTipText("Load some previous results.");
+        item.addActionListener(new ActionListener() {
 
-		/*
-		 * Actions to do
-		 * (non-Javadoc)
-		 * @see cytoscape.util.CytoscapeAction#actionPerformed(java.awt.event.ActionEvent)
-		 */
-		public void actionPerformed(ActionEvent e) {
-			//Debug: Draw a messagebox for showing that the plugin works
-			//JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"iRegulon is selected!");
-			final IRegulonVisualStyle style = new IRegulonVisualStyle();
-			//style.createVizMap();
-			//Draws the input window (Already working!)
-			final InputViewSidePanel inputView = new InputViewSidePanel();
-			inputView.DrawWindow();
-			
-			//Test and debug
-			
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SaveResults results = new SaveResults();
+                SaveLoadDialogs dia = new SaveLoadDialogs();
+                String xml = dia.openDialogue();
+                if (xml != null){
+                    try{
+                        Results result = results.loadResultsFromXML(xml);
+                        IRegulonOutputView output = new IRegulonOutputView(dia.getSaveName());
+                        output.drawPanel(result);
+                    }catch(Exception exception){
+                        System.err.println(exception.getMessage());
+                        exception.printStackTrace();
+                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+                                exception.getMessage());
+                    }
+                }
+            }
+        });
+        submenu.add(item);
+        submenu.addSeparator();
 
-			
-		}
-		
-		
-		
-	}
-	
-	
+        //Help box
+        item = new JMenuItem("Help");
+        item.setToolTipText("Get some help");
+        submenu.add(item);
+        CyHelpBroker.getHelpBroker().enableHelpOnButton(item, "Topic", null);
+
+        //About box
+        item = new JMenuItem("About...");
+        item.setToolTipText("About the plugin");
+        item.addActionListener(new AboutAction());
+        submenu.add(item);
+        return submenu;
+    }
+
+    private final class AboutAction extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+                    "<html> " +
+                            "<body>" +
+                            "" +
+                            "<br/> <br/>" +
+                            bundle.getString("plugin_name") +
+                            "<br/>" +
+                            "Version " +
+                            bundle.getString("version") +
+                            "<br/>" +
+                            "Build ID " + bundle.getString("build_ID") +
+                            "<br/>" +
+                            "Released: " + bundle.getString("release_date") +
+                            "<br/> <br/> <br/>" +
+                            bundle.getString("plugin_name") +
+                            " was developed in the Laboratory of Computational Biology (S. Aerts lab), University of Leuven, Belgium." +
+                            "<br/>" +
+                            "<br/>" +
+                            "This work is under writing process. For the moment please cite the webpage (lab description) and the Methods paper." +
+                            "<br/>" +
+                            "<br/>" +
+                            bundle.getString("labsite") +
+                            "<br/>" +
+                            "<br/>" +
+                            bundle.getString("paper") +
+                            "<br/>" +
+                            "<br/>" +
+                            "<br/>" +
+                            "Developers: Koen Herten & Bram Van de Sande." + "<br/>" +
+                            "Copyright 2012 KU Leuven." + "<br/>" +
+                            "<br/>" +
+                            "<br/>" +
+                            "Contact: " + bundle.getString("contact") +
+                            "<br/>" +
+                            "</body>" +
+                            "</html>", "About...", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 }

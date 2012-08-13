@@ -201,7 +201,6 @@
     <!-- =================================================================== -->
     <!-- Deploy to web server                                                -->
     <!-- =================================================================== -->
-    <!-- TODO: create configuration ini and deploy index.html and PHP scripts -->
     <target name="deploy" depends="binary_distribution,source_distribution,generate_installation_file,generate_php_configuration_file,generate_html_file">
         <ftp server="${ftp.server}" port="21"
              remotedir="iRegulon/"
@@ -215,5 +214,14 @@
             <fileset dir="${web.folder}/"  includes="*.css,*.php,*.html,.htaccess"/>
             <fileset dir="${web.folder}/images/"  includes="*.gif"/>
         </ftp>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Deploy to local installation                                        -->
+    <!-- =================================================================== -->
+    <target name="debug" depends="binary_distribution">
+        <copy todir="${local.installation}/plugins">
+            <fileset file="${build.folder}/${plugin.bin.filename}" />
+        </copy>
     </target>
 </project>

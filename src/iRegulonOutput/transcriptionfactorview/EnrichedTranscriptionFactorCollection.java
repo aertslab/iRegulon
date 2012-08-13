@@ -1,4 +1,4 @@
-package transcriptionfactorview;
+package iRegulonOutput.transcriptionfactorview;
 
 import java.util.Collection;
 import java.util.HashMap;

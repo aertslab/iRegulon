@@ -38,7 +38,7 @@ import java.util.List;
 
 import saveActions.SaveLoadDialogs;
 import saveActions.SaveResults;
-import transcriptionfactorview.EnrichedTranscriptionFactorsView;
+import iRegulonOutput.transcriptionfactorview.EnrichedTranscriptionFactorsView;
 
 
 

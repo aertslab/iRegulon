@@ -1,4 +1,4 @@
-package transcriptionfactorview;
+package iRegulonOutput.transcriptionfactorview;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

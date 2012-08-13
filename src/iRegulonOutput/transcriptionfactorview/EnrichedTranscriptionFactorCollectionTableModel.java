@@ -1,4 +1,4 @@
-package transcriptionfactorview;
+package iRegulonOutput.transcriptionfactorview;
 
 import java.util.ArrayList;
 import java.util.Collection;

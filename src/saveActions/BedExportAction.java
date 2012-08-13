@@ -1,7 +1,7 @@
 package saveActions;
 
-import iRegulonOutput.ResourceAction;
-import iRegulonOutput.SelectedMotif;
+import resultsview.ResourceAction;
+import resultsview.SelectedMotif;
 
 import java.awt.event.ActionEvent;
 

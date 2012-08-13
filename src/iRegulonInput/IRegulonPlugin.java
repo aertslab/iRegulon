@@ -5,7 +5,7 @@ import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
-import iRegulonOutput.ResultsView;
+import resultsview.ResultsView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -1,7 +1,7 @@
 package saveActions;
 
 import iRegulonInput.IRegulonResourceBundle;
-import iRegulonOutput.SelectedMotif;
+import resultsview.SelectedMotif;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -6,7 +6,7 @@ import httpConnection.ComputationalService;
 import httpConnection.ComputationalServiceHTTP;
 import iRegulonInput.IRegulonType;
 import iRegulonInput.Parameters;
-import iRegulonOutput.ResultsView;
+import resultsview.ResultsView;
 
 import java.awt.event.ActionEvent;
 

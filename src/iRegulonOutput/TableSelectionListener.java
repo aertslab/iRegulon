@@ -9,7 +9,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import domainModel.Motif;
+import domainmodel.Motif;
 
 
 public class TableSelectionListener implements ListSelectionListener {

@@ -1,12 +1,11 @@
 package iRegulonOutput.DetailPanel;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import domainModel.CandidateTargetGene;
-import domainModel.Motif;
+import domainmodel.CandidateTargetGene;
+import domainmodel.Motif;
 
 public class TGTableModel extends AbstractTableModel{
 

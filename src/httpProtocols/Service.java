@@ -4,8 +4,8 @@ package httpProtocols;
 import java.util.Collection;
 
 
-import domainModel.Input;
-import domainModel.Motif;
+import domainmodel.Input;
+import domainmodel.Motif;
 import exceptions.SentRequestException;
 
 public interface Service {

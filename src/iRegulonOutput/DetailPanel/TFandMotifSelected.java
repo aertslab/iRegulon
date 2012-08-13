@@ -1,8 +1,8 @@
 package iRegulonOutput.DetailPanel;
 
-import domainModel.Input;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.Input;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class TFandMotifSelected {
 

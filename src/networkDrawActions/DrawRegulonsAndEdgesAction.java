@@ -23,9 +23,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import domainModel.CandidateTargetGene;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.CandidateTargetGene;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSelectionListener{
 

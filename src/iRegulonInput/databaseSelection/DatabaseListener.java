@@ -6,10 +6,6 @@ import iRegulonInput.NodesActions;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,9 +18,9 @@ import javax.swing.event.DocumentListener;
 import cytoscape.Cytoscape;
 
 
-import domainModel.Database;
-import domainModel.Delineation;
-import domainModel.SpeciesNomenclature;
+import domainmodel.Database;
+import domainmodel.Delineation;
+import domainmodel.SpeciesNomenclature;
 
 public class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener{
 

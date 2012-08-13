@@ -12,12 +12,12 @@ import java.util.Collection;
 import java.util.List;
 
 
-import domainModel.CandidateTargetGene;
-import domainModel.GeneIdentifier;
-import domainModel.Input;
-import domainModel.Motif;
-import domainModel.SpeciesNomenclature;
-import domainModel.TranscriptionFactor;
+import domainmodel.CandidateTargetGene;
+import domainmodel.GeneIdentifier;
+import domainmodel.Input;
+import domainmodel.Motif;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TranscriptionFactor;
 import exceptions.SentRequestException;
 
 public class HTTPService extends IRegulonResourceBundle implements Service{

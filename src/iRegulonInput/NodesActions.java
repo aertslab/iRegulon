@@ -7,8 +7,8 @@ import cytoscape.Cytoscape;
 import cytoscape.CyNetwork;
 import cytoscape.data.CyAttributes;
 import cytoscape.*;
-import domainModel.GeneIdentifier;
-import domainModel.SpeciesNomenclature;
+import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
 
 public class NodesActions {
 

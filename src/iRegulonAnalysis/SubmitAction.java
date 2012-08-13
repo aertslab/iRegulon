@@ -15,9 +15,9 @@ import cytoscape.Cytoscape;
 
 import java.util.*;
 
-import domainModel.Input;
-import domainModel.Motif;
-import domainModel.Results;
+import domainmodel.Input;
+import domainmodel.Motif;
+import domainmodel.Results;
 
 
 public class SubmitAction extends AbstractAction {

@@ -3,7 +3,6 @@ package iRegulonOutput.DetailPanel;
 
 import iRegulonOutput.MotifListener;
 import iRegulonOutput.TFComboBox;
-import iRegulonOutput.MotifTableModels.GlobalMotifTableModel;
 import iRegulonOutput.MotifTableModels.ToolTipHeader;
 import iRegulonOutput.renderers.CombinedRenderer;
 import iRegulonOutput.renderers.DefaultRenderer;
@@ -26,9 +25,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
 
-import domainModel.Input;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.Input;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class TGPanel extends JPanel implements MotifListener{
 

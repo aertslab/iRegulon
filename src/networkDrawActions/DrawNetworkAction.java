@@ -7,7 +7,6 @@ import iRegulonOutput.SelectedMotif;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -28,9 +27,9 @@ import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.CalculatorCatalog;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
-import domainModel.CandidateTargetGene;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.CandidateTargetGene;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class DrawNetworkAction extends ComboboxAction implements ListSelectionListener{
 

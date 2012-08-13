@@ -25,7 +25,7 @@ import java.net.URL;
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
-import domainModel.Results;
+import domainmodel.Results;
 
 
 public class IRegulonPlugin extends CytoscapePlugin {

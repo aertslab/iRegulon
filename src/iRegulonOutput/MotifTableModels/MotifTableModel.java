@@ -5,8 +5,8 @@ import java.util.*;
 
 import javax.swing.table.AbstractTableModel;
 
-import domainModel.CandidateTargetGene;
-import domainModel.Motif;
+import domainmodel.CandidateTargetGene;
+import domainmodel.Motif;
 
 public class MotifTableModel extends AbstractTableModel implements GlobalMotifTableModel{
 	private static final int NR_OF_COLUMNS = 7;

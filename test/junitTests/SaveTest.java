@@ -10,11 +10,11 @@ import java.util.List;
 import org.junit.Test;
 
 
-import domainModel.GeneIdentifier;
-import domainModel.Motif;
-import domainModel.Results;
-import domainModel.SpeciesNomenclature;
-import domainModel.TranscriptionFactor;
+import domainmodel.GeneIdentifier;
+import domainmodel.Motif;
+import domainmodel.Results;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TranscriptionFactor;
 import exceptions.LoadException;
 
 import saveActions.SaveLoadDialogs;
@@ -122,18 +122,18 @@ public class SaveTest {
 		GeneIdentifier geneID13 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
 		
 		
-		List<domainModel.CandidateTargetGene> lctgs1 = new ArrayList<domainModel.CandidateTargetGene>();
-		List<domainModel.CandidateTargetGene> lctgs2 = new ArrayList<domainModel.CandidateTargetGene>();
-		List<domainModel.CandidateTargetGene> lctgs3 = new ArrayList<domainModel.CandidateTargetGene>();
-		domainModel.CandidateTargetGene ctg0 = new domainModel.CandidateTargetGene(geneID0, 1);
-		domainModel.CandidateTargetGene ctg1 = new domainModel.CandidateTargetGene(geneID1, 1);
-		domainModel.CandidateTargetGene ctg2 = new domainModel.CandidateTargetGene(geneID2, 1);
-		domainModel.CandidateTargetGene ctg3 = new domainModel.CandidateTargetGene(geneID3, 1);
-		domainModel.CandidateTargetGene ctg4 = new domainModel.CandidateTargetGene(geneID4, 1);
-		domainModel.CandidateTargetGene ctg5 = new domainModel.CandidateTargetGene(geneID5, 1);
-		domainModel.CandidateTargetGene ctg6 = new domainModel.CandidateTargetGene(geneID6, 1);
-		domainModel.CandidateTargetGene ctg7 = new domainModel.CandidateTargetGene(geneID7, 1);
-		domainModel.CandidateTargetGene ctg8 = new domainModel.CandidateTargetGene(geneID8, 1);
+		List<domainmodel.CandidateTargetGene> lctgs1 = new ArrayList<domainmodel.CandidateTargetGene>();
+		List<domainmodel.CandidateTargetGene> lctgs2 = new ArrayList<domainmodel.CandidateTargetGene>();
+		List<domainmodel.CandidateTargetGene> lctgs3 = new ArrayList<domainmodel.CandidateTargetGene>();
+		domainmodel.CandidateTargetGene ctg0 = new domainmodel.CandidateTargetGene(geneID0, 1);
+		domainmodel.CandidateTargetGene ctg1 = new domainmodel.CandidateTargetGene(geneID1, 1);
+		domainmodel.CandidateTargetGene ctg2 = new domainmodel.CandidateTargetGene(geneID2, 1);
+		domainmodel.CandidateTargetGene ctg3 = new domainmodel.CandidateTargetGene(geneID3, 1);
+		domainmodel.CandidateTargetGene ctg4 = new domainmodel.CandidateTargetGene(geneID4, 1);
+		domainmodel.CandidateTargetGene ctg5 = new domainmodel.CandidateTargetGene(geneID5, 1);
+		domainmodel.CandidateTargetGene ctg6 = new domainmodel.CandidateTargetGene(geneID6, 1);
+		domainmodel.CandidateTargetGene ctg7 = new domainmodel.CandidateTargetGene(geneID7, 1);
+		domainmodel.CandidateTargetGene ctg8 = new domainmodel.CandidateTargetGene(geneID8, 1);
 		lctgs1.add(ctg0);
 		lctgs1.add(ctg1);
 		lctgs1.add(ctg2);

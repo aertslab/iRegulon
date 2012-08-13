@@ -7,7 +7,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import domainModel.SpeciesNomenclature;
+import domainmodel.SpeciesNomenclature;
 
 public class SpeciesNomenclatureConverter implements Converter {
 

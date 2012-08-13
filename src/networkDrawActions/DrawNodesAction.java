@@ -22,10 +22,10 @@ import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
 import cytoscape.view.CyNetworkView;
-import domainModel.CandidateTargetGene;
-import domainModel.GeneIdentifier;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.CandidateTargetGene;
+import domainmodel.GeneIdentifier;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class DrawNodesAction extends ComboboxAction implements ListSelectionListener{
 		

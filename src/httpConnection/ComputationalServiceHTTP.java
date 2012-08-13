@@ -14,9 +14,9 @@ import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 
-import domainModel.GeneIdentifier;
-import domainModel.Input;
-import domainModel.Motif;
+import domainmodel.GeneIdentifier;
+import domainmodel.Input;
+import domainmodel.Motif;
 
 public class ComputationalServiceHTTP implements ComputationalService{
 

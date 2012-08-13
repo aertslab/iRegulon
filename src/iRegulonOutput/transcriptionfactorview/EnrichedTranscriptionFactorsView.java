@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
-import domainModel.Results;
+import domainmodel.Results;
 
 public class EnrichedTranscriptionFactorsView {
 

@@ -23,9 +23,9 @@ import cytoscape.data.Semantics;
 import cytoscape.view.*;
 import giny.view.*;
 
-import domainModel.GeneIdentifier;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.GeneIdentifier;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class DrawEdgesAction extends ComboboxAction implements ListSelectionListener {
 	
@@ -101,7 +101,7 @@ public class DrawEdgesAction extends ComboboxAction implements ListSelectionList
 		if (nodes.size() != 0){
 			node1 = this.getCyNode(this.getSelectedTranscriptionFactor().getGeneID(), nodes);
 			if (node1 != null){
-				for (domainModel.CandidateTargetGene child : tree.getCandidateTargetGenes()){
+				for (domainmodel.CandidateTargetGene child : tree.getCandidateTargetGenes()){
 					GeneIdentifier childID = child.getGeneID();
 					node2 = this.getCyNode(childID, nodes);
 					if (node2 != null){

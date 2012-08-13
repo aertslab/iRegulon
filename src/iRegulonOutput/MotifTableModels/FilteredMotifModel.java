@@ -5,9 +5,9 @@ import iRegulonOutput.FilteringOn;
 import javax.swing.table.AbstractTableModel;
 
 
-import domainModel.CandidateTargetGene;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.CandidateTargetGene;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class FilteredMotifModel extends AbstractTableModel implements GlobalMotifTableModel{
 

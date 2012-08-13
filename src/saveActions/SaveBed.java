@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileFilter;
 
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
-import domainModel.TranscriptionFactor;
+import domainmodel.TranscriptionFactor;
 import exceptions.BedException;
 
 public class SaveBed extends IRegulonResourceBundle {

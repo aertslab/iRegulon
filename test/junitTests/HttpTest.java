@@ -9,9 +9,9 @@ import httpProtocols.HTTPService;
 
 import org.junit.Test;
 
-import domainModel.GeneIdentifier;
-import domainModel.Motif;
-import domainModel.SpeciesNomenclature;
+import domainmodel.GeneIdentifier;
+import domainmodel.Motif;
+import domainmodel.SpeciesNomenclature;
 
 public class HttpTest {
 

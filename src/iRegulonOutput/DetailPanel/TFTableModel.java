@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import javax.swing.table.AbstractTableModel;
 
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class TFTableModel extends AbstractTableModel{
 

@@ -1,6 +1,6 @@
 package iRegulonInput;
 
-import domainModel.Input;
+import domainmodel.Input;
 
 public interface Parameters {
 	

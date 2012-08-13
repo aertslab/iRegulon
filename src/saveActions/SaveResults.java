@@ -2,13 +2,12 @@ package saveActions;
 
 import iRegulonInput.IRegulonType;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 import com.thoughtworks.xstream.XStream;
 
-import domainModel.*;
+import domainmodel.*;
 import exceptions.LoadException;
 
 public class SaveResults {

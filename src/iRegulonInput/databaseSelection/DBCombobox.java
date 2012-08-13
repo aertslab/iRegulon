@@ -1,13 +1,11 @@
 package iRegulonInput.databaseSelection;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JComboBox;
 
-import domainModel.Database;
+import domainmodel.Database;
 
 public class DBCombobox extends JComboBox{
 

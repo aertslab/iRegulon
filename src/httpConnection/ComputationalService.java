@@ -4,9 +4,9 @@ package httpConnection;
 import java.util.*;
 
 
-import domainModel.GeneIdentifier;
-import domainModel.Input;
-import domainModel.Motif;
+import domainmodel.GeneIdentifier;
+import domainmodel.Input;
+import domainmodel.Motif;
 
 
 

@@ -3,9 +3,9 @@ package iRegulonOutput.transcriptionfactorview;
 import java.util.ArrayList;
 import java.util.List;
 
-import domainModel.GeneIdentifier;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.GeneIdentifier;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class EnrichedTranscriptionFactor implements Comparable<EnrichedTranscriptionFactor>{
 

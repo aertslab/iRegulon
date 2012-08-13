@@ -4,10 +4,10 @@ import iRegulonInput.IRegulonType;
 
 import java.util.Collection;
 
-import domainModel.Database;
-import domainModel.Delineation;
-import domainModel.GeneIdentifier;
-import domainModel.SpeciesNomenclature;
+import domainmodel.Database;
+import domainmodel.Delineation;
+import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
 
 public class Input {
 

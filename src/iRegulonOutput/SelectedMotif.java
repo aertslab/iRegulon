@@ -3,7 +3,7 @@ package iRegulonOutput;
 
 import java.util.*;
 
-import domainModel.Motif;
+import domainmodel.Motif;
 
 
 public class SelectedMotif {

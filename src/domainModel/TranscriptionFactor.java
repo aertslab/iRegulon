@@ -1,4 +1,4 @@
-package domainModel;
+package domainmodel;
 
 
 public class TranscriptionFactor implements Comparable<TranscriptionFactor> {

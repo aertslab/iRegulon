@@ -1,4 +1,4 @@
-package domainModel;
+package domainmodel;
 
 import iRegulonInput.IRegulonResourceBundle;
 

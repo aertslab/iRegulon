@@ -1,6 +1,6 @@
 package iRegulonOutput.MotifTableModels;
 
-import domainModel.Motif;
+import domainmodel.Motif;
 
 public interface GlobalMotifTableModel {
 

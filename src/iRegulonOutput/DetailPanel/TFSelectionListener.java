@@ -4,7 +4,7 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import domainModel.TranscriptionFactor;
+import domainmodel.TranscriptionFactor;
 
 public class TFSelectionListener implements ListSelectionListener{
 

@@ -29,8 +29,8 @@ import cytoscape.data.Semantics;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class DrawMergedEdgesNetworkAction extends ComboboxAction implements ListSelectionListener{
 

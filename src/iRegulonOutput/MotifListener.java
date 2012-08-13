@@ -1,7 +1,7 @@
 package iRegulonOutput;
 
 
-import domainModel.Motif;
+import domainmodel.Motif;
 
 public interface MotifListener {
 

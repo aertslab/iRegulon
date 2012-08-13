@@ -4,13 +4,12 @@ import httpProtocols.*;
 import iRegulonInput.IRegulonResourceBundle;
 
 import java.util.Collection;
-import java.util.ResourceBundle;
 
 
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
-import domainModel.Input;
-import domainModel.Motif;
+import domainmodel.Input;
+import domainmodel.Motif;
 import exceptions.SentRequestException;
 
 public class ClassicalTask extends IRegulonResourceBundle implements Task {

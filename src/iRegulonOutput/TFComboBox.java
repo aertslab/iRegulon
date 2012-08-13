@@ -8,8 +8,8 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import domainModel.Motif;
-import domainModel.TranscriptionFactor;
+import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 
 public class TFComboBox extends JComboBox implements MotifListener, ActionListener{
 

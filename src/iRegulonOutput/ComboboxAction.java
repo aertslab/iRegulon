@@ -12,10 +12,10 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 
 
-import domainModel.GeneIdentifier;
-import domainModel.Motif;
-import domainModel.SpeciesNomenclature;
-import domainModel.TranscriptionFactor;
+import domainmodel.GeneIdentifier;
+import domainmodel.Motif;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TranscriptionFactor;
 
 public abstract class ComboboxAction extends IRegulonAction implements ListSelectionListener, DocumentListener, MotifListener {
 

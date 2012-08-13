@@ -5,9 +5,7 @@ import iRegulonInput.databaseSelection.BasedComboBox;
 import iRegulonInput.databaseSelection.DBCombobox;
 import iRegulonInput.databaseSelection.DatabaseListener;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -26,15 +24,14 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 
 import cytoscape.Cytoscape;
 
-import domainModel.Database;
-import domainModel.Delineation;
-import domainModel.Input;
-import domainModel.SpeciesNomenclature;
+import domainmodel.Database;
+import domainmodel.Delineation;
+import domainmodel.Input;
+import domainmodel.SpeciesNomenclature;
 
 public class InputView extends IRegulonResourceBundle implements Parameters{
 

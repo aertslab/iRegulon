@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import domainModel.GeneIdentifier;
-import domainModel.Motif;
-import domainModel.Results;
-import domainModel.TranscriptionFactor;
+import domainmodel.GeneIdentifier;
+import domainmodel.Motif;
+import domainmodel.Results;
+import domainmodel.TranscriptionFactor;
 
 public class EnrichedTranscriptionFactorCollection {
 	private final Map<GeneIdentifier, EnrichedTranscriptionFactor> enrichedTranscriptionFactors;

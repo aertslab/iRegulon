@@ -6,11 +6,11 @@ import java.util.Collection;
 import java.util.List;
 
 
-import domainModel.GeneIdentifier;
-import domainModel.Input;
-import domainModel.Motif;
-import domainModel.SpeciesNomenclature;
-import domainModel.TranscriptionFactor;
+import domainmodel.GeneIdentifier;
+import domainmodel.Input;
+import domainmodel.Motif;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TranscriptionFactor;
 
 public class HTTPServiceStub implements Service{
 
@@ -82,13 +82,13 @@ public class HTTPServiceStub implements Service{
 		GeneIdentifier geneID2 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
 		GeneIdentifier geneID3 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
 		
-		List<domainModel.CandidateTargetGene> lctgs1 = new ArrayList<domainModel.CandidateTargetGene>();
-		List<domainModel.CandidateTargetGene> lctgs2 = new ArrayList<domainModel.CandidateTargetGene>();
-		List<domainModel.CandidateTargetGene> lctgs3 = new ArrayList<domainModel.CandidateTargetGene>();
-		domainModel.CandidateTargetGene ctg0 = new domainModel.CandidateTargetGene(geneID0, 1);
-		domainModel.CandidateTargetGene ctg1 = new domainModel.CandidateTargetGene(geneID1, 1);
-		domainModel.CandidateTargetGene ctg2 = new domainModel.CandidateTargetGene(geneID2, 1);
-		domainModel.CandidateTargetGene ctg3 = new domainModel.CandidateTargetGene(geneID3, 1);
+		List<domainmodel.CandidateTargetGene> lctgs1 = new ArrayList<domainmodel.CandidateTargetGene>();
+		List<domainmodel.CandidateTargetGene> lctgs2 = new ArrayList<domainmodel.CandidateTargetGene>();
+		List<domainmodel.CandidateTargetGene> lctgs3 = new ArrayList<domainmodel.CandidateTargetGene>();
+		domainmodel.CandidateTargetGene ctg0 = new domainmodel.CandidateTargetGene(geneID0, 1);
+		domainmodel.CandidateTargetGene ctg1 = new domainmodel.CandidateTargetGene(geneID1, 1);
+		domainmodel.CandidateTargetGene ctg2 = new domainmodel.CandidateTargetGene(geneID2, 1);
+		domainmodel.CandidateTargetGene ctg3 = new domainmodel.CandidateTargetGene(geneID3, 1);
 		lctgs1.add(ctg0);
 		lctgs1.add(ctg1);
 		lctgs1.add(ctg2);

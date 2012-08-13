@@ -46,8 +46,8 @@ import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
-import domainModel.Motif;
-import domainModel.Results;
+import domainmodel.Motif;
+import domainmodel.Results;
 
 public class ResultsView extends IRegulonResourceBundle{
 	private List<Motif> motifList;

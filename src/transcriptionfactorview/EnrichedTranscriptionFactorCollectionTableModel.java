@@ -1,4 +1,4 @@
-package summaryTFs;
+package transcriptionfactorview;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,14 +6,14 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public class PredictedTFTableModel extends AbstractTableModel{
+public class EnrichedTranscriptionFactorCollectionTableModel extends AbstractTableModel{
 
-	private List<PredictedTF> predictedTFs;
+	private List<EnrichedTranscriptionFactor> predictedTFs;
 	private String[] colNames = {"TF rank", "TF", "#predicted", "Mean Score", "Value", "#perfect", "perfect Mean", "perfect Value"};
 	private static final int NR_OF_COLUMNS = 8;
 	
-	public PredictedTFTableModel(Collection<PredictedTF> predictedTFs){
-		this.predictedTFs = new ArrayList<PredictedTF>(predictedTFs);
+	public EnrichedTranscriptionFactorCollectionTableModel(Collection<EnrichedTranscriptionFactor> predictedTFs){
+		this.predictedTFs = new ArrayList<EnrichedTranscriptionFactor>(predictedTFs);
 	}
 	
 	@Override
@@ -23,13 +23,13 @@ public class PredictedTFTableModel extends AbstractTableModel{
 
 	@Override
 	public int getColumnCount() {
-		return this.NR_OF_COLUMNS;
+		return NR_OF_COLUMNS;
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
-		final PredictedTF tf = this.predictedTFs.get(rowIndex);
+		final EnrichedTranscriptionFactor tf = this.predictedTFs.get(rowIndex);
 		switch(columnIndex){
 		case 0 : return (Integer) rowIndex + 1;
 		case 1 : return (String) tf.getName();

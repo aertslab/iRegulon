@@ -38,22 +38,18 @@ import java.util.List;
 
 import saveActions.SaveLoadDialogs;
 import saveActions.SaveResults;
-import summaryTFs.CalculateTFs;
-import summaryTFs.TFOutputView;
+import transcriptionfactorview.EnrichedTranscriptionFactorsView;
 
 
 
 import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.view.cytopanels.CytoPanelListener;
 import cytoscape.view.cytopanels.CytoPanelState;
 import domainModel.Motif;
 import domainModel.Results;
 
-public class IRegulonOutputView extends IRegulonResourceBundle{
-
-	private JTable table;
+public class ResultsView extends IRegulonResourceBundle{
 	private List<Motif> motifList;
 	private String runName;
 	private JButton buttonDrawEdges;
@@ -72,7 +68,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 	
 	private JComponent totalPanel;
 	
-	public IRegulonOutputView(String runName){
+	public ResultsView(String runName){
 		this.runName = runName;
 		this.isSaved = false;
 	}
@@ -113,27 +109,12 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 			
 		//Container contentPane = frame.getContentPane();
 		String panelName = getBundle().getString("plugin_visual_name") + " " + runName;
-		
-		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Motif view", null, this.splitPane, "The motif oriented view of iRegulon.");
-		
-		/*
-		 * TEST
-		 * 
-		 * 
-		 * 
-		 */
-		
-		//TFOutputView tfOutput = new TFOutputView(this.runName, this.result);
-		//tabbedPane.addTab("TF view", null, tfOutput.createPanel(), "The transcription factor oriented view of iRegulon.");
-		
-		/*
-		 * 
-		 * 
-		 * 
-		 * END TEST
-		 */
-		
+
+        JTabbedPane tabbedPane = new JTabbedPane();
+        EnrichedTranscriptionFactorsView tfOutput = new EnrichedTranscriptionFactorsView(this.runName, this.result);
+		tabbedPane.addTab("Transcription Factors", null, tfOutput.createPanel(), "Transcription factor oriented view.");
+		tabbedPane.addTab("Motifs", null, this.splitPane, "Motif oriented view.");
+
 		
 		this.totalPanel = new JPanel();
 		this.totalPanel.setLayout(new GridBagLayout());
@@ -241,15 +222,7 @@ public class IRegulonOutputView extends IRegulonResourceBundle{
 		
 		
 	}
-	
-	/**
-	 * 
-	 * @return the JTable that contains the list of TFRegulons
-	 */
-	protected JTable getTable(){
-		return this.table;
-	}
-	
+
 	/**
 	 * 
 	 * @return all the TFRegulons found

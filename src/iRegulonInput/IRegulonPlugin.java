@@ -3,7 +3,7 @@ package iRegulonInput;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
-import iRegulonOutput.IRegulonOutputView;
+import iRegulonOutput.ResultsView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -105,22 +105,19 @@ public class IRegulonPlugin extends CytoscapePlugin {
         item = new JMenuItem("Load");
         item.setToolTipText("Load some previous results.");
         item.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 SaveResults results = new SaveResults();
                 SaveLoadDialogs dia = new SaveLoadDialogs();
                 String xml = dia.openDialogue();
                 if (xml != null){
-                    try{
-                        Results result = results.loadResultsFromXML(xml);
-                        IRegulonOutputView output = new IRegulonOutputView(dia.getSaveName());
+                    try {
+                        final Results result = results.loadResultsFromXML(xml);
+                        final ResultsView output = new ResultsView(dia.getSaveName());
                         output.drawPanel(result);
-                    }catch(Exception exception){
-                        System.err.println(exception.getMessage());
-                        exception.printStackTrace();
-                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                                exception.getMessage());
+                    } catch(Exception exception){
+                        logger.handleLog(LogLevel.LOG_ERROR, exception.getMessage());
+                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), exception.getMessage());
                     }
                 }
             }

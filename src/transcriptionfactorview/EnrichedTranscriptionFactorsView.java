@@ -1,15 +1,11 @@
-package summaryTFs;
+package transcriptionfactorview;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,16 +15,16 @@ import javax.swing.ListSelectionModel;
 
 import domainModel.Results;
 
-public class TFOutputView {
+public class EnrichedTranscriptionFactorsView {
 
-	private CalculateTFs calTFs;
+	private EnrichedTranscriptionFactorCollection calTFs;
 	private Results result;
 	private String runName;
 	
-	public TFOutputView(String runName, Results result){
+	public EnrichedTranscriptionFactorsView(String runName, Results result){
 		this.runName = runName;
 		this.result = result;
-		this.calTFs = new CalculateTFs(result);
+		this.calTFs = new EnrichedTranscriptionFactorCollection(result);
 	}
 	
 	public JComponent createPanel(){
@@ -84,9 +80,9 @@ public class TFOutputView {
 		}
 		
 		
-		List<PredictedTF> tfs = new ArrayList<PredictedTF>(this.calTFs.getCollectionPredictedTFs());
+		List<EnrichedTranscriptionFactor> tfs = new ArrayList<EnrichedTranscriptionFactor>(this.calTFs.getCollectionPredictedTFs());
 		Collections.sort(tfs);
-		PredictedTFTableModel predictedTFModel = new PredictedTFTableModel(tfs);
+		EnrichedTranscriptionFactorCollectionTableModel predictedTFModel = new EnrichedTranscriptionFactorCollectionTableModel(tfs);
 		JTable table = new JTable(predictedTFModel);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoCreateRowSorter(true);

@@ -1,14 +1,13 @@
-package summaryTFs;
+package transcriptionfactorview;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import domainModel.GeneIdentifier;
 import domainModel.Motif;
-import domainModel.Results;
 import domainModel.TranscriptionFactor;
 
-public class PredictedTF implements Comparable<PredictedTF>{
+public class EnrichedTranscriptionFactor implements Comparable<EnrichedTranscriptionFactor>{
 
 	private final GeneIdentifier geneID;
 	private int timesPredicted;
@@ -34,7 +33,7 @@ public class PredictedTF implements Comparable<PredictedTF>{
 	private static final float WEIGHT_SIMILAR = 1;
 	private static final float WEIGHT_REST = 0;
 	
-	public PredictedTF(GeneIdentifier geneID, int totalMotifs){
+	public EnrichedTranscriptionFactor(GeneIdentifier geneID, int totalMotifs){
 		this.geneID = geneID;
 		this.totalMotifs = totalMotifs;
 		this.timesPerfect = 0;
@@ -151,12 +150,12 @@ public class PredictedTF implements Comparable<PredictedTF>{
 	
 	/**
 	 * @param PredictedTF tf
-	 * @return -1 if this PredictedTF is better than tf
-	 * 			0 if both PredictedTF are equal
-	 * 			1 if tf is better than this PredictedTF
+	 * @return -1 if this EnrichedTranscriptionFactor is better than tf
+	 * 			0 if both EnrichedTranscriptionFactor are equal
+	 * 			1 if tf is better than this EnrichedTranscriptionFactor
 	 */
 	@Override
-	public int compareTo(PredictedTF tf) {
+	public int compareTo(EnrichedTranscriptionFactor tf) {
 		// TODO Auto-generated method stub
 		if (tf.getTotalScore() > this.getTotalScore()){
 			return 1;

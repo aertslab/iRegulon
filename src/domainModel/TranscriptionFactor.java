@@ -1,16 +1,14 @@
 package domainModel;
 
 
-public class TranscriptionFactor implements Comparable<TranscriptionFactor>{
-
-	private GeneIdentifier geneID;
-	private float orthologousIdentifier;
-	private float motifSimilarityFDR;
-	private String similarMotifName;
-	private String similarMotifDescription;
-	private String orthologousGeneName;
-	private String orthologousSpecies;
-	
+public class TranscriptionFactor implements Comparable<TranscriptionFactor> {
+	private final GeneIdentifier geneID;
+	private final float orthologousIdentifier;
+	private final float motifSimilarityFDR;
+	private final String similarMotifName;
+	private final String similarMotifDescription;
+	private final String orthologousGeneName;
+	private final String orthologousSpecies;
 	
 	public TranscriptionFactor(GeneIdentifier geneID, float orthologousIdentifier, 
 			float motifSimilarityFDR, String similarMotifName, String similarMotifDescription,
@@ -60,12 +58,6 @@ public class TranscriptionFactor implements Comparable<TranscriptionFactor>{
 		return this.orthologousSpecies;
 	}
 	
-	/**
-	 * @param TranscriptionFactor tf
-	 * @return -1 if this transcriptionfactor is better than tf
-	 * 			0 if both transcriptionfactors are equal
-	 * 			1 if tf is better than this transcriptionfactor
-	 */
 	public int compareTo(TranscriptionFactor tf){
 		if (Float.isNaN(tf.getOrthologousIdentifier()) && 
 				Float.isNaN(this.getOrthologousIdentifier())){
@@ -125,5 +117,4 @@ public class TranscriptionFactor implements Comparable<TranscriptionFactor>{
 	public String toString(){
 		return this.getName();
 	}
-	
 }

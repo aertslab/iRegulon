@@ -4,7 +4,7 @@ import httpConnection.ComputationalService;
 import httpConnection.ComputationalServiceHTTP;
 import iRegulonInput.IRegulonType;
 import iRegulonInput.Parameters;
-import iRegulonOutput.IRegulonOutputView;
+import iRegulonOutput.ResultsView;
 
 import java.awt.event.ActionEvent;
 
@@ -58,7 +58,7 @@ public class SubmitAction extends AbstractAction {
 			List<Motif> motifList = analyse.findPredictedRegulators(input);
 		
 			if (! motifList.isEmpty()){
-				IRegulonOutputView outputView = new IRegulonOutputView(input.getName());
+				ResultsView outputView = new ResultsView(input.getName());
 				Results result = new Results(motifList, input);
 				outputView.drawPanel(result);
 			}

@@ -1,8 +1,8 @@
-package networkDrawActions;
+package iRegulonOutput.actions;
 
 import iRegulonInput.IRegulonVisualStyle;
 import iRegulonInput.NodesActions;
-import iRegulonOutput.ComboboxAction;
+import iRegulonOutput.TranscriptionFactorDependentAction;
 import iRegulonOutput.SelectedMotif;
 
 import java.awt.event.ActionEvent;
@@ -27,38 +27,21 @@ import domainmodel.GeneIdentifier;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class DrawEdgesAction extends ComboboxAction implements ListSelectionListener {
+public class DrawEdgesAction extends TranscriptionFactorDependentAction {
+    private static final String NAME = "action_draw_edges";
+
 	
-	public DrawEdgesAction(SelectedMotif selectedRegulatoryTree){
-		super(selectedRegulatoryTree);
-		if (selectedRegulatoryTree == null){
-			throw new IllegalArgumentException();
-		}
-		putValue(Action.NAME, getBundle().getString("action_draw_edges_name"));
-		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_draw_edges_name"));
-		//String pathArrow = "/icons/arrow.png";
-		//java.net.URL imgURLArrow = getClass().getResource(pathArrow);
-		//ImageIcon iconArrow = new ImageIcon(imgURLArrow, "Add edges");
-		//putValue(Action.LARGE_ICON_KEY, iconArrow);
-		//putValue(Action.SMALL_ICON, iconArrow);
+	public DrawEdgesAction(SelectedMotif selectedMotif) {
+		super(NAME, selectedMotif);
+		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}
-	
-	public void valueChanged(ListSelectionEvent e) {
-		final ListSelectionModel model = (ListSelectionModel) e.getSource();
-		setEnabled(! model.isSelectionEmpty());
-	}
-	
-	
-	/**
-	 * 
-	 * @return a list of all selected Transcription factor regulons
-	 */
+
 	public Motif getListSelectedRegulatoryTree(){
-		return this.getSelectedRegulatoryTree().getMotif();
+		return this.getSelectedMotif().getMotif();
 	}
 	
-	public TranscriptionFactor getSelectedTranscriptionFactor(){
+	public TranscriptionFactor getSelectedTranscriptionFactor() {
 		return this.getTranscriptionFactor();
 	}
 	

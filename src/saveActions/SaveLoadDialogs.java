@@ -37,7 +37,7 @@ public class SaveLoadDialogs {
 	 * @param xml
 	 * @param name of the job
 	 */
-	public static boolean saveDialogue(String xml, String name, String extension){
+	public static boolean showDialog(String xml, String name, String extension){
 		JFrame frame = new JFrame();
 
 		// Create a file chooser

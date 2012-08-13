@@ -25,7 +25,7 @@ public class TFComboBox extends JComboBox implements MotifListener, ActionListen
 	}
 	
 	@Override
-	public void newRegTree(Motif currentSelection) {
+	public void newMotifSelected(Motif currentSelection) {
 		// TODO Auto-generated method stub
 		if (! this.tfCollection.equals(currentSelection) && currentSelection!=null){
 			this.tfCollection = currentSelection.getTranscriptionFactors();

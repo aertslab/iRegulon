@@ -31,7 +31,7 @@ public class SelectedMotif {
 	 */
 	protected void fireListeners() {
 		for (MotifListener l : new ArrayList<MotifListener>(listeners)) {
-			l.newRegTree(this.motifs);
+			l.newMotifSelected(this.motifs);
 		}
 	}
 	

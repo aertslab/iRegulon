@@ -26,7 +26,7 @@ public class SaveTest {
 	public void test() {
 		SaveResults save = new SaveResults();
 		Results resultS = new Results(getMotifs(0), null);
-		String xml = save.saveResultsAsXML(resultS);
+		String xml = save.convertResultsToXML(resultS);
 		
 		Results result;
 		try {
@@ -63,9 +63,9 @@ public class SaveTest {
 		
 		SaveResults save = new SaveResults();
 		Results resultS = new Results(getMotifs(0), null);
-		String xml = save.saveResultsAsXML(resultS);
+		String xml = save.convertResultsToXML(resultS);
 		
-		dialog.saveDialogue(xml, "test", ".ctf");
+		dialog.showDialog(xml, "test", ".ctf");
 		
 		String fileInput = dialog.openDialogue();
 		if (fileInput == null){

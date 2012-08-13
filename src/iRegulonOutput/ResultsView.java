@@ -1,5 +1,6 @@
 package iRegulonOutput;
 
+import domainmodel.TranscriptionFactor;
 import iRegulonInput.IRegulonResourceBundle;
 import iRegulonOutput.DetailPanel.TGPanel;
 import iRegulonOutput.MotifTableModels.FilteredMotifModel;
@@ -7,6 +8,7 @@ import iRegulonOutput.MotifTableModels.FilteredPatternDocumentListener;
 import iRegulonOutput.MotifTableModels.GlobalMotifTableModel;
 import iRegulonOutput.MotifTableModels.MotifTableModel;
 import iRegulonOutput.MotifTableModels.ToolTipHeader;
+import iRegulonOutput.actions.*;
 import iRegulonOutput.renderers.BooleanRenderer;
 import iRegulonOutput.renderers.ColorRenderer;
 import iRegulonOutput.renderers.ColumnWidthRenderer;
@@ -14,462 +16,229 @@ import iRegulonOutput.renderers.CombinedRenderer;
 import iRegulonOutput.renderers.DefaultRenderer;
 import iRegulonOutput.renderers.FloatRenderer;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.text.JTextComponent;
 
-import networkDrawActions.DrawNetworkAction;
-import networkDrawActions.DrawRegulonsAndEdgesAction;
+import iRegulonOutput.actions.CreateNewNetworkAction;
+import iRegulonOutput.actions.DrawNodesAndEdgesAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import saveActions.SaveLoadDialogs;
-import saveActions.SaveResults;
 import iRegulonOutput.transcriptionfactorview.EnrichedTranscriptionFactorsView;
 
-
-
-import cytoscape.Cytoscape;
-import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.Motif;
 import domainmodel.Results;
 
-public class ResultsView extends IRegulonResourceBundle{
-	private List<Motif> motifList;
-	private String runName;
-	private JButton buttonDrawEdges;
-	private JButton buttonDrawNetwork;
-	private TFComboBox tfcmbBox;
-	private JButton buttonSave;
-	private JButton buttonClose;
-	private JButton buttonTabDelimited;
-	private SelectedMotif selectedTFRegulons;
-	private JSplitPane splitPane;
-	private CytoPanel cytoPanel;
 
-	private boolean isSaved;
+public class ResultsView extends IRegulonResourceBundle {
+    private final String runName;
+    private final Results results;
+
+    private boolean isSaved;
+	private List<Motif> enrichedMotifs;
+    private SelectedMotif selectedMotif;
+    private JComboBox filterAttributeTF;
+    private JTextField filterValueTF;
+    private TFComboBox transcriptionFactorCB;
+
+    private JButton closeButton;
+	private JPanel mainPanel = null;
 	
-	private Results result;
-	
-	private JComponent totalPanel;
-	
-	public ResultsView(String runName){
+	public ResultsView(final String runName, final Results results) {
 		this.runName = runName;
+        this.results = results;
 		this.isSaved = false;
-	}
-	
-	
-	public void drawPanel(Results results){
-		this.result = results;
-		this.motifList = new ArrayList<Motif>(result.getMotifs());
-		//this.motifList = MotifList;
-		CytoscapeDesktop desktop = Cytoscape.getDesktop();
-		this.cytoPanel = desktop.getCytoPanel (SwingConstants.EAST);
-		cytoPanel.setState(CytoPanelState.DOCK);
-		//addCytoPanelListener(CytoPanelListener);
-		
-		
-		this.selectedTFRegulons = new SelectedMotif(result.getInput().getAttributeName());
-		
-		//JPanel panel = new JPanel(layout);
-		JPanel panel = this.createMasterPanel();
-		TGPanel tgPanel = new TGPanel(this.tfcmbBox, this.result.getInput());
-		this.selectedTFRegulons.registerListener(tgPanel);
 
-			
+        this.enrichedMotifs = new ArrayList<Motif>(results.getMotifs());
+        this.selectedMotif = new SelectedMotif(results.getInput().getAttributeName());
+	}
+
+    public String getRunName() {
+        return this.runName;
+    }
+
+    public String getPanelName() {
+        return getBundle().getString("plugin_visual_name") + " " + getRunName();
+    }
+
+    public Results getResults() {
+        return results;
+    }
+
+    public List<Motif> getEnrichedMotifs() {
+        return enrichedMotifs;
+    }
+
+    public Motif getSelectedMotif() {
+        return selectedMotif.getMotif();
+    }
+
+    public TranscriptionFactor getSelectedTranscriptionFactor() {
+        return (TranscriptionFactor) transcriptionFactorCB.getSelectedItem();
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved() {
+        isSaved = true;
+    }
+
+    public void addToPanel(final CytoPanel panel) {
+        if (this.mainPanel != null) {
+            throw new IllegalStateException();
+        }
+		final JPanel resultsView = createMainPanel();
+        this.mainPanel = resultsView;
+
+        panel.add(getPanelName(), resultsView);
+
+		// Make this new panel active ...
+		final int index = panel.indexOfComponent(resultsView);
+		panel.setSelectedIndex(index);
+
+        // Add listener for closing this results view ...
+        getCloseButton().addActionListener(new CloseResultsViewAction(panel, this));
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
+    private JButton getCloseButton() {
+        return closeButton;
+    }
+	
+	private JPanel createMainPanel() {
+        // 1. Create toolbar ...
+        this.transcriptionFactorCB = new TFComboBox(this.selectedMotif);
+        this.filterAttributeTF = new JComboBox(FilteringOn.values());
+        this.filterAttributeTF.setSelectedItem(FilteringOn.MOTIF);
+        this.filterValueTF = new JTextField();
+        this.closeButton = new JButton(new CloseResultsViewAction(null, this));
+        final JPanel toolBar = createToolBar(this.selectedMotif, this.transcriptionFactorCB, this.closeButton, this.filterAttributeTF, this.filterValueTF);
+
+        // 2. Create master and detail panel ...
+		final JScrollPane masterPanel = this.createMasterPanel(this.transcriptionFactorCB, this.filterAttributeTF, this.filterValueTF);
+		final TGPanel detailPanel = new TGPanel(this.transcriptionFactorCB, this.results.getInput());
+		this.selectedMotif.registerListener(detailPanel);
+
 
 		//Create a split pane with the two scroll panes in it.
-		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-			                           panel, tgPanel);
-		this.splitPane.setOneTouchExpandable(true);
-		this.splitPane.setDividerLocation(200);
+        final JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, masterPanel, detailPanel);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(200);
 
 		//Provide minimum sizes for the two components in the split pane
-		Dimension minimumSize = new Dimension(100, 50);
-		panel.setMinimumSize(minimumSize);
-		tgPanel.setMinimumSize(minimumSize);
+		final Dimension minimumSize = new Dimension(100, 50);
+		masterPanel.setMinimumSize(minimumSize);
+		detailPanel.setMinimumSize(minimumSize);
 			
-		//JScrollPane panelScrollPane = new JScrollPane(table);
-		//JScrollPane tgPanelScrollPane = new JScrollPane(tgPanel);
-			
-		//Container contentPane = frame.getContentPane();
-		String panelName = getBundle().getString("plugin_visual_name") + " " + runName;
-
-        JTabbedPane tabbedPane = new JTabbedPane();
-        EnrichedTranscriptionFactorsView tfOutput = new EnrichedTranscriptionFactorsView(this.runName, this.result);
+        final JTabbedPane tabbedPane = new JTabbedPane();
+        EnrichedTranscriptionFactorsView tfOutput = new EnrichedTranscriptionFactorsView(this.results);
 		tabbedPane.addTab("Transcription Factors", null, tfOutput.createPanel(), "Transcription factor oriented view.");
-		tabbedPane.addTab("Motifs", null, this.splitPane, "Motif oriented view.");
+		tabbedPane.addTab("Motifs", null, splitPane, "Motif oriented view.");
 
-		
-		this.totalPanel = new JPanel();
-		this.totalPanel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		
-		JLabel label = new JLabel(this.runName);
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx=0.9;
-		c.weighty=0;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.ipadx = 0;
-		c.ipady = 0;
-		this.totalPanel.add(label, c);
-		if (this.result.hasParameters()){
-			label.setText(this.result.getName());
-			String parameters = "<html>" 
-						+ "Name:  " + this.result.getName() 
-						+ "<br/>"
-						+ "Species and nomenclature: " + this.result.getSpeciesNomenclature().toString()
-						+ "<br/>"
-						+ "Minimal NEscore: " + this.result.getEScore()
-						+ "<br/>"
-						+ "Threshold for visualisation: " + this.result.getThresholdForVisualisation()
-						+ "<br/>"
-						+ "ROC threshold AUC: " + this.result.getROCthresholdAUC()
-						+ "<br/>"
-						+ "minimal orthologous: " + this.result.getMinOrthologous()
-						+ "<br/>"
-						+ "maximal motif similarity: " + this.result.getMaxMotifSimilarityFDR()
-						+ "<br/>"
-						+ "<br/>"
-						+ "database: " + this.result.getDatabaseName()
-						+ "<br/>";
-			if (this.result.isRegionBased()){
-				parameters += "overlap: " + this.result.getOverlap()
-						+ "<br/>";
-				if (this.result.isDelineationBased()){
-					parameters += "Delineation: " + this.result.getDelineationName();
-				}else{
-					parameters += "Upstream: " + this.result.getUpstream() + " kb"
-							+ "<br/>"
-							+ "Downstream: " + this.result.getDownstream() + " kb";
-				}
-			}
-			parameters += "</html>";
-			label.setToolTipText(parameters);
-		}
-		String pathClose = "/icons/close.png";
-		java.net.URL imgURLClose = getClass().getResource(pathClose);
-		ImageIcon iconClose = new ImageIcon(imgURLClose, "Save");
-		this.buttonClose = new JButton(iconClose);
-		this.buttonClose.setToolTipText("Close these results");
-		this.buttonClose.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (! isSaved){
-						JFrame frame = new JFrame();
-						int n = JOptionPane.showConfirmDialog(frame,
-						    	"Do you want to save this file?",
-						    	"Save?",
-						    	JOptionPane.YES_NO_OPTION);
-						if (n == 0){
-							SaveResults results = new SaveResults();
-							String xml = results.saveResultsAsXML(result);
-							String extention = ".irf";
-							SaveLoadDialogs.saveDialogue(xml, runName, extention);
-						}
-					}
-					cytoPanel.remove(totalPanel);
-					if (cytoPanel.getCytoPanelComponentCount() == 0){
-						cytoPanel.setState(CytoPanelState.HIDE);
-					}
-				}
-			});
-		c.gridx = 1;
-		c.gridy = 0;
-		c.gridwidth = 1;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		this.totalPanel.add(this.buttonClose, c);
-		
-		
-		c.gridx = 0;
-		c.gridy = 1;
-		c.gridwidth = 2;
-		c.weightx=0;
-		c.weighty=0.9;
-		c.ipadx = 0;
-		c.ipady = 0;
-		this.totalPanel.add(tabbedPane, c);
-		
-		
-		//add the panel to Cytoscape
-		this.cytoPanel.add(panelName, this.totalPanel);
-		//set this panel as active
-		int index = cytoPanel.indexOfComponent(this.totalPanel);
-		cytoPanel.setSelectedIndex(index);
-		
-		
-		
+		final JPanel result = new JPanel();
+		result.setLayout(new BorderLayout());
+        result.add(toolBar, BorderLayout.NORTH);
+        result.add(tabbedPane, BorderLayout.CENTER);
+        return result;
 	}
 
-	/**
-	 * 
-	 * @return all the TFRegulons found
-	 */
-	protected List<Motif> getRegulatoryTreeList(){
-		return this.motifList;
-	}
-	
-	protected JPanel createMasterPanel(){
-		
-		//JPanel panel = new JPanel(layout);
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+    private JPanel createToolBar(final SelectedMotif selectedMotif, final JComboBox transcriptionFactorComboBox,
+                                 final JButton closeButton, final JComboBox filterAttributeCB, final JTextField filterValueTF) {
+        final JPanel toolBar = new JPanel();
+		toolBar.setLayout(new GridBagLayout());
+		final GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-		
-		JLabel label = new JLabel(this.runName);
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx=0;
-		c.weighty=0;
-		c.gridwidth = 4;
-		c.gridheight = 1;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(label, c);
-		if (this.result.hasParameters()){
-			label.setText(this.result.getName());
-			String parameters = "<html>" 
-						+ "Name:  " + this.result.getName() 
-						+ "<br/>"
-						+ "Species and nomenclature: " + this.result.getSpeciesNomenclature().toString()
-						+ "<br/>"
-						+ "Minimal NEscore: " + this.result.getEScore()
-						+ "<br/>"
-						+ "Threshold for visualisation: " + this.result.getThresholdForVisualisation()
-						+ "<br/>"
-						+ "ROC threshold AUC: " + this.result.getROCthresholdAUC()
-						+ "<br/>"
-						+ "minimal orthologous: " + this.result.getMinOrthologous()
-						+ "<br/>"
-						+ "maximal motif similarity: " + this.result.getMaxMotifSimilarityFDR()
-						+ "<br/>"
-						+ "<br/>"
-						+ "database: " + this.result.getDatabaseName()
-						+ "<br/>";
-			if (this.result.isRegionBased()){
-				parameters += "overlap: " + this.result.getOverlap()
-						+ "<br/>";
-				if (this.result.isDelineationBased()){
-					parameters += "Delineation: " + this.result.getDelineationName();
-				}else{
-					parameters += "Upstream: " + this.result.getUpstream() + " kb"
-							+ "<br/>"
-							+ "Downstream: " + this.result.getDownstream() + " kb";
-				}
-			}
-			parameters += "</html>";
-			label.setToolTipText(parameters);
-		}
-		
-		//add buttons for drawing, and selecting transcription factor
+		c.ipadx = 0; c.ipady = 0;
 
-		
-		
-		//Container for the selected regulons
-		
-		//add buttons for drawing, and selecting transcription factor
-			
-		DrawRegulonsAndEdgesAction drawNodesAndEdgesAction = new DrawRegulonsAndEdgesAction(selectedTFRegulons);
-		this.buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
-		this.buttonDrawEdges.setText("+");
-			
-		DrawNetworkAction drawNetworkAction = new DrawNetworkAction(selectedTFRegulons);
-		this.buttonDrawNetwork = new JButton(drawNetworkAction);
-		this.buttonDrawNetwork.setText("N");
-			
-		JLabel labelTF = new JLabel("Transcription Factor");
-		this.tfcmbBox = new TFComboBox(selectedTFRegulons);
-		this.tfcmbBox.setEditable(true);
-		
-		final JTextComponent tc = (JTextComponent) this.tfcmbBox.getEditor().getEditorComponent();
+		c.gridx = 0; c.gridy = 0;
+		c.weightx = 0; c.weighty = 0;
+		c.gridwidth = 4; c.gridheight = 1;
+        toolBar.add(new SummaryLabel(getResults()), c);
+
+		c.gridx = 0; c.gridy = 1;
+		c.weightx=0.1; c.weighty = 0.0;
+        c.gridwidth = 1; c.gridheight = 1;
+        final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif);
+        final JButton buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
+        buttonDrawEdges.setText("+");
+        toolBar.add(buttonDrawEdges, c);
+
+        c.gridx = 1; c.gridy = 1;
+		c.weightx = 0.1; c.weighty = 0.0;
+        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewNetworkAction(selectedMotif);
+        JButton buttonDrawNetwork = new JButton(drawNetworkAction);
+        buttonDrawNetwork.setText("N");
+
+		toolBar.add(buttonDrawNetwork, c);
+
+        c.gridx = 2; c.gridy = 1;
+        c.weightx = 0.1; c.weighty = 0.0;
+		final JLabel labelTF = new JLabel("Transcription Factor");
+		toolBar.add(labelTF, c);
+
+        c.gridx = 3; c.gridy = 1;
+		c.weightx = 0.5; c.weighty = 0.0;
+		transcriptionFactorComboBox.setEditable(true);
+		final JTextComponent tc = (JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent();
 		tc.getDocument().addDocumentListener(drawNodesAndEdgesAction);
 		tc.getDocument().addDocumentListener(drawNetworkAction);
-			
-		String pathSave = "/icons/save.png";
-		java.net.URL imgURLSave = getClass().getResource(pathSave);
-		ImageIcon iconSave = new ImageIcon(imgURLSave, "Save");
-		this.buttonSave = new JButton(iconSave);
-		this.buttonSave.setToolTipText("Save these results as a ctf");
-		this.buttonSave.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SaveResults results = new SaveResults();
-					String xml = results.saveResultsAsXML(result);
-					String extention = ".irf";
-					boolean saved = SaveLoadDialogs.saveDialogue(xml, runName, extention);
-					if (! isSaved){
-						isSaved = saved;
-					}
-				}
-		});
-		
-		String pathTabDelimited = "/icons/save_tabDelimited.png";
-		java.net.URL imgURLTabDelimited = getClass().getResource(pathTabDelimited);
-		ImageIcon iconTabDelimited = new ImageIcon(imgURLTabDelimited, "Save");
-		this.buttonTabDelimited = new JButton(iconTabDelimited);
-		this.buttonTabDelimited.setToolTipText("Save these results as a tab delimited file");
-		this.buttonTabDelimited.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					SaveResults results = new SaveResults();
-					String tabfile = results.saveResultsAsTabDelimited(motifList);
-					String extention = ".txt";
-					SaveLoadDialogs.saveDialogue(tabfile, runName, extention);
-				}
-		});
-			
-		String pathClose = "/icons/close.png";
-		java.net.URL imgURLClose = getClass().getResource(pathClose);
-		ImageIcon iconClose = new ImageIcon(imgURLClose, "Save");
-		this.buttonClose = new JButton(iconClose);
-		this.buttonClose.setToolTipText("Close these results");
-		this.buttonClose.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if (! isSaved){
-						JFrame frame = new JFrame();
-						int n = JOptionPane.showConfirmDialog(frame,
-						    	"Do you want to save this file?",
-						    	"Save?",
-						    	JOptionPane.YES_NO_OPTION);
-						if (n == 0){
-							SaveResults results = new SaveResults();
-							String xml = results.saveResultsAsXML(result);
-							String extention = ".irf";
-							SaveLoadDialogs.saveDialogue(xml, runName, extention);
-						}
-					}
-					cytoPanel.remove(totalPanel);
-					if (cytoPanel.getCytoPanelComponentCount() == 0){
-						cytoPanel.setState(CytoPanelState.HIDE);
-					}
-				}
-			});
-			
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.gridx = 0;
-		c.gridy = 1;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(this.buttonDrawEdges, c);
-			
-			
-		c.gridx = 1;
-		c.gridy = 1;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(this.buttonDrawNetwork, c);
-			
-			
-		c.gridx = 2;
-		c.gridy = 1;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(labelTF, c);
-			
-		
-		c.gridx = 3;
-		c.gridy = 1;
-		c.weightx=0.5;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(this.tfcmbBox, c);
-			
-		c.gridx = 4;
-		c.gridy = 1;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(this.buttonSave, c);
-		
-		c.gridx = 5;
-		c.gridy = 1;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(this.buttonTabDelimited, c);
-			
-		c.gridx = 5;
-		c.gridy = 0;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(this.buttonClose, c);
-			
-		//the filtering options
-		JLabel labelFilter = new JLabel("Filtering on: ");
-		JComboBox filteringOn = new JComboBox(FilteringOn.values());
-		JTextField textFilter = new JTextField();
-			
-		c.gridx = 0;
-		c.gridy = 2;
+        toolBar.add(transcriptionFactorComboBox, c);
+
+        c.gridx = 4; c.gridy = 1;
+		c.weightx = 0.1; c.weighty = 0.0;
+        final JButton buttonSave = new JButton(new SaveResultsAction(this));
+        buttonSave.setText("");
+        toolBar.add(buttonSave, c);
+
+        c.gridx = 5; c.gridy = 1;
+		c.weightx = 0.1; c.weighty = 0.0;
+		final JButton buttonTabDelimited = new JButton(new ExportResultsAction(this));
+        buttonTabDelimited.setText("");
+		toolBar.add(buttonTabDelimited, c);
+
+        c.gridx = 5; c.gridy = 0;
+        c.weightx = 0.1; c.weighty = 0.0;
+        closeButton.setText("");
+		toolBar.add(closeButton, c);
+
+		c.gridx = 0; c.gridy = 2;
 		c.gridwidth = 2;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(labelFilter, c);
-			
-		c.gridx = 2;
-		c.gridy = 2;
+		c.weightx = 0.1; c.weighty = 0.0;
+		toolBar.add(new JLabel("Filtering on: "), c);
+
+		c.gridx = 2; c.gridy = 2;
 		c.gridwidth = 1;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(filteringOn, c);
-		
-		c.gridx = 3;
-		c.gridy = 2;
+		c.weightx = 0.1; c.weighty = 0.0;
+		toolBar.add(filterAttributeCB, c);
+
+		c.gridx = 3; c.gridy = 2;
 		c.gridwidth = 3;
-		c.weightx=0.1;
-		c.weighty=0;
-		c.ipadx = 0;
-		c.ipady = 0;
-		panel.add(textFilter, c);
-			
+		c.weightx = 0.1; c.weighty = 0.0;
+		toolBar.add(filterValueTF, c);
+
+        return toolBar;
+    }
+
+	protected JScrollPane createMasterPanel(final JComboBox transcriptionFactorComboBox,
+                                       final JComboBox filterAttributeCB, final JTextField filterValueTF) {
 		//add a table model
-		MotifTableModel tableModel = new MotifTableModel(this.motifList);
+		final MotifTableModel tableModel = new MotifTableModel(this.enrichedMotifs);
 		//filtering table model
-		FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, FilteringOn.MOTIF, "");
-		JTable table = new JTable(filteredModel);
+		final FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, FilteringOn.MOTIF, "");
+		final JTable table = new JTable(filteredModel);
 		
 		//set the tooltips on the columns
 		ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
@@ -480,17 +249,16 @@ public class ResultsView extends IRegulonResourceBundle{
 
 			
 		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
-		filteringOn.addActionListener(new FilteringOnComboBoxAction(filteredModel));
-		filteringOn.setSelectedItem(FilteringOn.MOTIF);
-		textFilter.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
+		filterAttributeCB.addActionListener(new FilteringOnComboBoxAction(filteredModel));
+		filterValueTF.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
 			
 		//tableModel.initColumnSizes(table);
 		//add mouse and selection listeners
-		//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedTFRegulons, tc);
-		table.addMouseListener(new MotifPopUpMenu(table, selectedTFRegulons, 
-				(JTextComponent) this.tfcmbBox.getEditor().getEditorComponent(), this.result.isRegionBased()));
+		//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedMotif, tc);
+		table.addMouseListener(new MotifPopUpMenu(table, selectedMotif,
+				(JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent(), this.results.isRegionBased()));
 		ListSelectionModel listSelectionModel = table.getSelectionModel();
-		TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedTFRegulons);
+		TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedMotif);
 		listSelectionModel.addListSelectionListener(tableSelectListener);
 	   	
 			
@@ -520,50 +288,7 @@ public class ResultsView extends IRegulonResourceBundle{
 		columnWidth.widthSetter();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoCreateRowSorter(true);
-			/*
-			TableRowSorter trs = new TableRowSorter(tableModel);
 
-	        class IntComparator implements Comparator {
-	            public int compare(Object o1, Object o2) {
-	                Integer int1 = (Integer)o1;
-	                Integer int2 = (Integer)o2;
-	                return int1.compareTo(int2);
-	            }
-
-	            public boolean equals(Object o2) {
-	                return this.equals(o2);
-	            }
-	        }
-	        trs.setComparator(0, new IntComparator());
-	        trs.setComparator(4, new IntComparator());
-	        trs.setComparator(5, new IntComparator());
-	        trs.setComparator(6, new IntComparator());
-
-	        table.setRowSorter(trs);
-			*/
-	        
-			
-			
-			//panel.add(table, BorderLayout.CENTER);
-			
-		JScrollPane scrollPane = new JScrollPane(table);
-	    panel.add(scrollPane);
-	    c.gridx = 0;
-		c.gridy = 3;
-		c.weightx=1;
-		c.weighty=0.8;
-		c.gridwidth = 6;
-		c.gridheight = 0;
-		c.ipadx = 0;
-		c.ipady = 100;
-		panel.add(scrollPane, c);
-		return panel;
-
+		return new JScrollPane(table);
 	}
-	
-	
-	
-
-	
-	
 }

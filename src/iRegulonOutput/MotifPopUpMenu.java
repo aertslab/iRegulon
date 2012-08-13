@@ -9,10 +9,10 @@ import javax.swing.text.JTextComponent;
 import saveActions.BedExportAction;
 import saveActions.BedLinkToBrowserAction;
 
-import networkDrawActions.DrawEdgesAction;
-import networkDrawActions.DrawMergedEdgesNetworkAction;
-import networkDrawActions.DrawNetworkAction;
-import networkDrawActions.DrawRegulonsAndEdgesAction;
+import iRegulonOutput.actions.DrawEdgesAction;
+import iRegulonOutput.actions.DrawMergedEdgesNetworkAction;
+import iRegulonOutput.actions.CreateNewNetworkAction;
+import iRegulonOutput.actions.DrawNodesAndEdgesAction;
 
 
 public class MotifPopUpMenu extends MouseAdapter{
@@ -28,13 +28,13 @@ public class MotifPopUpMenu extends MouseAdapter{
 		menu = new PopupMenu();
 			
 			
-		final DrawNetworkAction networkAction = new DrawNetworkAction(selectedTFRegulons);
+		final CreateNewNetworkAction networkAction = new CreateNewNetworkAction(selectedTFRegulons);
 		//table.getSelectionModel().addListSelectionListener(networkAction);
 		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
 		tc.getDocument().addDocumentListener(networkAction);
 		menu.addAction(networkAction);
 			
-		final DrawRegulonsAndEdgesAction drawRegulonsAndEdgesAction = new DrawRegulonsAndEdgesAction(selectedTFRegulons);
+		final DrawNodesAndEdgesAction drawRegulonsAndEdgesAction = new DrawNodesAndEdgesAction(selectedTFRegulons);
 		//table.getSelectionModel().addListSelectionListener(drawRegulonsAndEdgesAction);
 		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
 		tc.getDocument().addDocumentListener(drawRegulonsAndEdgesAction);

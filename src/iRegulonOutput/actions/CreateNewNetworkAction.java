@@ -1,7 +1,7 @@
-package networkDrawActions;
+package iRegulonOutput.actions;
 
 import iRegulonInput.IRegulonVisualStyle;
-import iRegulonOutput.ComboboxAction;
+import iRegulonOutput.TranscriptionFactorDependentAction;
 import iRegulonOutput.SelectedMotif;
 
 import java.awt.event.ActionEvent;
@@ -31,53 +31,24 @@ import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class DrawNetworkAction extends ComboboxAction implements ListSelectionListener{
 
-private static final String HIERARCHICAL_LAYOUT = "hierarchical";
+public class CreateNewNetworkAction extends TranscriptionFactorDependentAction {
+    private static final String NAME = "action_create_new_network";
 	
-	public DrawNetworkAction(SelectedMotif selectedRegulatoryTree){
-		super(selectedRegulatoryTree);
-		if (selectedRegulatoryTree == null){
-			throw new IllegalArgumentException();
-		}
-		//putValue(Action.NAME, "NetworkCreate");
-		//putValue(Action.NAME, getBundle().getString("action_draw_edges_name"));
-		putValue(Action.NAME, getBundle().getString("action_create_new_network_name"));
-		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_create_new_network_name"));
-		String pathNetwork = "/icons/node-select.png";
-		java.net.URL imgURLNetwork = getClass().getResource(pathNetwork);
-		ImageIcon iconNetwork = new ImageIcon(imgURLNetwork, "Draw new network");
-		putValue(Action.LARGE_ICON_KEY, iconNetwork);
-		putValue(Action.SMALL_ICON, iconNetwork);
+	public CreateNewNetworkAction(SelectedMotif selectedRegulatoryTree){
+		super(NAME, selectedRegulatoryTree);
+		if (selectedRegulatoryTree == null)	throw new IllegalArgumentException();
 		setEnabled(false);
 	}
 	
-	
-	
-	public void valueChanged(ListSelectionEvent e) {
-		final ListSelectionModel model = (ListSelectionModel) e.getSource();
-		setEnabled(! model.isSelectionEmpty());
-		//this.setEnabled(this.getSelectedRegulatoryTree() != null && this.getTranscriptionFactor() != null);
-	}
-	
 	public CyNetwork createNetwork(Motif mtf, TranscriptionFactor tf){
-		CyNetwork network = Cytoscape.createNetwork(tf.getName() + 
-				" with motif " + mtf.getEnrichedMotifID());
-		return network;
+        return Cytoscape.createNetwork(tf.getName() +
+                " with motif " + mtf.getEnrichedMotifID());
 	}
-	
-	public CyNetwork createNetwork(){
-		CyNetwork network = Cytoscape.createNetwork("New Network");	
-		return network;
-	}
-
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-		Motif tree = this.getSelectedRegulatoryTree().getMotif();
+		Motif tree = this.getSelectedMotif().getMotif();
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network = this.createNetwork(tree, tf);
 		CyNetworkView view = Cytoscape.createNetworkView(network, "MyNetwork");
@@ -190,9 +161,4 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 		cyNetworkAttrs.setListAttribute(network.getIdentifier(), attributeName, attributeValueList);
 		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
 	}
-	
-	
-	
-	
-	
 }

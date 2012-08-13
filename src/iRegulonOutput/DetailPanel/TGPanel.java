@@ -243,7 +243,7 @@ public class TGPanel extends JPanel implements MotifListener{
 
 
 	@Override
-	public void newRegTree(Motif currentSelection) {
+	public void newMotifSelected(Motif currentSelection) {
 		this.refresh(currentSelection);
 	}
 	

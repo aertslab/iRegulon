@@ -1,5 +1,7 @@
 package iRegulonAnalysis;
 
+import cytoscape.view.cytopanels.CytoPanel;
+import cytoscape.view.cytopanels.CytoPanelState;
 import httpConnection.ComputationalService;
 import httpConnection.ComputationalServiceHTTP;
 import iRegulonInput.IRegulonType;
@@ -8,8 +10,7 @@ import iRegulonOutput.ResultsView;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 import cytoscape.Cytoscape;
 
@@ -26,10 +27,7 @@ public class SubmitAction extends AbstractAction {
 	public SubmitAction(final Parameters parameters) {
 		super();
 		this.parameters = parameters;
-		//this.putValue(SHORT_DESCRIPTION, "Boe");
 	}
-	
-	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -51,16 +49,14 @@ public class SubmitAction extends AbstractAction {
 		}*/
 		
 		if (input.getIRegulonType().equals(IRegulonType.PREDICTED_REGULATORS)){
-			//Stub aanroepen
-			ComputationalService analyse = new ComputationalServiceHTTP();
-			//type oproepen
-			
-			List<Motif> motifList = analyse.findPredictedRegulators(input);
+			final ComputationalService analyse = new ComputationalServiceHTTP();
+			final List<Motif> motifList = analyse.findPredictedRegulators(input);
 		
 			if (! motifList.isEmpty()){
-				ResultsView outputView = new ResultsView(input.getName());
-				Results result = new Results(motifList, input);
-				outputView.drawPanel(result);
+				final ResultsView outputView = new ResultsView(input.getName(), new Results(motifList, input));
+                final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
+		        panel.setState(CytoPanelState.DOCK);
+                outputView.addToPanel(panel);
 			}
 		}
 		else{

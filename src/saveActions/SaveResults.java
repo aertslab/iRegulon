@@ -11,6 +11,9 @@ import domainmodel.*;
 import exceptions.LoadException;
 
 public class SaveResults {
+    public static final String NATIVE_FILE_EXTENSION = ".irf";
+    public static final String TSV_FILE_EXTENSION = ".txt";
+
 
 	private XStream xstream;
 	
@@ -33,10 +36,9 @@ public class SaveResults {
 	
 	/**
 	 * transforms the given collection of motifs to xml
-	 * @param motifs
 	 * @return String xml
 	 */
-	public String saveResultsAsXML(Results result){
+	public String convertResultsToXML(Results result){
 		//Set-up of the XStream
 		this.xstream = new XStream();
 		this.xstream.alias("motif", Motif.class);
@@ -56,7 +58,6 @@ public class SaveResults {
 	
 	/**
 	 * transforms the given xml to a collection of motifs
-	 * @param String xml
 	 * @return the motifs in a Collection of the given xml
 	 * @throws LoadException 
 	 */
@@ -98,7 +99,8 @@ public class SaveResults {
 			
 	}
 	
-	public String saveResultsAsTabDelimited(Collection<Motif> motifs){
+	public String convertResultsToTSV(final Results results){
+        final Collection<Motif> motifs = results.getMotifs();
 		//Header
 		String tabfile = "Rank" + "\t"
 						+ "Motif id" + "\t"

@@ -1,9 +1,9 @@
-package networkDrawActions;
+package iRegulonOutput.actions;
 
 import giny.view.NodeView;
 
 import iRegulonInput.NodesActions;
-import iRegulonOutput.ComboboxAction;
+import iRegulonOutput.TranscriptionFactorDependentAction;
 import iRegulonOutput.SelectedMotif;
 
 import java.awt.event.ActionEvent;
@@ -32,46 +32,14 @@ import cytoscape.view.cytopanels.CytoPanel;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class DrawMergedEdgesNetworkAction extends ComboboxAction implements ListSelectionListener{
-
-private static final String HIERARCHICAL_LAYOUT = "hierarchical";
+public class DrawMergedEdgesNetworkAction extends TranscriptionFactorDependentAction {
+    private static final String NAME = "action_draw_merged_edges_network";
 	
-	public DrawMergedEdgesNetworkAction(SelectedMotif selectedRegulatoryTree){
-		super(selectedRegulatoryTree);
-		if (selectedRegulatoryTree == null){
-			throw new IllegalArgumentException();
-		}
-		//putValue(Action.NAME, "NetworkCreate");
-		//putValue(Action.NAME, getBundle().getString("action_draw_edges_name"));
-		putValue(Action.NAME, getBundle().getString("action_draw_merged_edges_network_name"));
-		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_draw_merged_edges_network_name"));
-		//String pathNetwork = "/icons/node-select.png";
-		//java.net.URL imgURLNetwork = getClass().getResource(pathNetwork);
-		//ImageIcon iconNetwork = new ImageIcon(imgURLNetwork, "Draw new network");
-		//putValue(Action.LARGE_ICON_KEY, iconNetwork);
-		//putValue(Action.SMALL_ICON, iconNetwork);
+	public DrawMergedEdgesNetworkAction(SelectedMotif selectedMotif){
+		super(NAME, selectedMotif);
+		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}
-	
-	
-	
-	public void valueChanged(ListSelectionEvent e) {
-		final ListSelectionModel model = (ListSelectionModel) e.getSource();
-		setEnabled(! model.isSelectionEmpty());
-	}
-	
-	public CyNetwork createNetwork(Motif mtf, TranscriptionFactor tf){
-		CyNetwork network = Cytoscape.createNetwork(tf.getName() + 
-				" with motif " + mtf.getEnrichedMotifID());
-		return network;
-	}
-	
-	public CyNetwork createNetwork(){
-		CyNetwork network = Cytoscape.createNetwork("New Network");	
-		return network;
-	}
-
-	
 
 	//inner class data edge
 	private class NewEdgeAttr{
@@ -300,10 +268,6 @@ private static final String HIERARCHICAL_LAYOUT = "hierarchical";
 		}
 		return cyedges;
 	}
-	
-	
-	
-	
 }
 
 

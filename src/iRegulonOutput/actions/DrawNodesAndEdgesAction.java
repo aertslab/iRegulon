@@ -1,4 +1,4 @@
-package networkDrawActions;
+package iRegulonOutput.actions;
 
 import cytoscape.*;
 import cytoscape.data.CyAttributes;
@@ -9,7 +9,7 @@ import cytoscape.visual.VisualStyle;
 
 
 import iRegulonInput.IRegulonVisualStyle;
-import iRegulonOutput.ComboboxAction;
+import iRegulonOutput.TranscriptionFactorDependentAction;
 import iRegulonOutput.SelectedMotif;
 
 import java.awt.event.ActionEvent;
@@ -27,39 +27,24 @@ import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSelectionListener{
+public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction {
+    private static final String NAME = "action_draw_nodes_and_edges";
 
 	
-	public DrawRegulonsAndEdgesAction(SelectedMotif selectedRegulatoryTree){
-		super(selectedRegulatoryTree);
-		if (selectedRegulatoryTree == null){
-			throw new IllegalArgumentException();
-		}
-		putValue(Action.NAME, getBundle().getString("action_draw_edges_and_nodes_name"));
-		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_draw_edges_and_nodes_name"));
-		String pathArrow = "/icons/arrow.png";
-		java.net.URL imgURLArrow = getClass().getResource(pathArrow);
-		ImageIcon iconArrow = new ImageIcon(imgURLArrow, "Add edges");
-		putValue(Action.LARGE_ICON_KEY, iconArrow);
-		putValue(Action.SMALL_ICON, iconArrow);
+	public DrawNodesAndEdgesAction(SelectedMotif selectedMotif) {
+		super(NAME, selectedMotif);
+		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}
 	
-	public void valueChanged(ListSelectionEvent e) {
-		final ListSelectionModel model = (ListSelectionModel) e.getSource();
-		setEnabled(! model.isSelectionEmpty());
-	}
-	
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		DrawNodesAction drawNodesAction = new DrawNodesAction(this.getSelectedRegulatoryTree());
-		Motif tree = this.getSelectedRegulatoryTree().getMotif();
+		DrawNodesAction drawNodesAction = new DrawNodesAction(this.getSelectedMotif());
+		Motif tree = this.getSelectedMotif().getMotif();
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network =  Cytoscape.getCurrentNetwork();
 		CyNetworkView view = Cytoscape.getCurrentNetworkView();
-		Map<String, List<CyNode>> map = drawNodesAction.getNodeMap(this.getSelectedRegulatoryTree().getAttributeName(), network.nodesList());
+		Map<String, List<CyNode>> map = drawNodesAction.getNodeMap(this.getSelectedMotif().getAttributeName(), network.nodesList());
 		if (network != null && view != null){
 			List<CyNode> tfNodeList = map.get(this.getTranscriptionFactor().getGeneID());
 			if (tfNodeList == null || tfNodeList.isEmpty()){
@@ -68,13 +53,13 @@ public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSe
 				tfNodeList.add(parent);
 				DrawNodesAction.setAtribute(parent, "ID", tf.getName());
 			}
+
 			for (CyNode parent : tfNodeList){
-				DrawNodesAction.setAtribute(parent, this.getSelectedRegulatoryTree().getAttributeName(), tf.getName());
+				DrawNodesAction.setAtribute(parent, this.getSelectedMotif().getAttributeName(), tf.getName());
 				DrawNodesAction.setAtribute(parent, "Regulatory function", "Regulator");
 				DrawNodesAction.addAtribute(parent, "Motif", tree.getEnrichedMotifID());
 			}
-			//System.out.println("Draw Parent Node");
-			//System.out.println("Children " + tree.getCandidateTargetGenes().size());
+
 			for (CandidateTargetGene geneID : tree.getCandidateTargetGenes()){
 				List<CyNode> tgNodeList = map.get(geneID.getGeneName());
 				if (tgNodeList == null || tgNodeList.isEmpty()){
@@ -84,7 +69,7 @@ public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSe
 					DrawNodesAction.setAtribute(child, "ID", geneID.getGeneName());
 				}
 				for (CyNode tgNode : tgNodeList){
-					DrawNodesAction.setAtribute(tgNode, this.getSelectedRegulatoryTree().getAttributeName(), geneID.getGeneName());
+					DrawNodesAction.setAtribute(tgNode, this.getSelectedMotif().getAttributeName(), geneID.getGeneName());
 					//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
 					for (CyNode tfNode : tfNodeList){
 						this.drawEdgeAndAttributes(tfNode, tgNode, network, view, tree, geneID, tf);
@@ -108,7 +93,6 @@ public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSe
 		}
 	}
 	
-	
 	private void drawEdgeAndAttributes(CyNode parent, CyNode target, 
 						CyNetwork network, CyNetworkView view, Motif motif, 
 						CandidateTargetGene tg, TranscriptionFactor tf){
@@ -122,8 +106,4 @@ public class DrawRegulonsAndEdgesAction extends ComboboxAction implements ListSe
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 		cyEdgeAttrs.setUserVisible("featureID", false);
 	}
-	
-	
-	
-	
 }

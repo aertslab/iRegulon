@@ -3,6 +3,8 @@ package iRegulonInput;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
+import cytoscape.view.cytopanels.CytoPanel;
+import cytoscape.view.cytopanels.CytoPanelState;
 import iRegulonOutput.ResultsView;
 
 import java.awt.event.ActionEvent;
@@ -113,8 +115,10 @@ public class IRegulonPlugin extends CytoscapePlugin {
                 if (xml != null){
                     try {
                         final Results result = results.loadResultsFromXML(xml);
-                        final ResultsView output = new ResultsView(dia.getSaveName());
-                        output.drawPanel(result);
+                        final ResultsView output = new ResultsView(dia.getSaveName(), result);
+		                final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
+		                panel.setState(CytoPanelState.DOCK);
+                        output.addToPanel(panel);
                     } catch(Exception exception){
                         logger.handleLog(LogLevel.LOG_ERROR, exception.getMessage());
                         JOptionPane.showMessageDialog(Cytoscape.getDesktop(), exception.getMessage());

@@ -2,24 +2,21 @@ package saveActions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.Action;
-
-import iRegulonInput.IRegulonAction;
+import iRegulonOutput.ResourceAction;
 import iRegulonOutput.SelectedMotif;
 
-public class BedLinkToBrowserAction extends IRegulonAction{
+public class BedLinkToBrowserAction extends ResourceAction {
+    private static final String NAME = "action_link_to_UCSC";
 
 	private final SaveBed bedSaver;
 	
-	public BedLinkToBrowserAction(SelectedMotif motif){
+	public BedLinkToBrowserAction(SelectedMotif motif) {
+        super(NAME);
 		this.bedSaver = new SaveBed(motif);
-		putValue(Action.NAME, getBundle().getString("action_link_to_UCSC"));
-		putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_link_to_UCSC"));
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		this.bedSaver.openUCSC();
 	}
 

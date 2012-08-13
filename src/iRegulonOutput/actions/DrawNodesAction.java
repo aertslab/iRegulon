@@ -1,9 +1,9 @@
-package networkDrawActions;
+package iRegulonOutput.actions;
 
 import giny.view.NodeView;
 
 import iRegulonInput.NodesActions;
-import iRegulonOutput.ComboboxAction;
+import iRegulonOutput.TranscriptionFactorDependentAction;
 import iRegulonOutput.SelectedMotif;
 
 import java.awt.event.ActionEvent;
@@ -27,29 +27,21 @@ import domainmodel.GeneIdentifier;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class DrawNodesAction extends ComboboxAction implements ListSelectionListener{
+public class DrawNodesAction extends TranscriptionFactorDependentAction {
+    private static final String NAME = "action_draw_nodes";
 		
-		public DrawNodesAction(SelectedMotif selectedRegulatoryTree) {
-			super(selectedRegulatoryTree);
-			if (selectedRegulatoryTree == null){
-				throw new IllegalArgumentException("Couldn't create DrawNodes");
-			}
-			putValue(Action.NAME, getBundle().getString("action_draw_nodes_name"));
-			putValue(Action.SHORT_DESCRIPTION, getBundle().getString("action_draw_nodes_name"));
+		public DrawNodesAction(SelectedMotif selectedMotif) {
+			super(NAME, selectedMotif);
+			if (selectedMotif == null) throw new IllegalArgumentException();
 			setEnabled(false);
 		}
-		
-		public void valueChanged(ListSelectionEvent e) {
-			final ListSelectionModel model = (ListSelectionModel) e.getSource();
-			setEnabled(! model.isSelectionEmpty());
-		}
-		
+
 		/**
 		 * 
 		 * @return a list of all selected Transcription factor regulons
 		 */
 		public Motif getListSelectedRegulatoryTree(){
-			return this.getSelectedRegulatoryTree().getMotif();
+			return this.getSelectedMotif().getMotif();
 		}
 		
 		@Override
@@ -59,7 +51,7 @@ public class DrawNodesAction extends ComboboxAction implements ListSelectionList
 			CyNode node0 = Cytoscape.getCyNode(NodeID, true);
 			current_network.addNode(node0);
 			
-			//System.out.println(this.getSelectedRegulatoryTree());
+			//System.out.println(this.getSelectedMotif());
 			Motif regulatoryTree = this.getListSelectedRegulatoryTree();
 			TranscriptionFactor tf = this.getTranscriptionFactor();
 			CyNode node1 = null;

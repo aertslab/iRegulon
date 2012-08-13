@@ -5,5 +5,5 @@ import domainmodel.Motif;
 
 public interface MotifListener {
 
-	void newRegTree(Motif currentSelection);
+	void newMotifSelected(Motif currentSelection);
 }

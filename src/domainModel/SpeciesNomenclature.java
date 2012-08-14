@@ -3,7 +3,7 @@ package domainmodel;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
-import iRegulonInput.IRegulonResourceBundle;
+import view.IRegulonResourceBundle;
 
 import java.util.*;
 

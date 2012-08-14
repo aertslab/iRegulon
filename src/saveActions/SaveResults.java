@@ -1,6 +1,6 @@
 package saveActions;
 
-import parameterform.IRegulonType;
+import view.parametersform.IRegulonType;
 
 import java.util.Collection;
 import java.util.Iterator;

@@ -1,7 +1,7 @@
 package httpConnection;
 
 import httpProtocols.*;
-import parameterform.IRegulonResourceBundle;
+import view.IRegulonResourceBundle;
 
 import java.util.Collection;
 

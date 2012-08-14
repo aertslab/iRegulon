@@ -4,9 +4,9 @@ import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
 import httpConnection.ComputationalService;
 import httpConnection.ComputationalServiceHTTP;
-import parameterform.IRegulonType;
-import parameterform.Parameters;
-import resultsview.ResultsView;
+import view.parametersform.IRegulonType;
+import view.parametersform.Parameters;
+import view.resultspanel.ResultsView;
 
 import java.awt.event.ActionEvent;
 

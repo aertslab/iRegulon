@@ -1,6 +1,6 @@
 package domainmodel;
 
-import iRegulonInput.IRegulonType;
+import view.parametersform.IRegulonType;
 
 import java.util.Collection;
 

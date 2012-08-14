@@ -9,7 +9,7 @@ pluginVersion=@pluginVersion@
 # Html tags are encouraged for formatting purposes.
 pluginDescription=@pluginName@ predicts causal transcription factors for sets of differentially expressed genes derived from expression micro-array or RNA-Seq experiments.
 # URL to a website that gives more information about your plugin, Ex. http://my-lab-site.org
-projectURL=http://med.kuleuven.be/lcb/iRegulon/
+projectURL=@webserverUrl@
 # List of authors.  Note each author and institution pair are separated by a : (colon)
 # each additional author institution pair must be separated from other pairs bye a ; (semicolon)
 pluginAuthorsInstitutions=Koen Herten and Bram Van De Sande:LCB

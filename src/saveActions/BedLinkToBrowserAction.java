@@ -2,8 +2,8 @@ package saveActions;
 
 import java.awt.event.ActionEvent;
 
-import resultsview.ResourceAction;
-import resultsview.SelectedMotif;
+import view.resultspanel.ResourceAction;
+import view.resultspanel.SelectedMotif;
 
 public class BedLinkToBrowserAction extends ResourceAction {
     private static final String NAME = "action_link_to_UCSC";

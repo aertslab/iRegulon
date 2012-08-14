@@ -1,7 +1,7 @@
 package saveActions;
 
-import parameterform.IRegulonResourceBundle;
-import resultsview.SelectedMotif;
+import view.IRegulonResourceBundle;
+import view.resultspanel.SelectedMotif;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

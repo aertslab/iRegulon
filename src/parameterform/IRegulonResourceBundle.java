@@ -1,7 +1,7 @@
 /**
  * 
  */
-package iRegulonInput;
+package parameterform;
 
 import java.util.ResourceBundle;
 

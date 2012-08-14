@@ -1,10 +1,12 @@
-package iRegulonInput;
+package parameterform;
 
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
+import parameterform.actions.StartClasicalFrameAction;
+import parameterform.actions.StartSidePanelAction;
 import resultsview.ResultsView;
 
 import java.awt.event.ActionEvent;

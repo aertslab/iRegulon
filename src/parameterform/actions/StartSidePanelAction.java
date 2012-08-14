@@ -1,4 +1,6 @@
-package iRegulonInput;
+package parameterform.actions;
+
+import parameterform.InputViewSidePanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

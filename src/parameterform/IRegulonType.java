@@ -1,4 +1,4 @@
-package iRegulonInput;
+package parameterform;
 
 public enum IRegulonType {
 	PREDICTED_REGULATORS("Predicted regulators"),

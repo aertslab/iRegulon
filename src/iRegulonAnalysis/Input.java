@@ -1,6 +1,6 @@
 package iRegulonAnalysis;
 
-import iRegulonInput.IRegulonType;
+import parameterform.IRegulonType;
 
 import java.util.Collection;
 

@@ -1,6 +1,6 @@
 package httpProtocols;
 
-import iRegulonInput.IRegulonResourceBundle;
+import parameterform.IRegulonResourceBundle;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

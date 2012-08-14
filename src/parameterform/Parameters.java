@@ -1,4 +1,4 @@
-package iRegulonInput;
+package parameterform;
 
 import domainmodel.Input;
 

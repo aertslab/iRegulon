@@ -1,9 +1,9 @@
-package iRegulonInput;
+package parameterform;
 
 import iRegulonAnalysis.SubmitAction;
-import iRegulonInput.databaseselection.BasedComboBox;
-import iRegulonInput.databaseselection.DBCombobox;
-import iRegulonInput.databaseselection.DatabaseListener;
+import parameterform.databaseselection.BasedComboBox;
+import parameterform.databaseselection.DBCombobox;
+import parameterform.databaseselection.DatabaseListener;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;

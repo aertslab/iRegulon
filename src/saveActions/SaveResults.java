@@ -1,6 +1,6 @@
 package saveActions;
 
-import iRegulonInput.IRegulonType;
+import parameterform.IRegulonType;
 
 import java.util.Collection;
 import java.util.Iterator;

@@ -1,6 +1,6 @@
 package resultsview.renderers;
 
-import iRegulonInput.NodesActions;
+import parameterform.NodesActions;
 
 import java.util.ArrayList;
 import java.util.HashSet;

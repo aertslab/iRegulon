@@ -8,7 +8,7 @@ import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
 
 
-import iRegulonInput.IRegulonVisualStyle;
+import parameterform.IRegulonVisualStyle;
 import resultsview.TranscriptionFactorDependentAction;
 import resultsview.SelectedMotif;
 

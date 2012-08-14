@@ -1,7 +1,7 @@
 package resultsview.actions;
 
-import iRegulonInput.IRegulonVisualStyle;
-import iRegulonInput.NodesActions;
+import parameterform.IRegulonVisualStyle;
+import parameterform.NodesActions;
 import resultsview.TranscriptionFactorDependentAction;
 import resultsview.SelectedMotif;
 

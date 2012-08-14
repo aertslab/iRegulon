@@ -1,7 +1,7 @@
 package resultsview;
 
 import domainmodel.TranscriptionFactor;
-import iRegulonInput.IRegulonResourceBundle;
+import parameterform.IRegulonResourceBundle;
 import resultsview.motifview.detailpanel.TGPanel;
 import resultsview.motifview.tablemodels.FilteredMotifModel;
 import resultsview.motifview.tablemodels.FilteredPatternDocumentListener;

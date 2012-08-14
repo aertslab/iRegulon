@@ -1,6 +1,6 @@
 package saveActions;
 
-import iRegulonInput.IRegulonResourceBundle;
+import parameterform.IRegulonResourceBundle;
 import resultsview.SelectedMotif;
 
 import java.io.BufferedReader;

@@ -2,7 +2,7 @@ package resultsview.actions;
 
 import giny.view.NodeView;
 
-import iRegulonInput.NodesActions;
+import parameterform.NodesActions;
 import resultsview.TranscriptionFactorDependentAction;
 import resultsview.SelectedMotif;
 

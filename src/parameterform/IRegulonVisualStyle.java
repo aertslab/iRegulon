@@ -1,4 +1,4 @@
-package iRegulonInput;
+package parameterform;
 
 import java.awt.Color;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package iRegulonInput;
+package parameterform;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

@@ -84,7 +84,8 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         menu.addSeparator();
 
-        menu.add(new HelpAction());
+        final JMenuItem helpItem = menu.add(new HelpAction());
+        CyHelpBroker.getHelpBroker().enableHelpOnButton(helpItem, "Topic", null);
 
         menu.add(new JMenuItem(new AboutAction()));
 
@@ -96,12 +97,6 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         public HelpAction() {
             super(NAME);
-
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent actionEvent) {
-            CyHelpBroker.getHelpActionListener().actionPerformed(actionEvent);
         }
     }
 

@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Motif {
-
+public class Motif implements Comparable<Motif> {
 	final private String enrichedMotifID;
 	final private int clusterCode;
 	final private float neScore;
@@ -16,16 +15,7 @@ public class Motif {
 	final private String description;
 	final private int featureID;
 	final private int jobID;
-	
-	/**
-	 * 
-	 * @param enrichedMotifID
-	 * @param candidateTargetGenes
-	 * @param transcriptionFactors
-	 * @param NEScore
-	 * @param clusterCode
-	 * @param AUCValue
-	 */
+
 	public Motif(String enrichedMotifID, List<CandidateTargetGene> candidateTargetGenes,
 			List<TranscriptionFactor> transcriptionFactors, float neScore, int clusterCode
 			, float aucValue, int rank, String description, int featureID, int jobID){
@@ -73,29 +63,37 @@ public class Motif {
 	public int getRank(){
 		return this.rank;
 	}
-	
-	public String getDescription(){
+
+    public String getDescription(){
 		return this.description;
 	}
-	
-	public TranscriptionFactor getMostTrustedTF(){
-		TranscriptionFactor mttf = null;
-		for (TranscriptionFactor tf : this.getTranscriptionFactors()){
-			int trustedTF = mttf.compareTo(tf);
-			if (trustedTF == -1){
-				mttf = tf;
-			}
-		}
-		return mttf;
-	}
-	
+
 	public int getFeatureID(){
 		return this.featureID;
 	}
-	
+
 	public int getJobID(){
 		return this.jobID;
 	}
-	
-	
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Motif motif = (Motif) o;
+
+        if (!enrichedMotifID.equals(motif.enrichedMotifID)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return enrichedMotifID.hashCode();
+    }
+
+    public int compareTo(final Motif other) {
+        return this.getEnrichedMotifID().compareTo(other.getEnrichedMotifID());
+    }
 }

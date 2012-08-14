@@ -227,13 +227,13 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private void refreshBased(){
 		String based = (String) this.jcbBased.getSelectedItem();
 		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-		if (! species.getGeneDatabase().isEmpty() && ! species.getRegionsDatabase().isEmpty()){
+		if (! species.getGeneDatabases().isEmpty() && ! species.getRegionDatabases().isEmpty()){
 			this.jcbBased.setGeneAndRegion();
 		}else{
-			if (! species.getGeneDatabase().isEmpty()){
+			if (! species.getGeneDatabases().isEmpty()){
 				this.jcbBased.setOnlyGene();
 			}
-			if (! species.getRegionsDatabase().isEmpty()){
+			if (! species.getRegionDatabases().isEmpty()){
 				this.jcbBased.setOnlyRegion();
 			}
 		}
@@ -246,10 +246,10 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 		Database database = (Database) this.jcbDatabase.getSelectedItem();
 		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
 		if (this.jcbBased.isGeneBased()){
-			this.jcbDatabase.updateDatabases(species.getGeneDatabase());
+			this.jcbDatabase.updateDatabases(species.getGeneDatabases());
 		}else{
 			if(this.jcbBased.isRegionBased()){
-				this.jcbDatabase.updateDatabases(species.getRegionsDatabase());
+				this.jcbDatabase.updateDatabases(species.getRegionDatabases());
 			}
 		}
 		if (this.jcbDatabase.canBeSelected(database)){
@@ -291,7 +291,7 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 			this.rbtnConversion.setEnabled(true);
 			this.rbtnDelineation.setEnabled(true);
 			SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-			if (species.getRegionsDelineation().isEmpty()){
+			if (species.getRegionDelineations().isEmpty()){
 				this.rbtnDelineation.setEnabled(false);
 				this.rbtnConversion.setSelected(true);
 				delineation = false;
@@ -328,10 +328,10 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 		Delineation delineation = (Delineation) this.jcbDelineation.getSelectedItem();
 		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
 		this.jcbDelineation.removeAllItems();
-		for(Delineation key : species.getRegionsDelineation()){
+		for(Delineation key : species.getRegionDelineations()){
 			this.jcbDelineation.addItem(key);
 		}
-		if (species.getRegionsDelineation().contains(delineation)){
+		if (species.getRegionDelineations().contains(delineation)){
 			this.jcbDelineation.setSelectedItem(delineation);
 		}
 		

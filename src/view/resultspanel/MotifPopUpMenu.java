@@ -3,7 +3,7 @@ package view.resultspanel;
 
 import java.awt.event.*;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 import view.actions.BedExportAction;
@@ -15,63 +15,57 @@ import view.resultspanel.actions.CreateNewNetworkAction;
 import view.resultspanel.actions.DrawNodesAndEdgesAction;
 
 
-public class MotifPopUpMenu extends MouseAdapter{
-	
-	
+public class MotifPopUpMenu extends MouseAdapter {
 	private PopupMenu menu;
 	
 	
-	public MotifPopUpMenu(JTable table, SelectedMotif selectedTFRegulons, JTextComponent tc, boolean isRegionBased){
-		if (table == null || selectedTFRegulons == null){
+	public MotifPopUpMenu(SelectedMotif selectedMotif, JTextComponent selectedTF, boolean isRegionBased){
+		if (selectedMotif == null || selectedTF == null) {
 			throw new IllegalArgumentException();
 		}
+
 		menu = new PopupMenu();
-			
-			
-		final CreateNewNetworkAction networkAction = new CreateNewNetworkAction(selectedTFRegulons);
-		//table.getSelectionModel().addListSelectionListener(networkAction);
-		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-		tc.getDocument().addDocumentListener(networkAction);
+
+		final CreateNewNetworkAction networkAction = new CreateNewNetworkAction(selectedMotif);
+		selectedTF.getDocument().addDocumentListener(networkAction);
 		menu.addAction(networkAction);
 			
-		final DrawNodesAndEdgesAction drawRegulonsAndEdgesAction = new DrawNodesAndEdgesAction(selectedTFRegulons);
-		//table.getSelectionModel().addListSelectionListener(drawRegulonsAndEdgesAction);
-		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-		tc.getDocument().addDocumentListener(drawRegulonsAndEdgesAction);
+		final DrawNodesAndEdgesAction drawRegulonsAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif);
+		selectedTF.getDocument().addDocumentListener(drawRegulonsAndEdgesAction);
 		menu.addAction(drawRegulonsAndEdgesAction);
 			
-		final DrawEdgesAction drawEdgesAction = new DrawEdgesAction(selectedTFRegulons);
-		//table.getSelectionModel().addListSelectionListener(drawEdgesAction);
-		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-		tc.getDocument().addDocumentListener(drawEdgesAction);
+		final DrawEdgesAction drawEdgesAction = new DrawEdgesAction(selectedMotif);
+		selectedTF.getDocument().addDocumentListener(drawEdgesAction);
 		menu.addAction(drawEdgesAction);
 			
-			
-		final DrawMergedEdgesNetworkAction drawMergedAction = new DrawMergedEdgesNetworkAction(selectedTFRegulons);
-		//table.getSelectionModel().addListSelectionListener(drawMergedAction);
-		//the transcriptionfactor that is selected in the given text component, must be added as a listener 
-		tc.getDocument().addDocumentListener(drawMergedAction);
+		final DrawMergedEdgesNetworkAction drawMergedAction = new DrawMergedEdgesNetworkAction(selectedMotif);
+		selectedTF.getDocument().addDocumentListener(drawMergedAction);
 		menu.addAction(drawMergedAction);
 		
-		if (isRegionBased){
-			final BedExportAction bedExportAction = new BedExportAction(selectedTFRegulons);
+		if (isRegionBased) {
+			final BedExportAction bedExportAction = new BedExportAction(selectedMotif);
 			menu.addAction(bedExportAction);
 			
-			final BedLinkToBrowserAction bedLinkToBrowserAction = new BedLinkToBrowserAction(selectedTFRegulons);
+			final BedLinkToBrowserAction bedLinkToBrowserAction = new BedLinkToBrowserAction(selectedMotif);
 			menu.addAction(bedLinkToBrowserAction);
 		}
 	}
 
 
-	/**
-	 * the mouseclicking
-	 */
-	public void mouseClicked(MouseEvent e){
-		if (e.getButton() == e.BUTTON3){
+    public void mouseClicked(MouseEvent e){
+		if (e.getButton() == MouseEvent.BUTTON3) {
 	        menu.show(e.getComponent(), e.getX(), e.getY());
-		}
-	}
+        }
+    }
 
-	
-	
+    private static class PopupMenu extends JPopupMenu {
+
+        public PopupMenu() {
+            super();
+        }
+
+        public void addAction(Action action) {
+            add(new JMenuItem(action));
+        }
+    }
 }

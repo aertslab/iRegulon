@@ -255,7 +255,7 @@ public class ResultsView extends IRegulonResourceBundle {
 		//tableModel.initColumnSizes(table);
 		//add mouse and selection listeners
 		//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedMotif, tc);
-		table.addMouseListener(new MotifPopUpMenu(table, selectedMotif,
+		table.addMouseListener(new MotifPopUpMenu(selectedMotif,
 				(JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent(), this.results.isRegionBased()));
 		ListSelectionModel listSelectionModel = table.getSelectionModel();
 		TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedMotif);

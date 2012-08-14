@@ -1,4 +1,4 @@
-package saveActions;
+package view.actions;
 
 import view.IRegulonResourceBundle;
 import view.resultspanel.SelectedMotif;

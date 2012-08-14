@@ -11,6 +11,7 @@ import domainmodel.GeneIdentifier;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
+import view.ResourceAction;
 
 
 public abstract class TranscriptionFactorDependentAction extends ResourceAction

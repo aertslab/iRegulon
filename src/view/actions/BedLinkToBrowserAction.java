@@ -1,8 +1,8 @@
-package saveActions;
+package view.actions;
 
 import java.awt.event.ActionEvent;
 
-import view.resultspanel.ResourceAction;
+import view.ResourceAction;
 import view.resultspanel.SelectedMotif;
 
 public class BedLinkToBrowserAction extends ResourceAction {

@@ -1,4 +1,4 @@
-package iRegulonAnalysis;
+package view.parametersform;
 
 import view.parametersform.IRegulonType;
 

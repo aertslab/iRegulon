@@ -6,8 +6,8 @@ import java.awt.event.*;
 import javax.swing.JTable;
 import javax.swing.text.JTextComponent;
 
-import saveActions.BedExportAction;
-import saveActions.BedLinkToBrowserAction;
+import view.actions.BedExportAction;
+import view.actions.BedLinkToBrowserAction;
 
 import view.resultspanel.actions.DrawEdgesAction;
 import view.resultspanel.actions.DrawMergedEdgesNetworkAction;

@@ -1,6 +1,6 @@
 package view.parametersform;
 
-import iRegulonAnalysis.SubmitAction;
+import view.parametersform.actions.SubmitAnalysisAction;
 import view.IRegulonResourceBundle;
 import view.parametersform.databaseselection.BasedComboBox;
 import view.parametersform.databaseselection.DBCombobox;
@@ -105,7 +105,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 	 * @return the input panel 
 	 * 
 	 */
-	public JPanel CreateClassicalInputView(){
+	public JPanel createClassicalInputView(){
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
 		JPanel panel = new JPanel(layout);
@@ -1015,7 +1015,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         jbtn.setVisible(true);
         
         //action of the button
-        jbtn.addActionListener(new SubmitAction(this) {
+        jbtn.addActionListener(new SubmitAnalysisAction(this) {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -1087,7 +1087,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         	jbtn.setVisible(true);
         	yPos += 1;
         	//action of the button
-        	jbtn.addActionListener(new SubmitAction(this) {
+        	jbtn.addActionListener(new SubmitAnalysisAction(this) {
 			
         		@Override
         		public void actionPerformed(ActionEvent arg0) {
@@ -1168,17 +1168,17 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         group.add(databaseForTargetome);
         group.add(databaseNetworkAnnotations);
 
-        this.detailpanel = CreateClassicalInputView();
+        this.detailpanel = createClassicalInputView();
         //Register a listener for the radio buttons.
-        predictedRegulators.addActionListener(new SubmitAction(this) {
+        predictedRegulators.addActionListener(new SubmitAnalysisAction(this) {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				iRegulonType = IRegulonType.PREDICTED_REGULATORS;
-				detailpanel = CreateClassicalInputView();
+				detailpanel = createClassicalInputView();
 			}
 		});
-        databaseForRegulators.addActionListener(new SubmitAction(this) {
+        databaseForRegulators.addActionListener(new SubmitAnalysisAction(this) {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -1186,7 +1186,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 				detailpanel = new JPanel();
 			}
 		});
-        databaseForTargetome.addActionListener(new SubmitAction(this) {
+        databaseForTargetome.addActionListener(new SubmitAnalysisAction(this) {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -1194,7 +1194,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 				detailpanel = new JPanel();
 			}
 		});
-        databaseNetworkAnnotations.addActionListener(new SubmitAction(this) {
+        databaseNetworkAnnotations.addActionListener(new SubmitAnalysisAction(this) {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -1231,8 +1231,8 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		c.gridwidth = 3;
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
-		JComponent classical = CreateClassicalInputView();
-		tabbedPane.addTab("Classical", null, CreateClassicalInputView(), 
+		JComponent classical = createClassicalInputView();
+		tabbedPane.addTab("Classical", null, createClassicalInputView(),
 				"Do a classical " + this.getBundle().getString("plugin_name") + " analysis.");
 		
 

@@ -1,6 +1,6 @@
-package saveActions;
+package view.actions;
 
-import view.resultspanel.ResourceAction;
+import view.ResourceAction;
 import view.resultspanel.SelectedMotif;
 
 import java.awt.event.ActionEvent;

@@ -21,7 +21,7 @@ public class InputViewSidePanel extends IRegulonResourceBundle {
 	/*
 	 * Draws a window on the screen, that will be the input of the plugin
 	 */
-	public void DrawWindow(){
+	public void addSidePanel(){
 		CytoscapeDesktop desktop = Cytoscape.getDesktop();
 		CytoPanel cytoPanel = desktop.getCytoPanel (SwingConstants.WEST);
 		//cytoPanel.setState(CytoPanelState.DOCK);

@@ -17,8 +17,8 @@ import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
 import exceptions.LoadException;
 
-import saveActions.SaveLoadDialogs;
-import saveActions.SaveResults;
+import view.actions.SaveLoadDialogs;
+import view.actions.SaveResults;
 
 public class SaveTest {
 

@@ -1,10 +1,10 @@
 package view.resultspanel.actions;
 
 
-import view.resultspanel.ResourceAction;
+import view.ResourceAction;
 import view.resultspanel.ResultsView;
-import saveActions.SaveLoadDialogs;
-import saveActions.SaveResults;
+import view.actions.SaveLoadDialogs;
+import view.actions.SaveResults;
 
 import java.awt.event.ActionEvent;
 

@@ -6,8 +6,8 @@ import cytoscape.logger.LogLevel;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
 import view.parametersform.IRegulonVisualStyle;
-import view.parametersform.actions.StartClasicalFrameAction;
-import view.parametersform.actions.StartSidePanelAction;
+import view.parametersform.actions.OpenParametersFormAction;
+import view.parametersform.actions.AddParametersFormToSidePanelAction;
 import view.resultspanel.ResultsView;
 
 import java.awt.event.ActionEvent;
@@ -15,8 +15,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import saveActions.SaveLoadDialogs;
-import saveActions.SaveResults;
+import view.actions.SaveLoadDialogs;
+import view.actions.SaveResults;
 
 import java.util.*;
 
@@ -81,7 +81,7 @@ public class IRegulonPlugin extends CytoscapePlugin {
         JMenuItem item;
         item = new JMenuItem("Classical");
         item.setToolTipText("Do a classical  analysis.");
-        item.addActionListener(new StartClasicalFrameAction());
+        item.addActionListener(new OpenParametersFormAction());
         submenu.add(item);
 
         item = new JMenuItem("Other iRegulon options");
@@ -103,7 +103,7 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         item = new JMenuItem("Get the panel");
         item.setToolTipText("Get the control panel.");
-        item.addActionListener(new StartSidePanelAction());
+        item.addActionListener(new AddParametersFormToSidePanelAction());
         submenu.add(item);
         submenu.addSeparator();
 

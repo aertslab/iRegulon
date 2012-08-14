@@ -3,10 +3,10 @@ package view.resultspanel.actions;
 import cytoscape.Cytoscape;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
-import view.resultspanel.ResourceAction;
+import view.ResourceAction;
 import view.resultspanel.ResultsView;
-import saveActions.SaveLoadDialogs;
-import saveActions.SaveResults;
+import view.actions.SaveLoadDialogs;
+import view.actions.SaveResults;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

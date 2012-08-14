@@ -1,4 +1,4 @@
-package saveActions;
+package view.actions;
 
 import java.io.BufferedWriter;
 import java.io.File;

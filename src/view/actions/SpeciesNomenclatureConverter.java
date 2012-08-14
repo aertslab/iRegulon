@@ -1,4 +1,4 @@
-package saveActions;
+package view.actions;
 
 
 import com.thoughtworks.xstream.converters.Converter;

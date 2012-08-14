@@ -1,4 +1,4 @@
-package servercommunication;
+package unittests;
 
 
 import java.util.*;
@@ -9,6 +9,7 @@ import domainmodel.Input;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
+import servercommunication.ComputationalService;
 
 public class ComputationalServiceStub implements ComputationalService {
 

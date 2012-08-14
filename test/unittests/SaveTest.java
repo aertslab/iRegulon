@@ -15,7 +15,7 @@ import domainmodel.Motif;
 import domainmodel.Results;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
-import exceptions.LoadException;
+import view.actions.LoadException;
 
 import view.actions.SaveLoadDialogs;
 import view.actions.SaveResults;

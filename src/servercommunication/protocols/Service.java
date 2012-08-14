@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import domainmodel.Input;
 import domainmodel.Motif;
-import exceptions.SentRequestException;
+import servercommunication.SentRequestException;
 
 public interface Service {
 

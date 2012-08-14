@@ -8,7 +8,6 @@ import java.util.Iterator;
 import com.thoughtworks.xstream.XStream;
 
 import domainmodel.*;
-import exceptions.LoadException;
 
 public class SaveResults {
     public static final String NATIVE_FILE_EXTENSION = ".irf";

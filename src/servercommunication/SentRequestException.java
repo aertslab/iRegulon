@@ -1,4 +1,4 @@
-package exceptions;
+package servercommunication;
 
 public class SentRequestException extends Exception {
 

@@ -1,4 +1,4 @@
-package exceptions;
+package view.actions;
 
 public class LoadException extends Exception{
 	

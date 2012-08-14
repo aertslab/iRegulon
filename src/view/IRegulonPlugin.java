@@ -78,6 +78,7 @@ public class IRegulonPlugin extends CytoscapePlugin {
         submenu.setToolTipText("Plugin for prediction of motifs, there transcription factors and there target genes.");
 
         //iRegulon panel
+        // TODO:
         JMenuItem item;
         item = new JMenuItem("Classical");
         item.setToolTipText("Do a classical  analysis.");
@@ -100,13 +101,14 @@ public class IRegulonPlugin extends CytoscapePlugin {
         submenu.add(item);
 
         submenu.addSeparator();
-
+        // TODO:
         item = new JMenuItem("Get the panel");
         item.setToolTipText("Get the control panel.");
         item.addActionListener(new AddParametersFormToSidePanelAction());
         submenu.add(item);
         submenu.addSeparator();
 
+        //TODO: Create resource action ...
         item = new JMenuItem("Load");
         item.setToolTipText("Load some previous results.");
         item.addActionListener(new ActionListener() {

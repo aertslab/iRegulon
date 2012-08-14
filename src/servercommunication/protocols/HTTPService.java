@@ -1,5 +1,6 @@
 package servercommunication.protocols;
 
+import servercommunication.SentRequestException;
 import view.IRegulonResourceBundle;
 
 import java.io.BufferedReader;
@@ -18,7 +19,6 @@ import domainmodel.Input;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
-import exceptions.SentRequestException;
 
 public class HTTPService extends IRegulonResourceBundle implements Service{
 

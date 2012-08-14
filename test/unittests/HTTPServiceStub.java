@@ -1,4 +1,4 @@
-package servercommunication.protocols;
+package unittests;
 
 
 import java.util.ArrayList;
@@ -11,8 +11,10 @@ import domainmodel.Input;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
+import servercommunication.protocols.Service;
+import servercommunication.protocols.State;
 
-public class HTTPServiceStub implements Service{
+public class HTTPServiceStub implements Service {
 
 	private int jobsBefore;
 	private int attemts = 10;

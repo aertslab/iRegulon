@@ -10,7 +10,6 @@ import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import domainmodel.Input;
 import domainmodel.Motif;
-import exceptions.SentRequestException;
 
 public class ClassicalTask extends IRegulonResourceBundle implements Task {
 	private cytoscape.task.TaskMonitor taskMonitor;

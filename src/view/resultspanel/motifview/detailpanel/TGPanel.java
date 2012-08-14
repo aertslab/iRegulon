@@ -44,8 +44,7 @@ public class TGPanel extends JPanel implements MotifListener{
 	private HighLightColorRenderer hlcrtg;
 	private UpDateHighLightRenderer updateHLCR;
 	private TFandMotifSelected tfMotif;
-	private static Logos logos = new Logos();
-	
+
 	private int ipadx = 150;
 	private int ipady = 50;
 	private double imageHeight = 50.0;
@@ -279,9 +278,9 @@ public class TGPanel extends JPanel implements MotifListener{
 			
 			
 			
-			this.jlbLogo.setIcon(this.logos.createSizedImageIcon(motif.getEnrichedMotifID()));
-			this.jlbLogo.setFullIcon(this.logos.createImageIcon(motif.getEnrichedMotifID()));
-			//String path = "/logos/" + motif.getEnrichedMotifID() + ".png";
+			this.jlbLogo.setIcon(LogoUtilities.createResizedImageIcon(motif.getEnrichedMotifID()));
+			this.jlbLogo.setFullIcon(LogoUtilities.createImageIcon(motif.getEnrichedMotifID()));
+			//String path = "/logoUtilities/" + motif.getEnrichedMotifID() + ".png";
 			//String tooltiptext = "<html>" + "<img src=" + path + "/>" + "</html>";
 			//this.jlbLogo.setToolTipText(tooltiptext);
 			

@@ -13,10 +13,8 @@ import javax.swing.JTable;
 
 
 public class DetailFrameTFandMotif {
-	
 	private TFandMotifSelected tfMotif;
-	private static Logos logo = new Logos();
-	
+
 	public DetailFrameTFandMotif(TFandMotifSelected tfMotif){
 		this.tfMotif = tfMotif;
 		String title = tfMotif.getMotif().getEnrichedMotifID() + " " + tfMotif.getTranscriptionFactor().getName();
@@ -355,7 +353,7 @@ public class DetailFrameTFandMotif {
 		panel.add(emptyLabel, c);
 		ypos += 1;
 		
-		JLabel logoLabel = new JLabel(this.logo.createImageIcon(this.tfMotif.getMotif().getEnrichedMotifID()));
+		JLabel logoLabel = new JLabel(LogoUtilities.createImageIcon(this.tfMotif.getMotif().getEnrichedMotifID()));
 		c.gridx = 2;
 		c.gridy = yBgnLogo;
 		c.gridwidth = 2;
@@ -519,7 +517,7 @@ public class DetailFrameTFandMotif {
 			//c.gridwidth = 1;
 			//panel.add(empty2Label, c);
 			//ypos += 1;
-			JLabel logoTFLabel = new JLabel(this.logo.createImageIcon(this.tfMotif.getTranscriptionFactor().getSimilarMotifName()));
+			JLabel logoTFLabel = new JLabel(LogoUtilities.createImageIcon(this.tfMotif.getTranscriptionFactor().getSimilarMotifName()));
 			c.gridx = 2;
 			c.gridy = yBgnLogo;
 			c.gridwidth = 2;

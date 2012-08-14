@@ -4,13 +4,13 @@ package servercommunication.protocols;
 import java.util.Collection;
 
 
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 import servercommunication.SentRequestException;
 
 public interface Service {
 
-	public int sentJob(Input input) throws SentRequestException;
+	public int sentJob(InputParameters input) throws SentRequestException;
 	
 	public State getState(int jobID);
 	

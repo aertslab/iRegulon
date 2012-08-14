@@ -25,7 +25,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumn;
 
 
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
@@ -50,7 +50,7 @@ public class TGPanel extends JPanel implements MotifListener{
 	private double imageHeight = 50.0;
 	private double imagewidth = 100.0;
 	
-	public TGPanel(TFComboBox tfcombobox, Input input){
+	public TGPanel(TFComboBox tfcombobox, InputParameters input){
 		super();
 		this.tfMotif = new TFandMotifSelected(input);
 		this.updateHLCR = new UpDateHighLightRenderer();

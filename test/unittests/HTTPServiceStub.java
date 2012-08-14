@@ -7,7 +7,7 @@ import java.util.List;
 
 
 import domainmodel.GeneIdentifier;
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
@@ -25,7 +25,7 @@ public class HTTPServiceStub implements Service {
 	}
 	
 	@Override
-	public int sentJob(Input input) {
+	public int sentJob(InputParameters input) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

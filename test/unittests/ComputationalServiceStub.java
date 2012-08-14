@@ -5,7 +5,7 @@ import java.util.*;
 
 
 import domainmodel.GeneIdentifier;
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
@@ -14,7 +14,7 @@ import servercommunication.ComputationalService;
 public class ComputationalServiceStub implements ComputationalService {
 
 	@Override
-	public List<Motif> findPredictedRegulators(Input input) {
+	public List<Motif> findPredictedRegulators(InputParameters input) {
 		
 		
 		//String[] proteinen = {"603627", "603626", "555135", "603627", "603627"};

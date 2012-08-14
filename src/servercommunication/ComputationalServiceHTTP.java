@@ -15,13 +15,13 @@ import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 
 import domainmodel.GeneIdentifier;
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 
 public class ComputationalServiceHTTP implements ComputationalService{
 
 	@Override
-	public List<Motif> findPredictedRegulators(Input input) {
+	public List<Motif> findPredictedRegulators(InputParameters input) {
 		// TODO Auto-generated method stub
 		Service service = new HTTPService();
 		ClassicalTask task = new ClassicalTask(service, input);

@@ -8,9 +8,9 @@ import java.util.Collection;
 public class Results {
 
 	private Collection<Motif> motifs;
-	private Input inputParameters;
+	private InputParameters inputParameters;
 	
-	public Results(Collection<Motif> motifs, Input inputParameters){
+	public Results(Collection<Motif> motifs, InputParameters inputParameters){
 		this.motifs = motifs;
 		this.inputParameters = inputParameters;
 	}
@@ -167,7 +167,7 @@ public class Results {
 		return this.inputParameters.getDownstream();
 	}
 	
-	public Input getInput(){
+	public InputParameters getInput(){
 		return this.inputParameters;
 	}
 }

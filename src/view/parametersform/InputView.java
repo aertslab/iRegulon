@@ -31,7 +31,7 @@ import cytoscape.Cytoscape;
 
 import domainmodel.Database;
 import domainmodel.Delineation;
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.SpeciesNomenclature;
 
 public class InputView extends IRegulonResourceBundle implements Parameters {
@@ -41,7 +41,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 	private JComboBox jcbSpecieAndNomenclature;
 	private JTextField jtfROC;
 	private JTextField jtfVisualisation;
-	private Input input = null;
+	private InputParameters input = null;
 	private IRegulonType iRegulonType = IRegulonType.PREDICTED_REGULATORS;
 	private JTextField jtfName;
 	private JTextField jtfMinOrthologous;
@@ -703,7 +703,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
                 //frame.dispose();
                 if (NodesActions.nodesSelected()){
                     generateInput();
-                    Input input = getInput();
+                    InputParameters input = getInput();
                     if (input.parametersAreValid()){
                         if (frame != null){
                             frame.dispose();
@@ -938,7 +938,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 	 * 
 	 * @return the total input in a input class
 	 */
-	public Input getInput(){
+	public InputParameters getInput(){
 		return this.input;
 	}
 	
@@ -1002,7 +1002,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 	 * 			
 	 */
 	public void generateInput(){
-		this.input = new Input(NodesActions.getGenes(this.getAttributeName(), 
+		this.input = new InputParameters(NodesActions.getGenes(this.getAttributeName(),
 				this.getSpeciesNomenclature()), 
 				this.getNESThreshold(), 
 				this.getAUCThreshold(), 

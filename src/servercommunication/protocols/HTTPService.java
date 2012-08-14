@@ -15,7 +15,7 @@ import java.util.List;
 
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
@@ -35,7 +35,7 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 	 * @return the id of the job
 	 * @throws SentRequestException 
 	 */
-	public int sentJob(Input input) throws SentRequestException{
+	public int sentJob(InputParameters input) throws SentRequestException{
 		String name = input.getName();
 		Collection<GeneIdentifier> geneIDs = input.getGenes();
 		float AUCThreshold = input.getROCthresholdAUC();

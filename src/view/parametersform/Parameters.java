@@ -1,6 +1,6 @@
 package view.parametersform;
 
-import domainmodel.Input;
+import domainmodel.InputParameters;
 
 public interface Parameters {
 	
@@ -10,7 +10,7 @@ public interface Parameters {
 	
 	public float getNESThreshold();
 	
-	public Input getInput();
+	public InputParameters getInput();
 	
 	public void generateInput();
 	

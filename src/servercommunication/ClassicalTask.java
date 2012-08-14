@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 
 public class ClassicalTask extends IRegulonResourceBundle implements Task {
@@ -20,10 +20,10 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 	private Service service;
 	private String errorMessage = "No error has occured";
 
-	private Input input;
+	private InputParameters input;
 
 	
-	public ClassicalTask(Service service, Input input) {
+	public ClassicalTask(Service service, InputParameters input) {
 		this.service = service;
 		this.input = input;
 	}

@@ -5,7 +5,7 @@ import view.parametersform.IRegulonType;
 import java.util.Collection;
 
 
-public class Input {
+public class InputParameters {
 
 	
 	//all input variables
@@ -31,12 +31,12 @@ public class Input {
 	
 	
 	
-	public Input(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC, 
-			int visualisationThreshold, SpeciesNomenclature speciesNomenclature, 
-			IRegulonType iRegulonType, String runName, float minOrthologous,
-			float maxMotifSimilarityFDR, boolean isRegionBased, Database database, 
-			float overlap, Delineation delineation, int upstream, int downstream,
-			String attributeName){
+	public InputParameters(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC,
+                           int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
+                           IRegulonType iRegulonType, String runName, float minOrthologous,
+                           float maxMotifSimilarityFDR, boolean isRegionBased, Database database,
+                           float overlap, Delineation delineation, int upstream, int downstream,
+                           String attributeName){
 		this.genes = genes;
 		this.eScore = escore;
 		this.thresholdForVisualisation = visualisationThreshold;

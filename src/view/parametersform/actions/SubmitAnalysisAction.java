@@ -17,7 +17,7 @@ import cytoscape.Cytoscape;
 
 import java.util.*;
 
-import domainmodel.Input;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.Results;
 
@@ -35,7 +35,7 @@ public class SubmitAnalysisAction extends ResourceAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
         this.parameters.generateInput();
-        Input input = this.parameters.getInput();
+        InputParameters input = this.parameters.getInput();
         if (input.getIRegulonType().equals(IRegulonType.PREDICTED_REGULATORS)) {
             final ComputationalService analyse = new ComputationalServiceHTTP();
             final List<Motif> motifList = analyse.findPredictedRegulators(input);

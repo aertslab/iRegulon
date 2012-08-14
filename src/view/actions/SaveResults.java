@@ -44,7 +44,7 @@ public class SaveResults {
 		this.xstream.alias("candidateTargetGene", CandidateTargetGene.class);
 		this.xstream.alias("geneIdentifier", GeneIdentifier.class);
 		this.xstream.alias("transcriptionFactor", TranscriptionFactor.class);
-		this.xstream.alias("inputParameters", Input.class);
+		this.xstream.alias("inputParameters", InputParameters.class);
 		this.xstream.alias("iRegulonType", IRegulonType.class);
 				
 		this.xstream.setMode(XStream.NO_REFERENCES);
@@ -78,9 +78,9 @@ public class SaveResults {
 		this.xstream.alias("candidateTargetGene", CandidateTargetGene.class);
 		this.xstream.alias("geneIdentifier", GeneIdentifier.class);
 		this.xstream.alias("transcriptionFactor", TranscriptionFactor.class);
-		this.xstream.alias("inputParameters", Input.class);
+		this.xstream.alias("inputParameters", InputParameters.class);
 		this.xstream.alias("iRegulonType", IRegulonType.class);
-		this.xstream.aliasField("cisCisTargetType", Input.class, "iRegulonType");
+		this.xstream.aliasField("cisCisTargetType", InputParameters.class, "iRegulonType");
 		//this.xstream.alias("cisCisTargetType", IRegulonType.class);
 		//this.xstream.alias("CisTargetType", IRegulonType.class);
 

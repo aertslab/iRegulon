@@ -1,9 +1,9 @@
 package iRegulonInput;
 
 import iRegulonAnalysis.SubmitAction;
-import iRegulonInput.databaseSelection.BasedComboBox;
-import iRegulonInput.databaseSelection.DBCombobox;
-import iRegulonInput.databaseSelection.DatabaseListener;
+import iRegulonInput.databaseselection.BasedComboBox;
+import iRegulonInput.databaseselection.DBCombobox;
+import iRegulonInput.databaseselection.DatabaseListener;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;

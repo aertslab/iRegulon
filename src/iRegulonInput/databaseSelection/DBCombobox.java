@@ -1,4 +1,4 @@
-package iRegulonInput.databaseSelection;
+package iRegulonInput.databaseselection;
 
 import java.util.ArrayList;
 import java.util.List;

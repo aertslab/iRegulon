@@ -1,4 +1,4 @@
-package iRegulonInput.databaseSelection;
+package iRegulonInput.databaseselection;
 
 import iRegulonInput.IRegulonResourceBundle;
 import iRegulonInput.NodesActions;

@@ -10,8 +10,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -34,20 +34,19 @@ import domainmodel.Delineation;
 import domainmodel.Input;
 import domainmodel.SpeciesNomenclature;
 
-public class InputView extends IRegulonResourceBundle implements Parameters{
+public class InputView extends IRegulonResourceBundle implements Parameters {
+	private static final int FONT_SIZE_IN_POINTS = 12;
 
 	private JTextField jtfEscore;
 	private JComboBox jcbSpecieAndNomenclature;
 	private JTextField jtfROC;
 	private JTextField jtfVisualisation;
 	private Input input = null;
-	private int fontPoints = 12;
 	private IRegulonType iRegulonType = IRegulonType.PREDICTED_REGULATORS;
 	private JTextField jtfName;
 	private JTextField jtfMinOrthologous;
 	private JTextField jtfMaxMotifSimilarityFDR;
 	private JComboBox jcbGeneName;
-	//needed for control panel
 	private JPanel detailpanel;
 	private BasedComboBox jcbBased;
 	private DBCombobox jcbdatabase;
@@ -58,9 +57,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 	private JRadioButton rbtnDelineation;
 	private JRadioButton rbtnConversion;
 	private DatabaseListener dbListener;
-	
-	
-	
+
 	private String standardJobName;
 	private float standardEscore;
 	private float standardROC;
@@ -96,30 +93,21 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		this.frame = frame;
 		this.dbListener = null;
 	}
+
 	
-	
-	
-	/**
-	 * @post the jframe will be disposed if pressed on submit
-	 * @param jframe
-	 * @return the input panel 
-	 * 
-	 */
 	public JPanel createClassicalInputView(){
-		GridBagLayout layout = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		JPanel panel = new JPanel(layout);
-		int yPos = 0;
-		JLabel jtl;
-		Font f = new Font("Serif", 0, 50);
-		//not in a frame= in control pane: name is already drawn
+		final JPanel panel = new JPanel(new GridBagLayout());
+        final GridBagConstraints c = new GridBagConstraints();
+        final Font font = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
+        int yPos = 0;
+
+        JLabel jtl;
 		if (this.frame != null){
 			jtl = new JLabel(getBundle().getString("plugin_visual_name"));
-			jtl.setFont(f);
+			jtl.setFont(new Font("Serif", 0, 50));
         
-			c.gridx = 0;
-			c.gridy = yPos;
-			c.gridwidth = 3;
+			c.gridx = 0; c.gridy = yPos;
+			c.gridwidth = 4;
 			c.fill=GridBagConstraints.HORIZONTAL;
 
 			jtl.setVisible(true);
@@ -127,21 +115,16 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 			yPos += 2;
 		}
         
-        jtl = new JLabel("Classical ");
-        f = new Font("Serif", 0, 30); 
-        jtl.setFont(f);
+        jtl = new JLabel("Prediction of transcription factors");
+        jtl.setFont(new Font("Serif", 0, 30));
         
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
+        c.gridx = 0; c.gridy = yPos;
+		c.gridwidth = 4;
 		c.fill=GridBagConstraints.HORIZONTAL;
-
         jtl.setVisible(true);
         panel.add(jtl, c);
         yPos += 1;
-        
-        f = new Font("Serif", 0, fontPoints);
-        
+
         //Name of the analysis
         /*
          * nnn    nn				eeee
@@ -150,9 +133,9 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
          * nn   n nn  aaaaa  m m m 	e
          * nn    nnn a     a m m m 	eeee
          */
-        jtl = new JLabel("Choose a name:");
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> Choose a name for your analysis. </html>");
+        jtl = new JLabel("Name for analysis:");
+        jtl.setFont(font);
+        jtl.setToolTipText("Choose a name for your analysis.");
         c.gridx = 0;
 		c.gridy = yPos;
 		c.gridwidth = 2;
@@ -161,47 +144,21 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panel.add(jtl, c);
         
         this.jtfName = new JTextField(this.standardJobName);
-        this.jtfName.setFont(f);
+        this.jtfName.setFont(font);
         this.jtfName.setVisible(true);
-        this.jtfName.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				if (e.getButton() == e.BUTTON3){
-					if (Cytoscape.getCurrentNetwork() != null
-							&& Cytoscape.getCurrentNetwork().getTitle() != null
-							&& !Cytoscape.getCurrentNetwork().getTitle().equals("")
-							&& !Cytoscape.getCurrentNetwork().getTitle().equals("0")){
-						jtfName.setText(Cytoscape.getCurrentNetwork().getTitle());
-					}
-				}
-			}
-		});
+        this.jtfName.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == e.BUTTON3) {
+                    if (Cytoscape.getCurrentNetwork() != null
+                            && Cytoscape.getCurrentNetwork().getTitle() != null
+                            && !Cytoscape.getCurrentNetwork().getTitle().equals("")
+                            && !Cytoscape.getCurrentNetwork().getTitle().equals("0")) {
+                        jtfName.setText(Cytoscape.getCurrentNetwork().getTitle());
+                    }
+                }
+            }
+        });
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 3;
@@ -218,9 +175,9 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
          * 		SS
          * SSSSSSS
          */
-        jtl = new JLabel("Choose the species and the nomenclature");
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> Choose the species and the nomenclature of the genes </html>");
+        jtl = new JLabel("Species and gene nomenclature:");
+        jtl.setFont(font);
+        jtl.setToolTipText("Choose the species and the nomenclature of the genes.");
         
         c.gridx = 0;
 		c.gridy = yPos;
@@ -230,7 +187,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         
         this.jcbSpecieAndNomenclature = new JComboBox();
         this.jcbSpecieAndNomenclature.setModel(new javax.swing.DefaultComboBoxModel(SpeciesNomenclature.getSelectableNomenclatures().toArray()));
-        this.jcbSpecieAndNomenclature.setFont(f);
+        this.jcbSpecieAndNomenclature.setFont(font);
         this.jcbSpecieAndNomenclature.setVisible(true);
         c.gridx = 2;
 		c.gridy = yPos;
@@ -255,8 +212,8 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		databaseBorder.setTitlePosition(TitledBorder.CENTER);
 		databasePanel.setBorder(databaseBorder);
 		int lineY = 0;
-		jtl = new JLabel("Choose the database system");
-        jtl.setToolTipText("<html> Choose the base of the database. Region or Gene Based </html>");
+		jtl = new JLabel("Region- or gene-based analysis?");
+        jtl.setToolTipText("Choose the type of analysis to perform.");
         cDatabase.gridx = 0;
         cDatabase.gridy = lineY;
         cDatabase.gridwidth = 1;
@@ -273,8 +230,8 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		databasePanel.add(this.jcbBased, cDatabase);
 		lineY += 1;
 		
-		jtl = new JLabel("Choose the database");
-        jtl.setToolTipText("<html> Choose the database. </html>");
+		jtl = new JLabel("Database:");
+        jtl.setToolTipText("Choose the database.");
         cDatabase.gridx = 0;
         cDatabase.gridy = lineY;
         cDatabase.gridwidth = 1;
@@ -299,50 +256,17 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		panel.add(databasePanel, c);
 		yPos+=1;
 		
-		/*
-		jtl = new JLabel("Choose the database system");
-        jtl.setToolTipText("<html> Choose the base of the database. Region or Gene Based </html>");
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(jtl, c);
-		
-		this.jcbBased = new BasedComboBox();
-		c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(this.jcbBased, c);
-		yPos += 1;
-		
-		jtl = new JLabel("Choose the database");
-        jtl.setToolTipText("<html> Choose the database. </html>");
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		panel.add(jtl, c);
-
-		
-		this.jcbdatabase = new DBCombobox();
-		c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(this.jcbdatabase, c);
-		yPos += 1;
-		*/
-		
-		
 		GridBagLayout layoutRegion = new GridBagLayout();
 		GridBagConstraints cRegion = new GridBagConstraints();
 		JPanel panelRegion = new JPanel(layoutRegion);
-		TitledBorder borderRegion = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Region based specific");
+		TitledBorder borderRegion = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Region-based specific parameters");
 		borderRegion.setTitleJustification(TitledBorder.LEFT);
 		borderRegion.setTitlePosition(TitledBorder.CENTER);
 		panelRegion.setBorder(borderRegion);
 		lineY = 0;
 		
-		JLabel overlapJtl = new JLabel("Choose the Overlap");
-		overlapJtl.setToolTipText("<html> Percentage of the gene that must fall into the intreval to motif/gene. Must between 0 and 1. </html>");
+		JLabel overlapJtl = new JLabel("Overlap fraction:");
+		overlapJtl.setToolTipText("<html>Percentage of the putative regulatory region associated with a gene<br/>that must overlap with the predefined regions. Must be between 0 and 1.</html>");
 		cRegion.gridx = 0;
 		cRegion.gridy = lineY;
 		cRegion.gridwidth = 2;
@@ -395,8 +319,8 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         cRegion.fill=GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.rbtnConversion, cRegion);
         
-        JLabel labelUp = new JLabel("Upstream");
-        labelUp.setToolTipText("<html> Choose the amount of bp upstream of the conversion. </html>");
+        JLabel labelUp = new JLabel("Upstream region:");
+        labelUp.setToolTipText("Choose the amount of bp upstream of the TSS of a gene to use in the mapping to predefined regions.");
         cRegion.gridx = 1;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
@@ -414,8 +338,8 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panelRegion.add(this.txtUpStream, cRegion);
 		lineY+=1;
         
-        JLabel labelDown = new JLabel("Downstream");
-        labelDown.setToolTipText("<html> Choose the amount of bp downstream of the conversion. </html>");
+        JLabel labelDown = new JLabel("Downstream region:");
+        labelDown.setToolTipText("Choose the amount of bp downstream of the TSS of a gene to use in the mapping to predefined regions.");
         cRegion.gridx = 1;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
@@ -440,82 +364,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		c.fill=GridBagConstraints.HORIZONTAL;
 		panel.add(panelRegion, c);
 		yPos+=1;
-		/*
-		JLabel overlapJtl = new JLabel("Choose the Overlap");
-		overlapJtl.setToolTipText("<html> Percentage of the gene that must fall into the intreval to motif/gene. Must between 0 and 1. </html>");
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		panel.add(overlapJtl, c);
 
-		this.txtOverlap = new JTextField();
-		this.txtOverlap.setText(this.getBundle().getString("standard_overlap"));
-		c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(this.txtOverlap, c);
-		yPos += 1;
-		
-		this.rbtnDelineation = new JRadioButton();
-		this.rbtnDelineation.setEnabled(true);
-		this.rbtnDelineation.setSelected(true);
-		
-		this.rbtnConversion = new JRadioButton();
-		this.rbtnConversion.setEnabled(true);
-		
-        ButtonGroup group = new ButtonGroup();
-        group.add(this.rbtnDelineation);
-        group.add(this.rbtnConversion);
-        
-        this.jcbDelation = new JComboBox();
-		
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 1;
-        panel.add(this.rbtnDelineation, c);
-        
-        c.gridx = 1;
-		c.gridy = yPos;
-		c.gridwidth = 4;
-		panel.add(this.jcbDelation, c);
-        yPos+=1;
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 1;
-        panel.add(this.rbtnConversion, c);
-        
-        JLabel labelUp = new JLabel("Upstream");
-        labelUp.setToolTipText("<html> Choose the amount of bp upstream of the conversion. </html>");
-        c.gridx = 1;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		panel.add(labelUp, c);
-        
-        this.txtUpStream = new JTextField();
-        this.txtUpStream.setText(this.getBundle().getString("standard_upstream"));
-        c.gridx = 3;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		panel.add(this.txtUpStream, c);
-		yPos+=1;
-        
-        JLabel labelDown = new JLabel("Downstream");
-        labelDown.setToolTipText("<html> Choose the amount of bp downstream of the conversion. </html>");
-        c.gridx = 1;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		panel.add(labelDown, c);
-        
-        this.txtDownStream = new JTextField();
-        this.txtDownStream.setText(this.getBundle().getString("standard_downstream"));
-        c.gridx = 3;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		panel.add(this.txtDownStream, c);
-        yPos+=1;
-        */
-		
 		GridBagLayout layoutMotif = new GridBagLayout();
 		GridBagConstraints cMotif = new GridBagConstraints();
 		JPanel panelMotif = new JPanel(layoutMotif);
@@ -535,20 +384,19 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
          * EEEEEEE
          */
         
-        jtl = new JLabel("Choose an Enrichment score threshold");
-        jtl.setFont(f);
+        jtl = new JLabel("Enrichment score threshold:");
+        jtl.setFont(font);
         cMotif.gridx = 0;
         cMotif.gridy = lineY;
         cMotif.gridwidth = 1;
         cMotif.weightx=0;
         cMotif.fill=GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
-        jtl.setToolTipText("<html> Choose the minimal score threshold to consider " +
-        		"a motif as being relevant. </html>");
+        jtl.setToolTipText("<html>Choose the minimal score threshold to consider a motif as being relevant.</html>");
         panelMotif.add(jtl, cMotif);
         
         this.jtfEscore = new JTextField("" + this.standardEscore);
-        this.jtfEscore.setFont(f);
+        this.jtfEscore.setFont(font);
         this.jtfEscore.setVisible(true);
         cMotif.gridx = 1;
         cMotif.gridy = lineY;
@@ -568,11 +416,9 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
          * RR  RR	OO	OO	 cc
          * RR   RR	OOOOOO	  ccc
          */
-        jtl = new JLabel("Choose the ROC threshold for AUC.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> The x-axis (region rank) cut-off at which <P> " +
-				"to calculate the Area Under the Curve. This <P>" +
+        jtl = new JLabel("ROC threshold for AUC calculation:");
+        jtl.setFont(font);
+        jtl.setToolTipText("<html>The x-axis (region rank) cut-off at which to calculate the Area Under the Curve. This <br/>" +
 				"measure is used to compare and rank all motifs. </html>");
         
         cMotif.gridx = 0;
@@ -584,7 +430,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panelMotif.add(jtl, cMotif);
         
         this.jtfROC = new JTextField("" + this.standardROC);
-        this.jtfROC.setFont(f);
+        this.jtfROC.setFont(font);
         this.jtfROC.setEditable(true);
         
         cMotif.gridx = 1;
@@ -605,12 +451,9 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
          *     v
          * 
          */
-        jtl = new JLabel("Choose the Threshold for visualisation.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>The x-axis cut-off for visualisation. " + "<P>" +
-        		"When set to 5000, the recovery curve on the top 5000 " + "<P>" +
-        		"regions is shown. </html>");
+        jtl = new JLabel("Rank threshold:");
+        jtl.setFont(font);
+		jtl.setToolTipText("<html>The x-axis cut-off for calculation of the ROC.</html>");
         
 		cMotif.gridx = 0;
 		cMotif.gridy = lineY;
@@ -621,7 +464,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panelMotif.add(jtl, cMotif);
         
         this.jtfVisualisation = new JTextField("" + this.standardVisualisation);
-        this.jtfVisualisation.setFont(f);
+        this.jtfVisualisation.setFont(font);
         this.jtfVisualisation.setEditable(true);
         
         cMotif.gridx = 1;
@@ -639,110 +482,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		c.fill=GridBagConstraints.HORIZONTAL;
 		panel.add(panelMotif, c);
 		yPos+=1;
-		
-     // Escore
-        /*
-         * EEEEEEE
-         * EE
-         * EE
-         * EEEEE
-         * EE
-         * EE
-         * EEEEEEE
-         *//*
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 5;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(linePanel, c);
-		yPos+=1;
-        
-        jtl = new JLabel("Choose an Enrichment score threshold");
-        jtl.setFont(f);
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        jtl.setToolTipText("<html> Choose the minimal score threshold to consider " +
-        		"a motif as being relevant. </html>");
-        panel.add(jtl, c);
-        
-        this.jtfEscore = new JTextField("" + this.standardEscore);
-        this.jtfEscore.setFont(f);
-        this.jtfEscore.setVisible(true);
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		this.jtfEscore.setVisible(true);
-        panel.add(this.jtfEscore, c);
-        yPos += 1;
-        */
-        // ROCthresholdAUC
-        /* RRRRRRR
-         * RR	RR
-         * RRRRRRR	OOOOOO	  ccc
-         * RRRR		OO	OO	 cc
-         * RR RR	OO	OO	cc
-         * RR  RR	OO	OO	 cc
-         * RR   RR	OOOOOO	  ccc
-         *//*
-        jtl = new JLabel("Choose the ROC threshold for AUC.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> The x-axis (region rank) cut-off at which <P> " +
-				"to calculate the Area Under the Curve. This <P>" +
-				"measure is used to compare and rank all motifs. </html>");
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jtfROC = new JTextField("" + this.standardROC);
-        this.jtfROC.setFont(f);
-        this.jtfROC.setEditable(true);
-        
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		this.jtfROC.setVisible(true);
-        panel.add(this.jtfROC, c);
-        yPos += 1;
-*/
-        // threshold for visualisation
-        /*
-         * v       v
-         *  v     v
-         *   v   v
-         *    v v
-         *     v
-         * 
-         */
-/*        jtl = new JLabel("Choose the Threshold for visualisation.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>ThyPose x-axis cut-off for visualisation. " + "<P>" +
-        		"When set to 5000, the recovery curve on the top 5000 " + "<P>" +
-        		"regions is shown. </html>");
-        
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jtfVisualisation = new JTextField("" + this.standardVisualisation);
-        this.jtfVisualisation.setFont(f);
-        this.jtfVisualisation.setEditable(true);
-        
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		this.jtfVisualisation.setVisible(true);
-        panel.add(this.jtfVisualisation, c);
-        yPos += 1;
-*/        
+
 		//Minimal Orthologous id
 		/* OOOOOOO
 		 * OO	OO
@@ -753,18 +493,17 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		GridBagLayout layoutMotif2TF = new GridBagLayout();
 		GridBagConstraints cMotif2TF = new GridBagConstraints();
 		JPanel panelMotif2TF = new JPanel(layoutMotif2TF);
-		TitledBorder borderMotif2TF = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Motif2TF prediction");
+		TitledBorder borderMotif2TF = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "TF prediction");
 		borderMotif2TF.setTitleJustification(TitledBorder.LEFT);
 		borderMotif2TF.setTitlePosition(TitledBorder.CENTER);
 		panelMotif2TF.setBorder(borderMotif2TF);
 		lineY = 0;
 		
-		jtl = new JLabel("Choose the minimal orthologous.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>Choose the minimal orthologous. " + "<P>" +
-        		"How closer to 0, how more orthologous will be shown." + "<P>" +
-        		"Maximum 1.</html>");
+		jtl = new JLabel("Minimum orthologous identity:");
+        jtl.setFont(font);
+		jtl.setToolTipText("<html>Choose the minimal orthologous identity.<br/>" +
+                "How closer to 0, how more orthologous the transcription factor will be to the gene for which an enriched motif was found.<br/>" +
+                "(Value must be between 0 and 1).</html>");
 		cMotif2TF.gridx = 0;
 		cMotif2TF.gridy = lineY;
 		cMotif2TF.gridwidth = 1;
@@ -774,7 +513,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panelMotif2TF.add(jtl, cMotif2TF);
         
         this.jtfMinOrthologous = new JTextField("" + this.standardminOrthologous);
-        this.jtfMinOrthologous.setFont(f);
+        this.jtfMinOrthologous.setFont(font);
         this.jtfMinOrthologous.setEditable(true);
         this.jtfMinOrthologous.setVisible(true);
         cMotif2TF.gridx = 1;
@@ -792,12 +531,11 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		 * 		SS
 		 * SSSSSSS
 		 */
-		jtl = new JLabel("Choose the maximal motif similarity FDR.");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>Choose the maximal motif similarity FDR." + "<P>" +
-        		"How closer to 0, the motif will be more similar. " + "<P>" +
-        		"Maximum 1. </html>");
+		jtl = new JLabel("Maximum motif similarity FDR.");
+        jtl.setFont(font);
+		jtl.setToolTipText("<html>Choose the maximum motif similarity FDR. <br/>" +
+                "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +
+                "(Value must be between 0 and 1).</html>");
 		cMotif2TF.gridx = 0;
 		cMotif2TF.gridy = lineY;
 		cMotif2TF.gridwidth = 1;
@@ -807,7 +545,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panelMotif2TF.add(jtl, cMotif2TF);
         
         this.jtfMaxMotifSimilarityFDR = new JTextField("" + this.standardMaxMotifSimilarityFDR);
-        this.jtfMaxMotifSimilarityFDR.setFont(f);
+        this.jtfMaxMotifSimilarityFDR.setFont(font);
         this.jtfMaxMotifSimilarityFDR.setEditable(true);
         this.jtfMaxMotifSimilarityFDR.setVisible(true);
         
@@ -828,7 +566,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         
 		/*
 		jtl = new JLabel("Choose the minimal orthologous.");
-        f = new Font("Serif", 0, fontPoints);
+        f = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
         jtl.setFont(f);
 		jtl.setToolTipText("<html>Choose the minimal orthologous. " + "<P>" +
         		"How closer to 0, how more orthologous will be shown." + "<P>" +
@@ -857,7 +595,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		 * SSSSSSS
 		 *//*
 		jtl = new JLabel("Choose the maximal motif similarity FDR.");
-        f = new Font("Serif", 0, fontPoints);
+        f = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
         jtl.setFont(f);
 		jtl.setToolTipText("<html>Choose the maximal motif similarity FDR." + "<P>" +
         		"How closer to 0, the motif will be more similar. " + "<P>" +
@@ -895,9 +633,9 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		panelNode.setBorder(borderNode);
 		lineY = 0;
 		
-		jtl = new JLabel("Choose the attribute that is the gene name");
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> Choose the attribute that represents the gene name. </html>");
+		jtl = new JLabel("Node attribute that corresponds to geneID:");
+        jtl.setFont(font);
+        jtl.setToolTipText("<html>Choose the node attribute that represents the gene name.</html>");
         
         cNode.gridx = 0;
         cNode.gridy = lineY;
@@ -908,7 +646,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panelNode.add(jtl, cNode);
         
         this.jcbGeneName = new AttributeComboBox();
-        this.jcbGeneName.setFont(f);
+        this.jcbGeneName.setFont(font);
         this.jcbGeneName.setVisible(true);
         cNode.gridx = 1;
         cNode.gridy = lineY;
@@ -919,11 +657,10 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         lineY += 1;
 		
 		 
-        jtl = new JLabel("Amount of valid genes (nodes).");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>These is the amount of nodes that have a name that can be used for the analysis." + "<P>" +
-        		"This doesn't mean that all nodes has valid names! </html>");
+        jtl = new JLabel("Number of valid genes (nodes):");
+        jtl.setFont(font);
+		jtl.setToolTipText("<html>The number of nodes that have an ID usable for the analysis." + "<P>" +
+        		"This doesn't mean that all nodes have valid names! </html>");
 		cNode.gridx = 0;
 		cNode.gridy = lineY;
 		cNode.gridwidth = 1;
@@ -933,7 +670,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panelNode.add(jtl, cNode);
         
         JTextField amountNodes = new JTextField("0");
-        amountNodes.setFont(f);
+        amountNodes.setFont(font);
         amountNodes.setEditable(false);
         amountNodes.setVisible(true);
         
@@ -953,51 +690,6 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		panel.add(panelNode, c);
 		yPos+=1;
 		
-		/*
-        jtl = new JLabel("Choose the attribute that is the gene name");
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> Choose the attribute that represents the gene name. </html>");
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jcbGeneName = new AttributeComboBox();
-        this.jcbGeneName.setFont(f);
-        this.jcbGeneName.setVisible(true);
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(this.jcbGeneName, c);
-		yPos += 1;
-		
-		 
-        jtl = new JLabel("Amount of valid genes (nodes).");
-        f = new Font("Serif", 0, fontPoints);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>These is the amount of nodes that have a name that can be used for the analysis." + "<P>" +
-        		"This doesn't mean that all nodes has valid names! </html>");
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        JTextField amountNodes = new JTextField("0");
-        amountNodes.setFont(f);
-        amountNodes.setEditable(false);
-        amountNodes.setVisible(true);
-        
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(amountNodes, c);
-		yPos += 1;
-		*/
-		
-		
 		//Button
 		/* BBBBBB
 		 * BB  BB
@@ -1005,39 +697,35 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
 		 * BB  BB
 		 * BBBBBB
 		 */
-        JButton jbtn = new JButton("Submit");
-        jbtn.setFont(f);
+        JButton jbtn = new JButton(new SubmitAnalysisAction(this) {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                //frame.dispose();
+                if (NodesActions.nodesSelected()){
+                    generateInput();
+                    Input input = getInput();
+                    if (input.parametersAreValid()){
+                        if (frame != null){
+                            frame.dispose();
+                        }
+                        super.actionPerformed(arg0);
+                    }else{
+                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), input.getErrorMessage());
+
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"No nodes are selected!");
+                }
+
+            }
+        });
+        jbtn.setFont(font);
         
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 2;
 		c.weightx = 0.5;
         jbtn.setVisible(true);
-        
-        //action of the button
-        jbtn.addActionListener(new SubmitAnalysisAction(this) {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				//frame.dispose();
-				if (NodesActions.nodesSelected()){
-					generateInput();
-					Input input = getInput();
-					if (input.parametersAreValid()){
-						if (frame != null){
-							frame.dispose();
-						}
-						super.actionPerformed(arg0);
-					}else{
-						JOptionPane.showMessageDialog(Cytoscape.getDesktop(), input.getErrorMessage());
-						
-					}
-				}else{
-					JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"No nodes are selected!");
-				}
-	
-			}
-		});
         panel.add(jbtn, c);
         
 
@@ -1079,7 +767,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         if (frame != null){
         	//Button Cancel
         	jbtn = new JButton("Cancel");
-        	jbtn.setFont(f);
+        	jbtn.setFont(font);
         
         	c.gridx = 4;
         	c.gridy = yPos;
@@ -1126,7 +814,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters{
         panel.add(jtl, c);
         yPos += 2;
         
-        f = new Font("Serif", 0, fontPoints);
+        f = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
         /*
         //Change the kind of iRegulon action
         jtl = new JLabel("Choose the type of the " + this.getBundle().getString("plugin_name") + " action: ");

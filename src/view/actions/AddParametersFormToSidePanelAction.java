@@ -1,4 +1,4 @@
-package view.parametersform.actions;
+package view.actions;
 
 import view.ResourceAction;
 import view.parametersform.InputViewSidePanel;

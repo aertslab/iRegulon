@@ -3,11 +3,10 @@ package view;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
-import view.actions.LoadResultsAction;
-import view.actions.QueryMetatargetomeAction;
+import view.actions.*;
 import view.parametersform.IRegulonVisualStyle;
-import view.parametersform.actions.OpenParametersFormAction;
-import view.parametersform.actions.AddParametersFormToSidePanelAction;
+import view.actions.OpenParametersFormAction;
+import view.actions.AddParametersFormToSidePanelAction;
 
 import java.awt.event.ActionEvent;
 

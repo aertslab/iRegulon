@@ -1,4 +1,4 @@
-package view.parametersform.actions;
+package view.actions;
 
 import view.ResourceAction;
 import view.parametersform.InputView;
@@ -18,8 +18,9 @@ public class OpenParametersFormAction extends ResourceAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final JFrame frame = new JFrame(getBundle().getString("plugin_name"));
-		
+        final JFrame frame = new JFrame(getBundle().getString("plugin_name"));
+		frame.setAlwaysOnTop(true);
+
 		final InputView input = new InputView(frame);
 		frame.add(input.createClassicalInputView());
 		

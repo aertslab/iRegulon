@@ -1,46 +1,41 @@
 package resultsview.motifview.detailpanel;
 
-import java.util.Collection;
-
 import javax.swing.table.AbstractTableModel;
 
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class TFTableModel extends AbstractTableModel{
 
+public class TFTableModel extends AbstractTableModel {
 	private final Motif motif;
-	private static final int NR_OF_COLUMNS = 3;
-	private final String[] m_colNames = {"Transcription Factor Name", "Orthologous Identifier", "Motif Similarity FDR"};
-	private final String[] toolTipsCol = {"The name of the predicted transcritpion factor",
-			"<html> The orthologous identifier. <br/> <br/> This is a value between 0 and 1. <br/> If this is 0, transcription factor is not orthologous. <br/> MAX gives the perfect orthologous </html>",
-			"<html> The motif similarity. <br/> <br/> How closer to 0 how more similar the motif of the transcription factor <br/> is with the selected motis.</html>"};
+
+	private final String[] columnNames = {
+            "Transcription Factor Name",
+            "Orthologous Identity",
+            "Motif Similarity (FDR)" };
+	private final String[] columnToolTips = {
+            "The gene ID of the predicted transcritpion factor",
+			"The orthologous identity as fraction",
+			"The motif similarity FDR"};
 	
-	public TFTableModel(Motif motif){
+	public TFTableModel(Motif motif) {
 		this.motif = motif;
 	}
 	
-	public String[] getColumnNames(){
-		return this.m_colNames;
-	}
-	
 	public int getColumnCount() {
-		return NR_OF_COLUMNS; 
+		return this.columnNames.length;
 	}
 
 	public int getRowCount() {
-		if (this.motif == null){
-			return 0;
-		}
-		return this.motif.getTranscriptionFactors().size();
+		return this.motif == null ? 0 : this.motif.getTranscriptionFactors().size();
 	}
 	
-	public TranscriptionFactor getTranscriptionFactorAtRow(int row) {
-		Collection<TranscriptionFactor> tfCollection = this.motif.getTranscriptionFactors();
-		TranscriptionFactor[] tfArray = new TranscriptionFactor[tfCollection.size()];
-		this.motif.getTranscriptionFactors().toArray(tfArray);
-		//System.out.println(tfArray[row]);
-		return tfArray[row];
+	public TranscriptionFactor getTranscriptionFactorAtRow(int rowIndex) {
+		return this.motif.getTranscriptionFactors().get(rowIndex);
+	}
+
+	public String getColumnName(int col) {
+		return columnNames[col];
 	}
 	
     public Class<?> getColumnClass(int columnIndex) {
@@ -51,31 +46,18 @@ public class TFTableModel extends AbstractTableModel{
     	}
         return Object.class;
     }
-	
-	
-	public Object getValueAt(int row, int column) {
-		  Collection<TranscriptionFactor> tfCollection = this.motif.getTranscriptionFactors();
-		  TranscriptionFactor[] tfArray = new TranscriptionFactor[tfCollection.size()];
-		  int index = 0;
-		  for (TranscriptionFactor tf : tfCollection){
-			  tfArray[index] = tf;
-			  ++index;
-		  }
-		  switch (column){
-		  	case 0 : return (String) tfArray[row].getGeneID().getGeneName();
-		  	case 1 : return (Float) tfArray[row].getOrthologousIdentifier();
-		  	case 2 : return (Float) tfArray[row].getMotifSimilarityFDR();
-		  }
-		  return null;
-	}
-	
-	
-	public String getColumnName(int col) {
-		return m_colNames[col];
-	}
-	
-	public String[] getTooltips(){
-		return this.toolTipsCol;
-	}
 
+    public Object getValueAt(int row, int column) {
+        final TranscriptionFactor tf = getTranscriptionFactorAtRow(row);
+        switch (column){
+            case 0 : return tf.getGeneID().getGeneName();
+            case 1 : return tf.getMinOrthologousIdentity();
+            case 2 : return tf.getMaxMotifSimilarityFDR();
+        }
+        throw new IndexOutOfBoundsException();
+    }
+	
+	public String[] getTooltips() {
+		return this.columnToolTips;
+	}
 }

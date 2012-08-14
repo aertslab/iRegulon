@@ -397,7 +397,7 @@ public class DetailFrameTFandMotif {
 		
 		
 		
-		if (! Float.isNaN(this.tfMotif.getTranscriptionFactor().getMotifSimilarityFDR())){
+		if (! Float.isNaN(this.tfMotif.getTranscriptionFactor().getMaxMotifSimilarityFDR())){
 			
 			if (this.tfMotif.getTranscriptionFactor().getSimilarMotifName() != null){
 				JLabel tfsimMotifLabel = new JLabel();
@@ -439,14 +439,14 @@ public class DetailFrameTFandMotif {
 			panel.add(tfSMotifFDRLabel, c);
 		
 			JLabel tfSimilarMotifFDRLabel = new JLabel();
-			tfSimilarMotifFDRLabel.setText("" + this.tfMotif.getTranscriptionFactor().getMotifSimilarityFDR());
+			tfSimilarMotifFDRLabel.setText("" + this.tfMotif.getTranscriptionFactor().getMaxMotifSimilarityFDR());
 			c.gridx = 1;
 			c.gridy = ypos;
 			c.gridwidth = 1;
 			panel.add(tfSimilarMotifFDRLabel, c);
 			ypos+=1;
 		}
-		if (! Float.isNaN(this.tfMotif.getTranscriptionFactor().getOrthologousIdentifier())){
+		if (! Float.isNaN(this.tfMotif.getTranscriptionFactor().getMinOrthologousIdentity())){
 			if (this.tfMotif.getTranscriptionFactor().getOrthologousGeneName() != null){
 				JLabel tfOrthGeneNameLabel = new JLabel();
 				tfOrthGeneNameLabel.setText("Orthologous gene name: ");
@@ -487,7 +487,7 @@ public class DetailFrameTFandMotif {
 			panel.add(tfOrthIdentifierLabel, c);
 		
 			JLabel tfOrthologousIdentifierLabel = new JLabel();
-			tfOrthologousIdentifierLabel.setText("" + this.tfMotif.getTranscriptionFactor().getOrthologousIdentifier());
+			tfOrthologousIdentifierLabel.setText("" + this.tfMotif.getTranscriptionFactor().getMinOrthologousIdentity());
 			c.gridx = 1;
 			c.gridy = ypos;
 			c.gridwidth = 1;
@@ -511,7 +511,7 @@ public class DetailFrameTFandMotif {
 		//panel.add(new JScrollPane(targetGeneTable), c);
 		panel.add(pane, c);
 		
-		if (! Float.isNaN(this.tfMotif.getTranscriptionFactor().getMotifSimilarityFDR()) && this.tfMotif.getTranscriptionFactor().getSimilarMotifName() != null){
+		if (! Float.isNaN(this.tfMotif.getTranscriptionFactor().getMaxMotifSimilarityFDR()) && this.tfMotif.getTranscriptionFactor().getSimilarMotifName() != null){
 			//JLabel empty2Label = new JLabel();
 			//empty2Label.setText("");
 			//c.gridx = 1;

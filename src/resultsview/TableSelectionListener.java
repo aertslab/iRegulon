@@ -40,7 +40,7 @@ public class TableSelectionListener implements ListSelectionListener {
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		//System.out.println("Regulons updated");
-		this.selectedTFRegulons.setRegulatoryTree(this.getTFRegulonSelected());
+		this.selectedTFRegulons.setMotif(this.getTFRegulonSelected());
 	}
 	
 	/**

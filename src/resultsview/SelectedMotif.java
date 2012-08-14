@@ -8,60 +8,35 @@ import domainmodel.Motif;
 
 public class SelectedMotif {
 	private List<MotifListener> listeners;
-	private Motif motifs;
+	private Motif motif;
 	private String attributeName;
 	
-	public SelectedMotif(String attributeName){
-		this.motifs = null;
+	public SelectedMotif(String attributeName) {
+		this.motif = null;
 		this.listeners = new ArrayList<MotifListener>();
 		this.attributeName = attributeName;
 	}
 	
-	/**
-	 * 
-	 * @param l
-	 * @post a listener is added to the group of listeners
-	 */
 	public void registerListener(MotifListener l) {
 		this.listeners.add(l);
 	}
 	
-	/**
-	 * @post all the listerners gets the comment to do there action
-	 */
 	protected void fireListeners() {
 		for (MotifListener l : new ArrayList<MotifListener>(listeners)) {
-			l.newMotifSelected(this.motifs);
+			l.newMotifSelected(this.motif);
 		}
 	}
 	
 	public String getAttributeName(){
 		return this.attributeName;
 	}
-	
-	
-	
-	/**
-	 * 
-	 *@return all regulatoryTree that is selected in the JTable
-	 */
-	public Motif getMotif(){
-		return this.motifs;
+
+	public Motif getMotif() {
+		return this.motif;
 	}
 	
-	/**
-	 * 
-	 * @param motif the motif that is selected in the given JTable
-	 */
-	protected void setRegulatoryTree(Motif motifs){
-		this.motifs = motifs;
+	public void setMotif(Motif motif){
+		this.motif = motif;
 		fireListeners();
 	}
-	
-	
-
-	
-	
-	
-	
 }

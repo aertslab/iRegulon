@@ -5,7 +5,7 @@ import iRegulonInput.IRegulonResourceBundle;
 import java.util.*;
 
 
-public final class SpeciesNomenclature extends IRegulonResourceBundle{
+public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	private static final Map<Integer,SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer,SpeciesNomenclature>();
 	
 	public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols", "Hsapiens_HGNC_database");

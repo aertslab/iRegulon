@@ -1,23 +1,26 @@
 package resultsview.renderers;
 
 import java.awt.Component;
+import java.text.DecimalFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 
-public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUpdater{
+public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUpdater {
+    private static final String NOT_APPLICABLE_STRING = "Direct";
+    private static final String ZERO_STRING = "0";
 
-	String pattern;
-	MyFormat format;
+    private final DecimalFormat formatter;
+	private final String pattern;
 	
-	public FloatRenderer(String pattern){
+	public FloatRenderer(final String pattern){
 		this.pattern = pattern;
-		this.format = new MyFormat(pattern);
+		this.formatter = new DecimalFormat(pattern);
 	}
 	
-	public String getPattern(){
+	public String getPattern() {
 		return this.pattern;
 	}
 	
@@ -29,19 +32,16 @@ public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUp
 	}
 	
 	public JLabel updateCanvas(JTable table, Object value, JLabel canvas, boolean isSelected, int row) {
-		final Float number =(Float) value;
-		if (value == null){
+		final Float number = (Float) value;
+		if (number == null) {
 			canvas.setText("");
-		}
-		if (Float.isNaN(number)) { 
-		    canvas.setText("PERFECT");
+		} else if (Float.isNaN(number)) {
+		    canvas.setText(NOT_APPLICABLE_STRING);
+        } else if (number == 0.0) {
+            canvas.setText(ZERO_STRING);
 		} else {
-			canvas.setText(format.formatFloat(number));
-			if (number == 0){
-				canvas.setText("0");
-			}
+			canvas.setText(formatter.format(number).replace(',', '.'));
 		}
 		return canvas;
 	}
-
 }

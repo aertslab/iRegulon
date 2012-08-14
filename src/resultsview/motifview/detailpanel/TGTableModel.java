@@ -52,7 +52,7 @@ public class TGTableModel extends AbstractTableModel{
 		  case 2: return this.getRegulatoryLinkAtRow(row).getNEScore();
 		  case 3: return this.getRegulatoryLinkAtRow(row).getEnrichedMotif();
 		  case 4: return this.getRegulatoryLinkAtRow(row).getOrthologousIdentity();
-		  case 5: return this.getRegulatoryLinkAtRow(row).getMotifSimilarityFDR();
+		  case 5: return this.getRegulatoryLinkAtRow(row).getMaxMotifSimilarityFDR();
 		  }
 		  return null;
 		  */

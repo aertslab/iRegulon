@@ -58,34 +58,34 @@ public class EnrichedTranscriptionFactor implements Comparable<EnrichedTranscrip
 				this.timesPredicted++;
 				this.motifs.add(motif);
 				this.score += (motif.getNeScore());
-				if (Float.isNaN(tf.getOrthologousIdentifier())
-						&& Float.isNaN(tf.getMotifSimilarityFDR())){
+				if (Float.isNaN(tf.getMinOrthologousIdentity())
+						&& Float.isNaN(tf.getMaxMotifSimilarityFDR())){
 					//perfect
 					this.timesPerfect++;
 					this.perfectMotifs.add(motif);
 					this.scorePerfect += (motif.getNeScore());
 				}else{
 					this.scoreNotPerfect += (motif.getNeScore());
-					if (Float.isNaN(tf.getOrthologousIdentifier())){
+					if (Float.isNaN(tf.getMinOrthologousIdentity())){
 						//this.score += 1;
 						this.noOrthologes+=1;
-						if (! Float.isNaN(tf.getMotifSimilarityFDR())){
+						if (! Float.isNaN(tf.getMaxMotifSimilarityFDR())){
 							//ortholog
 							this.timesOrthologous++;
 							this.scoreOrthologous += motif.getNeScore();
 						}
 					}else{
-						//this.score -= tf.getOrthologousIdentifier();
-						if (Float.isNaN(tf.getMotifSimilarityFDR())){
+						//this.score -= tf.getMinOrthologousIdentity();
+						if (Float.isNaN(tf.getMaxMotifSimilarityFDR())){
 							//this.score += 1;
 							this.exactMotif += 1;
-							if (! Float.isNaN(tf.getOrthologousIdentifier())){
+							if (! Float.isNaN(tf.getMinOrthologousIdentity())){
 								//motif
 								this.timesSimilar++;
-								this.scoreSimilar += motif.getNeScore() * tf.getOrthologousIdentifier();
+								this.scoreSimilar += motif.getNeScore() * tf.getMinOrthologousIdentity();
 							}
 						}else{
-							//this.score -= tf.getMotifSimilarityFDR();
+							//this.score -= tf.getMaxMotifSimilarityFDR();
 							this.timesRest++;
 							this.scoreRest+= motif.getNeScore();
 						}

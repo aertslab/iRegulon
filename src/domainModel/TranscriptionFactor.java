@@ -1,25 +1,27 @@
 package domainmodel;
 
 
-public class TranscriptionFactor implements Comparable<TranscriptionFactor> {
+public final class TranscriptionFactor implements Comparable<TranscriptionFactor> {
 	private final GeneIdentifier geneID;
-	private final float orthologousIdentifier;
-	private final float motifSimilarityFDR;
+	private final float minOrthologousIdentity;
+	private final float maxMotifSimilarityFDR;
 	private final String similarMotifName;
 	private final String similarMotifDescription;
 	private final String orthologousGeneName;
 	private final String orthologousSpecies;
 	
-	public TranscriptionFactor(GeneIdentifier geneID, float orthologousIdentifier, 
-			float motifSimilarityFDR, String similarMotifName, String similarMotifDescription,
-			String ortholgousGeneName, String ortholgousSpecies){
+	public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity,
+			float maxMotifSimilarityFDR, String similarMotifName, String similarMotifDescription,
+			String orthologousGeneName, String orthologousSpecies){
 		this.geneID = geneID;
-		this.orthologousIdentifier = orthologousIdentifier;
-		this.motifSimilarityFDR = motifSimilarityFDR;
+
+		this.minOrthologousIdentity = orthologousGeneName == null ? Float.NaN : minOrthologousIdentity;
+        this.orthologousGeneName = orthologousGeneName;
+        this.orthologousSpecies = orthologousSpecies;
+
+		this.maxMotifSimilarityFDR = similarMotifName == null ? Float.NaN : maxMotifSimilarityFDR;
 		this.similarMotifName = similarMotifName;
 		this.similarMotifDescription = similarMotifDescription;
-		this.orthologousGeneName = ortholgousGeneName;
-		this.orthologousSpecies = ortholgousSpecies;
 	}
 	
 	public String getName(){
@@ -30,16 +32,16 @@ public class TranscriptionFactor implements Comparable<TranscriptionFactor> {
 		return this.geneID.getSpeciesNomenclature();
 	}
 	
-	public GeneIdentifier getGeneID(){
+	public GeneIdentifier getGeneID() {
 		return this.geneID;
 	}
 	
-	public float getOrthologousIdentifier(){
-		return this.orthologousIdentifier;
+	public float getMinOrthologousIdentity(){
+		return this.minOrthologousIdentity;
 	}
 	
-	public float getMotifSimilarityFDR(){
-		return this.motifSimilarityFDR;
+	public float getMaxMotifSimilarityFDR(){
+		return this.maxMotifSimilarityFDR;
 	}
 	
 	public String getSimilarMotifName(){
@@ -57,64 +59,62 @@ public class TranscriptionFactor implements Comparable<TranscriptionFactor> {
 	public String getOrthologousSpecies(){
 		return this.orthologousSpecies;
 	}
-	
-	public int compareTo(TranscriptionFactor tf){
-		if (Float.isNaN(tf.getOrthologousIdentifier()) && 
-				Float.isNaN(this.getOrthologousIdentifier())){
-			if(tf.getMotifSimilarityFDR() == this.getMotifSimilarityFDR()){
-				return 0;
-			}
-			if (Float.isNaN(tf.getMotifSimilarityFDR())){
-				return 1;
-			}
-			if (Float.isNaN(this.getMotifSimilarityFDR())){
-				return -1;
-			}
-			if (tf.getMotifSimilarityFDR() < this.getMotifSimilarityFDR()){
-				return 1;
-			}
-			return 1;
-		}
-		if (Float.isNaN(tf.getOrthologousIdentifier())){
-			return 1;
-		}
-		if (Float.isNaN(this.getOrthologousIdentifier())){
-			return -1;
-		}
-		if (tf.getOrthologousIdentifier() > this.getOrthologousIdentifier()){
-			return 1;
-		}
-		if (tf.getOrthologousIdentifier() < this.getOrthologousIdentifier()){
-			return -1;
-		}
-		if (tf.getOrthologousIdentifier() == this.getOrthologousIdentifier()){
-			if(tf.getMotifSimilarityFDR() == this.getMotifSimilarityFDR()){
-				return 0;
-			}
-			if (Float.isNaN(tf.getMotifSimilarityFDR())){
-				return -1;
-			}
-			if (Float.isNaN(this.getMotifSimilarityFDR())){
-				return 1;
-			}
-			if (tf.getMotifSimilarityFDR() < this.getMotifSimilarityFDR()){
-				return 1;
-			}
-		}
-		//both equal: alphabeticaly
-		if (this.getName().compareToIgnoreCase(tf.getName()) > 0){
-			//this is aphabeticaly afther tf (may have a longer name)
-			return 1;
-		}
-		if (this.getName().compareToIgnoreCase(tf.getName()) < 0){
-			// this is aphabeticaly before tg (may have a shorter name)
-						return -1;
-		}
-		//both equal
-		return 0;
+
+    private static int compareFloat(final float f1, final float f2, final boolean reverse) {
+        if (Double.isNaN(f1) && Double.isNaN(f2)) {
+            return 0;
+        } else if (Double.isNaN(f1)) {
+            return -1;
+        } else {
+            return reverse ? Float.compare(f2, f1) : Float.compare(f1, f2);
+        }
+    }
+
+    @Override
+	public int compareTo(TranscriptionFactor other) {
+        int r = compareFloat(this.getMaxMotifSimilarityFDR(), other.getMaxMotifSimilarityFDR(), false);
+        if (r != 0) return r;
+        r = compareFloat(this.getMinOrthologousIdentity(), other.getMinOrthologousIdentity(), true);
+        if (r != 0) return r;
+        return this.getName().toLowerCase().compareToIgnoreCase(other.getName().toLowerCase());
 	}
-	
-	public String toString(){
+
+    @Override
+	public String toString() {
 		return this.getName();
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TranscriptionFactor that = (TranscriptionFactor) o;
+
+        if (Float.compare(that.maxMotifSimilarityFDR, maxMotifSimilarityFDR) != 0) return false;
+        if (Float.compare(that.minOrthologousIdentity, minOrthologousIdentity) != 0) return false;
+        if (!geneID.equals(that.geneID)) return false;
+        if (orthologousGeneName != null ? !orthologousGeneName.equals(that.orthologousGeneName) : that.orthologousGeneName != null)
+            return false;
+        if (orthologousSpecies != null ? !orthologousSpecies.equals(that.orthologousSpecies) : that.orthologousSpecies != null)
+            return false;
+        if (similarMotifDescription != null ? !similarMotifDescription.equals(that.similarMotifDescription) : that.similarMotifDescription != null)
+            return false;
+        if (similarMotifName != null ? !similarMotifName.equals(that.similarMotifName) : that.similarMotifName != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = geneID.hashCode();
+        result = 31 * result + (minOrthologousIdentity != +0.0f ? Float.floatToIntBits(minOrthologousIdentity) : 0);
+        result = 31 * result + (maxMotifSimilarityFDR != +0.0f ? Float.floatToIntBits(maxMotifSimilarityFDR) : 0);
+        result = 31 * result + (similarMotifName != null ? similarMotifName.hashCode() : 0);
+        result = 31 * result + (similarMotifDescription != null ? similarMotifDescription.hashCode() : 0);
+        result = 31 * result + (orthologousGeneName != null ? orthologousGeneName.hashCode() : 0);
+        result = 31 * result + (orthologousSpecies != null ? orthologousSpecies.hashCode() : 0);
+        return result;
+    }
 }

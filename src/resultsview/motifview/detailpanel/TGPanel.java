@@ -274,7 +274,7 @@ public class TGPanel extends JPanel implements MotifListener{
 			//this.jtfNEScore.setText("" + score);
 			//float orthologousIdentifier = tree.getOrthologousIdentity();
 			//this.jtfOrthologousIdentifier.setText("" + orthologousIdentifier);
-			//float motifSimilarityFDR = tree.getMotifSimilarityFDR();
+			//float motifSimilarityFDR = tree.getMaxMotifSimilarityFDR();
 			//this.jtfMotifSimilarityFDR.setText("" + motifSimilarityFDR);
 			
 			

@@ -16,12 +16,6 @@ public class QueryMetatargetomeAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                "<html> " +
-                        "<body>" +
-                        "Comming soon." +
-                        "</body>" +
-                        "</html>");
+        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "Coming soon.");
     }
-
 }

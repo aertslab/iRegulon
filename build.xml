@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all">
     <property file="build.properties" />
+    <buildnumber file="build.number"/>
 
     <property name="source.folder" value="src/"/>
     <property name="build.folder" value="bin/"/>
@@ -95,6 +96,7 @@
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
                     <token key="webserverUrl" value="${webserver.url}"/>
+                    <token key="buildNumber" value="${build.number}"/>
                 </replacetokens>
             </filterchain>
         </copy>

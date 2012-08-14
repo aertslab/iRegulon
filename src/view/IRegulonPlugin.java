@@ -3,20 +3,16 @@ package view;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
-import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.view.cytopanels.CytoPanelState;
+import view.actions.LoadResultsAction;
+import view.actions.QueryMetatargetomeAction;
 import view.parametersform.IRegulonVisualStyle;
 import view.parametersform.actions.OpenParametersFormAction;
 import view.parametersform.actions.AddParametersFormToSidePanelAction;
-import view.resultspanel.ResultsView;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import view.actions.SaveLoadDialogs;
-import view.actions.SaveResults;
 
 import java.util.*;
 
@@ -30,7 +26,7 @@ import java.net.URL;
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
-import domainmodel.Results;
+
 
 
 public class IRegulonPlugin extends CytoscapePlugin {
@@ -73,82 +69,36 @@ public class IRegulonPlugin extends CytoscapePlugin {
 	}
 
     private JMenu createMenu() {
-        //iRegulon submenu
-        final JMenu submenu = new JMenu(bundle.getString("plugin_name"));
-        submenu.setToolTipText("Plugin for prediction of motifs, there transcription factors and there target genes.");
+        final JMenu menu = new JMenu(bundle.getString("plugin_name"));
+        menu.setToolTipText(bundle.getString("plugin_description"));
 
-        //iRegulon panel
-        // TODO:
-        JMenuItem item;
-        item = new JMenuItem("Classical");
-        item.setToolTipText("Do a classical  analysis.");
-        item.addActionListener(new OpenParametersFormAction());
-        submenu.add(item);
+        menu.add(new JMenuItem(new OpenParametersFormAction()));
+        menu.add(new JMenuItem(new AddParametersFormToSidePanelAction()));
+        menu.add(new JMenuItem(new QueryMetatargetomeAction()));
 
-        item = new JMenuItem("Other iRegulon options");
-        item.setToolTipText("Do other options of iRegulon: like iRegulonDB");
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                        "<html> " +
-                                "<body>" +
-                                "Comming soon." +
-                                "</body>" +
-                                "</html>");
-            }
-        });
-        submenu.add(item);
+        menu.addSeparator();
 
-        submenu.addSeparator();
-        // TODO:
-        item = new JMenuItem("Get the panel");
-        item.setToolTipText("Get the control panel.");
-        item.addActionListener(new AddParametersFormToSidePanelAction());
-        submenu.add(item);
-        submenu.addSeparator();
+        menu.add(new JMenuItem(new LoadResultsAction()));
 
-        //TODO: Create resource action ...
-        item = new JMenuItem("Load");
-        item.setToolTipText("Load some previous results.");
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SaveResults results = new SaveResults();
-                SaveLoadDialogs dia = new SaveLoadDialogs();
-                String xml = dia.openDialogue();
-                if (xml != null){
-                    try {
-                        final Results result = results.loadResultsFromXML(xml);
-                        final ResultsView output = new ResultsView(dia.getSaveName(), result);
-		                final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
-		                panel.setState(CytoPanelState.DOCK);
-                        output.addToPanel(panel);
-                    } catch(Exception exception){
-                        logger.handleLog(LogLevel.LOG_ERROR, exception.getMessage());
-                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), exception.getMessage());
-                    }
-                }
-            }
-        });
-        submenu.add(item);
-        submenu.addSeparator();
+        menu.addSeparator();
 
-        //Help box
-        item = new JMenuItem("Help");
+        final JMenuItem item = new JMenuItem("Help");
         item.setToolTipText("Get some help");
-        submenu.add(item);
+        menu.add(item);
         CyHelpBroker.getHelpBroker().enableHelpOnButton(item, "Topic", null);
 
-        //About box
-        item = new JMenuItem("About...");
-        item.setToolTipText("About the plugin");
-        item.addActionListener(new AboutAction());
-        submenu.add(item);
-        return submenu;
+        menu.add(new JMenuItem(new AboutAction()));
+
+        return menu;
     }
 
-    private final class AboutAction extends AbstractAction {
+    private final class AboutAction extends ResourceAction {
+        private static final String NAME = "action_about";
+
+        public AboutAction() {
+            super(NAME);
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(),

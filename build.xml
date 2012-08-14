@@ -57,8 +57,7 @@
     <!-- =================================================================== -->
     <target name="copy_resources" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}"
-                     includes="**/*.properties,**/*.txt,**/*.png,**/*.gif,**/*.jpg" />
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.gif,**/*.jpg" />
         </copy>
     </target>
 

@@ -32,8 +32,8 @@ public class BooleanRenderer extends JLabel implements TableCellRenderer, Canvas
     }
 	
 	static {
-        TRUE_ICON = loadIcon(bundle.getString("renderer_boolean_true_icon"));
-        FALSE_ICON = loadIcon(bundle.getString("renderer_boolean_false_icon"));
+        TRUE_ICON = loadIcon("renderer_boolean_true_icon");
+        FALSE_ICON = loadIcon("renderer_boolean_false_icon");
 	}
 	
 	public BooleanRenderer() {

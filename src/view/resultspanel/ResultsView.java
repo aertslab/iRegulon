@@ -2,19 +2,8 @@ package view.resultspanel;
 
 import domainmodel.TranscriptionFactor;
 import view.IRegulonResourceBundle;
-import view.resultspanel.motifview.detailpanel.TGPanel;
-import view.resultspanel.motifview.tablemodels.FilteredMotifModel;
-import view.resultspanel.motifview.tablemodels.FilteredPatternDocumentListener;
-import view.resultspanel.motifview.tablemodels.GlobalMotifTableModel;
-import view.resultspanel.motifview.tablemodels.MotifTableModel;
-import view.resultspanel.motifview.tablemodels.ToolTipHeader;
+import view.resultspanel.motifview.EnrichedMotifsView;
 import view.resultspanel.actions.*;
-import view.resultspanel.renderers.BooleanRenderer;
-import view.resultspanel.renderers.ColorRenderer;
-import view.resultspanel.renderers.ColumnWidthRenderer;
-import view.resultspanel.renderers.CombinedRenderer;
-import view.resultspanel.renderers.DefaultRenderer;
-import view.resultspanel.renderers.FloatRenderer;
 
 import java.awt.*;
 
@@ -22,14 +11,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import javax.swing.*;
-import javax.swing.table.*;
 import javax.swing.text.JTextComponent;
 
 import view.resultspanel.actions.CreateNewNetworkAction;
 import view.resultspanel.actions.DrawNodesAndEdgesAction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import view.resultspanel.transcriptionfactorview.EnrichedTranscriptionFactorsView;
 
@@ -43,7 +28,7 @@ public class ResultsView extends IRegulonResourceBundle {
     private final Results results;
 
     private boolean isSaved;
-	private List<Motif> enrichedMotifs;
+
     private SelectedMotif selectedMotif;
     private JComboBox filterAttributeTF;
     private JTextField filterValueTF;
@@ -57,7 +42,6 @@ public class ResultsView extends IRegulonResourceBundle {
         this.results = results;
 		this.isSaved = false;
 
-        this.enrichedMotifs = new ArrayList<Motif>(results.getMotifs());
         this.selectedMotif = new SelectedMotif(results.getInput().getAttributeName());
 	}
 
@@ -71,10 +55,6 @@ public class ResultsView extends IRegulonResourceBundle {
 
     public Results getResults() {
         return results;
-    }
-
-    public List<Motif> getEnrichedMotifs() {
-        return enrichedMotifs;
     }
 
     public Motif getSelectedMotif() {
@@ -127,26 +107,15 @@ public class ResultsView extends IRegulonResourceBundle {
         this.closeButton = new JButton(new CloseResultsViewAction(null, this));
         final JPanel toolBar = createToolBar(this.selectedMotif, this.transcriptionFactorCB, this.closeButton, this.filterAttributeTF, this.filterValueTF);
 
-        // 2. Create master and detail panel ...
-		final JScrollPane masterPanel = this.createMasterPanel(this.transcriptionFactorCB, this.filterAttributeTF, this.filterValueTF);
-		final TGPanel detailPanel = new TGPanel(this.transcriptionFactorCB, this.results.getInput());
-		this.selectedMotif.registerListener(detailPanel);
+        // 2. Create enriched motifs view ...
+        final EnrichedMotifsView motifsView = new EnrichedMotifsView(this.results);
 
+        // 3. Create enriched TF view ...
+        final EnrichedTranscriptionFactorsView tfsView = new EnrichedTranscriptionFactorsView(this.results);
 
-		//Create a split pane with the two scroll panes in it.
-        final JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, masterPanel, detailPanel);
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(200);
-
-		//Provide minimum sizes for the two components in the split pane
-		final Dimension minimumSize = new Dimension(100, 50);
-		masterPanel.setMinimumSize(minimumSize);
-		detailPanel.setMinimumSize(minimumSize);
-			
         final JTabbedPane tabbedPane = new JTabbedPane();
-        EnrichedTranscriptionFactorsView tfOutput = new EnrichedTranscriptionFactorsView(this.results);
-		tabbedPane.addTab("Transcription Factors", null, tfOutput.createPanel(), "Transcription factor oriented view.");
-		tabbedPane.addTab("Motifs", null, splitPane, "Motif oriented view.");
+        tabbedPane.addTab("Transcription Factors", null, tfsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF), "Transcription factor oriented view.");
+		tabbedPane.addTab("Motifs", null, motifsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF), "Motif oriented view.");
 
 		final JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());
@@ -231,64 +200,4 @@ public class ResultsView extends IRegulonResourceBundle {
 
         return toolBar;
     }
-
-	protected JScrollPane createMasterPanel(final JComboBox transcriptionFactorComboBox,
-                                       final JComboBox filterAttributeCB, final JTextField filterValueTF) {
-		//add a table model
-		final MotifTableModel tableModel = new MotifTableModel(this.enrichedMotifs);
-		//filtering table model
-		final FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, FilteringOn.MOTIF, "");
-		final JTable table = new JTable(filteredModel);
-		
-		//set the tooltips on the columns
-		ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
-		GlobalMotifTableModel modelTable = (GlobalMotifTableModel) table.getModel();
-	    header.setToolTipStrings(modelTable.getTooltips());
-	    header.setToolTipText("");
-	    table.setTableHeader(header);
-
-			
-		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
-		filterAttributeCB.addActionListener(new FilteringOnComboBoxAction(filteredModel));
-		filterValueTF.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
-			
-		//tableModel.initColumnSizes(table);
-		//add mouse and selection listeners
-		//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedMotif, tc);
-		table.addMouseListener(new MotifPopUpMenu(selectedMotif,
-				(JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent(), this.results.isRegionBased()));
-		ListSelectionModel listSelectionModel = table.getSelectionModel();
-		TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedMotif);
-		listSelectionModel.addListSelectionListener(tableSelectListener);
-	   	
-			
-		//colors of the table
-		ColorRenderer cr=new ColorRenderer("ClusterCode");
-			
-		//setting the table renderer
-		for (int i=0; i < table.getModel().getColumnCount(); i++){
-			CombinedRenderer renderer = new CombinedRenderer();
-			// the float renderer
-			if (table.getModel().getColumnClass(i).equals(Float.class)){
-				renderer.addRenderer(new FloatRenderer("0.000"));
-			}else{
-				if (table.getModel().getColumnClass(i).equals(Boolean.class)){
-					renderer.addRenderer(new BooleanRenderer());
-				}else{
-					renderer.addRenderer(new DefaultRenderer());
-				}
-			}
-			//the column renderer
-			renderer.addRenderer(cr);
-			TableColumn col = table.getColumnModel().getColumn(i);
-			col.setCellRenderer(renderer);
-		}
-		
-		ColumnWidthRenderer columnWidth = new ColumnWidthRenderer(table);
-		columnWidth.widthSetter();
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setAutoCreateRowSorter(true);
-
-		return new JScrollPane(table);
-	}
 }

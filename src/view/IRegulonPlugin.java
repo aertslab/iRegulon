@@ -85,14 +85,25 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         menu.addSeparator();
 
-        final JMenuItem item = new JMenuItem("Help");
-        item.setToolTipText("Get some help");
-        menu.add(item);
-        CyHelpBroker.getHelpBroker().enableHelpOnButton(item, "Topic", null);
+        menu.add(new HelpAction());
 
         menu.add(new JMenuItem(new AboutAction()));
 
         return menu;
+    }
+
+    private static final class HelpAction extends ResourceAction {
+        private static final String NAME = "action_help";
+
+        public HelpAction() {
+            super(NAME);
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            CyHelpBroker.getHelpActionListener().actionPerformed(actionEvent);
+        }
     }
 
     private final class AboutAction extends ResourceAction {

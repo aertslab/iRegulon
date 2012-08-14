@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import httpProtocols.HTTPService;
+import servercommunication.protocols.HTTPService;
 
 import org.junit.Test;
 

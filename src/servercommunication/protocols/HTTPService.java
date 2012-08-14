@@ -1,4 +1,4 @@
-package httpProtocols;
+package servercommunication.protocols;
 
 import view.IRegulonResourceBundle;
 

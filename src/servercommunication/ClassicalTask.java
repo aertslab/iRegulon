@@ -1,6 +1,6 @@
-package httpConnection;
+package servercommunication;
 
-import httpProtocols.*;
+import servercommunication.protocols.*;
 import view.IRegulonResourceBundle;
 
 import java.util.Collection;

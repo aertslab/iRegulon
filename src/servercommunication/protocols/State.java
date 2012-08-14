@@ -1,4 +1,4 @@
-package httpProtocols;
+package servercommunication.protocols;
 
 public enum State {
 

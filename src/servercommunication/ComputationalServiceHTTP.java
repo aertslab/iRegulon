@@ -1,6 +1,6 @@
-package httpConnection;
+package servercommunication;
 
-import httpProtocols.*;
+import servercommunication.protocols.*;
 
 import java.util.ArrayList;
 import java.util.Collection;

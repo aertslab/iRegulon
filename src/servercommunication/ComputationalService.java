@@ -1,4 +1,4 @@
-package httpConnection;
+package servercommunication;
 
 
 import java.util.*;

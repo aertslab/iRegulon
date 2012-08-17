@@ -120,8 +120,8 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 			col.setCellRenderer(renderer);
 		}
 
-		ColumnWidthRenderer columnWidth = new ColumnWidthRenderer(table);
-		columnWidth.widthSetter();
+		ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
+		columnWidth.setWidth();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoCreateRowSorter(true);
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel{
+public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel {
 
 	private final List<EnrichedTranscriptionFactor> transcriptionFactors;
 	private final String[] COLUMN_NAMES = {

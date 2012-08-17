@@ -9,6 +9,9 @@ import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FilterMotifTableModel extends AbstractTableModel implements MotifTableModel {
 
 	
@@ -178,19 +181,14 @@ public class FilterMotifTableModel extends AbstractTableModel implements MotifTa
 	}
 
 	@Override
-	public int[] getColumnImportance() {
-		int[] imp = this.model.getColumnImportance();
-		int[] newImp = new int[imp.length +1];
-		newImp[0] = 3;
-		for (int i=0; i < imp.length; i++){
-			newImp[i+1] = imp[i];
-		}
-		return newImp;
+	public List<Integer> getColumnImportances() {
+		final List<Integer> importances = new ArrayList<Integer>(model.getColumnImportances());
+		importances.add(0, 3);
+		return importances;
 	}
 
 	@Override
 	public String[] getTooltips() {
-		// TODO Auto-generated method stub
 		String[] tips = this.model.getTooltips();
 		String[] newTips = new String[tips.length +1];
 		newTips[0] = "Check if the filter expression is found in this motif (the motif, target or transcription factor), cross other wise";
@@ -199,7 +197,4 @@ public class FilterMotifTableModel extends AbstractTableModel implements MotifTa
 		}
 		return newTips;
 	}
-	
-	
-
 }

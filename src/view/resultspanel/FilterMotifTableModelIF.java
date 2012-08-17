@@ -1,7 +1,5 @@
-package view.resultspanel.motifview.tablemodels;
+package view.resultspanel;
 
-
-import view.resultspanel.FilterAttribute;
 
 public interface FilterMotifTableModelIF extends MotifTableModel {
 

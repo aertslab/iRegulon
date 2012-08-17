@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
+import view.resultspanel.MotifTableModel;
 
 public class BaseMotifTableModel extends AbstractTableModel implements MotifTableModel {
     private static final String[] COLUMN_NAMES = {"Rank", "Enriched Motif ID",

@@ -1,7 +1,5 @@
 package view.resultspanel;
 
-import view.resultspanel.motifview.tablemodels.FilterMotifTableModelIF;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

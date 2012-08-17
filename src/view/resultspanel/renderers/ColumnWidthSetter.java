@@ -1,6 +1,6 @@
 package view.resultspanel.renderers;
 
-import view.resultspanel.motifview.tablemodels.MotifTableModel;
+import view.resultspanel.MotifTableModel;
 
 import javax.swing.JTable;
 import java.util.List;

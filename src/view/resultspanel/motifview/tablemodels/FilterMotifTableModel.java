@@ -8,6 +8,8 @@ import javax.swing.table.AbstractTableModel;
 import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
+import view.resultspanel.FilterMotifTableModelIF;
+import view.resultspanel.MotifTableModel;
 
 import java.util.ArrayList;
 import java.util.List;

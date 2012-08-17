@@ -3,7 +3,7 @@ package view.resultspanel.motifview.detailpanel;
 
 import view.resultspanel.MotifListener;
 import view.resultspanel.TFComboBox;
-import view.resultspanel.motifview.tablemodels.ToolTipHeader;
+import view.resultspanel.ToolTipHeader;
 import view.resultspanel.renderers.CombinedRenderer;
 import view.resultspanel.renderers.DefaultRenderer;
 import view.resultspanel.renderers.FloatRenderer;

@@ -1,4 +1,4 @@
-package view.resultspanel.motifview.tablemodels;
+package view.resultspanel;
 
 import java.awt.event.MouseEvent;
 

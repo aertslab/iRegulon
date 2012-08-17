@@ -1,7 +1,7 @@
 package view.resultspanel.motifview;
 
+import view.resultspanel.MotifTableModel;
 import view.resultspanel.SelectedMotif;
-import view.resultspanel.motifview.tablemodels.MotifTableModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

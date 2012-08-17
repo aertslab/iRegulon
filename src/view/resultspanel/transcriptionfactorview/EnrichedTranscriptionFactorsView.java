@@ -67,9 +67,7 @@ public class EnrichedTranscriptionFactorsView extends JPanel implements MotifVie
         TableMotifSelectionConnector.connect(table, selectedMotif);
         table.addMouseListener(new MotifPopUpMenu(selectedMotif, filterValueTF, getResults().isRegionBased()));
 
-        //TODO: Use different selectedMotif object OR
-        //TODO: connect all other elements.
-
+        //TODO: Use different selectedMotif object OR TODO: connect all other elements.
 
         table.setDefaultRenderer(Float.class, new FloatRenderer("0.###E0"));
 

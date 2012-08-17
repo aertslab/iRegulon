@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 
-public class BaseMotifTableModel extends AbstractTableModel implements GlobalMotifTableModel {
+public class BaseMotifTableModel extends AbstractTableModel implements MotifTableModel {
 	private static final int NR_OF_COLUMNS = 7;
 	private final List<Motif> motifList; 
 	private final String[] colNames = {"Rank", "Enriched Motif ID", 
@@ -107,7 +107,7 @@ public class BaseMotifTableModel extends AbstractTableModel implements GlobalMot
 		  }
 	  }*/
 	  
-	  public int[] getCollumnImportance(){
+	  public int[] getColumnImportance(){
 		  return this.collumnImportant;
 	  }
 

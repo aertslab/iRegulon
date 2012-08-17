@@ -1,6 +1,6 @@
 package view.resultspanel.renderers;
 
-import view.resultspanel.motifview.tablemodels.GlobalMotifTableModel;
+import view.resultspanel.motifview.tablemodels.MotifTableModel;
 
 import javax.swing.JTable;
 
@@ -16,8 +16,8 @@ public class ColumnWidthRenderer{
 	}
 	
 	public void widthSetter(){
-		GlobalMotifTableModel model = (GlobalMotifTableModel) this.table.getModel();
-		int[] imp = model.getCollumnImportance();
+		MotifTableModel model = (MotifTableModel) this.table.getModel();
+		int[] imp = model.getColumnImportance();
 		int totImp = 0;
 		int maxImp = 0;
 		for (int index = 0; index < imp.length; index++){

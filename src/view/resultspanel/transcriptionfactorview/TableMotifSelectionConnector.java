@@ -4,7 +4,6 @@ import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.SelectedMotif;
 import view.resultspanel.TFComboBox;
-import view.resultspanel.motifview.tablemodels.GlobalMotifTableModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;

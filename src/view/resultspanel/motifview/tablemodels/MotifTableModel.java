@@ -2,15 +2,14 @@ package view.resultspanel.motifview.tablemodels;
 
 import domainmodel.Motif;
 
+import javax.swing.table.TableModel;
 
-public interface GlobalMotifTableModel {
+
+public interface MotifTableModel extends TableModel {
 
 	public Motif getMotifAtRow(int row);
-	
-	public Class<?> getColumnClass(int columnIndex);
-	
-	public int[] getCollumnImportance();
+
+	public int[] getColumnImportance();
 	
 	public String[] getTooltips();
-	
 }

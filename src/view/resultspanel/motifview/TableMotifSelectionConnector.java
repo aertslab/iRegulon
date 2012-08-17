@@ -1,7 +1,7 @@
 package view.resultspanel.motifview;
 
 import view.resultspanel.SelectedMotif;
-import view.resultspanel.motifview.tablemodels.GlobalMotifTableModel;
+import view.resultspanel.motifview.tablemodels.MotifTableModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -43,7 +43,7 @@ public final class TableMotifSelectionConnector implements ListSelectionListener
 		if (selectedRowIndices.length == 0){
 			return null;
 		} else {
-            final GlobalMotifTableModel model = (GlobalMotifTableModel) table.getModel();
+            final MotifTableModel model = (MotifTableModel) table.getModel();
 			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
 			return model.getMotifAtRow(modelRowIdx);
 		}

@@ -41,7 +41,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 		if (selectedRowIndices.length == 0){
 			return null;
 		} else {
-            final GlobalMotifTableModel model = (GlobalMotifTableModel) table.getModel();
+            final MotifTableModel model = (MotifTableModel) table.getModel();
 			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
 			return model.getMotifAtRow(modelRowIdx);
 		}
@@ -86,7 +86,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
 		//set the tooltips on the columns
 		ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
-		GlobalMotifTableModel modelTable = (GlobalMotifTableModel) table.getModel();
+		MotifTableModel modelTable = (MotifTableModel) table.getModel();
 	    header.setToolTipStrings(modelTable.getTooltips());
 	    header.setToolTipText("");
 	    table.setTableHeader(header);

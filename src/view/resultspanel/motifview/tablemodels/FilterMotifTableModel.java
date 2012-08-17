@@ -9,7 +9,7 @@ import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class FilterMotifTableModel extends AbstractTableModel implements GlobalMotifTableModel {
+public class FilterMotifTableModel extends AbstractTableModel implements MotifTableModel {
 
 	
 	private final BaseMotifTableModel model;
@@ -178,8 +178,8 @@ public class FilterMotifTableModel extends AbstractTableModel implements GlobalM
 	}
 
 	@Override
-	public int[] getCollumnImportance() {
-		int[] imp = this.model.getCollumnImportance();
+	public int[] getColumnImportance() {
+		int[] imp = this.model.getColumnImportance();
 		int[] newImp = new int[imp.length +1];
 		newImp[0] = 3;
 		for (int i=0; i < imp.length; i++){

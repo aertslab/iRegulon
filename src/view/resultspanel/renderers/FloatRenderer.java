@@ -1,6 +1,6 @@
 package view.resultspanel.renderers;
 
-import java.awt.Component;
+import java.awt.*;
 import java.text.DecimalFormat;
 
 import javax.swing.JLabel;
@@ -32,6 +32,15 @@ public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUp
 	}
 	
 	public JLabel updateCanvas(JTable table, Object value, JLabel canvas, boolean isSelected, int row) {
+        if(isSelected) {
+            canvas.setBackground(table.getSelectionBackground());
+            canvas.setForeground(table.getSelectionForeground());
+        } else {
+        	canvas.setBackground(table.getBackground());
+        	canvas.setForeground(table.getForeground());
+        }
+        canvas.setOpaque(true);
+
 		final Float number = (Float) value;
 		if (number == null) {
 			canvas.setText("");

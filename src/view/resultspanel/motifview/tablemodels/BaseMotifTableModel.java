@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 
-public class MotifTableModel extends AbstractTableModel implements GlobalMotifTableModel{
+public class BaseMotifTableModel extends AbstractTableModel implements GlobalMotifTableModel {
 	private static final int NR_OF_COLUMNS = 7;
 	private final List<Motif> motifList; 
 	private final String[] colNames = {"Rank", "Enriched Motif ID", 
@@ -23,7 +23,7 @@ public class MotifTableModel extends AbstractTableModel implements GlobalMotifTa
 						"<html>The amount of unique targets <br/> (it is possible that multiple targets appear multiple times in the list, <br/> those are only counted once). </html>",
 						"<html>The amount of unique transcription factors for this motif.</html>"};
 	
-	public MotifTableModel(List<Motif> motifList){
+	public BaseMotifTableModel(List<Motif> motifList){
 		this.motifList = motifList;
 		this.nrOfRows = this.calculateRowNr();
 	}

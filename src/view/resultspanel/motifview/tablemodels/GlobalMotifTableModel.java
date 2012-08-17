@@ -2,6 +2,7 @@ package view.resultspanel.motifview.tablemodels;
 
 import domainmodel.Motif;
 
+
 public interface GlobalMotifTableModel {
 
 	public Motif getMotifAtRow(int row);

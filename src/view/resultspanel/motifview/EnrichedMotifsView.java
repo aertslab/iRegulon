@@ -11,7 +11,6 @@ import view.resultspanel.renderers.*;
 
 import javax.swing.*;
 import javax.swing.table.TableColumn;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -80,9 +79,9 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox,
                                        final JComboBox filterAttributeCB, final JTextField filterValueTF) {
 		//add a table model
-		final MotifTableModel tableModel = new MotifTableModel(this.enrichedMotifs);
+		final BaseMotifTableModel tableModel = new BaseMotifTableModel(this.enrichedMotifs);
 		//filtering table model
-		final FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, FilteringOn.MOTIF, "");
+		final FilterMotifTableModel filteredModel = new FilterMotifTableModel(tableModel, FilterAttribute.MOTIF, "");
 		table = new JTable(filteredModel);
 
 		//set the tooltips on the columns

@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.JTextComponent;
 
 import view.resultspanel.actions.CreateNewNetworkAction;
 import view.resultspanel.actions.DrawNodesAndEdgesAction;
@@ -104,8 +103,8 @@ public class ResultsView extends IRegulonResourceBundle {
 	private JPanel createMainPanel() {
         // 1. Create toolbar ...
         this.transcriptionFactorCB = new TFComboBox(this.selectedMotif);
-        this.filterAttributeTF = new JComboBox(FilteringOn.values());
-        this.filterAttributeTF.setSelectedItem(FilteringOn.MOTIF);
+        this.filterAttributeTF = new JComboBox(FilterAttribute.values());
+        this.filterAttributeTF.setSelectedItem(FilterAttribute.MOTIF);
         this.filterValueTF = new JTextField();
         this.closeButton = new JButton();
         final JPanel toolBar = createToolBar(this.selectedMotif, this.transcriptionFactorCB, this.closeButton, this.filterAttributeTF, this.filterValueTF);

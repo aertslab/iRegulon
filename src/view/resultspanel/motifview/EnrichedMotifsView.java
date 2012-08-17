@@ -66,7 +66,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
         return this;
     }
 
-	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final JComboBox transcriptionFactorComboBox,
+	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox,
                                        final JComboBox filterAttributeCB, final JTextField filterValueTF) {
 		//add a table model
 		final MotifTableModel tableModel = new MotifTableModel(this.enrichedMotifs);
@@ -85,8 +85,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 		filterAttributeCB.addActionListener(new FilteringOnComboBoxAction(filteredModel));
 		filterValueTF.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
 
-		table.addMouseListener(new MotifPopUpMenu(selectedMotif,
-				(JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent(), this.results.isRegionBased()));
+		table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorComboBox, this.results.isRegionBased()));
 		TableMotifSelectionConnector.connect(table, selectedMotif);
 
 		//colors of the table

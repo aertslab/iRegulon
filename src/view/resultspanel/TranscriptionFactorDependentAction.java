@@ -15,15 +15,19 @@ import view.ResourceAction;
 
 
 public abstract class TranscriptionFactorDependentAction extends ResourceAction
-        implements ListSelectionListener, DocumentListener, MotifListener {
+        implements ListSelectionListener, DocumentListener {
 	private SelectedMotif selectedMotif;
 	private TranscriptionFactor transcriptionFactor;
 	
-	public TranscriptionFactorDependentAction(final String actionName, SelectedMotif selectedMotif) {
+	public TranscriptionFactorDependentAction(final String actionName,
+                                              final SelectedMotif selectedMotif,
+                                              final TFComboBox selectedTranscriptionFactor) {
         super(actionName);
-		this.setEnabled(false);
+		setEnabled(false);
 		this.selectedMotif = selectedMotif;
-		this.transcriptionFactor = null;
+		transcriptionFactor = null;
+
+        selectedTranscriptionFactor.registerAction(this);
 	}
 
     public SelectedMotif getSelectedMotif() {
@@ -84,9 +88,5 @@ public abstract class TranscriptionFactorDependentAction extends ResourceAction
 				e1.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	public void newMotifSelected(Motif currentSelection) {
 	}
 }

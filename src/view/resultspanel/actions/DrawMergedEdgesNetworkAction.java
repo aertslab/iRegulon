@@ -3,6 +3,7 @@ package view.resultspanel.actions;
 import giny.view.NodeView;
 
 import view.parametersform.NodesActions;
+import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
@@ -29,8 +30,8 @@ import cytoscape.view.cytopanels.CytoPanel;
 public class DrawMergedEdgesNetworkAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_merged_edges_network";
 	
-	public DrawMergedEdgesNetworkAction(SelectedMotif selectedMotif){
-		super(NAME, selectedMotif);
+	public DrawMergedEdgesNetworkAction(SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox){
+		super(NAME, selectedMotif, transcriptionFactorComboBox);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}

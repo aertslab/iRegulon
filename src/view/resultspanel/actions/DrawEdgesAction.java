@@ -2,6 +2,7 @@ package view.resultspanel.actions;
 
 import view.parametersform.IRegulonVisualStyle;
 import view.parametersform.NodesActions;
+import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
@@ -26,8 +27,8 @@ public class DrawEdgesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_edges";
 
 	
-	public DrawEdgesAction(SelectedMotif selectedMotif) {
-		super(NAME, selectedMotif);
+	public DrawEdgesAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor) {
+		super(NAME, selectedMotif, selectedTranscriptionFactor);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}

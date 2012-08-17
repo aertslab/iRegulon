@@ -3,6 +3,7 @@ package view.resultspanel.actions;
 import giny.view.NodeView;
 
 import view.parametersform.NodesActions;
+import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
@@ -25,8 +26,8 @@ import domainmodel.TranscriptionFactor;
 public class DrawNodesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_nodes";
 		
-		public DrawNodesAction(SelectedMotif selectedMotif) {
-			super(NAME, selectedMotif);
+		public DrawNodesAction(SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox) {
+			super(NAME, selectedMotif, transcriptionFactorComboBox);
 			if (selectedMotif == null) throw new IllegalArgumentException();
 			setEnabled(false);
 		}

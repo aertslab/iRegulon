@@ -1,6 +1,7 @@
 package view.resultspanel.actions;
 
 import view.parametersform.IRegulonVisualStyle;
+import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
@@ -30,8 +31,9 @@ import domainmodel.TranscriptionFactor;
 public class CreateNewNetworkAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_create_new_network";
 	
-	public CreateNewNetworkAction(SelectedMotif selectedRegulatoryTree){
-		super(NAME, selectedRegulatoryTree);
+	public CreateNewNetworkAction(SelectedMotif selectedRegulatoryTree,
+                                              final TFComboBox selectedTranscriptionFactor){
+		super(NAME, selectedRegulatoryTree, selectedTranscriptionFactor);
 		if (selectedRegulatoryTree == null)	throw new IllegalArgumentException();
 		setEnabled(false);
 	}

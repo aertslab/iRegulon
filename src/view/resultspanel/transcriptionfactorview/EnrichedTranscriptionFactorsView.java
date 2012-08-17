@@ -65,7 +65,7 @@ public class EnrichedTranscriptionFactorsView extends JPanel implements MotifVie
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoCreateRowSorter(true);
         TableMotifSelectionConnector.connect(table, selectedMotif);
-        table.addMouseListener(new MotifPopUpMenu(selectedMotif, filterValueTF, getResults().isRegionBased()));
+        table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased()));
 
         //TODO: Use different selectedMotif object OR TODO: connect all other elements.
 

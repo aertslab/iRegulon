@@ -89,7 +89,8 @@ public class ResultsView extends IRegulonResourceBundle {
 		panel.setSelectedIndex(index);
 
         // Add listener for closing this results view ...
-        getCloseButton().addActionListener(new CloseResultsViewAction(panel, this));
+        getCloseButton().setAction(new CloseResultsViewAction(panel, this));
+        getCloseButton().setText("");
     }
 
     public JPanel getMainPanel() {
@@ -106,7 +107,7 @@ public class ResultsView extends IRegulonResourceBundle {
         this.filterAttributeTF = new JComboBox(FilteringOn.values());
         this.filterAttributeTF.setSelectedItem(FilteringOn.MOTIF);
         this.filterValueTF = new JTextField();
-        this.closeButton = new JButton(new CloseResultsViewAction(null, this));
+        this.closeButton = new JButton();
         final JPanel toolBar = createToolBar(this.selectedMotif, this.transcriptionFactorCB, this.closeButton, this.filterAttributeTF, this.filterValueTF);
 
         // 2. Create enriched motifs view ...
@@ -141,7 +142,7 @@ public class ResultsView extends IRegulonResourceBundle {
         return result;
 	}
 
-    private JPanel createToolBar(final SelectedMotif selectedMotif, final JComboBox transcriptionFactorComboBox,
+    private JPanel createToolBar(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox,
                                  final JButton closeButton, final JComboBox filterAttributeCB, final JTextField filterValueTF) {
         final JPanel toolBar = new JPanel();
 		toolBar.setLayout(new GridBagLayout());
@@ -157,14 +158,14 @@ public class ResultsView extends IRegulonResourceBundle {
 		c.gridx = 0; c.gridy = 1;
 		c.weightx=0.1; c.weighty = 0.0;
         c.gridwidth = 1; c.gridheight = 1;
-        final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif);
+        final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif, transcriptionFactorComboBox);
         final JButton buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
         buttonDrawEdges.setText("+");
         toolBar.add(buttonDrawEdges, c);
 
         c.gridx = 1; c.gridy = 1;
 		c.weightx = 0.1; c.weighty = 0.0;
-        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewNetworkAction(selectedMotif);
+        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewNetworkAction(selectedMotif, transcriptionFactorComboBox);
         JButton buttonDrawNetwork = new JButton(drawNetworkAction);
         buttonDrawNetwork.setText("N");
 
@@ -178,9 +179,6 @@ public class ResultsView extends IRegulonResourceBundle {
         c.gridx = 3; c.gridy = 1;
 		c.weightx = 0.5; c.weighty = 0.0;
 		transcriptionFactorComboBox.setEditable(true);
-		final JTextComponent tc = (JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent();
-		tc.getDocument().addDocumentListener(drawNodesAndEdgesAction);
-		tc.getDocument().addDocumentListener(drawNetworkAction);
         toolBar.add(transcriptionFactorComboBox, c);
 
         c.gridx = 4; c.gridy = 1;
@@ -197,7 +195,6 @@ public class ResultsView extends IRegulonResourceBundle {
 
         c.gridx = 5; c.gridy = 0;
         c.weightx = 0.1; c.weighty = 0.0;
-        closeButton.setText("");
 		toolBar.add(closeButton, c);
 
 		c.gridx = 0; c.gridy = 2;

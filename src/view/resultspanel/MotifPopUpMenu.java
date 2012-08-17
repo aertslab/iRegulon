@@ -19,27 +19,23 @@ public class MotifPopUpMenu extends MouseAdapter {
 	private PopupMenu menu;
 	
 	
-	public MotifPopUpMenu(SelectedMotif selectedMotif, JTextComponent selectedTF, boolean isRegionBased){
-		if (selectedMotif == null || selectedTF == null) {
+	public MotifPopUpMenu(SelectedMotif selectedMotif, TFComboBox transcriptionFactorComboBox, boolean isRegionBased){
+		if (selectedMotif == null || transcriptionFactorComboBox == null) {
 			throw new IllegalArgumentException();
 		}
 
 		menu = new PopupMenu();
 
-		final CreateNewNetworkAction networkAction = new CreateNewNetworkAction(selectedMotif);
-		selectedTF.getDocument().addDocumentListener(networkAction);
+		final CreateNewNetworkAction networkAction = new CreateNewNetworkAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(networkAction);
 			
-		final DrawNodesAndEdgesAction drawRegulonsAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif);
-		selectedTF.getDocument().addDocumentListener(drawRegulonsAndEdgesAction);
+		final DrawNodesAndEdgesAction drawRegulonsAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(drawRegulonsAndEdgesAction);
 			
-		final DrawEdgesAction drawEdgesAction = new DrawEdgesAction(selectedMotif);
-		selectedTF.getDocument().addDocumentListener(drawEdgesAction);
+		final DrawEdgesAction drawEdgesAction = new DrawEdgesAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(drawEdgesAction);
 			
-		final DrawMergedEdgesNetworkAction drawMergedAction = new DrawMergedEdgesNetworkAction(selectedMotif);
-		selectedTF.getDocument().addDocumentListener(drawMergedAction);
+		final DrawMergedEdgesNetworkAction drawMergedAction = new DrawMergedEdgesNetworkAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(drawMergedAction);
 		
 		if (isRegionBased) {

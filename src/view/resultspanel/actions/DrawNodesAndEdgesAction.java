@@ -9,6 +9,7 @@ import cytoscape.visual.VisualStyle;
 
 
 import view.parametersform.IRegulonVisualStyle;
+import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
@@ -24,16 +25,19 @@ import domainmodel.TranscriptionFactor;
 public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_nodes_and_edges";
 
+    private final TFComboBox selectedTranscriptionFactor;
+
 	
-	public DrawNodesAndEdgesAction(SelectedMotif selectedMotif) {
-		super(NAME, selectedMotif);
+	public DrawNodesAndEdgesAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor) {
+		super(NAME, selectedMotif, selectedTranscriptionFactor);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
+        this.selectedTranscriptionFactor = selectedTranscriptionFactor;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		DrawNodesAction drawNodesAction = new DrawNodesAction(this.getSelectedMotif());
+		DrawNodesAction drawNodesAction = new DrawNodesAction(this.getSelectedMotif(), selectedTranscriptionFactor);
 		Motif tree = this.getSelectedMotif().getMotif();
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network =  Cytoscape.getCurrentNetwork();

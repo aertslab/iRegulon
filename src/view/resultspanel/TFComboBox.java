@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JComboBox;
+import javax.swing.*;
+import javax.swing.text.JTextComponent;
 
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
@@ -17,6 +18,11 @@ public class TFComboBox extends JComboBox implements MotifListener {
 		selectedMotif.registerListener(this);
 		setEnabled(false);
 	}
+
+    public void registerAction(final TranscriptionFactorDependentAction action) {
+        final JTextComponent textComponent = (JTextComponent) getEditor().getEditorComponent();
+        textComponent.getDocument().addDocumentListener(action);
+    }
 	
 	@Override
     public void newMotifSelected(Motif currentSelection) {

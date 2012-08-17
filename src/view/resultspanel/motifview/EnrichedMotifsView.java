@@ -88,8 +88,8 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 	    table.setTableHeader(header);
 
 		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
-		filterAttributeCB.addActionListener(new FilteringOnComboBoxAction(filteredModel));
-		filterValueTF.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
+		filterAttributeCB.addActionListener(new FilterAttributeActionListener(filteredModel));
+		filterValueTF.getDocument().addDocumentListener(new FilterPatternDocumentListener(filteredModel));
 
 		table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorComboBox, this.results.isRegionBased()));
 		TableMotifSelectionConnector.connect(table, selectedMotif);

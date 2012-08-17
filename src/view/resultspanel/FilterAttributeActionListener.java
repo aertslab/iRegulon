@@ -8,11 +8,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JComboBox;
 
 
-public class FilteringOnComboBoxAction implements ActionListener {
-
+public class FilterAttributeActionListener implements ActionListener {
 	private final FilterMotifTableModel model;
 	
-	public FilteringOnComboBoxAction(FilterMotifTableModel model){
+	public FilterAttributeActionListener(FilterMotifTableModel model) {
 		this.model = model;
 	}
 

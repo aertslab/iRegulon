@@ -5,11 +5,10 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 
-public class FilteredPatternDocumentListener implements DocumentListener{
-
+public class FilterPatternDocumentListener implements DocumentListener {
 	private final FilterMotifTableModel model;
 	
-	public FilteredPatternDocumentListener(FilterMotifTableModel model){
+	public FilterPatternDocumentListener(FilterMotifTableModel model){
 		this.model = model;
 	}
 	

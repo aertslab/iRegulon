@@ -1,10 +1,14 @@
 package view.resultspanel.transcriptionfactorview;
 
+import domainmodel.Motif;
+import view.resultspanel.MotifTableModel;
+
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel {
+public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel implements MotifTableModel {
 
 	private final List<EnrichedTranscriptionFactor> transcriptionFactors;
 	private final String[] COLUMN_NAMES = {
@@ -18,6 +22,9 @@ public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel {
             "Motif Similarity FDR",
             "Similar Motif ID",
             "Similar Motif Description"};
+    private final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(1, 3, 3, 2, 1, 1, 1, 1, 1, 1);
+    private final List<String> COLUMN_TOOLTIPS = Arrays.asList("", "", "", "", "", "", "", "", "", "");
+
 
 	public EnrichedTranscriptionFactorTableModel(List<EnrichedTranscriptionFactor> transcriptionFactors){
 		this.transcriptionFactors = transcriptionFactors;
@@ -74,4 +81,20 @@ public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel {
 	public String getColumnName(int col){
 		return this.COLUMN_NAMES[col];
 	}
+
+    @Override
+    public Motif getMotifAtRow(int rowIndex) {
+        final EnrichedTranscriptionFactor tf = this.transcriptionFactors.get(rowIndex);
+        return tf.getMotif();
+    }
+
+    @Override
+    public List<Integer> getColumnImportances() {
+        return COLUMN_IMPORTANCES;
+    }
+
+    @Override
+    public List<String> getTooltips() {
+        return COLUMN_TOOLTIPS;
+    }
 }

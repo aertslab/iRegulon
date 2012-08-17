@@ -55,6 +55,11 @@ public class Motif implements Comparable<Motif> {
 	public List<TranscriptionFactor> getTranscriptionFactors(){
 		return this.transcriptionFactors;
 	}
+
+    public TranscriptionFactor getBestTranscriptionFactor() {
+        if (getTranscriptionFactors().isEmpty()) return null;
+        else return getTranscriptionFactors().get(0);
+    }
 	
 	public float getAucValue(){
 		return this.aucValue;

@@ -3,6 +3,7 @@ package view.resultspanel.motifview;
 
 import domainmodel.Motif;
 import domainmodel.Results;
+import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.motifview.detailpanel.TGPanel;
 import view.resultspanel.motifview.tablemodels.*;
@@ -17,6 +18,7 @@ import java.util.List;
 
 public final class EnrichedMotifsView extends JPanel implements MotifView {
     private JTable table;
+    private TGPanel detailPanel;
 
     private final Results results;
 	private List<Motif> enrichedMotifs;
@@ -46,10 +48,19 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 		}
     }
 
+    @Override
+    public TranscriptionFactor getSelectedTranscriptionFactor() {
+        final Motif motif = getSelectedMotif();
+        if (motif == null) return null;
+        final TranscriptionFactor transcriptionFactor = detailPanel.getSelectedTranscriptionFactor();
+        if (transcriptionFactor != null) return transcriptionFactor;
+        else return getSelectedMotif().getBestTranscriptionFactor();
+    }
+
     public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB,
                                   final JComboBox filterAttributeTF, final JTextField filterValueTF) {
         final JScrollPane masterPanel = this.createMasterPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF);
-		final TGPanel detailPanel = new TGPanel(transcriptionFactorCB, results.getInput());
+		detailPanel = new TGPanel(transcriptionFactorCB, results.getInput());
 		selectedMotif.registerListener(detailPanel);
 
 		//Create a split pane with the two scroll panes in it.

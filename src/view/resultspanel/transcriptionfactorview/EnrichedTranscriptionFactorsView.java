@@ -59,12 +59,24 @@ public class EnrichedTranscriptionFactorsView extends JPanel implements MotifVie
 		}
     }
 
+    @Override
+    public TranscriptionFactor getSelectedTranscriptionFactor() {
+        final int[] selectedRowIndices = table.getSelectedRows();
+		if (selectedRowIndices.length == 0){
+			return null;
+		} else {
+            final EnrichedTranscriptionFactorTableModel model = (EnrichedTranscriptionFactorTableModel) table.getModel();
+			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
+			return model.getTranscriptionFactorAtRow(modelRowIdx).getTranscriptionFactor();
+		}
+    }
+
     public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB,
                                   final JComboBox filterAttributeTF, final JTextField filterValueTF) {
 		table = new JTable(new EnrichedTranscriptionFactorTableModel(this.transcriptionFactors));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoCreateRowSorter(true);
-        TableMotifSelectionConnector.connect(table, selectedMotif);
+        TableMotifSelectionConnector.connect(table, selectedMotif, transcriptionFactorCB);
         table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased()));
 
         //TODO: Use different selectedMotif object OR TODO: connect all other elements.

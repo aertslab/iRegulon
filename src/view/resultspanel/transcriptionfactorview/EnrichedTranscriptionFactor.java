@@ -18,6 +18,10 @@ public final class EnrichedTranscriptionFactor implements Comparable<EnrichedTra
         return motif;
     }
 
+    public TranscriptionFactor getTranscriptionFactor() {
+        return transcriptionFactor;
+    }
+
     public GeneIdentifier getTranscriptionFactorID() {
         return transcriptionFactor.getGeneID();
     }

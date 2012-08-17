@@ -29,7 +29,7 @@ import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class TGPanel extends JPanel implements MotifListener{
+public class TGPanel extends JPanel implements MotifListener {
 
 	
 	private JTable targetGeneTable;
@@ -234,6 +234,15 @@ public class TGPanel extends JPanel implements MotifListener{
 	    this.targetGeneTable.setAutoCreateRowSorter(true);
 		
 	}
+
+    public TranscriptionFactor getSelectedTranscriptionFactor() {
+        if (transcriptionFactorTable.getSelectedRowCount() == 0) return null;
+        else {
+            final int[] indices = transcriptionFactorTable.getSelectedRows();
+			final TFTableModel model = (TFTableModel) transcriptionFactorTable.getModel();
+            return model.getTranscriptionFactorAtRow(transcriptionFactorTable.convertRowIndexToModel(indices[0]));
+        }
+    }
 
 
 	@Override

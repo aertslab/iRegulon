@@ -78,16 +78,12 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
 	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox,
                                        final JComboBox filterAttributeCB, final JTextField filterValueTF) {
-		//add a table model
 		final BaseMotifTableModel tableModel = new BaseMotifTableModel(this.enrichedMotifs);
-		//filtering table model
 		final FilterMotifTableModel filteredModel = new FilterMotifTableModel(tableModel, FilterAttribute.MOTIF, "");
 		table = new JTable(filteredModel);
 
-		//set the tooltips on the columns
-		ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
-		MotifTableModel modelTable = (MotifTableModel) table.getModel();
-	    header.setToolTipStrings(modelTable.getTooltips());
+		final ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
+		header.setToolTipStrings(filteredModel.getTooltips().toArray(new String[filteredModel.getTooltips().size()]));
 	    header.setToolTipText("");
 	    table.setTableHeader(header);
 

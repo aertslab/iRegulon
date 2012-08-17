@@ -12,5 +12,5 @@ public interface MotifTableModel extends TableModel {
 
 	public List<Integer> getColumnImportances();
 	
-	public String[] getTooltips();
+	public List<String> getTooltips();
 }

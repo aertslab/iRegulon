@@ -4,7 +4,7 @@ import domainmodel.Motif;
 
 public interface GlobalMotifTableModel {
 
-	public Motif getRegulatoryTreeAtRow(int row);
+	public Motif getMotifAtRow(int row);
 	
 	public Class<?> getColumnClass(int columnIndex);
 	

@@ -22,6 +22,10 @@ public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel{
 	public EnrichedTranscriptionFactorTableModel(List<EnrichedTranscriptionFactor> transcriptionFactors){
 		this.transcriptionFactors = transcriptionFactors;
 	}
+
+    public EnrichedTranscriptionFactor getTranscriptionFactorAtRow(final int rowIdx) {
+        return transcriptionFactors.get(rowIdx);
+    }
 	
 	@Override
 	public int getRowCount() {

@@ -47,8 +47,13 @@ public class EnrichedTranscriptionFactorsView {
                                   final JComboBox filterAttributeTF, final JTextField filterValueTF) {
 		final JTable table = new JTable(new EnrichedTranscriptionFactorTableModel(this.transcriptionFactors));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setAutoCreateRowSorter(true);
+        table.setAutoCreateRowSorter(true);
+        TableMotifSelectionConnector.connect(table, selectedMotif);
         table.addMouseListener(new MotifPopUpMenu(selectedMotif, filterValueTF, getResults().isRegionBased()));
+
+        //TODO: Use different selectedMotif object OR
+        //TODO: connect all other elements.
+
         table.setDefaultRenderer(Float.class, new FloatRenderer("0.###E0"));
 		return new JScrollPane(table);
 	}

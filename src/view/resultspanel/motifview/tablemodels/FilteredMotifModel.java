@@ -53,7 +53,7 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	}
 	
 	public boolean hasPattern(int rowIndex){
-		Motif motif = this.getRegulatoryTreeAtRow(rowIndex);
+		Motif motif = this.getMotifAtRow(rowIndex);
 		if (this.filter == FilteringOn.MOTIF){
 			if (motif.getEnrichedMotifID().toLowerCase().contains(this.pattern.toLowerCase())){
 				return true;
@@ -166,8 +166,8 @@ public class FilteredMotifModel extends AbstractTableModel implements GlobalMoti
 	}
 
 	@Override
-	public Motif getRegulatoryTreeAtRow(int row) {
-		return this.model.getRegulatoryTreeAtRow(row);
+	public Motif getMotifAtRow(int row) {
+		return this.model.getMotifAtRow(row);
 	}
 	
 	public Class<?> getColumnClass(int columnIndex){

@@ -28,7 +28,7 @@ public class MotifTableModel extends AbstractTableModel implements GlobalMotifTa
 		this.nrOfRows = this.calculateRowNr();
 	}
 	
-	public Motif getRegulatoryTreeAtRow(int row) {
+	public Motif getMotifAtRow(int row) {
 		return this.motifList.get(row);
 	}
 	

@@ -1,7 +1,6 @@
 package view.resultspanel.motifview;
 
 
-import com.sun.java.browser.plugin2.liveconnect.v1.Result;
 import domainmodel.Motif;
 import domainmodel.Results;
 import view.resultspanel.*;
@@ -67,20 +66,13 @@ public final class EnrichedMotifsView {
 	    header.setToolTipText("");
 	    table.setTableHeader(header);
 
-
 		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
 		filterAttributeCB.addActionListener(new FilteringOnComboBoxAction(filteredModel));
 		filterValueTF.getDocument().addDocumentListener(new FilteredPatternDocumentListener(filteredModel));
 
-		//tableModel.initColumnSizes(table);
-		//add mouse and selection listeners
-		//MotifPopUpMenu interaction = new MotifPopUpMenu(table, selectedMotif, tc);
 		table.addMouseListener(new MotifPopUpMenu(selectedMotif,
 				(JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent(), this.results.isRegionBased()));
-		ListSelectionModel listSelectionModel = table.getSelectionModel();
-		TableSelectionListener tableSelectListener = new TableSelectionListener(table, selectedMotif);
-		listSelectionModel.addListSelectionListener(tableSelectListener);
-
+		TableMotifSelectionConnector.connect(table, selectedMotif);
 
 		//colors of the table
 		ColorRenderer cr=new ColorRenderer("ClusterCode");

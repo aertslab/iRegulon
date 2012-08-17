@@ -38,7 +38,7 @@ public class TGPanel extends JPanel implements MotifListener{
 	//private JTextField jtfNEScore;
 	//private JTextField jtfOrthologousIdentifier;
 	//private JTextField jtfMotifSimilarityFDR;
-	private ImageJLabel jlbLogo;
+	private LogoThumbnail jlbLogo;
 	private JTable transcriptionFactorTable;
 	private HighLightColorRenderer hlcrtf;
 	private HighLightColorRenderer hlcrtg;
@@ -47,9 +47,7 @@ public class TGPanel extends JPanel implements MotifListener{
 
 	private int ipadx = 150;
 	private int ipady = 50;
-	private double imageHeight = 50.0;
-	private double imagewidth = 100.0;
-	
+
 	public TGPanel(TFComboBox tfcombobox, InputParameters input){
 		super();
 		this.tfMotif = new TFandMotifSelected(input);
@@ -100,7 +98,7 @@ public class TGPanel extends JPanel implements MotifListener{
 		this.jlbMotif = new JLabel();
 		this.jlbMotif.setEnabled(true);
 		this.jlbMotif.setText("");
-		Dimension maximumSize = new Dimension((int) this.imagewidth, 1);
+		Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 1);
 		this.jlbMotif.setMaximumSize(maximumSize);
 		this.jlbMotif.setMinimumSize(maximumSize);
 		
@@ -203,10 +201,7 @@ public class TGPanel extends JPanel implements MotifListener{
 		this.add(new JScrollPane(transcriptionFactorTable), c);
 		
 		
-		this.jlbLogo = new ImageJLabel(null);
-		maximumSize = new Dimension((int) this.imagewidth, (int) this.imageHeight);
-		this.jlbLogo.setMaximumSize(maximumSize);
-		this.jlbLogo.setMinimumSize(maximumSize);
+		this.jlbLogo = new LogoThumbnail();
 		
 		c.gridx = 0;
 		c.gridy = 2;
@@ -247,49 +242,31 @@ public class TGPanel extends JPanel implements MotifListener{
 	}
 	
 	
-	public void refresh(Motif motif){
-		
-		//System.out.println("Redrawn");
+	public void refresh(Motif motif) {
 		this.targetGeneTable.setModel(new TGTableModel(motif));
 		this.transcriptionFactorTable.setModel(new TFTableModel(motif));
 		this.tfMotif.setMotif(motif);
 		
-		if (motif == null){
+		if (motif == null) {
 			motif = null;
 			this.jlbMotif.setText("");
 			this.jlbMotif.setToolTipText("");
 			this.jlbDescription.setText("");
 			this.jlbDescription.setToolTipText("");
-			//this.jtfNEScore.setText("");
-			//this.jtfOrthologousIdentifier.setText("");
-			//this.jtfMotifSimilarityFDR.setText("");
-			this.jlbLogo.setIcon(null);
-		}else{
+			this.jlbLogo.setMotif(null);
+		} else {
 			this.jlbMotif.setText(motif.getEnrichedMotifID());
 			this.jlbMotif.setToolTipText("Motif name: " + motif.getEnrichedMotifID());
-			//float score = motif.getNeScore();
 			this.jlbDescription.setText(motif.getDescription());
 			this.jlbDescription.setToolTipText("Description: " + motif.getDescription());
-			//this.jtfNEScore.setText("" + score);
-			//float orthologousIdentifier = tree.getOrthologousIdentity();
-			//this.jtfOrthologousIdentifier.setText("" + orthologousIdentifier);
-			//float motifSimilarityFDR = tree.getMaxMotifSimilarityFDR();
-			//this.jtfMotifSimilarityFDR.setText("" + motifSimilarityFDR);
-			
-			
-			
-			this.jlbLogo.setIcon(LogoUtilities.createResizedImageIcon(motif.getEnrichedMotifID()));
-			this.jlbLogo.setFullIcon(LogoUtilities.createImageIcon(motif.getEnrichedMotifID()));
-			//String path = "/logoUtilities/" + motif.getEnrichedMotifID() + ".png";
-			//String tooltiptext = "<html>" + "<img src=" + path + "/>" + "</html>";
-			//this.jlbLogo.setToolTipText(tooltiptext);
-			
+
+			this.jlbLogo.setMotif(motif);
+
 			//colors of the table
 			if (this.updateHLCR.mustUpdate()){
 				this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getIDs());
 				this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getIDs());
 			}
-			
 		}
 		
 		//setting the table renderer

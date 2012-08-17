@@ -12,7 +12,7 @@ import domainmodel.TranscriptionFactor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterMotifTableModel extends AbstractTableModel implements MotifTableModel {
+public class FilterMotifTableModel extends AbstractTableModel implements FilterMotifTableModelIF {
     private static final String FILTER_COLUMN_NAME = "Filtered";
     private static final String FILTER_COLUMN_TOOLTIP = "Check if the filter expression is found in this motif (the motif, target or transcription factor), cross otherwise";
     private static final int FILTER_COLUMN_IMPORTANCE = 3;
@@ -28,21 +28,25 @@ public class FilterMotifTableModel extends AbstractTableModel implements MotifTa
 		this.pattern = pattern;
 	}
 	
-	public FilterAttribute getFilterAttribute(){
+	@Override
+    public FilterAttribute getFilterAttribute(){
 		return this.filterAttribute;
 	}
 	
-	public void setFilterAttribute(FilterAttribute filter){
+	@Override
+    public void setFilterAttribute(FilterAttribute filter){
 		this.filterAttribute = filter;
 		this.fireTableDataChanged();
 	}
 	
 	
-	public String getPattern(){
+	@Override
+    public String getPattern(){
 		return this.pattern;
 	}
 	
-	public void setPattern(String pattern){
+	@Override
+    public void setPattern(String pattern){
 		this.pattern = (pattern == null) ? "": pattern;
 		this.fireTableDataChanged();
 	}

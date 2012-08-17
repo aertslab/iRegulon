@@ -1,6 +1,6 @@
 package view.resultspanel;
 
-import view.resultspanel.motifview.tablemodels.FilterMotifTableModel;
+import view.resultspanel.motifview.tablemodels.FilterMotifTableModelIF;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +9,9 @@ import javax.swing.JComboBox;
 
 
 public class FilterAttributeActionListener implements ActionListener {
-	private final FilterMotifTableModel model;
+	private final FilterMotifTableModelIF model;
 	
-	public FilterAttributeActionListener(FilterMotifTableModel model) {
+	public FilterAttributeActionListener(FilterMotifTableModelIF model) {
 		this.model = model;
 	}
 

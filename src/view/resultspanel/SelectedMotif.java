@@ -6,7 +6,7 @@ import java.util.*;
 import domainmodel.Motif;
 
 
-public class SelectedMotif {
+public final class SelectedMotif {
 	private List<MotifListener> listeners;
 	private Motif motif;
 	private String attributeName;
@@ -20,13 +20,7 @@ public class SelectedMotif {
 	public void registerListener(MotifListener l) {
 		this.listeners.add(l);
 	}
-	
-	protected void fireListeners() {
-		for (MotifListener l : new ArrayList<MotifListener>(listeners)) {
-			l.newMotifSelected(this.motif);
-		}
-	}
-	
+
 	public String getAttributeName(){
 		return this.attributeName;
 	}
@@ -35,8 +29,18 @@ public class SelectedMotif {
 		return this.motif;
 	}
 	
-	public void setMotif(Motif motif){
+	public void setMotif(Motif motif) {
 		this.motif = motif;
-		fireListeners();
+		refresh();
 	}
+
+    public void refresh() {
+        fireListeners();
+    }
+
+    private void fireListeners() {
+        for (MotifListener l : new ArrayList<MotifListener>(listeners)) {
+            l.newMotifSelected(this.motif);
+        }
+    }
 }

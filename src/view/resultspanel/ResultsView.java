@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.JTextComponent;
 
 import view.resultspanel.actions.CreateNewNetworkAction;
@@ -109,13 +111,28 @@ public class ResultsView extends IRegulonResourceBundle {
 
         // 2. Create enriched motifs view ...
         final EnrichedMotifsView motifsView = new EnrichedMotifsView(this.results);
-
         // 3. Create enriched TF view ...
         final EnrichedTranscriptionFactorsView tfsView = new EnrichedTranscriptionFactorsView(this.results);
 
+        // 4. Create tabbed pane with these views ...
         final JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Transcription Factors", null, tfsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF), "Transcription factor oriented view.");
-		tabbedPane.addTab("Motifs", null, motifsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF), "Motif oriented view.");
+        tabbedPane.addTab("Transcription Factors", null,
+                tfsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF),
+                "Transcription factor oriented view.");
+		tabbedPane.addTab("Motifs", null,
+                motifsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF),
+                "Motif oriented view.");
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                final JTabbedPane pane = (JTabbedPane) changeEvent.getSource();
+                // 1. Refresh motif selection ...
+                final MotifView view = (MotifView) pane.getSelectedComponent();
+                selectedMotif.setMotif((motifsView != null) ? view.getSelectedMotif() : null);
+                // 2. Refresh table row filter ...
+                //TODO: also filtering ...
+            }
+        });
 
 		final JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());

@@ -15,13 +15,16 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public final class EnrichedMotifsView {
+public final class EnrichedMotifsView extends JPanel implements MotifView {
+    private JTable table;
+
     private final Results results;
 	private List<Motif> enrichedMotifs;
 
     public EnrichedMotifsView(final Results results) {
         this.results = results;
         this.enrichedMotifs = new ArrayList<Motif>(results.getMotifs());
+        setLayout(new BorderLayout());
 	}
 
     public Results getResults() {
@@ -30,6 +33,17 @@ public final class EnrichedMotifsView {
 
     public java.util.List<Motif> getEnrichedMotifs() {
         return enrichedMotifs;
+    }
+
+    public Motif getSelectedMotif() {
+        final int[] selectedRowIndices = table.getSelectedRows();
+		if (selectedRowIndices.length == 0){
+			return null;
+		} else {
+            final GlobalMotifTableModel model = (GlobalMotifTableModel) table.getModel();
+			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
+			return model.getMotifAtRow(modelRowIdx);
+		}
     }
 
     public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB,
@@ -48,7 +62,8 @@ public final class EnrichedMotifsView {
 		masterPanel.setMinimumSize(minimumSize);
 		detailPanel.setMinimumSize(minimumSize);
 
-        return splitPane;
+        add(splitPane, BorderLayout.CENTER);
+        return this;
     }
 
 	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final JComboBox transcriptionFactorComboBox,
@@ -57,7 +72,7 @@ public final class EnrichedMotifsView {
 		final MotifTableModel tableModel = new MotifTableModel(this.enrichedMotifs);
 		//filtering table model
 		final FilteredMotifModel filteredModel = new FilteredMotifModel(tableModel, FilteringOn.MOTIF, "");
-		final JTable table = new JTable(filteredModel);
+		table = new JTable(filteredModel);
 
 		//set the tooltips on the columns
 		ToolTipHeader header = new ToolTipHeader(table.getColumnModel());

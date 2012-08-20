@@ -2,17 +2,12 @@ package domainmodel;
 
 import java.util.List;
 
-public class MotifCluster {
-    private final int clusterCode;
+public class MotifCluster extends AbstractMotif {
     private final List<Motif> motifs;
-    private final List<TranscriptionFactor> transcriptionFactors;
-    private final List<CandidateTargetGene> targetGenes;
 
     MotifCluster(int clusterCode, List<Motif> motifs, List<TranscriptionFactor> transcriptionFactors, List<CandidateTargetGene> targetGenes) {
-        this.clusterCode = clusterCode;
+        super(clusterCode, targetGenes, transcriptionFactors);
         this.motifs = motifs;
-        this.transcriptionFactors = transcriptionFactors;
-        this.targetGenes = targetGenes;
     }
 
     public String getID() {
@@ -25,18 +20,14 @@ public class MotifCluster {
         return buffer.toString();
     }
 
-    public int getClusterCode() {
-        return clusterCode;
-    }
-
     public float getAUCValue() {
         final Motif motif = getBestMotif();
-        return (motif == null) ? Float.NaN : motif.getAUCValue();
+        return (motif != null) ? motif.getAUCValue() : Float.NaN;
     }
 
-    public float getNEScore() {
+    public float getNEScore(){
         final Motif motif = getBestMotif();
-        return (motif == null) ? Float.NaN : motif.getNEScore();
+        return (motif != null) ? motif.getNEScore() : Float.NaN;
     }
 
     public Motif getBestMotif() {
@@ -46,18 +37,5 @@ public class MotifCluster {
 
     public List<Motif> getMotifs() {
         return motifs;
-    }
-
-    public TranscriptionFactor getBestTranscriptionFactor() {
-        if (getTranscriptionFactors().isEmpty()) return null;
-        else return getTranscriptionFactors().get(0);
-    }
-
-    public List<TranscriptionFactor> getTranscriptionFactors() {
-        return transcriptionFactors;
-    }
-
-    public List<CandidateTargetGene> getTargetGenes() {
-        return targetGenes;
     }
 }

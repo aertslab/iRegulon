@@ -10,7 +10,6 @@ import view.resultspanel.motifview.tablemodels.*;
 import view.resultspanel.renderers.*;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.*;
@@ -88,7 +87,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
         final JScrollPane masterPanel = this.createMasterPanel(selectedMotif, transcriptionFactorCB);
-		detailPanel = new TGPanel(transcriptionFactorCB, results.getInput());
+		detailPanel = new TGPanel(transcriptionFactorCB, results.getParameters());
 		selectedMotif.registerListener(detailPanel);
 
 		//Create a split pane with the two scroll panes in it.

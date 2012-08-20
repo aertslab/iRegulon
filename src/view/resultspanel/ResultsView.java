@@ -43,7 +43,7 @@ public class ResultsView extends IRegulonResourceBundle {
         this.results = results;
 		this.isSaved = false;
 
-        this.selectedMotif = new SelectedMotif(results.getInput().getAttributeName());
+        this.selectedMotif = new SelectedMotif(results.getParameters().getAttributeName());
 	}
 
     public String getRunName() {

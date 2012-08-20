@@ -10,6 +10,7 @@ import view.resultspanel.motifview.tablemodels.*;
 import view.resultspanel.renderers.*;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.*;
@@ -124,12 +125,17 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     @Override
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        final FilterMotifTableModel filteredModel = (FilterMotifTableModel) table.getModel();
+        final AbstractFilterMotifTableModel filteredModel = (AbstractFilterMotifTableModel) table.getModel();
+
+        filteredModel.setFilterAttribute((FilterAttribute) filterAttributeCB.getSelectedItem());
+        filteredModel.setPattern(filterValueTF.getText());
+
         filterAttributeActionListener = new FilterAttributeActionListener(filteredModel);
         filterAttributeCB.addActionListener(filterAttributeActionListener);
         filterPatternDocumentListener = new FilterPatternDocumentListener(filteredModel);
         filterValueTF.getDocument().addDocumentListener(filterPatternDocumentListener);
-        ((FilterMotifTableModel) table.getModel()).fireTableDataChanged();
+
+        ((AbstractTableModel) table.getModel()).fireTableDataChanged();
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 import domainmodel.Motif;
@@ -15,7 +16,6 @@ import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.renderers.BooleanRenderer;
 import view.resultspanel.renderers.ColumnWidthSetter;
-import view.resultspanel.renderers.DefaultRenderer;
 import view.resultspanel.renderers.FloatRenderer;
 import view.resultspanel.transcriptionfactorview.tablemodels.BaseEnrichedTranscriptionFactorTableModel;
 import view.resultspanel.transcriptionfactorview.tablemodels.FilterEnrichedTranscriptionFactorTableModel;
@@ -117,12 +117,17 @@ public class EnrichedTranscriptionFactorsView extends JPanel implements MotifVie
 
     @Override
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        final FilterEnrichedTranscriptionFactorTableModel model = (FilterEnrichedTranscriptionFactorTableModel) table.getModel();
-        filterAttributeActionListener = new FilterAttributeActionListener(model);
+        final AbstractFilterMotifTableModel filteredModel = (AbstractFilterMotifTableModel) table.getModel();
+
+        filteredModel.setFilterAttribute((FilterAttribute) filterAttributeCB.getSelectedItem());
+        filteredModel.setPattern(filterValueTF.getText());
+
+        filterAttributeActionListener = new FilterAttributeActionListener(filteredModel);
         filterAttributeCB.addActionListener(filterAttributeActionListener);
-        filterPatternDocumentListener = new FilterPatternDocumentListener(model);
+        filterPatternDocumentListener = new FilterPatternDocumentListener(filteredModel);
         filterValueTF.getDocument().addDocumentListener(filterPatternDocumentListener);
-        ((FilterEnrichedTranscriptionFactorTableModel) table.getModel()).fireTableDataChanged();
+
+        ((AbstractTableModel) table.getModel()).fireTableDataChanged();
     }
 
    @Override

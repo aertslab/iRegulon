@@ -8,6 +8,16 @@ import javax.swing.*;
 
 
 public interface MotifView {
+    public AbstractFilterMotifTableModel getModel();
+
+    public FilterAttributeActionListener getFilterAttributeListener();
+
+    public void setFilterAttributeListener(FilterAttributeActionListener listener);
+
+    public FilterPatternDocumentListener getFilterPatternListener();
+
+    public void setFilterPatternListener(FilterPatternDocumentListener listener);
+
     public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);
 
     public Motif getSelectedMotif();

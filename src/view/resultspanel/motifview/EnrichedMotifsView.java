@@ -19,6 +19,7 @@ import java.util.List;
 public final class EnrichedMotifsView extends JPanel implements MotifView {
     private JTable table;
     private TGPanel detailPanel;
+    private final MotifViewSupport support;
 
     private final Results results;
     private List<Motif> enrichedMotifs;
@@ -26,6 +27,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     private FilterPatternDocumentListener filterPatternDocumentListener;
 
     public EnrichedMotifsView(final Results results) {
+        this.support = new MotifViewSupport(this);
         this.results = results;
         this.enrichedMotifs = new ArrayList<Motif>(results.getMotifs());
         setLayout(new BorderLayout());
@@ -37,6 +39,31 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     public java.util.List<Motif> getEnrichedMotifs() {
         return enrichedMotifs;
+    }
+
+    @Override
+    public AbstractFilterMotifTableModel getModel() {
+        return (AbstractFilterMotifTableModel) table.getModel();
+    }
+
+    @Override
+    public FilterAttributeActionListener getFilterAttributeListener() {
+        return filterAttributeActionListener;
+    }
+
+    @Override
+    public void setFilterAttributeListener(FilterAttributeActionListener listener) {
+        filterAttributeActionListener = listener;
+    }
+
+    @Override
+    public FilterPatternDocumentListener getFilterPatternListener() {
+        return filterPatternDocumentListener;
+    }
+
+    @Override
+    public void setFilterPatternListener(FilterPatternDocumentListener listener) {
+       filterPatternDocumentListener = listener;
     }
 
     public Motif getSelectedMotif() {
@@ -125,28 +152,11 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     @Override
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        final AbstractFilterMotifTableModel filteredModel = (AbstractFilterMotifTableModel) table.getModel();
-
-        filteredModel.setFilterAttribute((FilterAttribute) filterAttributeCB.getSelectedItem());
-        filteredModel.setPattern(filterValueTF.getText());
-
-        filterAttributeActionListener = new FilterAttributeActionListener(filteredModel);
-        filterAttributeCB.addActionListener(filterAttributeActionListener);
-        filterPatternDocumentListener = new FilterPatternDocumentListener(filteredModel);
-        filterValueTF.getDocument().addDocumentListener(filterPatternDocumentListener);
-
-        ((AbstractTableModel) table.getModel()).fireTableDataChanged();
+        support.registerFilterComponents(filterAttributeCB, filterValueTF);
     }
 
     @Override
     public void unregisterFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        if (filterAttributeActionListener != null) {
-            filterAttributeCB.removeActionListener(filterAttributeActionListener);
-            filterAttributeActionListener = null;
-        }
-        if (filterPatternDocumentListener != null) {
-            filterValueTF.getDocument().removeDocumentListener(filterPatternDocumentListener);
-            filterPatternDocumentListener = null;
-        }
+        support.unregisterFilterComponents(filterAttributeCB, filterValueTF);
     }
 }

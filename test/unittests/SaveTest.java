@@ -49,7 +49,6 @@ public class SaveTest {
 			}
 			assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
 		} catch (LoadException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -92,7 +91,6 @@ public class SaveTest {
 			}
 			assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
 		} catch (LoadException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

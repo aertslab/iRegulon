@@ -22,7 +22,6 @@ public class ComputationalServiceHTTP implements ComputationalService{
 
 	@Override
 	public List<Motif> findPredictedRegulators(InputParameters input) {
-		// TODO Auto-generated method stub
 		Service service = new HTTPService();
 		ClassicalTask task = new ClassicalTask(service, input);
 		
@@ -57,7 +56,6 @@ public class ComputationalServiceHTTP implements ComputationalService{
 	public List<Motif> queryDatabaseForRegulators(GeneIdentifier geneID,
 			float minNEScore, float minOrthologousIdentity,
 			float minSimilarityFDR) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -65,7 +63,6 @@ public class ComputationalServiceHTTP implements ComputationalService{
 	public List<Motif> queryDatabaseForTargetome(GeneIdentifier geneID,
 			float minNEScore, float minOrthologousIdentity,
 			float minSimilarityFDR) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -74,7 +71,6 @@ public class ComputationalServiceHTTP implements ComputationalService{
 			Collection<Collection<GeneIdentifier>> geneIDPairs,
 			float minNEScore, float minOrthologousIdentity,
 			float minSimilarityFDR) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

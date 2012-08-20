@@ -26,7 +26,6 @@ public class HTTPServiceStub implements Service {
 	
 	@Override
 	public int sentJob(InputParameters input) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -128,7 +127,6 @@ public class HTTPServiceStub implements Service {
 
 	@Override
 	public String getErrorMessage(int jobID) {
-		// TODO Auto-generated method stub
 		return "The error message";
 	}
 

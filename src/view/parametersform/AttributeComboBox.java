@@ -60,8 +60,6 @@ public class AttributeComboBox  extends JComboBox implements FocusListener{
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		// TODO nothing
-		
 	}
 
 }

@@ -35,7 +35,6 @@ public class CandidateTargetGene implements Comparable<CandidateTargetGene>{
 	 * 			1 if tg is better than this targetGene
 	 */
 	public int compareTo(CandidateTargetGene tg) {
-		// TODO Auto-generated method stub
 		if (tg.getRank() < this.getRank()){
 			//the rank of this is lower.
 			return 1;

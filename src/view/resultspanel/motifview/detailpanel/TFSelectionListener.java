@@ -18,7 +18,6 @@ public class TFSelectionListener implements ListSelectionListener{
 	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
 		TFTableModel model = (TFTableModel) this.table.getModel();
 		int[] rowsSelected = table.getSelectedRows();
 		if (rowsSelected.length == 0){

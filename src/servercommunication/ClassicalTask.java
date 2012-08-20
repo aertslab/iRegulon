@@ -46,7 +46,6 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 		try {
 			jobID = this.service.sentJob(this.input);
 		} catch (SentRequestException e) {
-			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
 			e.printStackTrace();
 			jobID = -1;
@@ -92,7 +91,6 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 				Thread.sleep(3000);
 				//System.out.println("check");
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

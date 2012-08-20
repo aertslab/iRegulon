@@ -24,7 +24,7 @@ public class BaseEnrichedTranscriptionFactorTableModel extends AbstractTableMode
             "Motif Similarity FDR",
             "Similar Motif ID",
             "Similar Motif Description"};
-    private final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(1, 3, 3, 2, 1, 1, 1, 1, 1, 1);
+    private final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1, 2, 3, 3, 3, 3, 3, 3);
     private final List<String> COLUMN_TOOLTIPS = Arrays.asList("", "", "", "", "", "", "", "", "", "");
 
 

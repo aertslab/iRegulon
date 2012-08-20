@@ -1,5 +1,7 @@
 package view.resultspanel.motifview.detailpanel;
 
+import view.resultspanel.motifview.actions.ShowMotif2TFDetailAction;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,7 +16,7 @@ public class TFMouseListener extends MouseAdapter {
 			throw new IllegalArgumentException();
 		}
 		menu = new PopupMenu();
-		final TFDetailFrameAction tfDetailFrameAction = new TFDetailFrameAction(tfMotif);
+		final ShowMotif2TFDetailAction tfDetailFrameAction = new ShowMotif2TFDetailAction(tfMotif);
 		table.getSelectionModel().addListSelectionListener(tfDetailFrameAction);
 		menu.addAction(tfDetailFrameAction);
 	}

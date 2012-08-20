@@ -14,17 +14,27 @@ public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUp
 
     private final DecimalFormat formatter;
 	private final String pattern;
+    private String naLabel;
+
+    public FloatRenderer(final String pattern) {
+		this(pattern, NOT_APPLICABLE_STRING);
+	}
 	
-	public FloatRenderer(final String pattern){
+	public FloatRenderer(final String pattern, final String naLabel) {
 		this.pattern = pattern;
-		this.formatter = new DecimalFormat(pattern);
+        this.naLabel = naLabel;
+        this.formatter = new DecimalFormat(pattern);
 	}
 	
 	public String getPattern() {
 		return this.pattern;
 	}
-	
-	@Override
+
+    public String getNaLabel() {
+        return naLabel;
+    }
+
+    @Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 		updateCanvas(table, value, this, isSelected, row);
@@ -45,7 +55,7 @@ public class FloatRenderer extends JLabel implements TableCellRenderer, CanvasUp
 		if (number == null) {
 			canvas.setText("");
 		} else if (Float.isNaN(number)) {
-		    canvas.setText(NOT_APPLICABLE_STRING);
+		    canvas.setText(getNaLabel());
         } else if (number == 0.0) {
             canvas.setText(ZERO_STRING);
 		} else {

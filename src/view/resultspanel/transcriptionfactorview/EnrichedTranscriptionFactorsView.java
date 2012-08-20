@@ -3,9 +3,11 @@ package view.resultspanel.transcriptionfactorview;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 
 import domainmodel.Motif;
 import domainmodel.Results;
@@ -13,6 +15,7 @@ import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.renderers.BooleanRenderer;
 import view.resultspanel.renderers.ColumnWidthSetter;
+import view.resultspanel.renderers.DefaultRenderer;
 import view.resultspanel.renderers.FloatRenderer;
 import view.resultspanel.transcriptionfactorview.tablemodels.BaseEnrichedTranscriptionFactorTableModel;
 import view.resultspanel.transcriptionfactorview.tablemodels.FilterEnrichedTranscriptionFactorTableModel;
@@ -89,9 +92,21 @@ public class EnrichedTranscriptionFactorsView extends JPanel implements MotifVie
         header.setToolTipText("");
         table.setTableHeader(header);
 
-        table.setDefaultRenderer(Float.class, new FloatRenderer("0.###E0"));
         table.setDefaultRenderer(Boolean.class, new BooleanRenderer());
-
+        for (Enumeration<TableColumn> e = table.getColumnModel().getColumns(); e.hasMoreElements();) {
+            final TableColumn column = e.nextElement();
+            switch (column.getModelIndex()) {
+                case 4:
+                    column.setCellRenderer(new FloatRenderer("0.##"));
+                    break;
+                case 5:
+                    column.setCellRenderer(new FloatRenderer("0.###E0", "Not applicable"));
+                    break;
+                case 8:
+                    column.setCellRenderer(new FloatRenderer("0.###E0", "Direct"));
+                    break;
+            }
+        }
 
         final ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
 		columnWidth.setWidth();

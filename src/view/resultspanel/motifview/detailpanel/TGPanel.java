@@ -4,11 +4,7 @@ package view.resultspanel.motifview.detailpanel;
 import view.resultspanel.MotifListener;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.ToolTipHeader;
-import view.resultspanel.renderers.CombinedRenderer;
-import view.resultspanel.renderers.DefaultRenderer;
-import view.resultspanel.renderers.FloatRenderer;
-import view.resultspanel.renderers.HighLightColorRenderer;
-import view.resultspanel.renderers.UpDateHighLightRenderer;
+import view.resultspanel.renderers.*;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -16,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Enumeration;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -283,9 +280,9 @@ public class TGPanel extends JPanel implements MotifListener {
 			CombinedRenderer renderer = new CombinedRenderer();
 			// the float renderer
 			switch(i){
-			case 1 : renderer.addRenderer(new FloatRenderer("#.##")); //float renderer
+			case 1 : renderer.addRenderer(new FloatRenderer("0.###E0", "Not applicable")); //float renderer
 					break;
-			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0")); //float renderer
+			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
 					break;
 			default : renderer.addRenderer(new DefaultRenderer());
 			}

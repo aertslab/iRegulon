@@ -13,7 +13,7 @@ public class FilterEnrichedTranscriptionFactorTableModel extends AbstractFilterM
     @Override
     protected boolean hasPattern(int rowIndex) {
         if (this.filterAttribute == FilterAttribute.MOTIF){
-			if (getMotifAtRow(rowIndex).getID().toLowerCase().contains(this.pattern.toLowerCase())){
+			if (getMotifAtRow(rowIndex).getName().toLowerCase().contains(this.pattern.toLowerCase())){
 				return true;
 			}
 		}

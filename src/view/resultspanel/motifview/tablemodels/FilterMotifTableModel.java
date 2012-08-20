@@ -19,7 +19,7 @@ public class FilterMotifTableModel extends AbstractFilterMotifTableModel {
     protected boolean hasPattern(int rowIndex){
 		final Motif motif = this.getMotifAtRow(rowIndex);
 		if (this.filterAttribute == FilterAttribute.MOTIF){
-			if (motif.getID().toLowerCase().contains(this.pattern.toLowerCase())){
+			if (motif.getName().toLowerCase().contains(this.pattern.toLowerCase())){
 				return true;
 			}
 		}

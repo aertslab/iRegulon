@@ -10,10 +10,10 @@ public class MotifCluster extends AbstractMotif {
         this.motifs = motifs;
     }
 
-    public String getID() {
+    public String getName() {
         final StringBuilder buffer = new StringBuilder();
         for (Motif motif: getMotifs()) {
-            buffer.append(motif.getID());
+            buffer.append(motif.getName());
             buffer.append("/");
         }
         buffer.setLength(buffer.length()-1);
@@ -37,5 +37,22 @@ public class MotifCluster extends AbstractMotif {
 
     public List<Motif> getMotifs() {
         return motifs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MotifCluster that = (MotifCluster) o;
+
+        if (!motifs.equals(that.motifs)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return motifs.hashCode();
     }
 }

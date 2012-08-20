@@ -16,7 +16,7 @@ public abstract class AbstractMotif {
 
     }
 
-    public abstract String getID();
+    public abstract String getName();
 
     public abstract float getAUCValue();
 

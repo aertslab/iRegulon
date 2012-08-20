@@ -5,26 +5,24 @@ import java.util.Collections;
 import java.util.List;
 
 public class Motif extends AbstractMotif implements Comparable<Motif> {
-    final private String enrichedMotifID;
+    final private String name;
     final private int rank;
 	final private String description;
 	final private int featureID;
-	final private int jobID;
     private final float neScore;
     private final float aucValue;
 
-	public Motif(String enrichedMotifID, List<CandidateTargetGene> candidateTargetGenes,
+	public Motif(String name, List<CandidateTargetGene> candidateTargetGenes,
 			List<TranscriptionFactor> transcriptionFactors, float neScore, int clusterCode
 			, float aucValue, int rank, String description, int featureID, int jobID){
         super(clusterCode, candidateTargetGenes, transcriptionFactors);
-        this.enrichedMotifID = enrichedMotifID;
+        this.name = name;
         Collections.sort(new ArrayList<CandidateTargetGene>(this.candidateTargetGenes));
         Collections.sort(new ArrayList<TranscriptionFactor>(this.transcriptionFactors));
         this.rank = rank;
 		this.description = description;
 		this.featureID = featureID;
-		this.jobID = jobID;
-                this.neScore = neScore;
+        this.neScore = neScore;
         this.aucValue = aucValue;
 	}
 
@@ -32,8 +30,8 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
 		return this.rank;
 	}
 
-    public String getID() {
-        return this.enrichedMotifID;
+    public String getName() {
+        return this.name;
     }
 
     public String getDescription(){
@@ -48,12 +46,8 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
         return this.neScore;
     }
 
-	public int getFeatureID(){
+	public int getDatabaseID(){
 		return this.featureID;
-	}
-
-	public int getJobID(){
-		return this.jobID;
 	}
 
     @Override
@@ -63,17 +57,17 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
 
         Motif motif = (Motif) o;
 
-        if (!enrichedMotifID.equals(motif.enrichedMotifID)) return false;
+        if (!name.equals(motif.name)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return enrichedMotifID.hashCode();
+        return name.hashCode();
     }
 
     public int compareTo(final Motif other) {
-        return this.getID().compareTo(other.getID());
+        return this.getName().compareTo(other.getName());
     }
 }

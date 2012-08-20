@@ -79,7 +79,7 @@ public class SaveBed extends IRegulonResourceBundle {
 			transcr +=  tf;
 		}
 		transcr = transcr.substring(0, transcr.length() - 2);
-		String data = "featureIDandTarget=" + this.motif.getMotif().getFeatureID();
+		String data = "featureIDandTarget=" + this.motif.getMotif().getDatabaseID();
 		if (this.motif.getMotif().getCandidateTargetGenes().size() >= 1){
 			data += ":" + this.motif.getMotif().getCandidateTargetGenes().get(0).getGeneName();
 		}else{
@@ -126,7 +126,7 @@ public class SaveBed extends IRegulonResourceBundle {
 	
 	public void saveBed(){
 		JFrame frame = new JFrame();
-		String name = this.motif.getMotif().getID();
+		String name = this.motif.getMotif().getName();
 		String extension = ".bed";
 
 		// Create a file chooser

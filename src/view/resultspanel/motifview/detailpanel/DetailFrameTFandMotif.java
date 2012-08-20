@@ -17,7 +17,7 @@ public class DetailFrameTFandMotif {
 
 	public DetailFrameTFandMotif(TFandMotifSelected tfMotif){
 		this.tfMotif = tfMotif;
-		String title = tfMotif.getMotif().getID() + " " + tfMotif.getTranscriptionFactor().getName();
+		String title = tfMotif.getMotif().getName() + " " + tfMotif.getTranscriptionFactor().getName();
 		JFrame frame = new JFrame(title);
 		frame.add(this.getDetailPane());
 		
@@ -262,7 +262,7 @@ public class DetailFrameTFandMotif {
 		panel.add(motifLabel, c);
 		
 		JLabel motifNameLabel = new JLabel();
-		motifNameLabel.setText(this.tfMotif.getMotif().getID());
+		motifNameLabel.setText(this.tfMotif.getMotif().getName());
 		c.gridx = 1;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -353,7 +353,7 @@ public class DetailFrameTFandMotif {
 		panel.add(emptyLabel, c);
 		ypos += 1;
 		
-		JLabel logoLabel = new JLabel(LogoUtilities.createImageIcon(this.tfMotif.getMotif().getID()));
+		JLabel logoLabel = new JLabel(LogoUtilities.createImageIcon(this.tfMotif.getMotif().getName()));
 		c.gridx = 2;
 		c.gridy = yBgnLogo;
 		c.gridwidth = 2;

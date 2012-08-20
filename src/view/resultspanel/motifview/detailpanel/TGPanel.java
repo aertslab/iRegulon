@@ -261,8 +261,8 @@ public class TGPanel extends JPanel implements MotifListener {
 			this.jlbDescription.setToolTipText("");
 			this.jlbLogo.setMotif(null);
 		} else {
-			this.jlbMotif.setText(motif.getID());
-			this.jlbMotif.setToolTipText("Motif name: " + motif.getID());
+			this.jlbMotif.setText(motif.getName());
+			this.jlbMotif.setToolTipText("Motif name: " + motif.getName());
 			this.jlbDescription.setText(motif.getDescription());
 			this.jlbDescription.setToolTipText("Description: " + motif.getDescription());
 

@@ -55,7 +55,7 @@ public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction 
 			for (CyNode parent : tfNodeList){
 				DrawNodesAction.setAtribute(parent, this.getSelectedMotif().getAttributeName(), tf.getName());
 				DrawNodesAction.setAtribute(parent, "Regulatory function", "Regulator");
-				DrawNodesAction.addAtribute(parent, "Motif", tree.getID());
+				DrawNodesAction.addAtribute(parent, "Motif", tree.getName());
 			}
 
 			for (CandidateTargetGene geneID : tree.getCandidateTargetGenes()){
@@ -95,12 +95,12 @@ public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction 
 						CyNetwork network, CyNetworkView view, Motif motif, 
 						CandidateTargetGene tg, TranscriptionFactor tf){
 		CyEdge edge;
-		edge = DrawEdgesAction.addEdge(parent, target, network, view, motif.getID());
+		edge = DrawEdgesAction.addEdge(parent, target, network, view, motif.getName());
 		DrawEdgesAction.setAtribute(edge, "Regulator Gene", tf.getName());
 		DrawEdgesAction.setAtribute(edge, "Target Gene", tg.getGeneName());
 		DrawEdgesAction.setAtribute(edge, "Regulatory function", "Predicted");
-		DrawEdgesAction.setAtribute(edge, "Motif", motif.getID());
-		DrawEdgesAction.setAtribute(edge, "featureID", "" + motif.getFeatureID());
+		DrawEdgesAction.setAtribute(edge, "Motif", motif.getName());
+		DrawEdgesAction.setAtribute(edge, "featureID", "" + motif.getDatabaseID());
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 		cyEdgeAttrs.setUserVisible("featureID", false);
 	}

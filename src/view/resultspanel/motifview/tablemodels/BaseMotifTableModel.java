@@ -72,7 +72,7 @@ public class BaseMotifTableModel extends AbstractTableModel implements MotifTabl
             case 0:
                 return curMotif.getRank();
             case 1:
-                return curMotif.getID();
+                return curMotif.getName();
             case 2:
                 return curMotif.getNEScore();
             case 3:

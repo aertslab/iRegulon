@@ -4,6 +4,7 @@ package view.resultspanel.motifview.detailpanel;
 import view.resultspanel.MotifListener;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.ToolTipHeader;
+import view.resultspanel.NetworkMembershipSupport;
 import view.resultspanel.renderers.*;
 
 import java.awt.Dimension;
@@ -12,7 +13,6 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.Enumeration;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,9 +37,9 @@ public class TGPanel extends JPanel implements MotifListener {
 	//private JTextField jtfMotifSimilarityFDR;
 	private LogoThumbnail jlbLogo;
 	private JTable transcriptionFactorTable;
-	private HighLightColorRenderer hlcrtf;
-	private HighLightColorRenderer hlcrtg;
-	private UpDateHighLightRenderer updateHLCR;
+	private NetworkMembershipHighlightRenderer hlcrtf;
+	private NetworkMembershipHighlightRenderer hlcrtg;
+	private NetworkMembershipSupport updateHLCR;
 	private TFandMotifSelected tfMotif;
 
 	private int ipadx = 150;
@@ -48,7 +48,7 @@ public class TGPanel extends JPanel implements MotifListener {
 	public TGPanel(TFComboBox tfcombobox, InputParameters input){
 		super();
 		this.tfMotif = new TFandMotifSelected(input);
-		this.updateHLCR = new UpDateHighLightRenderer();
+		this.updateHLCR = new NetworkMembershipSupport();
 		/*this.SelectedRegulatoryTree = selectedRegulatoryTree;
 		String motif;
 		final JLabel label = new JLabel("Enriched Motif: ");
@@ -166,8 +166,8 @@ public class TGPanel extends JPanel implements MotifListener {
 		*/
 		
 		this.targetGeneTable = new JTable(new TGTableModel(null));
-		this.hlcrtg=new HighLightColorRenderer("Target Name");
-		this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getIDs());
+		this.hlcrtg=new NetworkMembershipHighlightRenderer("Target Name");
+		this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 		
 		c.gridx = 2;
 		c.gridy = 0;
@@ -185,8 +185,8 @@ public class TGPanel extends JPanel implements MotifListener {
 		this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(new TFTableSelectionListen(this.transcriptionFactorTable, tfcombobox));
 		this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(new TFSelectionListener(this.transcriptionFactorTable, this.tfMotif));
 		this.transcriptionFactorTable.addMouseListener(new TFMouseListener(this.transcriptionFactorTable, this.tfMotif));
-		this.hlcrtf=new HighLightColorRenderer("Transcription Factor Name");
-		this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getIDs());
+		this.hlcrtf=new NetworkMembershipHighlightRenderer("Transcription Factor Name");
+		this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 		c.gridx = 1;
 		c.gridy = 0;
 		c.weightx=0.3;
@@ -269,9 +269,9 @@ public class TGPanel extends JPanel implements MotifListener {
 			this.jlbLogo.setMotif(motif);
 
 			//colors of the table
-			if (this.updateHLCR.mustUpdate()){
-				this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getIDs());
-				this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getIDs());
+			if (this.updateHLCR.refresh()){
+				this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
+				this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 			}
 		}
 		

@@ -15,6 +15,16 @@ public class MotifCluster {
         this.targetGenes = targetGenes;
     }
 
+    public String getID() {
+        final StringBuilder buffer = new StringBuilder();
+        for (Motif motif: getMotifs()) {
+            buffer.append(motif.getEnrichedMotifID());
+            buffer.append("/");
+        }
+        buffer.setLength(buffer.length()-1);
+        return buffer.toString();
+    }
+
     public int getClusterCode() {
         return clusterCode;
     }

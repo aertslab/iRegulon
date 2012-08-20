@@ -2,6 +2,7 @@ package view.resultspanel.transcriptionfactorview;
 
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
+import view.resultspanel.MotifTableModel;
 import view.resultspanel.SelectedMotif;
 import view.resultspanel.TFComboBox;
 
@@ -48,9 +49,9 @@ public class TableMotifSelectionConnector implements ListSelectionListener {
 		if (selectedRowIndices.length == 0){
 			return null;
 		} else {
-            final EnrichedTranscriptionFactorTableModel model = (EnrichedTranscriptionFactorTableModel) table.getModel();
+            final MotifTableModel model = (MotifTableModel) table.getModel();
 			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
-			return model.getTranscriptionFactorAtRow(modelRowIdx).getMotif();
+			return model.getMotifAtRow(modelRowIdx);
 		}
 	}
 
@@ -59,9 +60,9 @@ public class TableMotifSelectionConnector implements ListSelectionListener {
 		if (selectedRowIndices.length == 0){
 			return null;
 		} else {
-            final EnrichedTranscriptionFactorTableModel model = (EnrichedTranscriptionFactorTableModel) table.getModel();
+            final MotifTableModel model = (MotifTableModel) table.getModel();
 			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
-			return model.getTranscriptionFactorAtRow(modelRowIdx).getTranscriptionFactor();
+			return model.getTranscriptionFactorAtRow(modelRowIdx);
 		}
 	}
 }

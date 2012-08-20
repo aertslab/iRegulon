@@ -20,7 +20,9 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     private TGPanel detailPanel;
 
     private final Results results;
-	private List<Motif> enrichedMotifs;
+    private List<Motif> enrichedMotifs;
+    private FilterAttributeActionListener filterAttributeActionListener;
+    private FilterPatternDocumentListener filterPatternDocumentListener;
 
     public EnrichedMotifsView(final Results results) {
         this.results = results;
@@ -56,9 +58,8 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
         else return getSelectedMotif().getBestTranscriptionFactor();
     }
 
-    public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB,
-                                  final JComboBox filterAttributeTF, final JTextField filterValueTF) {
-        final JScrollPane masterPanel = this.createMasterPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF);
+    public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+        final JScrollPane masterPanel = this.createMasterPanel(selectedMotif, transcriptionFactorCB);
 		detailPanel = new TGPanel(transcriptionFactorCB, results.getInput());
 		selectedMotif.registerListener(detailPanel);
 
@@ -76,8 +77,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
         return this;
     }
 
-	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox,
-                                       final JComboBox filterAttributeCB, final JTextField filterValueTF) {
+	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox) {
 		final BaseMotifTableModel tableModel = new BaseMotifTableModel(this.enrichedMotifs);
 		final FilterMotifTableModel filteredModel = new FilterMotifTableModel(tableModel, FilterAttribute.MOTIF, "");
 		table = new JTable(filteredModel);
@@ -88,8 +88,6 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 	    table.setTableHeader(header);
 
 		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
-		filterAttributeCB.addActionListener(new FilterAttributeActionListener(filteredModel));
-		filterValueTF.getDocument().addDocumentListener(new FilterPatternDocumentListener(filteredModel));
 
 		table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorComboBox, this.results.isRegionBased()));
 		TableMotifSelectionConnector.connect(table, selectedMotif);
@@ -116,11 +114,33 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 			col.setCellRenderer(renderer);
 		}
 
-		ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
+		final ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
 		columnWidth.setWidth();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoCreateRowSorter(true);
 
 		return new JScrollPane(table);
 	}
+
+    @Override
+    public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
+        final FilterMotifTableModel filteredModel = (FilterMotifTableModel) table.getModel();
+        filterAttributeActionListener = new FilterAttributeActionListener(filteredModel);
+        filterAttributeCB.addActionListener(filterAttributeActionListener);
+        filterPatternDocumentListener = new FilterPatternDocumentListener(filteredModel);
+        filterValueTF.getDocument().addDocumentListener(filterPatternDocumentListener);
+        ((FilterMotifTableModel) table.getModel()).fireTableDataChanged();
+    }
+
+    @Override
+    public void unregisterFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
+        if (filterAttributeActionListener != null) {
+            filterAttributeCB.removeActionListener(filterAttributeActionListener);
+            filterAttributeActionListener = null;
+        }
+        if (filterPatternDocumentListener != null) {
+            filterValueTF.getDocument().removeDocumentListener(filterPatternDocumentListener);
+            filterPatternDocumentListener = null;
+        }
+    }
 }

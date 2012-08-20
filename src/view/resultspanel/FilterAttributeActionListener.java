@@ -7,9 +7,9 @@ import javax.swing.JComboBox;
 
 
 public class FilterAttributeActionListener implements ActionListener {
-	private final FilterMotifTableModelIF model;
+	private final AbstractFilterMotifTableModel model;
 	
-	public FilterAttributeActionListener(FilterMotifTableModelIF model) {
+	public FilterAttributeActionListener(AbstractFilterMotifTableModel model) {
 		this.model = model;
 	}
 

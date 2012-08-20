@@ -31,7 +31,7 @@ public class ResultsView extends IRegulonResourceBundle {
     private boolean isSaved;
 
     private SelectedMotif selectedMotif;
-    private JComboBox filterAttributeTF;
+    private JComboBox filterAttributeCB;
     private JTextField filterValueTF;
     private TFComboBox transcriptionFactorCB;
 
@@ -103,11 +103,11 @@ public class ResultsView extends IRegulonResourceBundle {
 	private JPanel createMainPanel() {
         // 1. Create toolbar ...
         this.transcriptionFactorCB = new TFComboBox(this.selectedMotif);
-        this.filterAttributeTF = new JComboBox(FilterAttribute.values());
-        this.filterAttributeTF.setSelectedItem(FilterAttribute.MOTIF);
+        this.filterAttributeCB = new JComboBox(FilterAttribute.values());
+        this.filterAttributeCB.setSelectedItem(FilterAttribute.MOTIF);
         this.filterValueTF = new JTextField();
         this.closeButton = new JButton();
-        final JPanel toolBar = createToolBar(this.selectedMotif, this.transcriptionFactorCB, this.closeButton, this.filterAttributeTF, this.filterValueTF);
+        final JPanel toolBar = createToolBar(this.selectedMotif, this.transcriptionFactorCB, this.closeButton, this.filterAttributeCB, this.filterValueTF);
 
         // 2. Create enriched motifs view ...
         final EnrichedMotifsView motifsView = new EnrichedMotifsView(this.results);
@@ -117,10 +117,10 @@ public class ResultsView extends IRegulonResourceBundle {
         // 4. Create tabbed pane with these views ...
         final JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Transcription Factors", null,
-                tfsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF),
+                tfsView.createPanel(selectedMotif, transcriptionFactorCB),
                 "Transcription factor oriented view.");
 		tabbedPane.addTab("Motifs", null,
-                motifsView.createPanel(selectedMotif, transcriptionFactorCB, filterAttributeTF, filterValueTF),
+                motifsView.createPanel(selectedMotif, transcriptionFactorCB),
                 "Motif oriented view.");
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override
@@ -132,9 +132,12 @@ public class ResultsView extends IRegulonResourceBundle {
                 transcriptionFactorCB.setSelectedItem((view != null) ? view.getSelectedTranscriptionFactor() : null);
 
                 // 2. Refresh table row filter ...
-                //TODO: also refresh of filter => Possibly also necessary to rewire filter according to view ...
+                motifsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
+                tfsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
+                if (view != null) view.registerFilterComponents(filterAttributeCB, filterValueTF);
             }
         });
+        tfsView.registerFilterComponents(filterAttributeCB, filterValueTF);
 
 		final JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());

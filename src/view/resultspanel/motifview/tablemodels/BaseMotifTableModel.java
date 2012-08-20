@@ -7,6 +7,7 @@ import javax.swing.table.AbstractTableModel;
 
 import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 import view.resultspanel.MotifTableModel;
 
 public class BaseMotifTableModel extends AbstractTableModel implements MotifTableModel {
@@ -29,6 +30,12 @@ public class BaseMotifTableModel extends AbstractTableModel implements MotifTabl
 
     public Motif getMotifAtRow(int row) {
         return this.motifs.get(row);
+    }
+
+    @Override
+    public TranscriptionFactor getTranscriptionFactorAtRow(int row) {
+        final Motif curMotif = getMotifAtRow(row);
+        return (curMotif != null) ? curMotif.getBestTranscriptionFactor() : null;
     }
 
     public Class<?> getColumnClass(int columnIndex) {

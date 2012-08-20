@@ -1,14 +1,16 @@
-package view.resultspanel.transcriptionfactorview;
+package view.resultspanel.transcriptionfactorview.tablemodels;
 
 import domainmodel.Motif;
+import domainmodel.TranscriptionFactor;
 import view.resultspanel.MotifTableModel;
+import view.resultspanel.transcriptionfactorview.EnrichedTranscriptionFactor;
 
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel implements MotifTableModel {
+public class BaseEnrichedTranscriptionFactorTableModel extends AbstractTableModel implements MotifTableModel {
 
 	private final List<EnrichedTranscriptionFactor> transcriptionFactors;
 	private final String[] COLUMN_NAMES = {
@@ -26,13 +28,9 @@ public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel im
     private final List<String> COLUMN_TOOLTIPS = Arrays.asList("", "", "", "", "", "", "", "", "", "");
 
 
-	public EnrichedTranscriptionFactorTableModel(List<EnrichedTranscriptionFactor> transcriptionFactors){
+	public BaseEnrichedTranscriptionFactorTableModel(List<EnrichedTranscriptionFactor> transcriptionFactors){
 		this.transcriptionFactors = transcriptionFactors;
 	}
-
-    public EnrichedTranscriptionFactor getTranscriptionFactorAtRow(final int rowIdx) {
-        return transcriptionFactors.get(rowIdx);
-    }
 	
 	@Override
 	public int getRowCount() {
@@ -86,6 +84,11 @@ public class EnrichedTranscriptionFactorTableModel extends AbstractTableModel im
     public Motif getMotifAtRow(int rowIndex) {
         final EnrichedTranscriptionFactor tf = this.transcriptionFactors.get(rowIndex);
         return tf.getMotif();
+    }
+
+    @Override
+    public TranscriptionFactor getTranscriptionFactorAtRow(final int rowIdx) {
+        return transcriptionFactors.get(rowIdx).getTranscriptionFactor();
     }
 
     @Override

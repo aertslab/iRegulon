@@ -6,9 +6,9 @@ import javax.swing.text.BadLocationException;
 
 
 public class FilterPatternDocumentListener implements DocumentListener {
-	private final FilterMotifTableModelIF model;
+	private final AbstractFilterMotifTableModel model;
 	
-	public FilterPatternDocumentListener(FilterMotifTableModelIF model){
+	public FilterPatternDocumentListener(AbstractFilterMotifTableModel model){
 		this.model = model;
 	}
 	

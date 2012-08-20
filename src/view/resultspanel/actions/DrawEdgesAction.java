@@ -85,11 +85,11 @@ public class DrawEdgesAction extends TranscriptionFactorDependentAction {
 					node2 = this.getCyNode(childID, nodes);
 					if (node2 != null){
 						CyEdge edge;
-						edge = addEdge(node1, node2, tree.getEnrichedMotifID());
+						edge = addEdge(node1, node2, tree.getID());
 						this.setAtribute(edge, "Regulator Gene", this.getSelectedTranscriptionFactor().getGeneID().getGeneName());
 						this.setAtribute(edge, "Target Gene", childID.getGeneName());
 						this.setAtribute(edge, "Regulatory function", "Predicted");
-						this.setAtribute(edge, "Motif", tree.getEnrichedMotifID());
+						this.setAtribute(edge, "Motif", tree.getID());
 						this.setAtribute(edge, "featureID", "" + tree.getFeatureID());
 						CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 						cyEdgeAttrs.setUserVisible("featureID", false);

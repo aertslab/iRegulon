@@ -18,7 +18,7 @@ public class MotifCluster {
     public String getID() {
         final StringBuilder buffer = new StringBuilder();
         for (Motif motif: getMotifs()) {
-            buffer.append(motif.getEnrichedMotifID());
+            buffer.append(motif.getID());
             buffer.append("/");
         }
         buffer.setLength(buffer.length()-1);
@@ -31,12 +31,12 @@ public class MotifCluster {
 
     public float getAUCValue() {
         final Motif motif = getBestMotif();
-        return (motif == null) ? Float.NaN : motif.getAucValue();
+        return (motif == null) ? Float.NaN : motif.getAUCValue();
     }
 
     public float getNEScore() {
         final Motif motif = getBestMotif();
-        return (motif == null) ? Float.NaN : motif.getNeScore();
+        return (motif == null) ? Float.NaN : motif.getNEScore();
     }
 
     public Motif getBestMotif() {

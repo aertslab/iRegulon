@@ -40,8 +40,8 @@ public class LogoThumbnail extends JLabel {
         if (curMouseListener != null) removeMouseListener(curMouseListener);
 
         if (hasMotif()) {
-            setIcon(LogoUtilities.createResizedImageIcon(getMotif().getEnrichedMotifID()));
-            curMouseListener = new LogoThumbnailMouseListener(LogoUtilities.createImageIcon(getMotif().getEnrichedMotifID()), this);
+            setIcon(LogoUtilities.createResizedImageIcon(getMotif().getID()));
+            curMouseListener = new LogoThumbnailMouseListener(LogoUtilities.createImageIcon(getMotif().getID()), this);
         } else {
             setIcon(null);
             curMouseListener = null;

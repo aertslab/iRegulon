@@ -40,7 +40,7 @@ public class CreateNewNetworkAction extends TranscriptionFactorDependentAction {
 	
 	public CyNetwork createNetwork(Motif mtf, TranscriptionFactor tf){
         return Cytoscape.createNetwork(tf.getName() +
-                " with motif " + mtf.getEnrichedMotifID());
+                " with motif " + mtf.getID());
 	}
 
 	@Override
@@ -59,18 +59,18 @@ public class CreateNewNetworkAction extends TranscriptionFactorDependentAction {
 			DrawNodesAction.setAtribute(nodeChild, "ID", tf.getName());
 			//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
 			CyEdge edge;
-			edge = DrawEdgesAction.addEdge(nodeParent, nodeChild, network, view, tree.getEnrichedMotifID());
+			edge = DrawEdgesAction.addEdge(nodeParent, nodeChild, network, view, tree.getID());
 			DrawEdgesAction.setAtribute(edge, "Regulator Gene", tf.getName());
 			DrawEdgesAction.setAtribute(edge, "Target Gene", geneID.getGeneName());
 			DrawEdgesAction.setAtribute(edge, "Regulatory function", "Predicted");
-			DrawEdgesAction.setAtribute(edge, "Motif", tree.getEnrichedMotifID());
+			DrawEdgesAction.setAtribute(edge, "Motif", tree.getID());
 			DrawEdgesAction.setAtribute(edge, "featureID", "" + tree.getFeatureID());
 			CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 			cyEdgeAttrs.setUserVisible("featureID", false);
 		}
 		//if the node is a regulator and target at the same time, it must say regulator
 		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
-		DrawNodesAction.addAtribute(nodeParent, "Motif", tree.getEnrichedMotifID());
+		DrawNodesAction.addAtribute(nodeParent, "Motif", tree.getID());
 		/*final CyLayoutAlgorithm hierarchicalLayout = CyLayouts.getLayout(HIERARCHICAL_LAYOUT);
 		if (hierarchicalLayout != null){
 			System.out.println("Hierarchical");

@@ -134,7 +134,7 @@ public class Results {
         final List<List<Motif>> clusters = new ArrayList<List<Motif>>(code2motifs.values());
         Collections.sort(clusters, new Comparator<List<Motif>>() {
             private float getMaximumNEScore(List<Motif> motifs) {
-                return Collections.min(motifs, new MotifComparator()).getNeScore();
+                return Collections.min(motifs, new MotifComparator()).getNEScore();
             }
 
             @Override
@@ -167,7 +167,7 @@ public class Results {
         final Map<TranscriptionFactor, TranscriptionFactorAttributes> tf2attributes = new HashMap<TranscriptionFactor, TranscriptionFactorAttributes>();
         for (Motif motif : motifs) {
             for (TranscriptionFactor tf : motif.getTranscriptionFactors()) {
-                final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motif.getNeScore(), geneIDs.contains(tf.getName()));
+                final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motif.getNEScore(), geneIDs.contains(tf.getName()));
                 if (!tf2attributes.containsKey(tf) || (attributes.compareTo(tf2attributes.get(tf)) < 0)) {
                     tf2attributes.put(tf, attributes);
                 }
@@ -254,7 +254,7 @@ public class Results {
 
     private static class MotifComparator implements Comparator<Motif> {
         public int compare(Motif o1, Motif o2) {
-            return Float.compare(o2.getNeScore(), o1.getNeScore());
+            return Float.compare(o2.getNEScore(), o1.getNEScore());
         }
     }
 }

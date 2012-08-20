@@ -126,7 +126,7 @@ public class SaveBed extends IRegulonResourceBundle {
 	
 	public void saveBed(){
 		JFrame frame = new JFrame();
-		String name = this.motif.getMotif().getEnrichedMotifID();
+		String name = this.motif.getMotif().getID();
 		String extension = ".bed";
 
 		// Create a file chooser

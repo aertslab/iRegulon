@@ -27,11 +27,11 @@ public final class EnrichedTranscriptionFactor implements Comparable<EnrichedTra
     }
 
     public String getMotifID() {
-        return motif.getEnrichedMotifID();
+        return motif.getID();
     }
 
     public float getNES() {
-        return motif.getNeScore();
+        return motif.getNEScore();
     }
 
     public float getOrthologousIdentity() {

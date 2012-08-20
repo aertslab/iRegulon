@@ -17,7 +17,7 @@ public class DetailFrameTFandMotif {
 
 	public DetailFrameTFandMotif(TFandMotifSelected tfMotif){
 		this.tfMotif = tfMotif;
-		String title = tfMotif.getMotif().getEnrichedMotifID() + " " + tfMotif.getTranscriptionFactor().getName();
+		String title = tfMotif.getMotif().getID() + " " + tfMotif.getTranscriptionFactor().getName();
 		JFrame frame = new JFrame(title);
 		frame.add(this.getDetailPane());
 		
@@ -262,7 +262,7 @@ public class DetailFrameTFandMotif {
 		panel.add(motifLabel, c);
 		
 		JLabel motifNameLabel = new JLabel();
-		motifNameLabel.setText(this.tfMotif.getMotif().getEnrichedMotifID());
+		motifNameLabel.setText(this.tfMotif.getMotif().getID());
 		c.gridx = 1;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -292,7 +292,7 @@ public class DetailFrameTFandMotif {
 		panel.add(NESLabel, c);
 		
 		JLabel NEScoreLabel = new JLabel();
-		NEScoreLabel.setText("" + this.tfMotif.getMotif().getNeScore());
+		NEScoreLabel.setText("" + this.tfMotif.getMotif().getNEScore());
 		c.gridx = 1;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -307,7 +307,7 @@ public class DetailFrameTFandMotif {
 		panel.add(AUCLabel, c);
 		
 		JLabel AUCValueLabel = new JLabel();
-		AUCValueLabel.setText("" + this.tfMotif.getMotif().getAucValue());
+		AUCValueLabel.setText("" + this.tfMotif.getMotif().getAUCValue());
 		c.gridx = 1;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -353,7 +353,7 @@ public class DetailFrameTFandMotif {
 		panel.add(emptyLabel, c);
 		ypos += 1;
 		
-		JLabel logoLabel = new JLabel(LogoUtilities.createImageIcon(this.tfMotif.getMotif().getEnrichedMotifID()));
+		JLabel logoLabel = new JLabel(LogoUtilities.createImageIcon(this.tfMotif.getMotif().getID()));
 		c.gridx = 2;
 		c.gridy = yBgnLogo;
 		c.gridwidth = 2;

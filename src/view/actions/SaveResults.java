@@ -111,9 +111,9 @@ public class SaveResults {
 		for (Motif motif : motifs){
 			//Motif specifications
 			tabfile += motif.getRank() + "\t"
-					+ motif.getEnrichedMotifID() + "\t"
-					+ motif.getAucValue() + "\t"
-					+ motif.getNeScore() + "\t"
+					+ motif.getID() + "\t"
+					+ motif.getAUCValue() + "\t"
+					+ motif.getNEScore() + "\t"
 					+ motif.getClusterCode() + "\t";
 			// a komma seperated list of TFs
 			Iterator<TranscriptionFactor> tfIterator = motif.getTranscriptionFactors().iterator();

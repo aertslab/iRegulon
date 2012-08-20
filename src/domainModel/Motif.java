@@ -33,10 +33,7 @@ public class Motif implements Comparable<Motif> {
 		this.jobID = jobID;
 	}
 	
-	/**
-	 * @return String the enriched motif
-	 */
-	public String getEnrichedMotifID(){
+	public String getID() {
 		return this.enrichedMotifID;
 	}
 	
@@ -44,7 +41,7 @@ public class Motif implements Comparable<Motif> {
 		return this.clusterCode;
 	}
 	
-	public float getNeScore(){
+	public float getNEScore(){
 		return this.neScore;
 	}
 	
@@ -61,7 +58,7 @@ public class Motif implements Comparable<Motif> {
         else return getTranscriptionFactors().get(0);
     }
 	
-	public float getAucValue(){
+	public float getAUCValue(){
 		return this.aucValue;
 	}
 	
@@ -99,6 +96,6 @@ public class Motif implements Comparable<Motif> {
     }
 
     public int compareTo(final Motif other) {
-        return this.getEnrichedMotifID().compareTo(other.getEnrichedMotifID());
+        return this.getID().compareTo(other.getID());
     }
 }

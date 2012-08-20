@@ -16,6 +16,7 @@ public class QueryMetatargetomeAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //TODO: Implement the metatargetome functionality ...
         JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "Coming soon.");
     }
 }

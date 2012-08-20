@@ -7,7 +7,6 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 import domainmodel.Motif;
@@ -33,6 +32,7 @@ public class EnrichedTranscriptionFactorsView extends JPanel implements MotifVie
     public EnrichedTranscriptionFactorsView(final Results results) {
         this.support = new MotifViewSupport(this);
         this.results = results;
+        //TODO: CHange this towards MotifCluster objects and only display best TF and NEScore in the table.
 		this.transcriptionFactors = transform(results);
         setLayout(new BorderLayout());
 	}
@@ -139,6 +139,8 @@ public class EnrichedTranscriptionFactorsView extends JPanel implements MotifVie
 		columnWidth.setWidth();
 
         add(new JScrollPane(table), BorderLayout.CENTER);
+
+        //TODO: Add detail panel with other TFs, the enriched motifs in the clusters and the combined target genes ...
         return this;
 	}
 

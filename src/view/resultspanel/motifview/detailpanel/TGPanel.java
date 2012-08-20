@@ -230,7 +230,7 @@ public class TGPanel extends JPanel implements MotifListener {
 	    this.targetGeneTable.setTableHeader(header);
 	    
 	    //Sorting on the table
-	    this.transcriptionFactorTable.setAutoCreateRowSorter(true);
+	    //this.transcriptionFactorTable.setAutoCreateRowSorter(true);
 	    this.targetGeneTable.setAutoCreateRowSorter(true);
 		
 	}
@@ -343,13 +343,4 @@ public class TGPanel extends JPanel implements MotifListener {
 		
 		this.invalidate();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

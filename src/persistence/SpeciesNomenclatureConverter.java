@@ -1,4 +1,4 @@
-package view.actions;
+package persistence;
 
 
 import com.thoughtworks.xstream.converters.Converter;

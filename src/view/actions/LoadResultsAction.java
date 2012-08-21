@@ -7,6 +7,7 @@ import cytoscape.logger.LogLevel;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.Results;
+import persistence.SaveResults;
 import view.ResourceAction;
 import view.resultspanel.ResultsView;
 

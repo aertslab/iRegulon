@@ -1,10 +1,10 @@
 package view.resultspanel.actions;
 
 
+import persistence.SaveResults;
 import view.ResourceAction;
 import view.resultspanel.ResultsView;
 import view.actions.SaveLoadDialogs;
-import view.actions.SaveResults;
 
 import java.awt.event.ActionEvent;
 

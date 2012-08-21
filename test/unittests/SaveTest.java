@@ -15,10 +15,10 @@ import domainmodel.Motif;
 import domainmodel.Results;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
-import view.actions.LoadException;
+import persistence.LoadException;
+import persistence.SaveResults;
 
 import view.actions.SaveLoadDialogs;
-import view.actions.SaveResults;
 
 public class SaveTest {
 

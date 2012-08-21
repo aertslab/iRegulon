@@ -1,4 +1,4 @@
-package view.actions;
+package persistence;
 
 import view.parametersform.IRegulonType;
 
@@ -55,7 +55,7 @@ public class SaveResults {
 		return xml;
 	}
 	
-	public Results loadResultsFromXML(String xml) throws LoadException{
+	public Results loadResultsFromXML(String xml) throws LoadException {
 		this.xstream = new XStream();
 		
 		//this.xstream.aliasField("iRegulonType", IRegulonType.class, "iRegulonType");

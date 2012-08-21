@@ -1,5 +1,7 @@
 package view.actions;
 
+import persistence.BedConversionUtilities;
+import persistence.BedException;
 import view.IRegulonResourceBundle;
 import view.resultspanel.SelectedMotif;
 
@@ -23,7 +25,6 @@ import cytoscape.CytoscapeInit;
 import domainmodel.TranscriptionFactor;
 
 public class SaveBed extends IRegulonResourceBundle {
-
 	private SelectedMotif motif;
 	
 	
@@ -44,8 +45,7 @@ public class SaveBed extends IRegulonResourceBundle {
         }
         try {
         	if (canconnect){
-        		java.net.URI uri = new java.net.URI("http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hgt.customText=" + this.getBundle().getString("URL_motifBedGenerator") + "?" + this.generateParameters());
-        		desktop.browse(uri);
+                desktop.browse(new java.net.URI(BedConversionUtilities.INSTANCE.createUCSCResourceLink(this.motif.getMotif())));
         	}
         }
         catch ( Exception e ) {
@@ -66,62 +66,6 @@ public class SaveBed extends IRegulonResourceBundle {
 					"</body>" +
 					"</html>");
         }
-	}
-	
-	
-	private String generateParameters(){
-		String transcr = "";
-		List<TranscriptionFactor> tfs = this.motif.getMotif().getTranscriptionFactors();
-		for (TranscriptionFactor tf : tfs){
-			if (! transcr.equals("")){
-				transcr += ",";
-			}
-			transcr +=  tf;
-		}
-		transcr = transcr.substring(0, transcr.length() - 2);
-		String data = "featureIDandTarget=" + this.motif.getMotif().getDatabaseID();
-		if (this.motif.getMotif().getCandidateTargetGenes().size() >= 1){
-			data += ":" + this.motif.getMotif().getCandidateTargetGenes().get(0).getGeneName();
-		}else{
-			data += ":";
-		}
-		data += ":" + transcr;
-		return data;
-	}
-	
-	
-	private String getBed() throws BedException{
-	    String bed = ""; 
-	    String data = this.generateParameters();
-		try {
-			URL url = new URL(this.getBundle().getString("URL_motifBedGenerator") + "?" + data);
-			
-			URLConnection conn = url.openConnection();
-		    conn.setDoInput(true);
-		    conn.setDoOutput(true);
-		    // Get the response
-		    BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		    String line;
-		    //Delete first 2 lines
-		    int lineNr = 0;
-		    while ((line = rd.readLine()) != null) {
-		    	if (lineNr >= 2){
-		    		System.out.println(line);
-		    		bed+=line + '\n';
-		    	}
-		    	lineNr++;
-		    }
-		    rd.close();
-			return bed;
-		}
-		catch (Exception e) {
-			System.err.println(bed);
-			System.out.println(e.getMessage());
-			if (bed.isEmpty()){
-				bed = e.getMessage();
-			}
-			throw new BedException(bed, e);
-		}
 	}
 	
 	public void saveBed(){
@@ -150,8 +94,7 @@ public class SaveBed extends IRegulonResourceBundle {
 				selFile = new File(selFile.getAbsoluteFile() + "");
 			}
 		}
-		//System.out.println(selFile.getName());
-		//System.out.println(selFile.getAbsolutePath());
+
 		BufferedWriter output;
 		boolean success;
 		boolean write = false;
@@ -178,7 +121,7 @@ public class SaveBed extends IRegulonResourceBundle {
 					output = new BufferedWriter(new FileWriter(selFile));
 					String bed = "";
 					try{
-						bed = this.getBed();
+						bed = BedConversionUtilities.INSTANCE.getRegionsBed(this.motif.getMotif());
 					}
 					catch (BedException e){
 						e.printStackTrace();
@@ -213,9 +156,7 @@ public class SaveBed extends IRegulonResourceBundle {
 		}
 	}
 	
-	
-	private static class bedFileFilter extends FileFilter{
-
+	private static class bedFileFilter extends FileFilter {
 		@Override
 		public boolean accept(File f) {
 			String name = f.getName();
@@ -230,8 +171,5 @@ public class SaveBed extends IRegulonResourceBundle {
 		public String getDescription() {
 			return "UCSC bed files";
 		}
-		
 	}
-	
-	
 }

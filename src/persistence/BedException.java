@@ -1,4 +1,4 @@
-package view.actions;
+package persistence;
 
 public class BedException extends Exception{
 

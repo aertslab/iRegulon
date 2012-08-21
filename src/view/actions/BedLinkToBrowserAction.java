@@ -19,5 +19,4 @@ public class BedLinkToBrowserAction extends ResourceAction {
 	public void actionPerformed(ActionEvent e) {
 		this.bedSaver.openUCSC();
 	}
-
 }

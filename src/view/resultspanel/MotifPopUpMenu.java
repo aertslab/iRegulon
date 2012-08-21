@@ -4,7 +4,6 @@ package view.resultspanel;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 
 import view.actions.BedExportAction;
 import view.actions.BedLinkToBrowserAction;

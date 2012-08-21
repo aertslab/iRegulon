@@ -40,7 +40,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         setLayout(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
         cc.fill = GridBagConstraints.BOTH;
-        cc.weightx = 1.0/3.0; cc.weighty = 1.0;
+        cc.weighty = 1.0;
 
         final BaseMotifTableModel motifsModel = new BaseMotifTableModel();
         motifsTable = new JTable(motifsModel);
@@ -62,7 +62,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	    header.setToolTipText("");
 	    motifsTable.setTableHeader(header);
 
-        cc.gridx = 0; cc.gridy = 0;
+        cc.weightx = 2.0/5.0; cc.gridx = 0; cc.gridy = 0;
         add(new JScrollPane(motifsTable), cc);
 
         final TranscriptionFactorTableModel tfModel = new TranscriptionFactorTableModel();
@@ -90,7 +90,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         transcriptionFactorsTable.setTableHeader(tfHeader);
 
 
-        cc.gridx = 1; cc.gridy = 0;
+        cc.weightx = 2.0/5.0; cc.gridx = 1; cc.gridy = 0;
         add(new JScrollPane(transcriptionFactorsTable), cc);
 
         final CandidateTargetGeneTableModel tgModel = new CandidateTargetGeneTableModel();
@@ -106,7 +106,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         tgHeader.setToolTipText("");
         targetGeneTable.setTableHeader(tgHeader);
 
-        cc.gridx = 2; cc.gridy = 0;
+        cc.weightx = 1.0/5.0; cc.gridx = 2; cc.gridy = 0;
         add(new JScrollPane(targetGeneTable), cc);
     }
 

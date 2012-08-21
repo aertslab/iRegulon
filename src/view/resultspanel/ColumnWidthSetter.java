@@ -1,6 +1,4 @@
-package view.resultspanel.renderers;
-
-import view.resultspanel.MotifTableModel;
+package view.resultspanel;
 
 import javax.swing.JTable;
 import java.util.List;
@@ -14,7 +12,7 @@ public class ColumnWidthSetter {
 	}
 	
 	public void setWidth() {
-		final MotifTableModel model = (MotifTableModel) this.table.getModel();
+		final ColumnImportances model = (ColumnImportances) this.table.getModel();
 
         final List<Integer> columnImportance = model.getColumnImportances();
         for (int i = 0, columnImportanceSize = columnImportance.size(); i < columnImportanceSize; i++) {

@@ -8,12 +8,10 @@ import javax.swing.table.TableModel;
 import java.util.List;
 
 
-public interface MotifTableModel extends TableModel {
+public interface MotifTableModel extends TableModel, ColumnImportances {
 	public AbstractMotif getMotifAtRow(int row);
 
     public TranscriptionFactor getTranscriptionFactorAtRow(int row);
 
-	public List<Integer> getColumnImportances();
-	
 	public List<String> getTooltips();
 }

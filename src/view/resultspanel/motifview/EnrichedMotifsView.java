@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 
@@ -28,12 +29,14 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
     private FilterPatternDocumentListener filterPatternDocumentListener;
+    private MouseListener popupListener;
 
     public EnrichedMotifsView(final Results results) {
         this.support = new MotifViewSupport(this);
         this.results = results;
         this.enrichedMotifs = new ArrayList<Motif>(results.getMotifs());
         setLayout(new BorderLayout());
+        initPanel();
 	}
 
     public Results getResults() {
@@ -89,8 +92,8 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
         else return getSelectedMotif().getBestTranscriptionFactor();
     }
 
-    public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
-        final JScrollPane masterPanel = this.createMasterPanel(selectedMotif, transcriptionFactorCB);
+    private void initPanel() {
+        final JScrollPane masterPanel = createMasterPanel();
 		detailPanel = new DetailPanel(results.getParameters());
 
 		//Create a split pane with the two scroll panes in it.
@@ -104,14 +107,12 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 		detailPanel.setMinimumSize(minimumSize);
 
         add(splitPane, BorderLayout.CENTER);
-        return this;
     }
 
-	private JScrollPane createMasterPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox) {
+	private JScrollPane createMasterPanel() {
 		final BaseMotifTableModel tableModel = new BaseMotifTableModel(this.enrichedMotifs);
 		final FilterMotifTableModel filteredModel = new FilterMotifTableModel(tableModel, FilterAttribute.MOTIF, "");
 		table = new JTable(filteredModel);
-        table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorComboBox, this.results.isRegionBased()));
 
 		final ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
 		header.setToolTipStrings(filteredModel.getTooltips().toArray(new String[filteredModel.getTooltips().size()]));
@@ -149,6 +150,10 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
             detailPanel.registerSelectionComponents(transcriptionFactorCB);
             selectedMotif.registerListener(detailPanel);
         }
+        if (popupListener == null) {
+            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, this.results.isRegionBased());
+            table.addMouseListener(popupListener);
+        }
     }
 
     public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
@@ -157,6 +162,10 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
             selectionListener = null;
             detailPanel.unregisterSelectionComponents();
             selectedMotif.unregisterListener(detailPanel);
+        }
+        if (popupListener != null) {
+            table.removeMouseListener(popupListener);
+            popupListener = null;
         }
     }
 

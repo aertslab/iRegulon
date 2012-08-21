@@ -1,6 +1,7 @@
 package view.resultspanel.motifclusterview;
 
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.*;
@@ -25,6 +26,7 @@ public class MotifClustersView extends JPanel implements MotifView {
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
     private FilterPatternDocumentListener filterPatternDocumentListener;
+    private MouseListener popupListener;
 
     public MotifClustersView(final Results results) {
         this.support = new MotifViewSupport(this);
@@ -34,6 +36,7 @@ public class MotifClustersView extends JPanel implements MotifView {
         this.clusters = results.getMotifClusters(networkSupport.getCurrentIDs());
 
         setLayout(new BorderLayout());
+        initPanel();
 	}
 
     public Results getResults() {
@@ -92,14 +95,13 @@ public class MotifClustersView extends JPanel implements MotifView {
 		}
     }
 
-    public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+    private void initPanel() {
 		final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(
                 new BaseMotifClusterTableModel(this.clusters),
                 FilterAttribute.TRANSCRIPTION_FACTOR, "");
         table = new JTable(model);
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoCreateRowSorter(true);
-        table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased()));
 
         final ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
         header.setToolTipStrings(model.getTooltips().toArray(new String[model.getTooltips().size()]));
@@ -125,9 +127,7 @@ public class MotifClustersView extends JPanel implements MotifView {
 		columnWidth.setWidth();
 
         add(new JScrollPane(table), BorderLayout.CENTER);
-
         //TODO: Add detail panel with other TFs, the enriched motifs in the clusters and the combined target genes ...
-        return this;
 	}
 
     public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
@@ -136,12 +136,20 @@ public class MotifClustersView extends JPanel implements MotifView {
             selectedMotif.setMotif(getSelectedMotif());
             transcriptionFactorCB.setSelectedItem(getSelectedTranscriptionFactor());
         }
+        if (popupListener == null) {
+            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased());
+            table.addMouseListener(popupListener);
+        }
     }
 
     public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
         if (selectionListener != null) {
             TableMotifClusterSelectionConnector.unconnect(table, selectionListener);
             selectionListener = null;
+        }
+        if (popupListener != null) {
+            table.removeMouseListener(popupListener);
+            popupListener = null;
         }
     }
 

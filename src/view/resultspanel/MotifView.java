@@ -17,8 +17,6 @@ public interface MotifView {
 
     public void setFilterPatternListener(FilterPatternDocumentListener listener);
 
-    public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);
-
     public AbstractMotif getSelectedMotif();
 
     public TranscriptionFactor getSelectedTranscriptionFactor();

@@ -118,10 +118,10 @@ public class ResultsView extends IRegulonResourceBundle {
         // 4. Create tabbed pane with these views ...
         final JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Transcription Factors", null,
-                tfsView.createPanel(selectedMotif, transcriptionFactorCB),
+                tfsView,
                 "Transcription factor oriented view.");
 		tabbedPane.addTab("Motifs", null,
-                motifsView.createPanel(selectedMotif, transcriptionFactorCB),
+                motifsView,
                 "Motif oriented view.");
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override

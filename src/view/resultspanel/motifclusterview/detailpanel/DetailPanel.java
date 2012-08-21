@@ -98,7 +98,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         for (int i=0; i < transcriptionFactorsTable.getModel().getColumnCount(); i++){
 			final CombinedRenderer renderer = new CombinedRenderer();
 			switch(i){
-			case 1 : renderer.addRenderer(new FloatRenderer("0.###E0", "Not applicable")); //float renderer
+			case 1 : renderer.addRenderer(new FloatRenderer("0.###E0", "N/A")); //float renderer
 					break;
 			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
 					break;

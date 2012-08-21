@@ -21,7 +21,7 @@ import java.util.List;
 public final class EnrichedMotifsView extends JPanel implements MotifView {
     private JTable table;
     private DetailPanel detailPanel;
-    private final MotifViewSupport support;
+    private final MotifViewSupport viewSupport;
 
     private final Results results;
     private List<Motif> enrichedMotifs;
@@ -32,7 +32,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     private MouseListener popupListener;
 
     public EnrichedMotifsView(final Results results) {
-        this.support = new MotifViewSupport(this);
+        this.viewSupport = new MotifViewSupport(this);
         this.results = results;
         this.enrichedMotifs = new ArrayList<Motif>(results.getMotifs());
         setLayout(new BorderLayout());
@@ -45,6 +45,16 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     public java.util.List<Motif> getEnrichedMotifs() {
         return enrichedMotifs;
+    }
+
+    @Override
+    public JTable getMasterTable() {
+        return table;
+    }
+
+    @Override
+    public DetailPanelIF getDetailPanel() {
+        return detailPanel;
     }
 
     @Override
@@ -72,24 +82,14 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
        filterPatternDocumentListener = listener;
     }
 
+    @Override
     public AbstractMotif getSelectedMotif() {
-        final int[] selectedRowIndices = table.getSelectedRows();
-		if (selectedRowIndices.length == 0){
-			return null;
-		} else {
-            final MotifTableModel model = (MotifTableModel) table.getModel();
-			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
-			return model.getMotifAtRow(modelRowIdx);
-		}
+        return viewSupport.getSelectedMotif();
     }
 
     @Override
     public TranscriptionFactor getSelectedTranscriptionFactor() {
-        final AbstractMotif motif = getSelectedMotif();
-        if (motif == null) return null;
-        final TranscriptionFactor transcriptionFactor = detailPanel.getSelectedTranscriptionFactor();
-        if (transcriptionFactor != null) return transcriptionFactor;
-        else return getSelectedMotif().getBestTranscriptionFactor();
+        return viewSupport.getSelectedTranscriptionFactor();
     }
 
     private void initPanel() {
@@ -171,11 +171,11 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     @Override
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        support.registerFilterComponents(filterAttributeCB, filterValueTF);
+        viewSupport.registerFilterComponents(filterAttributeCB, filterValueTF);
     }
 
     @Override
     public void unregisterFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        support.unregisterFilterComponents(filterAttributeCB, filterValueTF);
+        viewSupport.unregisterFilterComponents(filterAttributeCB, filterValueTF);
     }
 }

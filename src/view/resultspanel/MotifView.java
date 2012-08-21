@@ -7,7 +7,11 @@ import javax.swing.*;
 
 
 public interface MotifView {
+    public JTable getMasterTable();
+
     public AbstractFilterMotifTableModel getModel();
+
+    public DetailPanelIF getDetailPanel();
 
     public FilterAttributeActionListener getFilterAttributeListener();
 

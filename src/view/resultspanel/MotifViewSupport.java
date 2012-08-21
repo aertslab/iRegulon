@@ -2,6 +2,8 @@ package view.resultspanel;
 
 
 import domainmodel.AbstractMotif;
+import domainmodel.TranscriptionFactor;
+
 import javax.swing.*;
 
 
@@ -14,6 +16,26 @@ public class MotifViewSupport {
 
     public MotifView getView() {
         return view;
+    }
+
+    public AbstractMotif getSelectedMotif() {
+        final int selectedRowIndex = getView().getMasterTable().getSelectedRow();
+		if (selectedRowIndex < 0) {
+			return null;
+		} else {
+            final MotifTableModel model = getView().getModel();
+			final int modelRowIdx = getView().getMasterTable().convertRowIndexToModel(selectedRowIndex);
+			return model.getMotifAtRow(modelRowIdx);
+		}
+    }
+
+    public TranscriptionFactor getSelectedTranscriptionFactor() {
+        final AbstractMotif motif = getSelectedMotif();
+        if (motif == null) return null;
+
+        final TranscriptionFactor transcriptionFactor = getView().getDetailPanel().getSelectedTranscriptionFactor();
+        if (transcriptionFactor != null) return transcriptionFactor;
+        else return getSelectedMotif().getBestTranscriptionFactor();
     }
 
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {

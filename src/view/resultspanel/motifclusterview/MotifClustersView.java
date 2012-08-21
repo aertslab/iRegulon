@@ -10,18 +10,21 @@ import javax.swing.table.TableColumn;
 
 import domainmodel.*;
 import view.resultspanel.*;
+import view.resultspanel.motifclusterview.detailpanel.DetailPanel;
 import view.resultspanel.renderers.*;
 import view.resultspanel.motifclusterview.tablemodels.BaseMotifClusterTableModel;
 import view.resultspanel.motifclusterview.tablemodels.FilterMotifClusterTableModel;
 
 
 public class MotifClustersView extends JPanel implements MotifView {
-    private JTable table;
-    private final MotifViewSupport support;
+    private final MotifViewSupport viewSupport;
     private final NetworkMembershipSupport networkSupport;
 
     private final Results results;
     private final List<MotifCluster> clusters;
+
+    private JTable table;
+    private DetailPanelIF detailPanel;
 
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
@@ -29,7 +32,7 @@ public class MotifClustersView extends JPanel implements MotifView {
     private MouseListener popupListener;
 
     public MotifClustersView(final Results results) {
-        this.support = new MotifViewSupport(this);
+        this.viewSupport = new MotifViewSupport(this);
         this.results = results;
 
         this.networkSupport = new NetworkMembershipSupport();
@@ -45,6 +48,16 @@ public class MotifClustersView extends JPanel implements MotifView {
 
     public List<MotifCluster> getMotifClusters() {
         return clusters;
+    }
+
+    @Override
+    public JTable getMasterTable() {
+        return table;
+    }
+
+    @Override
+    public DetailPanelIF getDetailPanel() {
+        return detailPanel;
     }
 
     @Override
@@ -72,27 +85,14 @@ public class MotifClustersView extends JPanel implements MotifView {
        filterPatternDocumentListener = listener;
     }
 
+    @Override
     public AbstractMotif getSelectedMotif() {
-        final int[] selectedRowIndices = table.getSelectedRows();
-		if (selectedRowIndices.length == 0){
-			return null;
-		} else {
-            final MotifTableModel model = (MotifTableModel) table.getModel();
-			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
-			return model.getMotifAtRow(modelRowIdx);
-		}
+        return viewSupport.getSelectedMotif();
     }
 
     @Override
     public TranscriptionFactor getSelectedTranscriptionFactor() {
-        final int[] selectedRowIndices = table.getSelectedRows();
-		if (selectedRowIndices.length == 0){
-			return null;
-		} else {
-            final MotifTableModel model = (MotifTableModel) table.getModel();
-			final int modelRowIdx = table.convertRowIndexToModel(selectedRowIndices[0]);
-			return model.getTranscriptionFactorAtRow(modelRowIdx);
-		}
+        return viewSupport.getSelectedTranscriptionFactor();
     }
 
     private void initPanel() {
@@ -125,9 +125,10 @@ public class MotifClustersView extends JPanel implements MotifView {
 
         final ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
 		columnWidth.setWidth();
-
         add(new JScrollPane(table), BorderLayout.CENTER);
-        //TODO: Add detail panel with other TFs, the enriched motifs in the clusters and the combined target genes ...
+
+        detailPanel = new DetailPanel();
+        add((JPanel) detailPanel, BorderLayout.SOUTH);
 	}
 
     public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
@@ -140,6 +141,7 @@ public class MotifClustersView extends JPanel implements MotifView {
             popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased());
             table.addMouseListener(popupListener);
         }
+        detailPanel.registerSelectionComponents(transcriptionFactorCB);
     }
 
     public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
@@ -151,15 +153,16 @@ public class MotifClustersView extends JPanel implements MotifView {
             table.removeMouseListener(popupListener);
             popupListener = null;
         }
+        detailPanel.unregisterSelectionComponents();
     }
 
     @Override
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        support.registerFilterComponents(filterAttributeCB, filterValueTF);
+        viewSupport.registerFilterComponents(filterAttributeCB, filterValueTF);
     }
 
     @Override
     public void unregisterFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        support.unregisterFilterComponents(filterAttributeCB, filterValueTF);
+        viewSupport.unregisterFilterComponents(filterAttributeCB, filterValueTF);
     }
 }

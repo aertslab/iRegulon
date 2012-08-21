@@ -5,6 +5,7 @@ import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.TranscriptionFactorTableModel;
+import view.resultspanel.motifclusterview.tablemodels.BaseMotifClusterTableModel;
 import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;
 import view.resultspanel.renderers.*;
 
@@ -42,7 +43,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         cc.fill = GridBagConstraints.BOTH;
         cc.weightx = 1.0/3.0; cc.weighty = 1.0;
 
-        motifsTable = new JTable(new BaseMotifTableModel());
+        final BaseMotifTableModel motifsModel = new BaseMotifTableModel();
+        motifsTable = new JTable(motifsModel);
         motifsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         for (int i = 0; i < motifsTable.getModel().getColumnCount(); i++) {
             final TableColumn column = motifsTable.getColumnModel().getColumn(i);
@@ -54,11 +56,18 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
                 column.setCellRenderer(new DefaultRenderer());
             }
         }
+        new ColumnWidthSetter(motifsTable).setWidth();
+		motifsTable.setAutoCreateRowSorter(true);
+        final ToolTipHeader header = new ToolTipHeader(motifsTable.getColumnModel());
+		header.setToolTipStrings(motifsModel.getTooltips().toArray(new String[motifsModel.getTooltips().size()]));
+	    header.setToolTipText("");
+	    motifsTable.setTableHeader(header);
 
-        cc.gridx = 1; cc.gridy = 0;
+        cc.gridx = 0; cc.gridy = 0;
         add(new JScrollPane(motifsTable), cc);
 
-        transcriptionFactorsTable = new JTable(new TranscriptionFactorTableModel());
+        final TranscriptionFactorTableModel tfModel = new TranscriptionFactorTableModel();
+        transcriptionFactorsTable = new JTable(tfModel);
         transcriptionFactorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         transcriptionFactorHighlighter = new NetworkMembershipHighlightRenderer("Transcription Factor Name");
         transcriptionFactorsTable.addMouseMotionListener(new TranscriptionFactorTooltip(transcriptionFactorsTable));
@@ -75,16 +84,30 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 			final TableColumn column = transcriptionFactorsTable.getColumnModel().getColumn(i);
 			column.setCellRenderer(renderer);
 		}
+        new ColumnWidthSetter(transcriptionFactorsTable).setWidth();
+        transcriptionFactorsTable.setAutoCreateRowSorter(true);
+        final ToolTipHeader tfHeader = new ToolTipHeader(transcriptionFactorsTable.getColumnModel());
+        tfHeader.setToolTipStrings(tfModel.getTooltips());
+        tfHeader.setToolTipText("");
+        transcriptionFactorsTable.setTableHeader(tfHeader);
+
 
         cc.gridx = 1; cc.gridy = 0;
         add(new JScrollPane(transcriptionFactorsTable), cc);
 
-        targetGeneTable = new JTable(new CandidateTargetGeneTableModel());
+        final CandidateTargetGeneTableModel tgModel = new CandidateTargetGeneTableModel();
+        targetGeneTable = new JTable(tgModel);
         targetGeneTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         targetGeneHighlighter = new NetworkMembershipHighlightRenderer("Target Name");
         for (int i=0; i < this.targetGeneTable.getModel().getColumnCount(); i++){
 			this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(targetGeneHighlighter);
 		}
+        new ColumnWidthSetter(targetGeneTable).setWidth();
+        targetGeneTable.setAutoCreateRowSorter(true);
+        final ToolTipHeader tgHeader = new ToolTipHeader(targetGeneTable.getColumnModel());
+        tgHeader.setToolTipStrings(tgModel.getTooltips());
+        tgHeader.setToolTipText("");
+        targetGeneTable.setTableHeader(tgHeader);
 
         cc.gridx = 2; cc.gridy = 0;
         add(new JScrollPane(targetGeneTable), cc);

@@ -142,6 +142,7 @@ public class MotifClustersView extends JPanel implements MotifView {
             table.addMouseListener(popupListener);
         }
         detailPanel.registerSelectionComponents(transcriptionFactorCB);
+        selectedMotif.registerListener(detailPanel);
     }
 
     public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
@@ -154,6 +155,7 @@ public class MotifClustersView extends JPanel implements MotifView {
             popupListener = null;
         }
         detailPanel.unregisterSelectionComponents();
+        selectedMotif.unregisterListener(detailPanel);
     }
 
     @Override

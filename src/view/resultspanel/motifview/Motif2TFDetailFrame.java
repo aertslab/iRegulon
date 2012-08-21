@@ -1,6 +1,8 @@
-package view.resultspanel.motifview.detailpanel;
+package view.resultspanel.motifview;
 
 import view.resultspanel.CandidateTargetGeneTableModel;
+import view.resultspanel.motifview.detailpanel.LogoUtilities;
+import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,10 +16,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 
-public class DetailFrameTFandMotif {
+public class Motif2TFDetailFrame {
 	private TFandMotifSelected tfMotif;
 
-	public DetailFrameTFandMotif(TFandMotifSelected tfMotif){
+	public Motif2TFDetailFrame(TFandMotifSelected tfMotif){
 		this.tfMotif = tfMotif;
 		String title = tfMotif.getMotif().getName() + " " + tfMotif.getTranscriptionFactor().getName();
 		JFrame frame = new JFrame(title);

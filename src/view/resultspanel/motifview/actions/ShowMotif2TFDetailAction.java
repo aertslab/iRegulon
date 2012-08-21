@@ -1,14 +1,11 @@
 package view.resultspanel.motifview.actions;
 
 import view.ResourceAction;
-import view.resultspanel.motifview.detailpanel.DetailFrameTFandMotif;
+import view.resultspanel.motifview.Motif2TFDetailFrame;
 import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
 
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -27,7 +24,7 @@ public class ShowMotif2TFDetailAction extends ResourceAction implements ListSele
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		new DetailFrameTFandMotif(tfMotif);
+		new Motif2TFDetailFrame(tfMotif);
 	}
 
 	@Override

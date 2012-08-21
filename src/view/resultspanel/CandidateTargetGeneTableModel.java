@@ -6,11 +6,15 @@ import javax.swing.table.AbstractTableModel;
 import domainmodel.AbstractMotif;
 import domainmodel.CandidateTargetGene;
 
+import java.util.Arrays;
+import java.util.List;
 
-public final class CandidateTargetGeneTableModel extends AbstractTableModel {
+
+public final class CandidateTargetGeneTableModel extends AbstractTableModel implements ColumnImportances {
     private static final String[] COLUMN_NAMES = {"Rank", "Target Name"};
     private static final String[] COLUMN_TOOLTIPS = {"The rank of the target.",
             "The name of the predicted target."};
+        private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1);
 
     private final AbstractMotif motif;
 
@@ -52,5 +56,9 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel {
 
     public String[] getTooltips() {
         return COLUMN_TOOLTIPS;
+    }
+
+    public List<Integer> getColumnImportances() {
+        return COLUMN_IMPORTANCES;
     }
 }

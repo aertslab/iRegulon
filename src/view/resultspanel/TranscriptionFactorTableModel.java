@@ -4,12 +4,15 @@ import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.Arrays;
+import java.util.List;
 
-public class TranscriptionFactorTableModel extends AbstractTableModel {
+public class TranscriptionFactorTableModel extends AbstractTableModel implements ColumnImportances {
 	private static final String[] COLUMN_NAMES = {
             "Transcription Factor Name",
             "Orthologous Identity",
             "Motif Similarity (FDR)" };
+    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(1, 3, 3);
 	private static final String[] COLUMN_TOOLTIPS = {
             "The gene ID of the predicted transcritpion factor",
 			"The orthologous identity as fraction",
@@ -62,5 +65,9 @@ public class TranscriptionFactorTableModel extends AbstractTableModel {
 
 	public String[] getTooltips() {
 		return COLUMN_TOOLTIPS;
+    }
+
+    public List<Integer> getColumnImportances() {
+        return COLUMN_IMPORTANCES;
     }
 }

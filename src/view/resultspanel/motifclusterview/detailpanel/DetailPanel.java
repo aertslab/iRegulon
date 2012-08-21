@@ -46,7 +46,6 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         motifsTable = new JTable(motifsModel);
         motifsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         installRenderersOnMotifsTable();
-        new ColumnWidthSetter(motifsTable).setWidth();
 		motifsTable.setAutoCreateRowSorter(true);
         final ToolTipHeader header = new ToolTipHeader(motifsTable.getColumnModel());
 		header.setToolTipStrings(motifsModel.getTooltips().toArray(new String[motifsModel.getTooltips().size()]));
@@ -91,6 +90,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         for (int i=0; i < this.targetGeneTable.getModel().getColumnCount(); i++){
 			this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(targetGeneHighlighter);
 		}
+
+        new ColumnWidthSetter(targetGeneTable).setWidth();
     }
 
     private void installRenderersOnTranscriptionFactorsTable() {
@@ -107,6 +108,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 			final TableColumn column = transcriptionFactorsTable.getColumnModel().getColumn(i);
 			column.setCellRenderer(renderer);
 		}
+
+        new ColumnWidthSetter(transcriptionFactorsTable).setWidth();
     }
 
     private void installRenderersOnMotifsTable() {
@@ -120,6 +123,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
                 column.setCellRenderer(new DefaultRenderer());
             }
         }
+
+        new ColumnWidthSetter(motifsTable).setWidth();
     }
 
     public boolean hasCurrentCluster() {

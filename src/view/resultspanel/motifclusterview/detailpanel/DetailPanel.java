@@ -117,8 +117,6 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             final TableColumn column = motifsTable.getColumnModel().getColumn(i);
             if (motifsTable.getModel().getColumnClass(i).equals(Float.class)) {
                 column.setCellRenderer(new FloatRenderer("0.000"));
-            } else if (motifsTable.getModel().getColumnClass(i).equals(Boolean.class)) {
-                column.setCellRenderer(new BooleanRenderer());
             } else {
                 column.setCellRenderer(new DefaultRenderer());
             }

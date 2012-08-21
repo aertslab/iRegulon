@@ -11,6 +11,15 @@ public class DefaultRenderer extends JLabel implements TableCellRenderer, Canvas
 	@Override
 	public JLabel updateCanvas(JTable table, Object value, JLabel canvas,
 			boolean isSelected, int row) {
+        if(isSelected) {
+            canvas.setBackground(table.getSelectionBackground());
+            canvas.setForeground(table.getSelectionForeground());
+        } else {
+        	canvas.setBackground(table.getBackground());
+        	canvas.setForeground(table.getForeground());
+        }
+        canvas.setOpaque(true);
+
 		if (value == null){
 			canvas.setText("");
 		}else{

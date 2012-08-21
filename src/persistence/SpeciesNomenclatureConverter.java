@@ -9,27 +9,26 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 import domainmodel.SpeciesNomenclature;
 
+
 public class SpeciesNomenclatureConverter implements Converter {
+    public boolean canConvert(Class clazz) {
+        return clazz.equals(SpeciesNomenclature.class);
+    }
 
-        public boolean canConvert(Class clazz) {
-                return clazz.equals(SpeciesNomenclature.class);
-        }
-
-        public void marshal(Object value, HierarchicalStreamWriter writer,
+    public void marshal(Object value, HierarchicalStreamWriter writer,
                         MarshallingContext context) {
-        		SpeciesNomenclature spnom = (SpeciesNomenclature) value;
-                writer.startNode("code");
-                writer.setValue("" + spnom.getCode());
-                writer.endNode();
-        }
+        final SpeciesNomenclature speciesNomenclature = (SpeciesNomenclature) value;
+        writer.startNode("code");
+        writer.setValue("" + speciesNomenclature.getCode());
+        writer.endNode();
+    }
 
-        public Object unmarshal(HierarchicalStreamReader reader,
-                        UnmarshallingContext context) {
-                reader.moveDown();
-                SpeciesNomenclature spnom = SpeciesNomenclature.getNomenclature(
-                										Integer.parseInt(reader.getValue()));
-                reader.moveUp();
-                return spnom;
-        }
-
+    public Object unmarshal(HierarchicalStreamReader reader,
+                            UnmarshallingContext context) {
+        reader.moveDown();
+        final SpeciesNomenclature speciesNomenclature = SpeciesNomenclature.getNomenclature(
+                Integer.parseInt(reader.getValue()));
+        reader.moveUp();
+        return speciesNomenclature;
+    }
 }

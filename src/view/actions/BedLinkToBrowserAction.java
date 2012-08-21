@@ -8,11 +8,11 @@ import view.resultspanel.SelectedMotif;
 public class BedLinkToBrowserAction extends ResourceAction {
     private static final String NAME = "action_link_to_UCSC";
 
-	private final SaveBed bedSaver;
+	private final BedUtilities bedSaver;
 	
 	public BedLinkToBrowserAction(SelectedMotif motif) {
         super(NAME);
-		this.bedSaver = new SaveBed(motif);
+		this.bedSaver = new BedUtilities(motif);
 	}
 	
 	@Override

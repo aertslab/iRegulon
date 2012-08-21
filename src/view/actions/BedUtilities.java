@@ -1,5 +1,8 @@
 package view.actions;
 
+import cytoscape.logger.ConsoleLogger;
+import cytoscape.logger.CyLogHandler;
+import cytoscape.logger.LogLevel;
 import persistence.BedConversionUtilities;
 import persistence.BedException;
 import view.IRegulonResourceBundle;
@@ -24,11 +27,14 @@ import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import domainmodel.TranscriptionFactor;
 
-public class SaveBed extends IRegulonResourceBundle {
-	private SelectedMotif motif;
+
+public class BedUtilities extends IRegulonResourceBundle {
+    private final CyLogHandler logger = ConsoleLogger.getLogger();
+
+	private final SelectedMotif motif;
 	
 	
-	public SaveBed(SelectedMotif motif){
+	public BedUtilities(SelectedMotif motif){
 		this.motif = motif;
 	}
 	
@@ -120,39 +126,22 @@ public class SaveBed extends IRegulonResourceBundle {
 				try {
 					output = new BufferedWriter(new FileWriter(selFile));
 					String bed = "";
-					try{
+					try {
 						bed = BedConversionUtilities.INSTANCE.getRegionsBed(this.motif.getMotif());
-					}
-					catch (BedException e){
-						e.printStackTrace();
-						System.out.println(e.getMessage());
-						JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-								"<html> " +
-								"<body>" +
-								"An error has occured while generating your bed file." +
-								"</body>" +
-								"</html>");
+					} catch (BedException e){
+						logger.handleLog(LogLevel.LOG_ERROR, e.getCause().getMessage());
+						JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "An error has occured while generating your bed file.");
 					}
 					output.write(bed);
 					output.close();
 				} catch (IOException e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-							"<html> " +
-							"<body>" +
-							"An error has occured while save your file." +
-							"</body>" +
-							"</html>");
+                    logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+					JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "An error has occured while save your file.");
 				}
 			}
 		} catch (IOException e1) {
-			e1.printStackTrace();
-			JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-					"<html> " +
-					"<body>" +
-					"An error has occured while creating your file." +
-					"</body>" +
-					"</html>");
+			logger.handleLog(LogLevel.LOG_ERROR, e1.getMessage());
+			JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "An error has occured while creating your file.");
 		}
 	}
 	
@@ -169,7 +158,7 @@ public class SaveBed extends IRegulonResourceBundle {
 
 		@Override
 		public String getDescription() {
-			return "UCSC bed files";
+			return "UCSC BED files";
 		}
 	}
 }

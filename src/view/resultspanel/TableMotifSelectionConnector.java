@@ -1,24 +1,26 @@
-package view.resultspanel.motifview;
+package view.resultspanel;
 
-import view.resultspanel.MotifTableModel;
-import view.resultspanel.SelectedMotif;
+import domainmodel.AbstractMotif;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import domainmodel.Motif;
 
-
-public final class TableMotifSelectionConnector implements ListSelectionListener {
+public class TableMotifSelectionConnector implements ListSelectionListener {
 	private JTable table;
 	private SelectedMotif selectedMotif;
 
-	public static void connect(JTable table, SelectedMotif selectedMotif) {
-        new TableMotifSelectionConnector(table, selectedMotif);
+	public static ListSelectionListener connect(JTable table, SelectedMotif selectedMotif) {
+        return new TableMotifSelectionConnector(table, selectedMotif);
+    }
+
+    public static void unconnect(JTable table, ListSelectionListener selectionListener) {
+        final ListSelectionModel listSelectionModel = table.getSelectionModel();
+        listSelectionModel.removeListSelectionListener(selectionListener);
     }
 	
-	private TableMotifSelectionConnector(JTable table, SelectedMotif selectedMotif){
+	public TableMotifSelectionConnector(JTable table, SelectedMotif selectedMotif){
 		if (table == null || selectedMotif == null){
 			throw new IllegalArgumentException();
 		}
@@ -29,16 +31,20 @@ public final class TableMotifSelectionConnector implements ListSelectionListener
         listSelectionModel.addListSelectionListener(this);
 	}
 
+    protected JTable getTable() {
+        return table;
+    }
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		this.selectedMotif.setMotif(this.getSelectedMotif());
 	}
 
-    public Motif getSelectedMotif(){
+    public AbstractMotif getSelectedMotif(){
         return this.getSelectedMotif(this.table);
     }
 
-	public Motif getSelectedMotif(final JTable table) {
+	public AbstractMotif getSelectedMotif(final JTable table) {
 		final int[] selectedRowIndices = table.getSelectedRows();
 		if (selectedRowIndices.length == 0){
 			return null;

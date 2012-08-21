@@ -8,6 +8,7 @@ import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
 
 
+import domainmodel.AbstractMotif;
 import view.parametersform.IRegulonVisualStyle;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
@@ -38,7 +39,7 @@ public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		DrawNodesAction drawNodesAction = new DrawNodesAction(this.getSelectedMotif(), selectedTranscriptionFactor);
-		Motif tree = this.getSelectedMotif().getMotif();
+		AbstractMotif tree = this.getSelectedMotif().getMotif();
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network =  Cytoscape.getCurrentNetwork();
 		CyNetworkView view = Cytoscape.getCurrentNetworkView();
@@ -92,7 +93,7 @@ public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction 
 	}
 	
 	private void drawEdgeAndAttributes(CyNode parent, CyNode target, 
-						CyNetwork network, CyNetworkView view, Motif motif, 
+						CyNetwork network, CyNetworkView view, AbstractMotif motif,
 						CandidateTargetGene tg, TranscriptionFactor tf){
 		CyEdge edge;
 		edge = DrawEdgesAction.addEdge(parent, target, network, view, motif.getName());

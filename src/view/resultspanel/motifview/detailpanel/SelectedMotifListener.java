@@ -6,12 +6,12 @@ import javax.swing.event.ListSelectionListener;
 
 import domainmodel.TranscriptionFactor;
 
-public class TFSelectionListener implements ListSelectionListener{
+public class SelectedMotifListener implements ListSelectionListener{
 
 	private JTable table;
 	private TFandMotifSelected tfMotif;
 	
-	public TFSelectionListener(JTable table, TFandMotifSelected tfMotif){
+	public SelectedMotifListener(JTable table, TFandMotifSelected tfMotif){
 		this.table = table;
 		this.tfMotif = tfMotif;
 	}

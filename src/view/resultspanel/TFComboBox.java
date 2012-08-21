@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
+import domainmodel.AbstractMotif;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
@@ -25,7 +26,7 @@ public class TFComboBox extends JComboBox implements MotifListener {
     }
 	
 	@Override
-    public void newMotifSelected(Motif currentSelection) {
+    public void newMotifSelected(AbstractMotif currentSelection) {
         if (currentSelection != null) {
             final List<TranscriptionFactor> tfs = new ArrayList<TranscriptionFactor>(currentSelection.getTranscriptionFactors());
             Collections.sort(tfs);

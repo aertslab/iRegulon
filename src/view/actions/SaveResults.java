@@ -55,11 +55,6 @@ public class SaveResults {
 		return xml;
 	}
 	
-	/**
-	 * transforms the given xml to a collection of motifs
-	 * @return the motifs in a Collection of the given xml
-	 * @throws LoadException 
-	 */
 	public Results loadResultsFromXML(String xml) throws LoadException{
 		this.xstream = new XStream();
 		
@@ -93,6 +88,7 @@ public class SaveResults {
 			//Results result = new Results(motifs, null);
 				return result;
 		}catch (Exception e){
+            //BUG:
 			throw new LoadException("The file can't be loaded: wrong format", e);
 		}
 			

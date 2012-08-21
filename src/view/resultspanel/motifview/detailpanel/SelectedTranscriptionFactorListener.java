@@ -9,20 +9,17 @@ import javax.swing.event.ListSelectionListener;
 
 import domainmodel.TranscriptionFactor;
 
-public class TFTableSelectionListen implements ListSelectionListener{
-
-	private JTable table;
-	private TFComboBox tfcombobox;
+public class SelectedTranscriptionFactorListener implements ListSelectionListener {
+	private final JTable table;
+	private final TFComboBox tfcombobox;
 	
-	public TFTableSelectionListen(JTable table, TFComboBox tfcombobox){
+	public SelectedTranscriptionFactorListener(JTable table, TFComboBox tfcombobox){
 		this.table = table;
 		this.tfcombobox = tfcombobox;
 	}
-	
-	
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		//final TFTableModel tftModel = (TFTableModel) table.getModel();
 		TranscriptionFactor tf = this.getSelectedTranscriptionFactor();
 		this.tfcombobox.setSelectedItem(tf);
 	}
@@ -39,6 +36,4 @@ public class TFTableSelectionListen implements ListSelectionListener{
 			return tf;
 		}
 	}
-
-	
 }

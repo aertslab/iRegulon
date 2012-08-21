@@ -3,33 +3,39 @@ package view.resultspanel;
 
 import java.util.*;
 
+import domainmodel.AbstractMotif;
 import domainmodel.Motif;
 
 
 public final class SelectedMotif {
-	private List<MotifListener> listeners;
-	private Motif motif;
-	private String attributeName;
-	
-	public SelectedMotif(String attributeName) {
-		this.motif = null;
+	private final List<MotifListener> listeners;
+    private final String attributeName;
+
+	private AbstractMotif motif;
+
+	public SelectedMotif(final String attributeName) {
 		this.listeners = new ArrayList<MotifListener>();
 		this.attributeName = attributeName;
-	}
+        this.motif = null;
+    }
 	
 	public void registerListener(MotifListener l) {
 		this.listeners.add(l);
 	}
 
+    public void unregisterListener(MotifListener l) {
+        this.listeners.remove(l);
+    }
+
 	public String getAttributeName(){
 		return this.attributeName;
 	}
 
-	public Motif getMotif() {
+	public AbstractMotif getMotif() {
 		return this.motif;
 	}
 	
-	public void setMotif(Motif motif) {
+	public void setMotif(AbstractMotif motif) {
 		this.motif = motif;
 		refresh();
 	}
@@ -39,7 +45,7 @@ public final class SelectedMotif {
     }
 
     private void fireListeners() {
-        for (MotifListener l : new ArrayList<MotifListener>(listeners)) {
+        for (final MotifListener l : new ArrayList<MotifListener>(listeners)) {
             l.newMotifSelected(this.motif);
         }
     }

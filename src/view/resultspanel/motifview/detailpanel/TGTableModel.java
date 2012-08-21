@@ -4,18 +4,19 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import domainmodel.AbstractMotif;
 import domainmodel.CandidateTargetGene;
 import domainmodel.Motif;
 
 public class TGTableModel extends AbstractTableModel{
 
-	private final Motif motif;
+	private final AbstractMotif motif;
 	private static final int NR_OF_COLUMNS = 2;
 	private final String[] m_colNames = {"Rank", "Target Name"};
 	private final String[] toolTipsCol = {"The rank of the target.",
 					"The name of the predicted target."};
 	
-	public TGTableModel(Motif motif){
+	public TGTableModel(AbstractMotif motif){
 		this.motif = motif;
 	}
 	

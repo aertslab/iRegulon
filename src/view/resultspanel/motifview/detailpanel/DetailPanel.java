@@ -1,6 +1,7 @@
 package view.resultspanel.motifview.detailpanel;
 
 
+import domainmodel.AbstractMotif;
 import view.resultspanel.MotifListener;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.ToolTipHeader;
@@ -12,6 +13,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JLabel;
@@ -19,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 
@@ -26,71 +29,33 @@ import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class TGPanel extends JPanel implements MotifListener {
-
-	
+public class DetailPanel extends JPanel implements MotifListener {
 	private JTable targetGeneTable;
 	private JLabel jlbMotif;
 	private JLabel jlbDescription;
-	//private JTextField jtfNEScore;
-	//private JTextField jtfOrthologousIdentifier;
-	//private JTextField jtfMotifSimilarityFDR;
 	private LogoThumbnail jlbLogo;
 	private JTable transcriptionFactorTable;
 	private NetworkMembershipHighlightRenderer hlcrtf;
 	private NetworkMembershipHighlightRenderer hlcrtg;
 	private NetworkMembershipSupport updateHLCR;
+
 	private TFandMotifSelected tfMotif;
 
 	private int ipadx = 150;
 	private int ipady = 50;
 
-	public TGPanel(TFComboBox tfcombobox, InputParameters input){
+    private ListSelectionListener selectedTranscriptionFactorListener;
+    private ListSelectionListener selectedMotifListener;
+    private MouseListener popupMouseListener;
+
+	public DetailPanel(InputParameters input){
 		super();
 		this.tfMotif = new TFandMotifSelected(input);
 		this.updateHLCR = new NetworkMembershipSupport();
-		/*this.SelectedRegulatoryTree = selectedRegulatoryTree;
-		String motif;
-		final JLabel label = new JLabel("Enriched Motif: ");
-		jtfMotif = new JTextField();
-		jtfMotif.setEnabled(false);
-		if (this.SelectedRegulatoryTree.getRegulatoryTree().isEmpty()){
-			jtfMotif.setText("");
-		}else{
-			GeneIdentifier child = this.SelectedRegulatoryTree.getRegulatoryTree().get(0).getChildIDs().iterator().next();
-			jtfMotif.setText(this.SelectedRegulatoryTree.getRegulatoryTree().get(0).getEnrichedMotifID());
-		}
-		this.add(new JPanel() {
-			{
-				setLayout(new FlowLayout());
-				add(label);
-				add(jtfMotif);
-			}
-		}, BorderLayout.NORTH);
-		
-		Collection<RegulatoryTree> treeCollection = this.SelectedRegulatoryTree.getRegulatoryTree();
-		RegulatoryTree tree;
-		if (treeCollection.isEmpty()){
-			tree = null;
-		}else{
-			tree = treeCollection.iterator().next();
-		}
-		table = new JTable(new TargetGeneTableModel(null));
-		
-		//this.add(label, BorderLayout.PAGE_START);
-		
-		this.add(new JScrollPane(table), BorderLayout.CENTER);*/
+
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
-		
-		/*
-		JLabel label = new JLabel("Enriched Motif: ");
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx=0;
-		this.add(label, c);
-		*/
 		
 		this.jlbMotif = new JLabel();
 		this.jlbMotif.setEnabled(true);
@@ -121,50 +86,7 @@ public class TGPanel extends JPanel implements MotifListener {
 		c.ipadx = 1;
 		c.ipady = 1;
 		this.add(this.jlbDescription, c);
-		
-		/*
-		label = new JLabel("NEScore: ");
-		c.gridx = 0;
-		c.gridy = 5;
-		c.weightx=0;
-		this.add(label, c);
-		
-		this.jtfNEScore = new JTextField();
-		this.jtfNEScore.setText("");
-		this.jtfNEScore.setEditable(false);
-		c.gridx = 1;
-		c.gridy = 5;
-		c.weightx=0.25;
-		c.ipadx = ipadx;
-		this.add(this.jtfNEScore, c);
-		*/
 
-		/*
-		label = new JLabel("Ortholous Identifier: ");
-		c.gridx = 0;
-		c.gridy = 6;
-		this.add(label, c);
-		
-		this.jtfOrthologousIdentifier = new JTextField();
-		this.jtfOrthologousIdentifier.setText("");
-		c.gridx = 1;
-		c.gridy = 6;
-		c.ipadx = 50;
-		this.add(this.jtfOrthologousIdentifier, c);
-		
-		label = new JLabel("Motif Similarity FDR: ");
-		c.gridx = 0;
-		c.gridy = 7;
-		this.add(label, c);
-		
-		this.jtfMotifSimilarityFDR = new JTextField();
-		this.jtfMotifSimilarityFDR.setText("");
-		c.gridx = 1;
-		c.gridy = 7;
-		c.ipadx = 50;
-		this.add(this.jtfMotifSimilarityFDR, c);
-		*/
-		
 		this.targetGeneTable = new JTable(new TGTableModel(null));
 		this.hlcrtg=new NetworkMembershipHighlightRenderer("Target Name");
 		this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
@@ -182,9 +104,7 @@ public class TGPanel extends JPanel implements MotifListener {
 		
 		this.transcriptionFactorTable = new JTable(new TFTableModel(null));
 		this.transcriptionFactorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(new TFTableSelectionListen(this.transcriptionFactorTable, tfcombobox));
-		this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(new TFSelectionListener(this.transcriptionFactorTable, this.tfMotif));
-		this.transcriptionFactorTable.addMouseListener(new TFMouseListener(this.transcriptionFactorTable, this.tfMotif));
+
 		this.hlcrtf=new NetworkMembershipHighlightRenderer("Transcription Factor Name");
 		this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 		c.gridx = 1;
@@ -241,17 +161,49 @@ public class TGPanel extends JPanel implements MotifListener {
         }
     }
 
+    public void registerSelectionComponents(final TFComboBox tfcombobox) {
+        if (selectedTranscriptionFactorListener == null) {
+            selectedTranscriptionFactorListener = new SelectedTranscriptionFactorListener(this.transcriptionFactorTable, tfcombobox);
+		    this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(selectedTranscriptionFactorListener);
+        }
+
+        if (selectedMotifListener == null) {
+		    selectedMotifListener = new SelectedMotifListener(this.transcriptionFactorTable, this.tfMotif);
+            this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(selectedMotifListener);
+        }
+
+        if (popupMouseListener == null) {
+            popupMouseListener = new PopupMouseListener(this.transcriptionFactorTable, this.tfMotif);
+            this.transcriptionFactorTable.addMouseListener(popupMouseListener);
+        }
+    }
+
+    public void unregisterSelectionComponents() {
+        if (selectedTranscriptionFactorListener != null) {
+            this.transcriptionFactorTable.getSelectionModel().removeListSelectionListener(selectedTranscriptionFactorListener);
+            selectedTranscriptionFactorListener = null;
+        }
+
+        if (selectedMotifListener != null) {
+            this.transcriptionFactorTable.getSelectionModel().removeListSelectionListener(selectedMotifListener);
+            selectedMotifListener = null;
+        }
+
+        if (popupMouseListener != null) {
+            this.transcriptionFactorTable.removeMouseListener(popupMouseListener);
+            popupMouseListener = null;
+        }
+    }
 
 	@Override
-	public void newMotifSelected(Motif currentSelection) {
+	public void newMotifSelected(AbstractMotif currentSelection) {
 		this.refresh(currentSelection);
 	}
 	
-	
-	public void refresh(Motif motif) {
+	public void refresh(AbstractMotif motif) {
 		this.targetGeneTable.setModel(new TGTableModel(motif));
 		this.transcriptionFactorTable.setModel(new TFTableModel(motif));
-		this.tfMotif.setMotif(motif);
+		this.tfMotif.setMotif((Motif) motif);
 		
 		if (motif == null) {
 			motif = null;
@@ -266,7 +218,7 @@ public class TGPanel extends JPanel implements MotifListener {
 			this.jlbDescription.setText(motif.getDescription());
 			this.jlbDescription.setToolTipText("Description: " + motif.getDescription());
 
-			this.jlbLogo.setMotif(motif);
+			this.jlbLogo.setMotif((Motif) motif);
 
 			//colors of the table
 			if (this.updateHLCR.refresh()){

@@ -1,5 +1,6 @@
 package view.resultspanel.motifview.tablemodels;
 
+import domainmodel.AbstractMotif;
 import view.resultspanel.AbstractFilterMotifTableModel;
 import view.resultspanel.FilterAttribute;
 
@@ -17,26 +18,29 @@ public class FilterMotifTableModel extends AbstractFilterMotifTableModel {
 
     @Override
     protected boolean hasPattern(int rowIndex){
-		final Motif motif = this.getMotifAtRow(rowIndex);
-		if (this.filterAttribute == FilterAttribute.MOTIF){
-			if (motif.getName().toLowerCase().contains(this.pattern.toLowerCase())){
-				return true;
-			}
+		final AbstractMotif motif = this.getMotifAtRow(rowIndex);
+		if (getFilterAttribute() == FilterAttribute.MOTIF){
+			return motif.getName().toLowerCase().contains(getPattern().toLowerCase());
 		}
-		if (this.filterAttribute == FilterAttribute.TRANSCRIPTION_FACTOR){
+
+		if (getFilterAttribute() == FilterAttribute.TRANSCRIPTION_FACTOR){
 			for (TranscriptionFactor tf : motif.getTranscriptionFactors()){
-				if (tf.getName().toLowerCase().contains(this.pattern.toLowerCase())){
+				if (tf.getName().toLowerCase().contains(getPattern().toLowerCase())){
 					return true;
 				}
 			}
+            return false;
 		}
-		if (this.filterAttribute == FilterAttribute.TARGET_GENE){
+
+		if (getFilterAttribute() == FilterAttribute.TARGET_GENE){
 			for (CandidateTargetGene tg : motif.getCandidateTargetGenes()){
-				if (tg.getGeneName().toLowerCase().contains(this.pattern.toLowerCase())){
+				if (tg.getGeneName().toLowerCase().contains(getPattern().toLowerCase())){
 					return true;
 				}
 			}
+            return false;
 		}
-		return false;
+
+		throw new IllegalStateException();
 	}
 }

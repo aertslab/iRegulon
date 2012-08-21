@@ -1,5 +1,6 @@
 package view.resultspanel.actions;
 
+import domainmodel.AbstractMotif;
 import view.parametersform.IRegulonVisualStyle;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
@@ -38,14 +39,14 @@ public class CreateNewNetworkAction extends TranscriptionFactorDependentAction {
 		setEnabled(false);
 	}
 	
-	public CyNetwork createNetwork(Motif mtf, TranscriptionFactor tf){
+	public CyNetwork createNetwork(AbstractMotif mtf, TranscriptionFactor tf){
         return Cytoscape.createNetwork(tf.getName() +
                 " with motif " + mtf.getName());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Motif tree = this.getSelectedMotif().getMotif();
+		AbstractMotif tree = this.getSelectedMotif().getMotif();
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network = this.createNetwork(tree, tf);
 		CyNetworkView view = Cytoscape.createNetworkView(network, "MyNetwork");

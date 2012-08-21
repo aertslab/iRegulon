@@ -1,6 +1,7 @@
 package view.resultspanel;
 
 
+import domainmodel.AbstractMotif;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
@@ -78,7 +79,7 @@ public abstract class AbstractFilterMotifTableModel extends AbstractTableModel i
         }
     }
 
-    public Motif getMotifAtRow(int row) {
+    public AbstractMotif getMotifAtRow(int row) {
         return this.model.getMotifAtRow(row);
     }
 

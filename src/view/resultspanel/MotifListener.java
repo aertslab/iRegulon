@@ -1,9 +1,10 @@
 package view.resultspanel;
 
 
-import domainmodel.Motif;
+import domainmodel.AbstractMotif;
+
 
 public interface MotifListener {
 
-	void newMotifSelected(Motif currentSelection);
+	void newMotifSelected(AbstractMotif currentSelection);
 }

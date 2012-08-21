@@ -6,7 +6,7 @@ import java.awt.*;
 import javax.swing.table.*;
 
 
-public class ColorRenderer extends JLabel implements TableCellRenderer, CanvasUpdater
+public class ClusterColorRenderer extends JLabel implements TableCellRenderer, CanvasUpdater
     {
      private String columnName;
      private String[] COLORS = {"44B4D5","8BFEA8","B4D1B6","DBEBFF","5757FF","FF97E8","63E9FC","6CA870",
@@ -15,7 +15,7 @@ public class ColorRenderer extends JLabel implements TableCellRenderer, CanvasUp
      
      
      
-     public ColorRenderer(String column)
+     public ClusterColorRenderer(String column)
          {
          this.columnName = column;
          setOpaque(true);

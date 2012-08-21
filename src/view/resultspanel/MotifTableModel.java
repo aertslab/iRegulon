@@ -1,5 +1,6 @@
 package view.resultspanel;
 
+import domainmodel.AbstractMotif;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
@@ -8,8 +9,7 @@ import java.util.List;
 
 
 public interface MotifTableModel extends TableModel {
-
-	public Motif getMotifAtRow(int row);
+	public AbstractMotif getMotifAtRow(int row);
 
     public TranscriptionFactor getTranscriptionFactorAtRow(int row);
 

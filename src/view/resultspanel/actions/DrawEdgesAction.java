@@ -1,5 +1,6 @@
 package view.resultspanel.actions;
 
+import domainmodel.AbstractMotif;
 import view.parametersform.IRegulonVisualStyle;
 import view.parametersform.NodesActions;
 import view.resultspanel.TFComboBox;
@@ -33,7 +34,7 @@ public class DrawEdgesAction extends TranscriptionFactorDependentAction {
 		setEnabled(false);
 	}
 
-	public Motif getListSelectedRegulatoryTree(){
+	public AbstractMotif getListSelectedRegulatoryTree(){
 		return this.getSelectedMotif().getMotif();
 	}
 	
@@ -73,7 +74,7 @@ public class DrawEdgesAction extends TranscriptionFactorDependentAction {
 			}
 		}*/
 		
-		Motif tree = this.getListSelectedRegulatoryTree();
+		AbstractMotif tree = this.getListSelectedRegulatoryTree();
 		CyNode node1 = null;
 		CyNode node2 = null;
 		ArrayList<CyNode> nodes = NodesActions.getAllNodes();

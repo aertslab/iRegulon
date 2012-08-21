@@ -1,5 +1,6 @@
 package view.resultspanel.actions;
 
+import domainmodel.*;
 import giny.view.NodeView;
 
 import view.parametersform.NodesActions;
@@ -18,10 +19,6 @@ import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
 import cytoscape.view.CyNetworkView;
-import domainmodel.CandidateTargetGene;
-import domainmodel.GeneIdentifier;
-import domainmodel.Motif;
-import domainmodel.TranscriptionFactor;
 
 public class DrawNodesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_nodes";
@@ -36,7 +33,7 @@ public class DrawNodesAction extends TranscriptionFactorDependentAction {
 		 * 
 		 * @return a list of all selected Transcription factor regulons
 		 */
-		public Motif getListSelectedRegulatoryTree(){
+		public AbstractMotif getListSelectedRegulatoryTree(){
 			return this.getSelectedMotif().getMotif();
 		}
 		
@@ -48,7 +45,7 @@ public class DrawNodesAction extends TranscriptionFactorDependentAction {
 			current_network.addNode(node0);
 			
 			//System.out.println(this.getSelectedMotif());
-			Motif regulatoryTree = this.getListSelectedRegulatoryTree();
+			AbstractMotif regulatoryTree = this.getListSelectedRegulatoryTree();
 			TranscriptionFactor tf = this.getTranscriptionFactor();
 			CyNode node1 = null;
 			CyNode node2 = null;

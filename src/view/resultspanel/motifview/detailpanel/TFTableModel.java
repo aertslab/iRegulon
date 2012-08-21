@@ -2,12 +2,13 @@ package view.resultspanel.motifview.detailpanel;
 
 import javax.swing.table.AbstractTableModel;
 
+import domainmodel.AbstractMotif;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
 
 public class TFTableModel extends AbstractTableModel {
-	private final Motif motif;
+	private final AbstractMotif motif;
 
 	private final String[] columnNames = {
             "Transcription Factor Name",
@@ -18,7 +19,7 @@ public class TFTableModel extends AbstractTableModel {
 			"The orthologous identity as fraction",
 			"The motif similarity FDR"};
 	
-	public TFTableModel(Motif motif) {
+	public TFTableModel(AbstractMotif motif) {
 		this.motif = motif;
 	}
 	

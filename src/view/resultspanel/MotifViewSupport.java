@@ -1,8 +1,8 @@
 package view.resultspanel;
 
 
+import domainmodel.AbstractMotif;
 import javax.swing.*;
-
 
 
 public class MotifViewSupport {

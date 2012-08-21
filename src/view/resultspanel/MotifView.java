@@ -1,9 +1,8 @@
 package view.resultspanel;
 
 
-import domainmodel.Motif;
+import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
-
 import javax.swing.*;
 
 
@@ -20,9 +19,13 @@ public interface MotifView {
 
     public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);
 
-    public Motif getSelectedMotif();
+    public AbstractMotif getSelectedMotif();
 
     public TranscriptionFactor getSelectedTranscriptionFactor();
+
+    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);
+
+    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);
 
     public void registerFilterComponents(final JComboBox filterAttributeTF, final JTextField filterValueTF);
 

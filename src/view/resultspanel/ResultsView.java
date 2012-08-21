@@ -1,5 +1,6 @@
 package view.resultspanel;
 
+import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
 import view.IRegulonResourceBundle;
 import view.resultspanel.motifview.EnrichedMotifsView;
@@ -17,7 +18,7 @@ import javax.swing.event.ChangeListener;
 import view.resultspanel.actions.CreateNewNetworkAction;
 import view.resultspanel.actions.DrawNodesAndEdgesAction;
 
-import view.resultspanel.transcriptionfactorview.EnrichedTranscriptionFactorsView;
+import view.resultspanel.motifclusterview.MotifClustersView;
 
 import cytoscape.view.cytopanels.CytoPanel;
 import domainmodel.Motif;
@@ -58,7 +59,7 @@ public class ResultsView extends IRegulonResourceBundle {
         return results;
     }
 
-    public Motif getSelectedMotif() {
+    public AbstractMotif getSelectedMotif() {
         return selectedMotif.getMotif();
     }
 
@@ -112,7 +113,7 @@ public class ResultsView extends IRegulonResourceBundle {
         // 2. Create enriched motifs view ...
         final EnrichedMotifsView motifsView = new EnrichedMotifsView(this.results);
         // 3. Create enriched TF view ...
-        final EnrichedTranscriptionFactorsView tfsView = new EnrichedTranscriptionFactorsView(this.results);
+        final MotifClustersView tfsView = new MotifClustersView(this.results);
 
         // 4. Create tabbed pane with these views ...
         final JTabbedPane tabbedPane = new JTabbedPane();
@@ -128,8 +129,9 @@ public class ResultsView extends IRegulonResourceBundle {
                 final JTabbedPane pane = (JTabbedPane) changeEvent.getSource();
                 // 1. Refresh motif selection ...
                 final MotifView view = (MotifView) pane.getSelectedComponent();
-                selectedMotif.setMotif((view != null) ? view.getSelectedMotif() : null);
-                transcriptionFactorCB.setSelectedItem((view != null) ? view.getSelectedTranscriptionFactor() : null);
+                motifsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
+                tfsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
+                if (view != null) view.registerSelectionComponents(selectedMotif, transcriptionFactorCB);
 
                 // 2. Refresh table row filter ...
                 motifsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
@@ -137,7 +139,11 @@ public class ResultsView extends IRegulonResourceBundle {
                 if (view != null) view.registerFilterComponents(filterAttributeCB, filterValueTF);
             }
         });
-        tfsView.registerFilterComponents(filterAttributeCB, filterValueTF);
+        final MotifView view = (MotifView) tabbedPane.getSelectedComponent();
+        if (view != null) {
+            view.registerSelectionComponents(selectedMotif, transcriptionFactorCB);
+            view.registerFilterComponents(filterAttributeCB, filterValueTF);
+        }
 
 		final JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());

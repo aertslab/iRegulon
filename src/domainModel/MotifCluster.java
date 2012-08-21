@@ -10,6 +10,11 @@ public class MotifCluster extends AbstractMotif {
         this.motifs = motifs;
     }
 
+    public int getDatabaseID() {
+        final Motif motif = getBestMotif();
+        return (motif != null) ? motif.getDatabaseID() : -1;
+    }
+
     public String getName() {
         final StringBuilder buffer = new StringBuilder();
         for (Motif motif: getMotifs()) {
@@ -18,6 +23,10 @@ public class MotifCluster extends AbstractMotif {
         }
         buffer.setLength(buffer.length()-1);
         return buffer.toString();
+    }
+
+    public String getDescription() {
+        return "STAMP cluster for transcription factor \"" + getBestTranscriptionFactor().getName() + "\".";
     }
 
     public float getAUCValue() {

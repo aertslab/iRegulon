@@ -8,10 +8,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 
-public class TFMouseListener extends MouseAdapter {
+public class PopupMouseListener extends MouseAdapter {
 	private PopupMenu menu;
 	
-	public TFMouseListener(JTable table, TFandMotifSelected tfMotif){
+	public PopupMouseListener(JTable table, TFandMotifSelected tfMotif){
 		if (table == null) {
 			throw new IllegalArgumentException();
 		}

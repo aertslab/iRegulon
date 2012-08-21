@@ -16,7 +16,11 @@ public abstract class AbstractMotif {
 
     }
 
+    public abstract int getDatabaseID();
+
     public abstract String getName();
+
+    public abstract String getDescription();
 
     public abstract float getAUCValue();
 

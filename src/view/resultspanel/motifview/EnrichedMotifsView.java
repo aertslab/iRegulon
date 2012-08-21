@@ -1,15 +1,17 @@
 package view.resultspanel.motifview;
 
 
+import domainmodel.AbstractMotif;
 import domainmodel.Motif;
 import domainmodel.Results;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
-import view.resultspanel.motifview.detailpanel.TGPanel;
+import view.resultspanel.motifview.detailpanel.DetailPanel;
 import view.resultspanel.motifview.tablemodels.*;
 import view.resultspanel.renderers.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.util.*;
@@ -17,11 +19,13 @@ import java.util.List;
 
 public final class EnrichedMotifsView extends JPanel implements MotifView {
     private JTable table;
-    private TGPanel detailPanel;
+    private DetailPanel detailPanel;
     private final MotifViewSupport support;
 
     private final Results results;
     private List<Motif> enrichedMotifs;
+
+    private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
     private FilterPatternDocumentListener filterPatternDocumentListener;
 
@@ -65,7 +69,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
        filterPatternDocumentListener = listener;
     }
 
-    public Motif getSelectedMotif() {
+    public AbstractMotif getSelectedMotif() {
         final int[] selectedRowIndices = table.getSelectedRows();
 		if (selectedRowIndices.length == 0){
 			return null;
@@ -78,7 +82,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     @Override
     public TranscriptionFactor getSelectedTranscriptionFactor() {
-        final Motif motif = getSelectedMotif();
+        final AbstractMotif motif = getSelectedMotif();
         if (motif == null) return null;
         final TranscriptionFactor transcriptionFactor = detailPanel.getSelectedTranscriptionFactor();
         if (transcriptionFactor != null) return transcriptionFactor;
@@ -87,8 +91,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     public JComponent createPanel(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
         final JScrollPane masterPanel = this.createMasterPanel(selectedMotif, transcriptionFactorCB);
-		detailPanel = new TGPanel(transcriptionFactorCB, results.getParameters());
-		selectedMotif.registerListener(detailPanel);
+		detailPanel = new DetailPanel(results.getParameters());
 
 		//Create a split pane with the two scroll panes in it.
         final JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, masterPanel, detailPanel);
@@ -108,46 +111,54 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 		final BaseMotifTableModel tableModel = new BaseMotifTableModel(this.enrichedMotifs);
 		final FilterMotifTableModel filteredModel = new FilterMotifTableModel(tableModel, FilterAttribute.MOTIF, "");
 		table = new JTable(filteredModel);
+        table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorComboBox, this.results.isRegionBased()));
 
 		final ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
 		header.setToolTipStrings(filteredModel.getTooltips().toArray(new String[filteredModel.getTooltips().size()]));
 	    header.setToolTipText("");
 	    table.setTableHeader(header);
 
-		//let the filtering model listen to the combobox that dessides the filtering (motif or TF)
+        final ClusterColorRenderer clusterColorRenderer = new ClusterColorRenderer("ClusterCode");
+        for (int i = 0; i < table.getModel().getColumnCount(); i++) {
+            final CombinedRenderer renderer = new CombinedRenderer();
+            if (table.getModel().getColumnClass(i).equals(Float.class)) {
+                renderer.addRenderer(new FloatRenderer("0.000"));
+            } else if (table.getModel().getColumnClass(i).equals(Boolean.class)) {
+                renderer.addRenderer(new BooleanRenderer());
+            } else {
+                renderer.addRenderer(new DefaultRenderer());
+            }
+            renderer.addRenderer(clusterColorRenderer);
+            final TableColumn column = table.getColumnModel().getColumn(i);
+            column.setCellRenderer(renderer);
+        }
 
-		table.addMouseListener(new MotifPopUpMenu(selectedMotif, transcriptionFactorComboBox, this.results.isRegionBased()));
-		TableMotifSelectionConnector.connect(table, selectedMotif);
-
-		//colors of the table
-		ColorRenderer cr=new ColorRenderer("ClusterCode");
-
-		//setting the table renderer
-		for (int i=0; i < table.getModel().getColumnCount(); i++){
-			CombinedRenderer renderer = new CombinedRenderer();
-			// the float renderer
-			if (table.getModel().getColumnClass(i).equals(Float.class)){
-				renderer.addRenderer(new FloatRenderer("0.000"));
-			}else{
-				if (table.getModel().getColumnClass(i).equals(Boolean.class)){
-					renderer.addRenderer(new BooleanRenderer());
-				}else{
-					renderer.addRenderer(new DefaultRenderer());
-				}
-			}
-			//the column renderer
-			renderer.addRenderer(cr);
-			TableColumn col = table.getColumnModel().getColumn(i);
-			col.setCellRenderer(renderer);
-		}
-
-		final ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
+        final ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
 		columnWidth.setWidth();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoCreateRowSorter(true);
 
 		return new JScrollPane(table);
 	}
+
+    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+        if (selectionListener == null) {
+            selectionListener = TableMotifSelectionConnector.connect(table, selectedMotif);
+            selectedMotif.setMotif(getSelectedMotif());
+            transcriptionFactorCB.setSelectedItem(getSelectedTranscriptionFactor());
+            detailPanel.registerSelectionComponents(transcriptionFactorCB);
+            selectedMotif.registerListener(detailPanel);
+        }
+    }
+
+    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+        if (selectionListener != null) {
+            TableMotifSelectionConnector.unconnect(table, selectionListener);
+            selectionListener = null;
+            detailPanel.unregisterSelectionComponents();
+            selectedMotif.unregisterListener(detailPanel);
+        }
+    }
 
     @Override
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {

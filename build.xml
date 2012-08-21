@@ -36,7 +36,7 @@
 
     <target name="compile" depends="clean">
         <mkdir dir="${build.folder}"/>
-        <javac destdir="${build.folder}">
+        <javac destdir="${build.folder}" debug="${debug}">
             <classpath refid="project.class.path"/>
             <src path="${source.folder}"/>
         </javac>

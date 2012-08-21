@@ -14,7 +14,7 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel impl
     private static final String[] COLUMN_NAMES = {"Rank", "Target Name"};
     private static final String[] COLUMN_TOOLTIPS = {"The rank of the target.",
             "The name of the predicted target."};
-        private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1);
+        private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 2);
 
     private final AbstractMotif motif;
 

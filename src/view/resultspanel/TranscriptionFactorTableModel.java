@@ -12,7 +12,7 @@ public class TranscriptionFactorTableModel extends AbstractTableModel implements
             "Transcription Factor Name",
             "Orthologous Identity",
             "Motif Similarity (FDR)" };
-    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(1, 3, 3);
+    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(2, 3, 3);
 	private static final String[] COLUMN_TOOLTIPS = {
             "The gene ID of the predicted transcritpion factor",
 			"The orthologous identity as fraction",

@@ -1,5 +1,7 @@
 package view.resultspanel.motifview.detailpanel;
 
+import view.resultspanel.CandidateTargetGeneTableModel;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -493,7 +495,7 @@ public class DetailFrameTFandMotif {
 			ypos+=1;
 			
 		}
-		JTable targetGeneTable = new JTable(new TGTableModel(this.tfMotif.getMotif()));
+		JTable targetGeneTable = new JTable(new CandidateTargetGeneTableModel(this.tfMotif.getMotif()));
 		//Dimension preferredSizes = new Dimension(10, 10);
 		//targetGeneTable.setPreferredSize(preferredSizes);
 		c.gridx = 0;

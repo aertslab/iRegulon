@@ -2,10 +2,7 @@ package view.resultspanel.motifview.detailpanel;
 
 
 import domainmodel.AbstractMotif;
-import view.resultspanel.MotifListener;
-import view.resultspanel.TFComboBox;
-import view.resultspanel.ToolTipHeader;
-import view.resultspanel.NetworkMembershipSupport;
+import view.resultspanel.*;
 import view.resultspanel.renderers.*;
 
 import java.awt.Dimension;
@@ -87,7 +84,7 @@ public class DetailPanel extends JPanel implements MotifListener {
 		c.ipady = 1;
 		this.add(this.jlbDescription, c);
 
-		this.targetGeneTable = new JTable(new TGTableModel(null));
+		this.targetGeneTable = new JTable(new CandidateTargetGeneTableModel(null));
 		this.hlcrtg=new NetworkMembershipHighlightRenderer("Target Name");
 		this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 		
@@ -141,7 +138,7 @@ public class DetailPanel extends JPanel implements MotifListener {
 	    this.transcriptionFactorTable.setTableHeader(header);
 		
 	    header = new ToolTipHeader(this.targetGeneTable.getColumnModel());
-		TGTableModel TGmodelTable = (TGTableModel) this.targetGeneTable.getModel();
+		CandidateTargetGeneTableModel TGmodelTable = (CandidateTargetGeneTableModel) this.targetGeneTable.getModel();
 	    header.setToolTipStrings(TGmodelTable.getTooltips());
 	    header.setToolTipText("");
 	    this.targetGeneTable.setTableHeader(header);
@@ -201,7 +198,7 @@ public class DetailPanel extends JPanel implements MotifListener {
 	}
 	
 	public void refresh(AbstractMotif motif) {
-		this.targetGeneTable.setModel(new TGTableModel(motif));
+		this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motif));
 		this.transcriptionFactorTable.setModel(new TFTableModel(motif));
 		this.tfMotif.setMotif((Motif) motif);
 		

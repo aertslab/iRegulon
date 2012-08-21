@@ -37,6 +37,7 @@ public class LoadResultsAction extends ResourceAction {
                 output.addToPanel(panel);
             } catch (Exception exception) {
                 logger.handleLog(LogLevel.LOG_ERROR, exception.getMessage());
+                logger.handleLog(LogLevel.LOG_ERROR, exception.getCause().getMessage());
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(), exception.getMessage());
             }
         }

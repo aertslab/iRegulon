@@ -17,7 +17,7 @@ public class PersistenceUtilities {
 	private PersistenceUtilities() {
 	}
 	
-	public static String convertResultsToXML(Results result) {
+	public static String convertResultsToXML(final Results result) {
 		final XStream xstream = new XStream();
 		xstream.alias("motif", Motif.class);
 		xstream.alias("candidateTargetGene", CandidateTargetGene.class);
@@ -32,7 +32,7 @@ public class PersistenceUtilities {
 		return xstream.toXML(result);
 	}
 	
-	public static Results loadResultsFromXML(String xml) throws LoadException {
+	public static Results loadResultsFromXML(final String xml) throws LoadException {
 		final XStream xstream = new XStream();
 		xstream.alias("motif", Motif.class);
 		xstream.alias("candidateTargetGene", CandidateTargetGene.class);
@@ -40,14 +40,22 @@ public class PersistenceUtilities {
 		xstream.alias("transcriptionFactor", TranscriptionFactor.class);
 		xstream.alias("inputParameters", InputParameters.class);
 		xstream.alias("iRegulonType", IRegulonType.class);
-		xstream.aliasField("cisCisTargetType", InputParameters.class, "iRegulonType");
         xstream.registerConverter(new SpeciesNomenclatureConverter());
 
-        try{
-			return (Results) xstream.fromXML(xml);
-		}catch (Exception e){
-            throw new LoadException("The file can't be loaded: wrong format", e);
-		}
+        xstream.aliasField("cisCisTargetType", InputParameters.class, "iRegulonType");
+
+        xstream.omitField(Motif.class, "jobID");
+        xstream.aliasField("parameters", Results.class, "inputParameters");
+        xstream.aliasField("enrichedMotifID", Motif.class, "name");
+        xstream.aliasField("minOrthologous", TranscriptionFactor.class, "minOrthologousIdentity");
+
+
+
+        try {
+            return (Results) xstream.fromXML(xml);
+        } catch (Exception e) {
+            throw new LoadException("The IRF file has an invalid format.", e);
+        }
 	}
 	
 	public static String convertResultsToTSV(final Results results) {

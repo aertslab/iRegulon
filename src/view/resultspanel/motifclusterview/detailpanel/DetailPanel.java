@@ -5,7 +5,6 @@ import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.TranscriptionFactorTableModel;
-import view.resultspanel.motifclusterview.tablemodels.BaseMotifClusterTableModel;
 import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;
 import view.resultspanel.renderers.*;
 
@@ -84,7 +83,6 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 			final TableColumn column = transcriptionFactorsTable.getColumnModel().getColumn(i);
 			column.setCellRenderer(renderer);
 		}
-        new ColumnWidthSetter(transcriptionFactorsTable).setWidth();
         transcriptionFactorsTable.setAutoCreateRowSorter(true);
         final ToolTipHeader tfHeader = new ToolTipHeader(transcriptionFactorsTable.getColumnModel());
         tfHeader.setToolTipStrings(tfModel.getTooltips());
@@ -102,7 +100,6 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         for (int i=0; i < this.targetGeneTable.getModel().getColumnCount(); i++){
 			this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(targetGeneHighlighter);
 		}
-        new ColumnWidthSetter(targetGeneTable).setWidth();
         targetGeneTable.setAutoCreateRowSorter(true);
         final ToolTipHeader tgHeader = new ToolTipHeader(targetGeneTable.getColumnModel());
         tgHeader.setToolTipStrings(tgModel.getTooltips());

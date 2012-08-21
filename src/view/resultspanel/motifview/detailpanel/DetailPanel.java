@@ -26,7 +26,7 @@ import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class DetailPanel extends JPanel implements MotifListener {
+public class DetailPanel extends JPanel implements DetailPanelIF {
 	private JTable targetGeneTable;
 	private JLabel jlbMotif;
 	private JLabel jlbDescription;
@@ -149,6 +149,12 @@ public class DetailPanel extends JPanel implements MotifListener {
 		
 	}
 
+    @Override
+    public AbstractMotif getSelectedMotif() {
+        return this.tfMotif.getMotif();
+    }
+
+    @Override
     public TranscriptionFactor getSelectedTranscriptionFactor() {
         if (transcriptionFactorTable.getSelectedRowCount() == 0) return null;
         else {
@@ -158,6 +164,7 @@ public class DetailPanel extends JPanel implements MotifListener {
         }
     }
 
+    @Override
     public void registerSelectionComponents(final TFComboBox tfcombobox) {
         if (selectedTranscriptionFactorListener == null) {
             selectedTranscriptionFactorListener = new SelectedTranscriptionFactorListener(this.transcriptionFactorTable, tfcombobox);
@@ -175,6 +182,7 @@ public class DetailPanel extends JPanel implements MotifListener {
         }
     }
 
+    @Override
     public void unregisterSelectionComponents() {
         if (selectedTranscriptionFactorListener != null) {
             this.transcriptionFactorTable.getSelectionModel().removeListSelectionListener(selectedTranscriptionFactorListener);

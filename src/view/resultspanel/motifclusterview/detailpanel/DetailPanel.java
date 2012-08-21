@@ -45,16 +45,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         final BaseMotifTableModel motifsModel = new BaseMotifTableModel();
         motifsTable = new JTable(motifsModel);
         motifsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        for (int i = 0; i < motifsTable.getModel().getColumnCount(); i++) {
-            final TableColumn column = motifsTable.getColumnModel().getColumn(i);
-            if (motifsTable.getModel().getColumnClass(i).equals(Float.class)) {
-                column.setCellRenderer(new FloatRenderer("0.000"));
-            } else if (motifsTable.getModel().getColumnClass(i).equals(Boolean.class)) {
-                column.setCellRenderer(new BooleanRenderer());
-            } else {
-                column.setCellRenderer(new DefaultRenderer());
-            }
-        }
+        installRenderersOnMotifsTable();
         new ColumnWidthSetter(motifsTable).setWidth();
 		motifsTable.setAutoCreateRowSorter(true);
         final ToolTipHeader header = new ToolTipHeader(motifsTable.getColumnModel());
@@ -70,19 +61,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         transcriptionFactorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         transcriptionFactorHighlighter = new NetworkMembershipHighlightRenderer("Transcription Factor Name");
         transcriptionFactorsTable.addMouseMotionListener(new TranscriptionFactorTooltip(transcriptionFactorsTable));
-        for (int i=0; i < transcriptionFactorsTable.getModel().getColumnCount(); i++){
-			final CombinedRenderer renderer = new CombinedRenderer();
-			switch(i){
-			case 1 : renderer.addRenderer(new FloatRenderer("0.###E0", "Not applicable")); //float renderer
-					break;
-			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
-					break;
-			default : renderer.addRenderer(new DefaultRenderer());
-			}
-			renderer.addRenderer(transcriptionFactorHighlighter);
-			final TableColumn column = transcriptionFactorsTable.getColumnModel().getColumn(i);
-			column.setCellRenderer(renderer);
-		}
+        installRenderersOnTranscriptionFactorsTable();
         transcriptionFactorsTable.setAutoCreateRowSorter(true);
         final ToolTipHeader tfHeader = new ToolTipHeader(transcriptionFactorsTable.getColumnModel());
         tfHeader.setToolTipStrings(tfModel.getTooltips());
@@ -97,9 +76,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         targetGeneTable = new JTable(tgModel);
         targetGeneTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         targetGeneHighlighter = new NetworkMembershipHighlightRenderer("Target Name");
-        for (int i=0; i < this.targetGeneTable.getModel().getColumnCount(); i++){
-			this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(targetGeneHighlighter);
-		}
+        installRenderersOnTargetGeneTable();
         targetGeneTable.setAutoCreateRowSorter(true);
         final ToolTipHeader tgHeader = new ToolTipHeader(targetGeneTable.getColumnModel());
         tgHeader.setToolTipStrings(tgModel.getTooltips());
@@ -108,6 +85,41 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
         cc.weightx = 1.0/5.0; cc.gridx = 2; cc.gridy = 0;
         add(new JScrollPane(targetGeneTable), cc);
+    }
+
+    private void installRenderersOnTargetGeneTable() {
+        for (int i=0; i < this.targetGeneTable.getModel().getColumnCount(); i++){
+			this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(targetGeneHighlighter);
+		}
+    }
+
+    private void installRenderersOnTranscriptionFactorsTable() {
+        for (int i=0; i < transcriptionFactorsTable.getModel().getColumnCount(); i++){
+			final CombinedRenderer renderer = new CombinedRenderer();
+			switch(i){
+			case 1 : renderer.addRenderer(new FloatRenderer("0.###E0", "Not applicable")); //float renderer
+					break;
+			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
+					break;
+			default : renderer.addRenderer(new DefaultRenderer());
+			}
+			renderer.addRenderer(transcriptionFactorHighlighter);
+			final TableColumn column = transcriptionFactorsTable.getColumnModel().getColumn(i);
+			column.setCellRenderer(renderer);
+		}
+    }
+
+    private void installRenderersOnMotifsTable() {
+        for (int i = 0; i < motifsTable.getModel().getColumnCount(); i++) {
+            final TableColumn column = motifsTable.getColumnModel().getColumn(i);
+            if (motifsTable.getModel().getColumnClass(i).equals(Float.class)) {
+                column.setCellRenderer(new FloatRenderer("0.000"));
+            } else if (motifsTable.getModel().getColumnClass(i).equals(Boolean.class)) {
+                column.setCellRenderer(new BooleanRenderer());
+            } else {
+                column.setCellRenderer(new DefaultRenderer());
+            }
+        }
     }
 
     public boolean hasCurrentCluster() {
@@ -136,8 +148,11 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         }
 
         motifsTable.setModel(new BaseMotifTableModel(getCurrentCluster().getMotifs()));
+        installRenderersOnMotifsTable();
         transcriptionFactorsTable.setModel(new TranscriptionFactorTableModel(getCurrentCluster()));
+        installRenderersOnTranscriptionFactorsTable();
         targetGeneTable.setModel(new CandidateTargetGeneTableModel(getCurrentCluster()));
+        installRenderersOnTargetGeneTable();
     }
 
     @Override

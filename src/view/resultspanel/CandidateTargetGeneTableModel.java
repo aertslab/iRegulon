@@ -18,6 +18,10 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel {
         this.motif = motif;
     }
 
+    public CandidateTargetGeneTableModel() {
+        this.motif = null;
+    }
+
     public int getColumnCount() {
         return COLUMN_NAMES.length;
     }

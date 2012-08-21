@@ -1,36 +1,184 @@
 package view.resultspanel.motifclusterview.detailpanel;
 
 import domainmodel.AbstractMotif;
+import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
-import view.resultspanel.DetailPanelIF;
-import view.resultspanel.TFComboBox;
+import view.resultspanel.*;
+import view.resultspanel.TranscriptionFactorTableModel;
+import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;
+import view.resultspanel.renderers.*;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 
 
 public class DetailPanel extends JPanel implements DetailPanelIF {
+    private MotifCluster currentCluster;
+
+    private NetworkMembershipSupport support;
+
+    private JTable motifsTable;
+    private JTable transcriptionFactorsTable;
+    private JTable targetGeneTable;
+
+    private NetworkMembershipHighlightRenderer transcriptionFactorHighlighter;
+    private NetworkMembershipHighlightRenderer targetGeneHighlighter;
+
+    private ListSelectionListener transcriptionFactorSelectionListener;
+
+
+    public DetailPanel() {
+        super();
+        this.support = new NetworkMembershipSupport();
+        initPanel();
+    }
+
+    private void initPanel() {
+        setLayout(new GridBagLayout());
+        final GridBagConstraints cc = new GridBagConstraints();
+        cc.fill = GridBagConstraints.BOTH;
+        cc.weightx = 1.0/3.0; cc.weighty = 1.0;
+
+        motifsTable = new JTable(new BaseMotifTableModel());
+        motifsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        for (int i = 0; i < motifsTable.getModel().getColumnCount(); i++) {
+            final TableColumn column = motifsTable.getColumnModel().getColumn(i);
+            if (motifsTable.getModel().getColumnClass(i).equals(Float.class)) {
+                column.setCellRenderer(new FloatRenderer("0.000"));
+            } else if (motifsTable.getModel().getColumnClass(i).equals(Boolean.class)) {
+                column.setCellRenderer(new BooleanRenderer());
+            } else {
+                column.setCellRenderer(new DefaultRenderer());
+            }
+        }
+
+        cc.gridx = 1; cc.gridy = 0;
+        add(new JScrollPane(motifsTable), cc);
+
+        transcriptionFactorsTable = new JTable(new TranscriptionFactorTableModel());
+        transcriptionFactorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        transcriptionFactorHighlighter = new NetworkMembershipHighlightRenderer("Transcription Factor Name");
+        transcriptionFactorsTable.addMouseMotionListener(new TranscriptionFactorTooltip(transcriptionFactorsTable));
+        for (int i=0; i < transcriptionFactorsTable.getModel().getColumnCount(); i++){
+			final CombinedRenderer renderer = new CombinedRenderer();
+			switch(i){
+			case 1 : renderer.addRenderer(new FloatRenderer("0.###E0", "Not applicable")); //float renderer
+					break;
+			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
+					break;
+			default : renderer.addRenderer(new DefaultRenderer());
+			}
+			renderer.addRenderer(transcriptionFactorHighlighter);
+			final TableColumn column = transcriptionFactorsTable.getColumnModel().getColumn(i);
+			column.setCellRenderer(renderer);
+		}
+
+        cc.gridx = 1; cc.gridy = 0;
+        add(new JScrollPane(transcriptionFactorsTable), cc);
+
+        targetGeneTable = new JTable(new CandidateTargetGeneTableModel());
+        targetGeneTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        targetGeneHighlighter = new NetworkMembershipHighlightRenderer("Target Name");
+        for (int i=0; i < this.targetGeneTable.getModel().getColumnCount(); i++){
+			this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(targetGeneHighlighter);
+		}
+
+        cc.gridx = 2; cc.gridy = 0;
+        add(new JScrollPane(targetGeneTable), cc);
+    }
+
+    public boolean hasCurrentCluster() {
+        return currentCluster != null;
+    }
+
+    public MotifCluster getCurrentCluster() {
+        return currentCluster;
+    }
+
+    public void setCurrentCluster(final MotifCluster newCluster) {
+        final MotifCluster oldCluster = this.currentCluster;
+        this.currentCluster = newCluster;
+        assert oldCluster != null;
+        if ((oldCluster != null && newCluster == null)
+                || (oldCluster == null && newCluster != null)
+                || (oldCluster != null && !oldCluster.equals(newCluster))) {
+            refresh();
+        }
+    }
+
+    private void refresh() {
+        if (support.refresh()) {
+            transcriptionFactorHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
+            targetGeneHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
+        }
+
+        motifsTable.setModel(new BaseMotifTableModel(getCurrentCluster().getMotifs()));
+        transcriptionFactorsTable.setModel(new TranscriptionFactorTableModel(getCurrentCluster()));
+        targetGeneTable.setModel(new CandidateTargetGeneTableModel(getCurrentCluster()));
+    }
+
     @Override
     public AbstractMotif getSelectedMotif() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (!hasCurrentCluster()) {
+            return null;
+        }
+        final int rowIdx = motifsTable.getSelectedRow();
+        if (rowIdx < 0) {
+            return getCurrentCluster();
+        } else {
+            final MotifTableModel model = (MotifTableModel) motifsTable.getModel();
+            return model.getMotifAtRow(motifsTable.convertRowIndexToModel(rowIdx));
+        }
     }
 
     @Override
     public TranscriptionFactor getSelectedTranscriptionFactor() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        if (!hasCurrentCluster()) {
+            return null;
+        }
+        final int rowIdx = transcriptionFactorsTable.getSelectedRow();
+        if (rowIdx < 0) {
+            return getCurrentCluster().getBestTranscriptionFactor();
+        } else {
+            final TranscriptionFactorTableModel model = (TranscriptionFactorTableModel) transcriptionFactorsTable.getModel();
+            return model.getTranscriptionFactorAtRow(motifsTable.convertRowIndexToModel(rowIdx));
+        }
     }
 
     @Override
     public void registerSelectionComponents(TFComboBox tfcombobox) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (transcriptionFactorSelectionListener == null) {
+            transcriptionFactorSelectionListener = new TranscriptionFactorSelectionListener(tfcombobox);
+            transcriptionFactorsTable.getSelectionModel().addListSelectionListener(transcriptionFactorSelectionListener);
+        }
     }
 
     @Override
     public void unregisterSelectionComponents() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (transcriptionFactorSelectionListener != null) {
+            transcriptionFactorsTable.getSelectionModel().removeListSelectionListener(transcriptionFactorSelectionListener);
+            transcriptionFactorSelectionListener = null;
+        }
     }
 
     @Override
     public void newMotifSelected(AbstractMotif currentSelection) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        setCurrentCluster((MotifCluster) currentSelection);
+    }
+
+    private class TranscriptionFactorSelectionListener implements ListSelectionListener {
+        private final TFComboBox comboBox;
+
+        private TranscriptionFactorSelectionListener(TFComboBox comboBox) {
+            this.comboBox = comboBox;
+        }
+
+        @Override
+        public void valueChanged(ListSelectionEvent e) {
+            this.comboBox.setSelectedItem(getSelectedTranscriptionFactor());
+        }
     }
 }

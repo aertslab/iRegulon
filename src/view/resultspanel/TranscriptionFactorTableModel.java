@@ -1,51 +1,53 @@
-package view.resultspanel.motifview.detailpanel;
+package view.resultspanel;
+
+import domainmodel.AbstractMotif;
+import domainmodel.TranscriptionFactor;
 
 import javax.swing.table.AbstractTableModel;
 
-import domainmodel.AbstractMotif;
-import domainmodel.Motif;
-import domainmodel.TranscriptionFactor;
-
-
-public class TFTableModel extends AbstractTableModel {
-	private final AbstractMotif motif;
-
-	private final String[] columnNames = {
+public class TranscriptionFactorTableModel extends AbstractTableModel {
+	private static final String[] COLUMN_NAMES = {
             "Transcription Factor Name",
             "Orthologous Identity",
             "Motif Similarity (FDR)" };
-	private final String[] columnToolTips = {
+	private static final String[] COLUMN_TOOLTIPS = {
             "The gene ID of the predicted transcritpion factor",
 			"The orthologous identity as fraction",
 			"The motif similarity FDR"};
-	
-	public TFTableModel(AbstractMotif motif) {
+
+    private final AbstractMotif motif;
+
+	public TranscriptionFactorTableModel(final AbstractMotif motif) {
 		this.motif = motif;
 	}
-	
+
+    public TranscriptionFactorTableModel() {
+		this(null);
+	}
+
+	public TranscriptionFactor getTranscriptionFactorAtRow(int rowIndex) {
+		return (this.motif == null) ? null : this.motif.getTranscriptionFactors().get(rowIndex);
+	}
+
 	public int getColumnCount() {
-		return this.columnNames.length;
+		return COLUMN_NAMES.length;
 	}
 
 	public int getRowCount() {
-		return this.motif == null ? 0 : this.motif.getTranscriptionFactors().size();
-	}
-	
-	public TranscriptionFactor getTranscriptionFactorAtRow(int rowIndex) {
-		return this.motif.getTranscriptionFactors().get(rowIndex);
+		return (this.motif == null) ? 0 : this.motif.getTranscriptionFactors().size();
 	}
 
 	public String getColumnName(int col) {
-		return columnNames[col];
+		return COLUMN_NAMES[col];
 	}
-	
+
     public Class<?> getColumnClass(int columnIndex) {
     	switch (columnIndex){
     	case 0 : return String.class;
     	case 1 : return Float.class;
     	case 2 : return Float.class;
+        default: throw new IndexOutOfBoundsException();
     	}
-        return Object.class;
     }
 
     public Object getValueAt(int row, int column) {
@@ -54,11 +56,11 @@ public class TFTableModel extends AbstractTableModel {
             case 0 : return tf.getGeneID().getGeneName();
             case 1 : return tf.getMinOrthologousIdentity();
             case 2 : return tf.getMaxMotifSimilarityFDR();
+            default: throw new IndexOutOfBoundsException();
         }
-        throw new IndexOutOfBoundsException();
     }
-	
+
 	public String[] getTooltips() {
-		return this.columnToolTips;
-	}
+		return COLUMN_TOOLTIPS;
+    }
 }

@@ -99,7 +99,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		this.add(new JScrollPane(targetGeneTable), c);
 		
 		
-		this.transcriptionFactorTable = new JTable(new TFTableModel(null));
+		this.transcriptionFactorTable = new JTable(new TranscriptionFactorTableModel(null));
 		this.transcriptionFactorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		this.hlcrtf=new NetworkMembershipHighlightRenderer("Transcription Factor Name");
@@ -132,7 +132,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		//tooltips in the headers of the tables
 		
 		ToolTipHeader header = new ToolTipHeader(this.transcriptionFactorTable.getColumnModel());
-		TFTableModel modelTable = (TFTableModel) this.transcriptionFactorTable.getModel();
+		TranscriptionFactorTableModel modelTable = (TranscriptionFactorTableModel) this.transcriptionFactorTable.getModel();
 	    header.setToolTipStrings(modelTable.getTooltips());
 	    header.setToolTipText("");
 	    this.transcriptionFactorTable.setTableHeader(header);
@@ -159,7 +159,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         if (transcriptionFactorTable.getSelectedRowCount() == 0) return null;
         else {
             final int[] indices = transcriptionFactorTable.getSelectedRows();
-			final TFTableModel model = (TFTableModel) transcriptionFactorTable.getModel();
+			final TranscriptionFactorTableModel model = (TranscriptionFactorTableModel) transcriptionFactorTable.getModel();
             return model.getTranscriptionFactorAtRow(transcriptionFactorTable.convertRowIndexToModel(indices[0]));
         }
     }
@@ -207,7 +207,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	
 	public void refresh(AbstractMotif motif) {
 		this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motif));
-		this.transcriptionFactorTable.setModel(new TFTableModel(motif));
+		this.transcriptionFactorTable.setModel(new TranscriptionFactorTableModel(motif));
 		this.tfMotif.setMotif((Motif) motif);
 		
 		if (motif == null) {
@@ -252,48 +252,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 			this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(this.hlcrtg);
 		}
 		
-		this.transcriptionFactorTable.addMouseMotionListener(new MouseMotionAdapter(){
-			   public void mouseMoved(MouseEvent e){
-				   //get column and row index
-			        Point p = e.getPoint(); 
-			        int row = transcriptionFactorTable.rowAtPoint(p);
-			        int column = transcriptionFactorTable.columnAtPoint(p);
-			        TFTableModel tfModel = (TFTableModel) transcriptionFactorTable.getModel();
-			        TranscriptionFactor tf = tfModel.getTranscriptionFactorAtRow(row);
-			        if (column == 1){
-			        	String orthology = "<html>";
-			        	if (tf.getOrthologousGeneName() != null){
-			        		orthology = orthology + "Orthologous Gene Name = " + tf.getOrthologousGeneName();
-			        	}
-			        	if (tf.getOrthologousSpecies() != null){
-			        		orthology = orthology + "<br/> Orthologous Species = " + tf.getOrthologousSpecies();
-			        	}
-			        	orthology = orthology + "</html>";
-			        	if (orthology.equalsIgnoreCase("<html></html>")){
-			        		transcriptionFactorTable.setToolTipText(null);
-			        	}else{
-			        		transcriptionFactorTable.setToolTipText(orthology);
-			        	}
-
-			        }
-			        if (column == 2){
-			        	String motifSimilarity = "<html>";
-			        	if (tf.getSimilarMotifName() != null){
-			        		motifSimilarity = motifSimilarity + "Similar motif name = " + tf.getSimilarMotifName();
-			        	}
-			        	if (tf.getSimilarMotifDescription() != null){
-			        		motifSimilarity = motifSimilarity + "<br/> Similar motif description = " + tf.getSimilarMotifDescription();
-			        	}
-			        	motifSimilarity = motifSimilarity + "</html>";
-			        	if (motifSimilarity.equalsIgnoreCase("<html></html>")){
-			        		transcriptionFactorTable.setToolTipText(null);
-			        	}else{
-			        		transcriptionFactorTable.setToolTipText(motifSimilarity);
-			        	}
-
-			        }
-			   }//end MouseMoved
-			});
+		this.transcriptionFactorTable.addMouseMotionListener(new TranscriptionFactorTooltip(this.transcriptionFactorTable));
 		
 		this.invalidate();
 	}

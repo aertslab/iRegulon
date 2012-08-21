@@ -28,8 +28,12 @@ public class BaseMotifTableModel extends AbstractTableModel implements MotifTabl
         this.motifs = motifs;
     }
 
+    public BaseMotifTableModel() {
+        this(null);
+    }
+
     public Motif getMotifAtRow(int row) {
-        return this.motifs.get(row);
+        return (this.motifs == null) ? null : this.motifs.get(row);
     }
 
     @Override
@@ -59,7 +63,7 @@ public class BaseMotifTableModel extends AbstractTableModel implements MotifTabl
     }
 
     public int getRowCount() {
-        return this.motifs.size();
+        return (this.motifs == null) ? 0 : this.motifs.size();
     }
 
     public int getColumnCount() {

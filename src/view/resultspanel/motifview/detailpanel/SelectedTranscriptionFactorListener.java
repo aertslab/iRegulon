@@ -8,6 +8,7 @@ import javax.swing.event.ListSelectionListener;
 
 
 import domainmodel.TranscriptionFactor;
+import view.resultspanel.TranscriptionFactorTableModel;
 
 public class SelectedTranscriptionFactorListener implements ListSelectionListener {
 	private final JTable table;
@@ -25,7 +26,7 @@ public class SelectedTranscriptionFactorListener implements ListSelectionListene
 	}
 	
 	public TranscriptionFactor getSelectedTranscriptionFactor(){
-		final TFTableModel tftModel = (TFTableModel) table.getModel();
+		final TranscriptionFactorTableModel tftModel = (TranscriptionFactorTableModel) table.getModel();
 	
 		int[] rowsSelected = table.getSelectedRows();
 		if (rowsSelected.length == 0){

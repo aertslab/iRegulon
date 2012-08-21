@@ -164,7 +164,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             return getCurrentCluster().getBestTranscriptionFactor();
         } else {
             final TranscriptionFactorTableModel model = (TranscriptionFactorTableModel) transcriptionFactorsTable.getModel();
-            return model.getTranscriptionFactorAtRow(motifsTable.convertRowIndexToModel(rowIdx));
+            return model.getTranscriptionFactorAtRow(transcriptionFactorsTable.convertRowIndexToModel(rowIdx));
         }
     }
 

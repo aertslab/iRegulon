@@ -1,7 +1,7 @@
 package view.resultspanel.actions;
 
 
-import persistence.SaveResults;
+import persistence.PersistenceUtilities;
 import view.ResourceAction;
 import view.resultspanel.ResultsView;
 import view.actions.SaveLoadDialogs;
@@ -23,10 +23,9 @@ public class SaveResultsAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        final SaveResults results = new SaveResults();
-        boolean saved = SaveLoadDialogs.showDialog(results.convertResultsToXML(getView().getResults()),
+        boolean saved = SaveLoadDialogs.showDialog(PersistenceUtilities.convertResultsToXML(getView().getResults()),
                 getView().getRunName(),
-                SaveResults.NATIVE_FILE_EXTENSION);
+                PersistenceUtilities.NATIVE_FILE_EXTENSION);
         if (saved && !view.isSaved()) {
             getView().setSaved();
         }

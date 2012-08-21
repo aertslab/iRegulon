@@ -16,7 +16,7 @@ import domainmodel.Results;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
 import persistence.LoadException;
-import persistence.SaveResults;
+import persistence.PersistenceUtilities;
 
 import view.actions.SaveLoadDialogs;
 
@@ -24,7 +24,7 @@ public class SaveTest {
 
 	@Test
 	public void test() {
-		SaveResults save = new SaveResults();
+		PersistenceUtilities save = new PersistenceUtilities();
 		Results resultS = new Results(getMotifs(0), null);
 		String xml = save.convertResultsToXML(resultS);
 		
@@ -60,7 +60,7 @@ public class SaveTest {
 		
 		
 		
-		SaveResults save = new SaveResults();
+		PersistenceUtilities save = new PersistenceUtilities();
 		Results resultS = new Results(getMotifs(0), null);
 		String xml = save.convertResultsToXML(resultS);
 		

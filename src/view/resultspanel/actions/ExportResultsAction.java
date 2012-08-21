@@ -1,7 +1,7 @@
 package view.resultspanel.actions;
 
 
-import persistence.SaveResults;
+import persistence.PersistenceUtilities;
 import view.ResourceAction;
 import view.resultspanel.ResultsView;
 import view.actions.SaveLoadDialogs;
@@ -23,8 +23,7 @@ public class ExportResultsAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        final SaveResults results = new SaveResults();
-        String tabfile = results.convertResultsToTSV(getView().getResults());
-        SaveLoadDialogs.showDialog(tabfile, getView().getRunName(), SaveResults.TSV_FILE_EXTENSION);
+        final String data = PersistenceUtilities.convertResultsToTSV(getView().getResults());
+        SaveLoadDialogs.showDialog(data, getView().getRunName(), PersistenceUtilities.TSV_FILE_EXTENSION);
     }
 }

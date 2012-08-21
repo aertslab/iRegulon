@@ -3,7 +3,7 @@ package view.resultspanel.actions;
 import cytoscape.Cytoscape;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
-import persistence.SaveResults;
+import persistence.PersistenceUtilities;
 import view.ResourceAction;
 import view.resultspanel.ResultsView;
 import view.actions.SaveLoadDialogs;
@@ -32,10 +32,9 @@ public class CloseResultsViewAction extends ResourceAction {
                     "Save?",
                     JOptionPane.YES_NO_OPTION);
             if (result == 0) {
-                final SaveResults converter = new SaveResults();
-                SaveLoadDialogs.showDialog(converter.convertResultsToXML(view.getResults()),
+                SaveLoadDialogs.showDialog(PersistenceUtilities.convertResultsToXML(view.getResults()),
                         view.getRunName(),
-                        SaveResults.NATIVE_FILE_EXTENSION);
+                        PersistenceUtilities.NATIVE_FILE_EXTENSION);
             }
         }
         panel.remove(view.getMainPanel());

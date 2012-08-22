@@ -167,8 +167,11 @@ public class Results {
         final Map<TranscriptionFactor, TranscriptionFactorAttributes> tf2attributes = new HashMap<TranscriptionFactor, TranscriptionFactorAttributes>();
         for (Motif motif : motifs) {
             for (TranscriptionFactor tf : motif.getTranscriptionFactors()) {
-                final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motif.getNEScore(), geneIDs.contains(tf.getName()));
-                if (!tf2attributes.containsKey(tf) || (attributes.compareTo(tf2attributes.get(tf)) < 0)) {
+                if (tf2attributes.containsKey(tf)) {
+                    final TranscriptionFactorAttributes attributes = tf2attributes.get(tf);
+                    attributes.update(motif);
+                } else {
+                    final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motif.getNEScore(), geneIDs.contains(tf.getName()));
                     tf2attributes.put(tf, attributes);
                 }
             }
@@ -179,50 +182,94 @@ public class Results {
 
         final List<TranscriptionFactor> result = new ArrayList<TranscriptionFactor>();
         for (TranscriptionFactorAttributes attributes: tfAttributes) {
-            result.add(attributes.getTranscriptionFactor());
+            result.add(attributes.createTranscriptionFactor());
         }
 
         return result;
     }
 
     private List<CandidateTargetGene> combineTargetGenes(final List<Motif> motifs) {
-        final Map<GeneIdentifier, Integer> geneID2maxRank = new HashMap<GeneIdentifier, Integer>();
+        final Map<GeneIdentifier, TargetGeneAttributes> geneID2attributes = new HashMap<GeneIdentifier, TargetGeneAttributes>();
         for (Motif motif : motifs) {
             for (CandidateTargetGene targetGene : motif.getCandidateTargetGenes()) {
-                if (geneID2maxRank.containsKey(targetGene.getGeneID())) {
-                    final int curRank = geneID2maxRank.get(targetGene.getGeneID());
-                    if (curRank < targetGene.getRank()) {
-                        geneID2maxRank.put(targetGene.getGeneID(), targetGene.getRank());
-                    }
+                if (geneID2attributes.containsKey(targetGene.getGeneID())) {
+                    final TargetGeneAttributes curAttributes = geneID2attributes.get(targetGene.getGeneID());
+                    curAttributes.update(targetGene.getRank());
                 } else {
-                    geneID2maxRank.put(targetGene.getGeneID(), targetGene.getRank());
+                    geneID2attributes.put(targetGene.getGeneID(), new TargetGeneAttributes(targetGene.getRank()));
                 }
             }
         }
 
         final List<CandidateTargetGene> targetGenes = new ArrayList<CandidateTargetGene>();
-        for (GeneIdentifier ID: geneID2maxRank.keySet()) {
-            targetGenes.add(new CandidateTargetGene(ID, geneID2maxRank.get(ID)));
+        for (GeneIdentifier ID: geneID2attributes.keySet()) {
+            final TargetGeneAttributes curAttributes = geneID2attributes.get(ID);
+            targetGenes.add(new CandidateTargetGene(ID, curAttributes.getMaxRank(), curAttributes.getMotifCount()));
         }
-        Collections.sort(targetGenes, new Comparator<CandidateTargetGene>() {
-            @Override
-            public int compare(CandidateTargetGene o1, CandidateTargetGene o2) {
-                return new Integer(o1.getRank()).compareTo(o2.getRank());
-            }
-        });
+
+        Collections.sort(targetGenes);
 
         return targetGenes;
     }
 
+    private static class TargetGeneAttributes {
+        private int maxRank = 0;
+        private int motifCount = 0;
+
+        public TargetGeneAttributes(final int rank) {
+            motifCount = 1;
+            maxRank = rank;
+        }
+
+        public void update(final int rank) {
+            incrementMotifCount();
+            updateRank(rank);
+        }
+
+        private void updateRank(final int rank) {
+            maxRank = (rank > maxRank) ? rank : maxRank;
+        }
+
+        private void incrementMotifCount() {
+            motifCount++;
+        }
+
+        public int getMaxRank() {
+            return maxRank;
+        }
+
+        public int getMotifCount() {
+            return motifCount;
+        }
+    }
+
     private static class TranscriptionFactorAttributes implements Comparable<TranscriptionFactorAttributes> {
         private final TranscriptionFactor transcriptionFactor;
-        private final float NEScore;
         private final boolean isPresentInSignature;
+
+        private float NEScore;
+        private final Set<AbstractMotif> motifs = new HashSet<AbstractMotif>();
 
         private TranscriptionFactorAttributes(TranscriptionFactor transcriptionFactor, float NEScore, boolean presentInSignature) {
             this.transcriptionFactor = transcriptionFactor;
+            this.isPresentInSignature = presentInSignature;
             this.NEScore = NEScore;
-            isPresentInSignature = presentInSignature;
+        }
+
+        public void update(final Motif motif) {
+            NEScore = (motif.getNEScore() > NEScore) ? motif.getNEScore() : NEScore;
+            motifs.add(motif);
+        }
+
+        public TranscriptionFactor createTranscriptionFactor() {
+            return new TranscriptionFactor(transcriptionFactor.getGeneID(),
+                    transcriptionFactor.getMinOrthologousIdentity(),
+                    transcriptionFactor.getMaxMotifSimilarityFDR(),
+                    transcriptionFactor.getSimilarMotifName(),
+                    transcriptionFactor.getSimilarMotifDescription(),
+                    transcriptionFactor.getOrthologousGeneName(),
+                    transcriptionFactor.getOrthologousSpecies(),
+                    motifs);
         }
 
         public TranscriptionFactor getTranscriptionFactor() {
@@ -235,6 +282,10 @@ public class Results {
 
         public boolean isPresentInSignature() {
             return isPresentInSignature;
+        }
+
+        public Set<AbstractMotif> getMotifs() {
+            return motifs;
         }
 
         @Override

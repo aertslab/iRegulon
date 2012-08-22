@@ -1,6 +1,7 @@
 package view.resultspanel.motifclusterview.detailpanel;
 
 import domainmodel.AbstractMotif;
+import domainmodel.Motif;
 import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
@@ -47,6 +48,14 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         motifsTable = new JTable(motifsModel);
         motifsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         installRenderersOnMotifsTable();
+        motifsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                final ExtendedTranscriptionFactorTableModel model = (ExtendedTranscriptionFactorTableModel) transcriptionFactorsTable.getModel();
+                model.setSelectedMotif((Motif) getSelectedMotif());
+                model.fireTableDataChanged();
+            }
+        });
 		motifsTable.setAutoCreateRowSorter(true);
         final ToolTipHeader header = new ToolTipHeader(motifsTable.getColumnModel());
 		header.setToolTipStrings(motifsModel.getTooltips().toArray(new String[motifsModel.getTooltips().size()]));

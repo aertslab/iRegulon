@@ -1,11 +1,14 @@
 package view.resultspanel.motifclusterview.tablemodels;
 
 import domainmodel.AbstractMotif;
+import domainmodel.Motif;
+import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.TranscriptionFactorTableModelIF;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel implements TranscriptionFactorTableModelIF {
@@ -24,14 +27,35 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
 			"The motif similarity FDR"};
 
     private final AbstractMotif motif;
+    private List<Motif> selectedMotifs = Collections.emptyList();
 
-	public ExtendedTranscriptionFactorTableModel(final AbstractMotif motif) {
+	public ExtendedTranscriptionFactorTableModel(final MotifCluster motif) {
 		this.motif = motif;
+        setSelectedMotifs(motif != null ? motif.getMotifs() : null);
 	}
 
     public ExtendedTranscriptionFactorTableModel() {
 		this(null);
 	}
+
+    public List<Motif> getSelectedMotifs() {
+        return selectedMotifs;
+    }
+
+    public void setSelectedMotif(final Motif motif) {
+        setSelectedMotifs(Collections.singletonList(motif));
+    }
+
+    public void setSelectedMotifs(final List<Motif> motifs) {
+         this.selectedMotifs = (motifs != null) ? motifs : Collections.<Motif>emptyList();
+    }
+
+    public boolean isAssociatedWith(final TranscriptionFactor tf) {
+        for (final Motif motif: getSelectedMotifs()) {
+            if (tf.isAssociatedWith(motif)) return true;
+        }
+        return false;
+    }
 
 	@Override
     public TranscriptionFactor getTranscriptionFactorAtRow(int rowIndex) {
@@ -64,7 +88,7 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
     public Object getValueAt(int row, int column) {
         final TranscriptionFactor tf = getTranscriptionFactorAtRow(row);
         switch (column){
-            case 0 : return tf.isAssociatedWith(motif);
+            case 0 : return isAssociatedWith(tf);
             case 1 : return tf.getGeneID().getGeneName();
             case 2 : return tf.getMotifCount();
             case 3 : return tf.getMinOrthologousIdentity();

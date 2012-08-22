@@ -3,15 +3,13 @@ package view.resultspanel.motifview.detailpanel;
 
 import domainmodel.AbstractMotif;
 import view.resultspanel.*;
+import view.resultspanel.motifview.tablemodels.TranscriptionFactorTableModel;
 import view.resultspanel.renderers.*;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -133,7 +131,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		//tooltips in the headers of the tables
 		
 		ToolTipHeader header = new ToolTipHeader(this.transcriptionFactorTable.getColumnModel());
-		TranscriptionFactorTableModel modelTable = (TranscriptionFactorTableModel) this.transcriptionFactorTable.getModel();
+		TranscriptionFactorTableModelIF modelTable = (TranscriptionFactorTableModelIF) this.transcriptionFactorTable.getModel();
 	    header.setToolTipStrings(modelTable.getTooltips());
 	    header.setToolTipText("");
 	    this.transcriptionFactorTable.setTableHeader(header);
@@ -160,7 +158,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         if (transcriptionFactorTable.getSelectedRowCount() == 0) return null;
         else {
             final int[] indices = transcriptionFactorTable.getSelectedRows();
-			final TranscriptionFactorTableModel model = (TranscriptionFactorTableModel) transcriptionFactorTable.getModel();
+			final TranscriptionFactorTableModelIF model = (TranscriptionFactorTableModelIF) transcriptionFactorTable.getModel();
             return model.getTranscriptionFactorAtRow(transcriptionFactorTable.convertRowIndexToModel(indices[0]));
         }
     }

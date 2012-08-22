@@ -5,7 +5,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import domainmodel.TranscriptionFactor;
-import view.resultspanel.TranscriptionFactorTableModel;
+import view.resultspanel.TranscriptionFactorTableModelIF;
 
 public class SelectedMotifListener implements ListSelectionListener{
 
@@ -19,7 +19,7 @@ public class SelectedMotifListener implements ListSelectionListener{
 	
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		TranscriptionFactorTableModel model = (TranscriptionFactorTableModel) this.table.getModel();
+		TranscriptionFactorTableModelIF model = (TranscriptionFactorTableModelIF) this.table.getModel();
 		int[] rowsSelected = table.getSelectedRows();
 		if (rowsSelected.length == 0){
 		}

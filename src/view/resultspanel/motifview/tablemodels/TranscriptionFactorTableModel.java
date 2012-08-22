@@ -1,13 +1,14 @@
-package view.resultspanel;
+package view.resultspanel.motifview.tablemodels;
 
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
+import view.resultspanel.TranscriptionFactorTableModelIF;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Arrays;
 import java.util.List;
 
-public class TranscriptionFactorTableModel extends AbstractTableModel implements ColumnImportances {
+public class TranscriptionFactorTableModel extends AbstractTableModel implements TranscriptionFactorTableModelIF {
 	private static final String[] COLUMN_NAMES = {
             "Transcription Factor Name",
             "Orthologous Identity",
@@ -28,7 +29,8 @@ public class TranscriptionFactorTableModel extends AbstractTableModel implements
 		this(null);
 	}
 
-	public TranscriptionFactor getTranscriptionFactorAtRow(int rowIndex) {
+	@Override
+    public TranscriptionFactor getTranscriptionFactorAtRow(int rowIndex) {
 		return (this.motif == null) ? null : this.motif.getTranscriptionFactors().get(rowIndex);
 	}
 
@@ -63,7 +65,8 @@ public class TranscriptionFactorTableModel extends AbstractTableModel implements
         }
     }
 
-	public String[] getTooltips() {
+	@Override
+    public String[] getTooltips() {
 		return COLUMN_TOOLTIPS;
     }
 

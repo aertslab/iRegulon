@@ -20,7 +20,7 @@ public class TranscriptionFactorTooltip extends MouseMotionAdapter {
         final int row = table.rowAtPoint(p);
         final int column = table.columnAtPoint(p);
 
-        final TranscriptionFactorTableModel model = (TranscriptionFactorTableModel) table.getModel();
+        final TranscriptionFactorTableModelIF model = (TranscriptionFactorTableModelIF) table.getModel();
         final TranscriptionFactor tf = model.getTranscriptionFactorAtRow(row);
 
         if (column == 1) {

@@ -4,7 +4,7 @@ import domainmodel.AbstractMotif;
 import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
-import view.resultspanel.TranscriptionFactorTableModel;
+import view.resultspanel.motifclusterview.tablemodels.ExtendedTranscriptionFactorTableModel;
 import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;
 import view.resultspanel.renderers.*;
 
@@ -55,7 +55,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         cc.weightx = 2.0/5.0; cc.gridx = 0; cc.gridy = 0;
         add(new JScrollPane(motifsTable), cc);
 
-        final TranscriptionFactorTableModel tfModel = new TranscriptionFactorTableModel();
+        final TranscriptionFactorTableModelIF tfModel = new ExtendedTranscriptionFactorTableModel();
         transcriptionFactorsTable = new JTable(tfModel);
         transcriptionFactorsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         transcriptionFactorHighlighter = new NetworkMembershipHighlightRenderer("Transcription Factor Name");
@@ -98,9 +98,11 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         for (int i=0; i < transcriptionFactorsTable.getModel().getColumnCount(); i++){
 			final CombinedRenderer renderer = new CombinedRenderer();
 			switch(i){
-			case 1 : renderer.addRenderer(new FloatRenderer("0.###E0", "N/A")); //float renderer
+            case 0 : renderer.addRenderer(new BooleanRenderer()); //float renderer
+                    break;
+			case 3 : renderer.addRenderer(new FloatRenderer("0.###E0", "N/A")); //float renderer
 					break;
-			case 2 : renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
+			case 4 : renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
 					break;
 			default : renderer.addRenderer(new DefaultRenderer());
 			}
@@ -150,7 +152,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
         motifsTable.setModel(new BaseMotifTableModel(hasCurrentCluster() ? getCurrentCluster().getMotifs() : null));
         installRenderersOnMotifsTable();
-        transcriptionFactorsTable.setModel(new TranscriptionFactorTableModel(getCurrentCluster()));
+        transcriptionFactorsTable.setModel(new ExtendedTranscriptionFactorTableModel(getCurrentCluster()));
         installRenderersOnTranscriptionFactorsTable();
         targetGeneTable.setModel(new CandidateTargetGeneTableModel(getCurrentCluster()));
         installRenderersOnTargetGeneTable();
@@ -179,7 +181,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         if (rowIdx < 0) {
             return getCurrentCluster().getBestTranscriptionFactor();
         } else {
-            final TranscriptionFactorTableModel model = (TranscriptionFactorTableModel) transcriptionFactorsTable.getModel();
+            final TranscriptionFactorTableModelIF model = (TranscriptionFactorTableModelIF) transcriptionFactorsTable.getModel();
             return model.getTranscriptionFactorAtRow(transcriptionFactorsTable.convertRowIndexToModel(rowIdx));
         }
     }

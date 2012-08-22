@@ -1,5 +1,6 @@
 package view.parametersform;
 
+import view.CytoscapeNetworkUtilities;
 import view.parametersform.actions.SubmitAnalysisAction;
 import view.IRegulonResourceBundle;
 import view.parametersform.databaseselection.BasedComboBox;
@@ -701,7 +702,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 //frame.dispose();
-                if (NodesActions.nodesSelected()){
+                if (CytoscapeNetworkUtilities.hasSelectedNodes()){
                     generateInput();
                     InputParameters input = getInput();
                     if (input.parametersAreValid()){
@@ -1002,8 +1003,8 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 	 * 			
 	 */
 	public void generateInput(){
-		this.input = new InputParameters(NodesActions.getGenes(this.getAttributeName(),
-				this.getSpeciesNomenclature()), 
+		this.input = new InputParameters(CytoscapeNetworkUtilities.getGenes(this.getAttributeName(),
+                this.getSpeciesNomenclature()),
 				this.getNESThreshold(), 
 				this.getAUCThreshold(), 
 				this.getRankThreshold(), 

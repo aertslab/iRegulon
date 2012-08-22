@@ -2,7 +2,7 @@ package view.resultspanel.actions;
 
 import giny.view.NodeView;
 
-import view.parametersform.NodesActions;
+import view.CytoscapeNetworkUtilities;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
@@ -76,7 +76,7 @@ public class DrawMergedEdgesNetworkAction extends TranscriptionFactorDependentAc
 		
 		//Create a new network
 		//CyNetwork network = Cytoscape.createNetwork(CisTargetXNodes.getAllNodes(), this.getAllEdges(), "test");
-		CyNetwork network2 = Cytoscape.createNetwork(NodesActions.getAllNodes(), this.getAllEdges(), "Merged iRegulon network", Cytoscape.getCurrentNetwork());
+		CyNetwork network2 = Cytoscape.createNetwork(CytoscapeNetworkUtilities.getAllNodes(), CytoscapeNetworkUtilities.getAllEdges(), "Merged iRegulon network", Cytoscape.getCurrentNetwork());
 		Cytoscape.setCurrentNetwork(network2.getIdentifier());
 		CyNetworkView cyView = Cytoscape.createNetworkView(network2, "merged iRegulon network view");
 		
@@ -246,22 +246,6 @@ public class DrawMergedEdgesNetworkAction extends TranscriptionFactorDependentAc
 		CyAttributes cyNetworkAttrs = Cytoscape.getNetworkAttributes();
 		cyNetworkAttrs.setListAttribute(network.getIdentifier(), attributeName, attributeValueList);
 		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
-	
-	
-	/**
-	 * Get all the Nodes (as CyNode) in the network
-	 * @pre this.nodesSelected() == true
-	 * @return an arrayList filled with the selected CyNodes
-	 */
-	static public ArrayList<CyEdge> getAllEdges(){
-		CyNetwork current_network = Cytoscape.getCurrentNetwork();
-		Iterator it = current_network.edgesIterator();
-		ArrayList<CyEdge> cyedges = new ArrayList<CyEdge>();
-		while(it.hasNext()){
-			cyedges.add((CyEdge) it.next());
-		}
-		return cyedges;
 	}
 }
 

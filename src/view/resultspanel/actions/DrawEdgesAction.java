@@ -1,8 +1,8 @@
 package view.resultspanel.actions;
 
 import domainmodel.AbstractMotif;
+import view.CytoscapeNetworkUtilities;
 import view.parametersform.IRegulonVisualStyle;
-import view.parametersform.NodesActions;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
@@ -21,7 +21,6 @@ import cytoscape.view.*;
 import giny.view.*;
 
 import domainmodel.GeneIdentifier;
-import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
 public class DrawEdgesAction extends TranscriptionFactorDependentAction {
@@ -77,7 +76,7 @@ public class DrawEdgesAction extends TranscriptionFactorDependentAction {
 		AbstractMotif tree = this.getListSelectedRegulatoryTree();
 		CyNode node1 = null;
 		CyNode node2 = null;
-		ArrayList<CyNode> nodes = NodesActions.getAllNodes();
+		List<CyNode> nodes = CytoscapeNetworkUtilities.getAllNodes();
 		if (nodes.size() != 0){
 			node1 = this.getCyNode(this.getSelectedTranscriptionFactor().getGeneID(), nodes);
 			if (node1 != null){
@@ -185,7 +184,7 @@ public class DrawEdgesAction extends TranscriptionFactorDependentAction {
 	 * @param nodes all the nodes where there must been shearched in
 	 * @return the node that is gene
 	 */
-	public CyNode getCyNode(GeneIdentifier geneIdentifier, ArrayList<CyNode> nodes){
+	public CyNode getCyNode(GeneIdentifier geneIdentifier, List<CyNode> nodes){
 		CyNode node1 = null;
 		for(CyNode node : nodes){
 			if (node.getIdentifier().equals(geneIdentifier.getGeneName())){

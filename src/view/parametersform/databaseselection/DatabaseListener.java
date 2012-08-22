@@ -1,7 +1,7 @@
 package view.parametersform.databaseselection;
 
 import view.IRegulonResourceBundle;
-import view.parametersform.NodesActions;
+import view.CytoscapeNetworkUtilities;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -372,8 +372,8 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private void refreshAmountOfNodes(){
 		this.txtAmountNodes.setBackground(Color.WHITE);
 		if (this.jcbGeneNameAttr.getSelectedItem() != null){
-			int amountNodes = NodesActions.getGenes((String) this.jcbGeneNameAttr.getSelectedItem(), 
-					(SpeciesNomenclature) this.jcbSpecies.getSelectedItem()).size();
+			int amountNodes = CytoscapeNetworkUtilities.getGenes((String) this.jcbGeneNameAttr.getSelectedItem(),
+                    (SpeciesNomenclature) this.jcbSpecies.getSelectedItem()).size();
 			if (amountNodes == 0){
 				this.txtAmountNodes.setBackground(Color.RED);
 				this.canSubmit = false;

@@ -3,7 +3,7 @@ package view.resultspanel.actions;
 import domainmodel.*;
 import giny.view.NodeView;
 
-import view.parametersform.NodesActions;
+import view.CytoscapeNetworkUtilities;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
@@ -49,7 +49,7 @@ public class DrawNodesAction extends TranscriptionFactorDependentAction {
 			TranscriptionFactor tf = this.getTranscriptionFactor();
 			CyNode node1 = null;
 			CyNode node2 = null;
-			ArrayList<CyNode> nodes = NodesActions.getAllNodes();
+			List<CyNode> nodes = CytoscapeNetworkUtilities.getAllNodes();
 			//System.out.println(tf.getName());
 			node1 = this.getCyNode(tf.getName(), nodes);
 			if (node1 == null){
@@ -70,7 +70,7 @@ public class DrawNodesAction extends TranscriptionFactorDependentAction {
 		 * @param nodes all the nodes where there must been shearched in
 		 * @return the node that is gene
 		 */
-		public CyNode getCyNode(String geneName, ArrayList<CyNode> nodes){
+		public CyNode getCyNode(String geneName, List<CyNode> nodes){
 			CyNode node1 = null;
 			for(CyNode node : nodes){
 				if (node.getIdentifier().equals(geneName)){

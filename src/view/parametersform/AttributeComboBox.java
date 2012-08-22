@@ -3,12 +3,14 @@ package view.parametersform;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.JComboBox;
 
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
+import view.CytoscapeNetworkUtilities;
 
 
 public class AttributeComboBox  extends JComboBox implements FocusListener{
@@ -34,7 +36,7 @@ public class AttributeComboBox  extends JComboBox implements FocusListener{
 		boolean contains = false;
 		this.removeAllItems();
 		String [] attr = Cytoscape.getNodeAttributes().getAttributeNames();
-		ArrayList<CyNode> nodes = NodesActions.getSelectedNodes();
+		List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
 		for (String atName : attr){
 			if (Cytoscape.getNodeAttributes().getType(atName) == Cytoscape.getNodeAttributes().TYPE_STRING
 					&& ! atName.equals("ID") && ! atName.equals("hiddenLabel")){

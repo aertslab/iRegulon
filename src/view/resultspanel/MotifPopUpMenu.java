@@ -18,23 +18,26 @@ public class MotifPopUpMenu extends MouseAdapter {
 	private PopupMenu menu;
 	
 	
-	public MotifPopUpMenu(SelectedMotif selectedMotif, TFComboBox transcriptionFactorComboBox, boolean isRegionBased){
-		if (selectedMotif == null || transcriptionFactorComboBox == null) {
+	public MotifPopUpMenu(final SelectedMotif selectedMotif,
+                          final TFComboBox transcriptionFactorComboBox,
+                          final boolean isRegionBased,
+                          final Refreshable view) {
+		if (selectedMotif == null || transcriptionFactorComboBox == null || view == null) {
 			throw new IllegalArgumentException();
 		}
 
 		menu = new PopupMenu();
 
-		final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
+		final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view);
 		menu.addAction(networkAction);
 			
-		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
+		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view);
 		menu.addAction(drawRegulonsAndEdgesAction);
 			
-		final AddRegulatoryInteractionsAction drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox);
+		final AddRegulatoryInteractionsAction drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox, view);
 		menu.addAction(drawEdgesAction);
 			
-		final AddRegulatoryNetworkWithCombinedEdgesAction drawMergedAction = new AddRegulatoryNetworkWithCombinedEdgesAction(selectedMotif, transcriptionFactorComboBox);
+		final AddRegulatoryNetworkWithCombinedEdgesAction drawMergedAction = new AddRegulatoryNetworkWithCombinedEdgesAction(selectedMotif, transcriptionFactorComboBox, view);
 		menu.addAction(drawMergedAction);
 		
 		if (isRegionBased) {

@@ -205,8 +205,12 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	public void newMotifSelected(AbstractMotif currentSelection) {
 		this.refresh(currentSelection);
 	}
+
+    public void refresh() {
+         refresh(getSelectedMotif());
+    }
 	
-	public void refresh(AbstractMotif motif) {
+	private void refresh(AbstractMotif motif) {
 		this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motif));
 		this.transcriptionFactorTable.setModel(new TranscriptionFactorTableModel(motif));
 		this.tfMotif.setMotif((Motif) motif);
@@ -227,8 +231,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 			this.jlbLogo.setMotif((Motif) motif);
 
 			//colors of the table
-			this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
-            this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
+            refreshHighlighting();
 		}
 		
 		//setting the table renderer
@@ -255,4 +258,9 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		
 		this.invalidate();
 	}
+
+    private void refreshHighlighting() {
+        this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
+        this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
+    }
 }

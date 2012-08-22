@@ -18,17 +18,24 @@ public abstract class TranscriptionFactorDependentAction extends ResourceAction
         implements ListSelectionListener, DocumentListener {
 	private SelectedMotif selectedMotif;
 	private TranscriptionFactor transcriptionFactor;
+    private Refreshable view;
 	
 	public TranscriptionFactorDependentAction(final String actionName,
                                               final SelectedMotif selectedMotif,
-                                              final TFComboBox selectedTranscriptionFactor) {
+                                              final TFComboBox selectedTranscriptionFactor,
+                                              final Refreshable view) {
         super(actionName);
 		setEnabled(false);
 		this.selectedMotif = selectedMotif;
 		transcriptionFactor = null;
+        this.view = view;
 
         selectedTranscriptionFactor.registerAction(this);
 	}
+
+    protected Refreshable getView() {
+        return view;
+    }
 
     public SelectedMotif getSelectedMotif() {
         return this.selectedMotif;

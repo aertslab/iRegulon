@@ -144,7 +144,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         }
     }
 
-    private void refresh() {
+    public void refresh() {
         transcriptionFactorHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
         targetGeneHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
 

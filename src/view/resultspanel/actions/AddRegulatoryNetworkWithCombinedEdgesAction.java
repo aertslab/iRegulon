@@ -3,6 +3,7 @@ package view.resultspanel.actions;
 import giny.view.NodeView;
 
 import view.CytoscapeNetworkUtilities;
+import view.resultspanel.Refreshable;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
@@ -30,8 +31,10 @@ import cytoscape.view.cytopanels.CytoPanel;
 public class AddRegulatoryNetworkWithCombinedEdgesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_merged_edges_network";
 	
-	public AddRegulatoryNetworkWithCombinedEdgesAction(SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox){
-		super(NAME, selectedMotif, transcriptionFactorComboBox);
+	public AddRegulatoryNetworkWithCombinedEdgesAction(SelectedMotif selectedMotif,
+                                                       final TFComboBox transcriptionFactorComboBox,
+                                                       final Refreshable view){
+		super(NAME, selectedMotif, transcriptionFactorComboBox, view);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}
@@ -184,7 +187,7 @@ public class AddRegulatoryNetworkWithCombinedEdgesAction extends TranscriptionFa
 		}else{
 			cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")));
 		}
-		
+        getView().refresh();
 	}
 	
 	/**

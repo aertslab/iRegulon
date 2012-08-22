@@ -6,7 +6,7 @@ import domainmodel.TranscriptionFactor;
 import javax.swing.*;
 
 
-public interface MotifView {
+public interface MotifView extends Refreshable {
     public JTable getMasterTable();
 
     public AbstractFilterMotifTableModel getModel();
@@ -32,6 +32,4 @@ public interface MotifView {
     public void registerFilterComponents(final JComboBox filterAttributeTF, final JTextField filterValueTF);
 
     public void unregisterFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF);
-
-    public void refresh();
 }

@@ -3,6 +3,7 @@ package view.resultspanel.actions;
 import domainmodel.AbstractMotif;
 import view.CytoscapeNetworkUtilities;
 import view.parametersform.IRegulonVisualStyle;
+import view.resultspanel.Refreshable;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
@@ -27,8 +28,9 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
     private static final String NAME = "action_draw_edges";
 
 	
-	public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor) {
-		super(NAME, selectedMotif, selectedTranscriptionFactor);
+	public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor,
+                                              final Refreshable view) {
+		super(NAME, selectedMotif, selectedTranscriptionFactor, view);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}
@@ -43,36 +45,6 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		/*List<Object[]> TFRegulons = this.getListSelectedRegulatoryTree();
-		System.out.println("Regulons to Draw: " + TFRegulons.size());
-		CyNode node1 = null;
-		CyNode node2 = null;
-		ArrayList<CyNode> nodes = CisTargetXNodes.getAlldNodes();
-		for (Object[] regulonTarget : TFRegulons){
-			RegulatoryTree regulon = (RegulatoryTree) regulonTarget[0];
-			System.out.println(regulon.getParentName());
-			node1 = this.getCyNode(regulon.getParent(), nodes);
-			if (node1 != null){
-				RegulatoryLink link = (RegulatoryLink) regulonTarget[1];
-				node2 = this.getCyNode(link.getGeneID(), nodes);
-				if (node1 != null && node2 != null){
-					System.out.println("TargetGene " + link.getGeneName());
-					CyEdge edge;
-					if (regulon.isEdgeDirectedFromParentToChildren()){
-						edge = addEdge(node1, node2);
-						this.addAtribute(edge, "Regulator Gene", regulon.getParentName());
-						this.addAtribute(edge, "Target Gene", link.getGeneName());
-					}else {
-						edge = addEdge(node2, node1);
-						this.addAtribute(edge, "Regulator Gene", link.getGeneName());
-						this.addAtribute(edge, "Target Gene", regulon.getParentName());
-					}
-					this.addAtribute(edge, "Enriched Motif", link.getEnrichedMotif());
-					
-				}
-			}
-		}*/
-		
 		AbstractMotif tree = this.getListSelectedRegulatoryTree();
 		CyNode node1 = null;
 		CyNode node2 = null;
@@ -99,6 +71,7 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
 			IRegulonVisualStyle vsStyle = new IRegulonVisualStyle();
 			CyNetworkView view = Cytoscape.getCurrentNetworkView();
 			view.redrawGraph(true,true);
+            getView().refresh();
 		}
 	}
 	

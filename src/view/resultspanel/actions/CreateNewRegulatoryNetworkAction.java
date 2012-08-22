@@ -2,6 +2,7 @@ package view.resultspanel.actions;
 
 import domainmodel.AbstractMotif;
 import view.parametersform.IRegulonVisualStyle;
+import view.resultspanel.Refreshable;
 import view.resultspanel.TFComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
@@ -32,8 +33,9 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
     private static final String NAME = "action_create_new_network";
 	
 	public CreateNewRegulatoryNetworkAction(SelectedMotif selectedRegulatoryTree,
-                                            final TFComboBox selectedTranscriptionFactor){
-		super(NAME, selectedRegulatoryTree, selectedTranscriptionFactor);
+                                            final TFComboBox selectedTranscriptionFactor,
+                                            final Refreshable view){
+		super(NAME, selectedRegulatoryTree, selectedTranscriptionFactor,view);
 		if (selectedRegulatoryTree == null)	throw new IllegalArgumentException();
 		setEnabled(false);
 	}
@@ -49,14 +51,14 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
 		TranscriptionFactor tf = this.getTranscriptionFactor();
 		CyNetwork network = this.createNetwork(tree, tf);
 		CyNetworkView view = Cytoscape.createNetworkView(network, "MyNetwork");
-		CyNode nodeParent = DrawNodesAction.addNode(tf.getName(), network, view);
-		DrawNodesAction.setAtribute(nodeParent, "ID", tf.getName());
-		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
+		CyNode nodeParent = addNode(tf.getName(), network, view);
+		setAtribute(nodeParent, "ID", tf.getName());
+		setAtribute(nodeParent, "Regulatory function", "Regulator");
 		//System.out.println("Draw Parent Node");
 		//System.out.println("Children " + tree.getCandidateTargetGenes().size());
 		for (CandidateTargetGene geneID : tree.getCandidateTargetGenes()){
-			CyNode nodeChild = DrawNodesAction.addNode(geneID.getGeneName(), network, view);
-			DrawNodesAction.setAtribute(nodeChild, "ID", tf.getName());
+			CyNode nodeChild = addNode(geneID.getGeneName(), network, view);
+			setAtribute(nodeChild, "ID", tf.getName());
 			//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
 			CyEdge edge;
 			edge = AddRegulatoryInteractionsAction.addEdge(nodeParent, nodeChild, network, view, tree.getName());
@@ -69,8 +71,8 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
 			cyEdgeAttrs.setUserVisible("featureID", false);
 		}
 		//if the node is a regulator and target at the same time, it must say regulator
-		DrawNodesAction.setAtribute(nodeParent, "Regulatory function", "Regulator");
-		DrawNodesAction.addAtribute(nodeParent, "Motif", tree.getName());
+		setAtribute(nodeParent, "Regulatory function", "Regulator");
+		addAtribute(nodeParent, "Motif", tree.getName());
 		/*final CyLayoutAlgorithm hierarchicalLayout = CyLayouts.getLayout(HIERARCHICAL_LAYOUT);
 		if (hierarchicalLayout != null){
 			System.out.println("Hierarchical");
@@ -89,6 +91,7 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
 			manager.setVisualStyle(vs);
 		}
 		view.redrawGraph(true,true);
+        getView().refresh();
 		CytoscapeDesktop desktop = Cytoscape.getDesktop();
 		CytoPanel cytoPanel = desktop.getCytoPanel (SwingConstants.WEST);
 		if (cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")) == -1){
@@ -158,4 +161,61 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
 		cyNetworkAttrs.setListAttribute(network.getIdentifier(), attributeName, attributeValueList);
 		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
 	}
+
+    /**
+		 *
+		 * @param node where a attribute must be added to
+		 * @param attributeName the name of the attribute that must be added
+		 * @param AttributeValue the value that that attribute has for this node
+		 */
+		static public void addAtribute(CyNode node, String attributeName, String attributeValue){
+			CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
+			List<Object> nodeAtr = cyNodeAttrs.getListAttribute(node.getIdentifier(), attributeName);
+			if (nodeAtr == null){
+				nodeAtr = new ArrayList<Object>();
+			}
+			boolean isIn = false;
+			String atrString;
+			for (Object atr : nodeAtr){
+				atrString = (String) atr;
+				if (atrString.equals(attributeValue)){
+					isIn = true;
+				}
+			}
+			if (! isIn){
+				nodeAtr.add(attributeValue);
+			}
+			nodeAtr.add(attributeValue);
+			cyNodeAttrs.setListAttribute(node.getIdentifier(), attributeName, nodeAtr);
+			Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+		}
+
+    /**
+		 *
+		 * @param node where a attribute must be set to
+		 * @param attributeName the name of the attribute that must be added
+		 * @param AttributeValue the value that that attribute has for this node
+		 */
+		static public void setAtribute(CyNode node, String attributeName, String attributeValue){
+			CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
+			cyNodeAttrs.setAttribute(node.getIdentifier(), attributeName, attributeValue);
+			Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+		}
+    /**
+		 *
+		 * @param nodeID the name for the node
+		 * @param network the network where the edge must be added to
+		 * @param view the view where the edge must be added to
+		 * @return the new created node
+		 */
+		static public CyNode addNode(String nodeID, CyNetwork network, CyNetworkView view){
+			CyNode node = Cytoscape.getCyNode(nodeID, true);
+			network.addNode(node);
+			//System.out.println("Node drawn");
+
+			//view eigenschappen veranderen
+			view.addNodeView(node.getRootGraphIndex());
+			view.updateView();
+			return node;
+		}
 }

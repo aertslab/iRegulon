@@ -151,6 +151,7 @@ public class MotifClustersView extends JPanel implements MotifView {
                 FilterAttribute.TRANSCRIPTION_FACTOR, "");
         table.setModel(model);
         installRenderers();
+        detailPanel.refresh();
     }
 
     public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
@@ -160,7 +161,7 @@ public class MotifClustersView extends JPanel implements MotifView {
             transcriptionFactorCB.setSelectedItem(getSelectedTranscriptionFactor());
         }
         if (popupListener == null) {
-            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased());
+            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased(), this);
             table.addMouseListener(popupListener);
         }
         detailPanel.registerSelectionComponents(transcriptionFactorCB);

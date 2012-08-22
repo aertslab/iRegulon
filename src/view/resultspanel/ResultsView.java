@@ -7,6 +7,9 @@ import view.resultspanel.motifview.EnrichedMotifsView;
 import view.resultspanel.actions.*;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,7 +27,7 @@ import cytoscape.view.cytopanels.CytoPanel;
 import domainmodel.Results;
 
 
-public class ResultsView extends IRegulonResourceBundle {
+public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private final String runName;
     private final Results results;
 
@@ -37,7 +40,9 @@ public class ResultsView extends IRegulonResourceBundle {
 
     private JButton closeButton;
 	private JPanel mainPanel = null;
-	
+    private JTabbedPane tabbedPane;
+
+
 	public ResultsView(final String runName, final Results results) {
 		this.runName = runName;
         this.results = results;
@@ -92,6 +97,12 @@ public class ResultsView extends IRegulonResourceBundle {
         getCloseButton().setText("");
     }
 
+    @Override
+    public void refresh() {
+        final MotifView view = (MotifView) tabbedPane.getSelectedComponent();
+        if (view != null) view.refresh();
+    }
+
     public JPanel getMainPanel() {
         return mainPanel;
     }
@@ -115,7 +126,7 @@ public class ResultsView extends IRegulonResourceBundle {
         final MotifClustersView tfsView = new MotifClustersView(this.results);
 
         // 4. Create tabbed pane with these views ...
-        final JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Transcription Factors", null,
                 tfsView,
                 "Transcription factor oriented view.");
@@ -171,14 +182,14 @@ public class ResultsView extends IRegulonResourceBundle {
 		c.gridx = 0; c.gridy = 1;
 		c.weightx=0.1; c.weighty = 0.0;
         c.gridwidth = 1; c.gridheight = 1;
-        final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
+        final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this);
         final JButton buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
         buttonDrawEdges.setText("+");
         toolBar.add(buttonDrawEdges, c);
 
         c.gridx = 1; c.gridy = 1;
 		c.weightx = 0.1; c.weighty = 0.0;
-        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
+        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this);
         JButton buttonDrawNetwork = new JButton(drawNetworkAction);
         buttonDrawNetwork.setText("N");
 

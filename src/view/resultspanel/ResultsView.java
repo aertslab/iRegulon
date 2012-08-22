@@ -134,23 +134,34 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
                 motifsView,
                 "Motif oriented view.");
         tabbedPane.addChangeListener(new ChangeListener() {
+            private MotifView getOtherView(final MotifView view) {
+                if (view == motifsView) return tfsView;
+                if (view == tfsView) return motifsView;
+                return null;
+            }
+
+
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 final JTabbedPane pane = (JTabbedPane) changeEvent.getSource();
-                final MotifView view = (MotifView) pane.getSelectedComponent();
+                final MotifView curView = (MotifView) pane.getSelectedComponent();
+                final MotifView prevView = getOtherView(curView);
 
                 // 1. Refresh this view ...
-                if (view != null) view.refresh();
+                if (curView != null) curView.refresh();
 
                 // 2. Refresh motif selection ...
                 motifsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
                 tfsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
-                if (view != null) view.registerSelectionComponents(selectedMotif, transcriptionFactorCB);
+                if (curView != null) curView.registerSelectionComponents(selectedMotif, transcriptionFactorCB);
 
                 // 3. Refresh table row filter ...
                 motifsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
                 tfsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
-                if (view != null) view.registerFilterComponents(filterAttributeCB, filterValueTF);
+                if (curView != null) curView.registerFilterComponents(filterAttributeCB, filterValueTF);
+
+                // 4. Take over selection of previous view if possible ...
+                if (curView != null) curView.setSelectedMotif(prevView != null ? prevView.getSelectedMotif() : null);
             }
         });
         final MotifView view = (MotifView) tabbedPane.getSelectedComponent();

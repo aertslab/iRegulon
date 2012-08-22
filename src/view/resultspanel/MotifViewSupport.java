@@ -29,6 +29,26 @@ public class MotifViewSupport {
 		}
     }
 
+    public void setSelectedMotif(final AbstractMotif motif) {
+        final int modelIdx = findModelIndexForMotif(motif);
+        if (modelIdx < 0) getView().getMasterTable().getSelectionModel().clearSelection();
+        else {
+            final int viewIdx = getView().getMasterTable().convertRowIndexToView(modelIdx);
+            getView().getMasterTable().getSelectionModel().setSelectionInterval(viewIdx, viewIdx);
+        }
+    }
+
+    private int findModelIndexForMotif(final AbstractMotif motif) {
+        if (motif == null) return -1;
+        final MotifTableModel model = (MotifTableModel) getView().getMasterTable().getModel();
+        for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
+            if (model.getMotifAtRow(rowIndex).getDatabaseID() == motif.getDatabaseID()) {
+                return rowIndex;
+            }
+        }
+        return -1;
+    }
+
     public TranscriptionFactor getSelectedTranscriptionFactor() {
         final AbstractMotif motif = getSelectedMotif();
         if (motif == null) return null;

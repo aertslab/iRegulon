@@ -88,8 +88,8 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     }
 
     @Override
-    public void setSelectedMotif(AbstractMotif motif) {
-        //TODO:
+    public void setSelectedMotif(final AbstractMotif motif) {
+        viewSupport.setSelectedMotif(motif);
     }
 
     @Override

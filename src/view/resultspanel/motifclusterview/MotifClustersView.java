@@ -94,24 +94,7 @@ public class MotifClustersView extends JPanel implements MotifView {
 
     @Override
     public void setSelectedMotif(final AbstractMotif motif) {
-        final MotifTableModel model = (MotifTableModel) table.getModel();
-        final int modelIdx = findModelIndexForMotif(motif);
-        if (modelIdx < 0) table.getSelectionModel().clearSelection();
-        else {
-            final int viewIdx = table.convertRowIndexToView(modelIdx);
-            table.getSelectionModel().setSelectionInterval(viewIdx, viewIdx);
-        }
-    }
-
-    private int findModelIndexForMotif(final AbstractMotif motif) {
-        if (motif == null) return -1;
-        final MotifTableModel model = (MotifTableModel) table.getModel();
-        for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
-            if (model.getMotifAtRow(rowIndex).getDatabaseID() == motif.getDatabaseID()) {
-                return rowIndex;
-            }
-        }
-        return -1;
+        viewSupport.setSelectedMotif(motif);
     }
 
     @Override

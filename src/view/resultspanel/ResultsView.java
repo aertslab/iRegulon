@@ -69,6 +69,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 	}
 
     private void registerRefreshListeners() {
+        //TODO: Dit blijkt niet te werken ...
         Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_LOADED, refreshListener);
         Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_MODIFIED, refreshListener);
         Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_DESTROYED, refreshListener);

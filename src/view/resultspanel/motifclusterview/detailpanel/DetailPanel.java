@@ -7,7 +7,7 @@ import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.motifclusterview.tablemodels.ExtendedCandidateTargetGeneTableModel;
 import view.resultspanel.motifclusterview.tablemodels.ExtendedTranscriptionFactorTableModel;
-import view.resultspanel.motifview.detailpanel.LogoThumbnail;
+import view.resultspanel.LogoThumbnail;
 import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;
 import view.resultspanel.renderers.*;
 

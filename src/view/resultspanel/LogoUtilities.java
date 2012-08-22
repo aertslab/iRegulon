@@ -1,4 +1,4 @@
-package view.resultspanel.motifview.detailpanel;
+package view.resultspanel;
 
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;

@@ -1,7 +1,7 @@
 package view.resultspanel.motifview;
 
+import view.resultspanel.LogoUtilities;
 import view.resultspanel.motifview.tablemodels.CandidateTargetGeneTableModel;
-import view.resultspanel.motifview.detailpanel.LogoUtilities;
 import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
 
 import java.awt.Dimension;

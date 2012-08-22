@@ -1,4 +1,4 @@
-package view.resultspanel.motifview.detailpanel;
+package view.resultspanel;
 
 import java.awt.Graphics;
 import java.awt.Point;

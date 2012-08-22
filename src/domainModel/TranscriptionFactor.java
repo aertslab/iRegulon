@@ -1,6 +1,11 @@
 package domainmodel;
 
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 public final class TranscriptionFactor implements Comparable<TranscriptionFactor> {
 	private final GeneIdentifier geneID;
 	private final float minOrthologousIdentity;
@@ -9,10 +14,11 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
 	private final String similarMotifDescription;
 	private final String orthologousGeneName;
 	private final String orthologousSpecies;
+    private final Set<AbstractMotif> motifs;
 	
 	public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity,
 			float maxMotifSimilarityFDR, String similarMotifName, String similarMotifDescription,
-			String orthologousGeneName, String orthologousSpecies){
+			String orthologousGeneName, String orthologousSpecies, final Collection<AbstractMotif> motifs){
 		this.geneID = geneID;
 
 		this.minOrthologousIdentity = orthologousGeneName == null ? Float.NaN : minOrthologousIdentity;
@@ -22,6 +28,16 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
 		this.maxMotifSimilarityFDR = similarMotifName == null ? Float.NaN : maxMotifSimilarityFDR;
 		this.similarMotifName = similarMotifName;
 		this.similarMotifDescription = similarMotifDescription;
+
+        this.motifs = new HashSet<AbstractMotif>(motifs);
+	}
+
+    public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity,
+			float maxMotifSimilarityFDR, String similarMotifName, String similarMotifDescription,
+			String orthologousGeneName, String orthologousSpecies) {
+		this(geneID, minOrthologousIdentity, maxMotifSimilarityFDR, similarMotifName, similarMotifDescription,
+                orthologousGeneName, orthologousSpecies,
+                Collections.<AbstractMotif>emptySet());
 	}
 	
 	public String getName(){
@@ -59,6 +75,10 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
 	public String getOrthologousSpecies(){
 		return this.orthologousSpecies;
 	}
+
+    public boolean isAssociatedWith(AbstractMotif motif) {
+        return this.motifs.contains(motif);
+    }
 
     private static int compareFloat(final float f1, final float f2, final boolean reverse) {
         if (Double.isNaN(f1) && Double.isNaN(f2)) {

@@ -1,61 +1,68 @@
 package domainmodel;
 
 
-public class CandidateTargetGene implements Comparable<CandidateTargetGene>{
-
-	private GeneIdentifier geneID;
-	private int rank;
+public class CandidateTargetGene implements Comparable<CandidateTargetGene> {
+	private final GeneIdentifier geneID;
+	private final int rank;
+    private final int numberOfMotifs;
 	
-	public CandidateTargetGene(GeneIdentifier geneID, int rank){
+	public CandidateTargetGene(final GeneIdentifier geneID, final int rank){
+		this(geneID, rank, 1);
+	}
+
+    public CandidateTargetGene(final GeneIdentifier geneID, final int rank, final int numberOfMotifs){
+        if (geneID == null) throw new IllegalArgumentException();
 		this.geneID = geneID;
 		this.rank = rank;
+        this.numberOfMotifs = numberOfMotifs;
 	}
-	
-	public String getGeneName(){
-		return this.geneID.getGeneName();
-	}
-	
-	public SpeciesNomenclature getSpeciesNomenclature(){
-		return this.geneID.getSpeciesNomenclature();
-	}
-	
-	public int getRank(){
-		return this.rank;
-	}
-	
-	public GeneIdentifier getGeneID(){
+
+	public GeneIdentifier getGeneID() {
 		return this.geneID;
 	}
 
-	@Override
-	/**
-	 * @param CandidateTargetGene tg
-	 * @return -1 if this targetGene is better than tg
-	 * 			0 if both targetGenes are equal
-	 * 			1 if tg is better than this targetGene
-	 */
-	public int compareTo(CandidateTargetGene tg) {
-		if (tg.getRank() < this.getRank()){
-			//the rank of this is lower.
-			return 1;
-		}
-		if (this.getRank() > tg.getRank()){
-			//the rank of this is higher
-			return -1;
-		}
-		if (this.getGeneName().compareToIgnoreCase(tg.getGeneName()) > 0){
-			//this is aphabeticaly afther tg (may have a longer name)
-			return 1;
-		}
-		if (this.getGeneName().compareToIgnoreCase(tg.getGeneName()) < 0){
-			// this is aphabeticaly before tg (may have a shorter name)
-			return -1;
-		}
-		//the targetgenes are the same
-		return 0;
+    public String getGeneName() {
+        return this.geneID.getGeneName();
+    }
+
+    public SpeciesNomenclature getSpeciesNomenclature(){
+        return this.geneID.getSpeciesNomenclature();
+    }
+
+	public int getRank() {
+		return this.rank;
 	}
-	
-	
-	
-	
+
+    public int getNumberOfMotifs() {
+        return numberOfMotifs;
+    }
+
+    @Override
+	public int compareTo(CandidateTargetGene other) {
+		int r = new Integer(getRank()).compareTo(other.getRank());
+        if (r != 0) return r;
+        return getGeneName().compareToIgnoreCase(other.getGeneName());
+	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CandidateTargetGene that = (CandidateTargetGene) o;
+
+        if (numberOfMotifs != that.numberOfMotifs) return false;
+        if (rank != that.rank) return false;
+        if (!geneID.equals(that.geneID)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = geneID.hashCode();
+        result = 31 * result + rank;
+        result = 31 * result + numberOfMotifs;
+        return result;
+    }
 }

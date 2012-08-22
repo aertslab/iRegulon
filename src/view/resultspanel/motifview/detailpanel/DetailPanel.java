@@ -3,6 +3,7 @@ package view.resultspanel.motifview.detailpanel;
 
 import domainmodel.AbstractMotif;
 import view.resultspanel.*;
+import view.resultspanel.motifview.tablemodels.CandidateTargetGeneTableModel;
 import view.resultspanel.motifview.tablemodels.TranscriptionFactorTableModel;
 import view.resultspanel.renderers.*;
 
@@ -137,7 +138,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	    this.transcriptionFactorTable.setTableHeader(header);
 		
 	    header = new ToolTipHeader(this.targetGeneTable.getColumnModel());
-		CandidateTargetGeneTableModel TGmodelTable = (CandidateTargetGeneTableModel) this.targetGeneTable.getModel();
+		CandidateTargetGeneTableModelIF TGmodelTable = (CandidateTargetGeneTableModelIF) this.targetGeneTable.getModel();
 	    header.setToolTipStrings(TGmodelTable.getTooltips());
 	    header.setToolTipText("");
 	    this.targetGeneTable.setTableHeader(header);

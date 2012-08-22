@@ -1,16 +1,17 @@
-package view.resultspanel;
+package view.resultspanel.motifview.tablemodels;
 
 
 import javax.swing.table.AbstractTableModel;
 
 import domainmodel.AbstractMotif;
 import domainmodel.CandidateTargetGene;
+import view.resultspanel.CandidateTargetGeneTableModelIF;
 
 import java.util.Arrays;
 import java.util.List;
 
 
-public final class CandidateTargetGeneTableModel extends AbstractTableModel implements ColumnImportances {
+public final class CandidateTargetGeneTableModel extends AbstractTableModel implements CandidateTargetGeneTableModelIF {
     private static final String[] COLUMN_NAMES = {"Rank", "Target Name"};
     private static final String[] COLUMN_TOOLTIPS = {"The rank of the target.",
             "The name of the predicted target."};
@@ -38,6 +39,7 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel impl
         return (this.motif == null) ? 0 : this.motif.getCandidateTargetGenes().size();
     }
 
+    @Override
     public CandidateTargetGene getCandidateTargetGeneAtRow(final int rowIndex) {
         return this.motif.getCandidateTargetGenes().get(rowIndex);
     }
@@ -54,6 +56,7 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel impl
         }
     }
 
+    @Override
     public String[] getTooltips() {
         return COLUMN_TOOLTIPS;
     }

@@ -4,6 +4,7 @@ import domainmodel.AbstractMotif;
 import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
+import view.resultspanel.motifclusterview.tablemodels.ExtendedCandidateTargetGeneTableModel;
 import view.resultspanel.motifclusterview.tablemodels.ExtendedTranscriptionFactorTableModel;
 import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;
 import view.resultspanel.renderers.*;
@@ -71,7 +72,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         cc.weightx = 2.0/5.0; cc.gridx = 1; cc.gridy = 0;
         add(new JScrollPane(transcriptionFactorsTable), cc);
 
-        final CandidateTargetGeneTableModel tgModel = new CandidateTargetGeneTableModel();
+        final CandidateTargetGeneTableModelIF tgModel = new ExtendedCandidateTargetGeneTableModel();
         targetGeneTable = new JTable(tgModel);
         targetGeneTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         targetGeneHighlighter = new NetworkMembershipHighlightRenderer("Target Name");
@@ -154,7 +155,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         installRenderersOnMotifsTable();
         transcriptionFactorsTable.setModel(new ExtendedTranscriptionFactorTableModel(getCurrentCluster()));
         installRenderersOnTranscriptionFactorsTable();
-        targetGeneTable.setModel(new CandidateTargetGeneTableModel(getCurrentCluster()));
+        targetGeneTable.setModel(new ExtendedCandidateTargetGeneTableModel(getCurrentCluster()));
         installRenderersOnTargetGeneTable();
     }
 

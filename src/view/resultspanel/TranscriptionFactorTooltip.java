@@ -26,10 +26,10 @@ public class TranscriptionFactorTooltip extends MouseMotionAdapter {
         if (column == 1) {
             String orthology = "<html>";
             if (tf.getOrthologousGeneName() != null) {
-                orthology = orthology + "Orthologous Gene Name = " + tf.getOrthologousGeneName();
+                orthology = orthology + "<b>Orthologous Gene Name:</b> " + tf.getOrthologousGeneName();
             }
             if (tf.getOrthologousSpecies() != null) {
-                orthology = orthology + "<br/> Orthologous Species = " + tf.getOrthologousSpecies();
+                orthology = orthology + "<br/><b>Orthologous Species:</b> " + tf.getOrthologousSpecies();
             }
             orthology = orthology + "</html>";
             if (orthology.equalsIgnoreCase("<html></html>")) {
@@ -41,10 +41,10 @@ public class TranscriptionFactorTooltip extends MouseMotionAdapter {
         } else if (column == 2) {
             String motifSimilarity = "<html>";
             if (tf.getSimilarMotifName() != null) {
-                motifSimilarity = motifSimilarity + "Similar motif name = " + tf.getSimilarMotifName();
+                motifSimilarity = motifSimilarity + "<b>Similar motif name:</b> " + tf.getSimilarMotifName();
             }
             if (tf.getSimilarMotifDescription() != null) {
-                motifSimilarity = motifSimilarity + "<br/> Similar motif description = " + tf.getSimilarMotifDescription();
+                motifSimilarity = motifSimilarity + "<br/><b>Similar motif description:</b> " + tf.getSimilarMotifDescription();
             }
             motifSimilarity = motifSimilarity + "</html>";
             if (motifSimilarity.equalsIgnoreCase("<html></html>")) {

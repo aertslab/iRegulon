@@ -21,7 +21,6 @@ import view.resultspanel.actions.DrawNodesAndEdgesAction;
 import view.resultspanel.motifclusterview.MotifClustersView;
 
 import cytoscape.view.cytopanels.CytoPanel;
-import domainmodel.Motif;
 import domainmodel.Results;
 
 
@@ -214,7 +213,7 @@ public class ResultsView extends IRegulonResourceBundle {
 		c.gridx = 0; c.gridy = 2;
 		c.gridwidth = 2;
 		c.weightx = 0.1; c.weighty = 0.0;
-		toolBar.add(new JLabel("Filtering on: "), c);
+		toolBar.add(new JLabel("Filter on "), c);
 
 		c.gridx = 2; c.gridy = 2;
 		c.gridwidth = 1;

@@ -7,43 +7,68 @@ import javax.swing.*;
 
 public class SummaryLabel extends JLabel {
     public SummaryLabel(final Results results) {
+        super();
         setText(results.getName());
         setToolTipText(createToolTipText(results));
     }
 
-    private String createToolTipText(Results results) {
-        if (results.hasParameters()){
-            String parameters = "<html>"
-                        + "Name:  " + results.getName()
-                        + "<br/>"
-                        + "Species and nomenclature: " + results.getSpeciesNomenclature().toString()
-                        + "<br/>"
-                        + "Minimal NEscore: " + results.getEScore()
-                        + "<br/>"
-                        + "Threshold for visualisation: " + results.getThresholdForVisualisation()
-                        + "<br/>"
-                        + "ROC threshold AUC: " + results.getROCthresholdAUC()
-                        + "<br/>"
-                        + "minimal orthologous: " + results.getMinOrthologous()
-                        + "<br/>"
-                        + "maximal motif similarity: " + results.getMaxMotifSimilarityFDR()
-                        + "<br/>"
-                        + "<br/>"
-                        + "database: " + results.getDatabaseName()
-                        + "<br/>";
-            if (results.isRegionBased()){
-                parameters += "overlap: " + results.getOverlap() + "<br/>";
-                if (results.isDelineationBased()){
-                    parameters += "Delineation: " + results.getDelineationName();
-                } else {
-                    parameters += "Upstream: " + results.getUpstream() + " kb <br/>";
-                    parameters += "Downstream: " + results.getDownstream() + " kb";
-                }
+    private String createToolTipText(final Results results) {
+        if (!results.hasParameters()) return "";
+        final StringBuilder builder = new StringBuilder();
+        builder.append("<html>");
+
+        builder.append("<b>Name:</b> ");
+        builder.append(results.getName());
+        builder.append("<br/>");
+
+
+        builder.append("<b>Species and nomenclature:</b> ");
+        builder.append(results.getSpeciesNomenclature().toString());
+        builder.append("<br/>");
+
+        builder.append("<b>Mimumum NEScore:</b> ");
+        builder.append(results.getEScore());
+        builder.append("<br/>");
+
+        builder.append("<b>Rank threshold for visualisation:</b> ");
+        builder.append(results.getThresholdForVisualisation());
+        builder.append("<br/>");
+
+        builder.append("<b>ROC threshold for AUC calculation (%):</b> ");
+        builder.append(results.getROCthresholdAUC());
+        builder.append("<br/>");
+
+        builder.append("<b>Minimum orthologous identity (%):</b> ");
+        builder.append(results.getMinOrthologous());
+        builder.append("<br/>");
+
+        builder.append("<b>Maximum motif similarity (FDR):</b> ");
+        builder.append(results.getMaxMotifSimilarityFDR());
+        builder.append("<br/>");
+
+        builder.append("<b>Database:</b> ");
+        builder.append(results.getDatabaseName());
+        builder.append("<br/>");
+
+        if (results.isRegionBased()) {
+            builder.append("<b>Overlap fraction:</b> ");
+            builder.append(results.getOverlap() );
+            builder.append("<br/>");
+
+            if (results.isDelineationBased()) {
+                 builder.append("<b>Putative regulatory region:</b> ");
+                 builder.append(results.getDelineationName());
+                 builder.append("<br/>");
+            } else {
+                 builder.append("<b>Putative regulatory region:</b> [TSS-");
+                 builder.append(results.getUpstream());
+                 builder.append("kb,TSS+");
+                 builder.append(results.getDownstream());
+                 builder.append("kb]<br/>");
             }
-            parameters += "</html>";
-            return parameters;
-        } else {
-            return "";
         }
+
+        builder.append("</html>");
+        return builder.toString();
     }
 }

@@ -37,6 +37,7 @@ public class CloseResultsViewAction extends ResourceAction {
                         PersistenceUtilities.NATIVE_FILE_EXTENSION);
             }
         }
+        view.unregisterRefreshListeners();
         panel.remove(view.getMainPanel());
         if (panel.getCytoPanelComponentCount() == 0) {
             panel.setState(CytoPanelState.HIDE);

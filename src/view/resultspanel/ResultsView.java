@@ -49,6 +49,8 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 	private JPanel mainPanel = null;
     private JTabbedPane tabbedPane;
 
+    private final PropertyChangeListener refreshListener;
+
 
 	public ResultsView(final String runName, final Results results) {
 		this.runName = runName;
@@ -57,13 +59,27 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
         this.selectedMotif = new SelectedMotif(results.getParameters().getAttributeName());
 
-        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_CREATED, new PropertyChangeListener() {
+        refreshListener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
                 refresh();
             }
-        });
+        };
+        registerRefreshListeners();
 	}
+
+    private void registerRefreshListeners() {
+        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_LOADED, refreshListener);
+        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_MODIFIED, refreshListener);
+        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_DESTROYED, refreshListener);
+    }
+
+    public void unregisterRefreshListeners() {
+        Cytoscape.getDesktop().removePropertyChangeListener(Cytoscape.NETWORK_LOADED, refreshListener);
+        Cytoscape.getDesktop().removePropertyChangeListener(Cytoscape.NETWORK_MODIFIED, refreshListener);
+        Cytoscape.getDesktop().removePropertyChangeListener(Cytoscape.NETWORK_DESTROYED, refreshListener);
+    }
+
 
     public String getRunName() {
         return this.runName;

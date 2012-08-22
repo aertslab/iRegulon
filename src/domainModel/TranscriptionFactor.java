@@ -80,6 +80,10 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
         return this.motifs.contains(motif);
     }
 
+    public int getMotifCount() {
+        return this.motifs.size();
+    }
+
     private static int compareFloat(final float f1, final float f2, final boolean reverse) {
         if (Double.isNaN(f1) && Double.isNaN(f2)) {
             return 0;

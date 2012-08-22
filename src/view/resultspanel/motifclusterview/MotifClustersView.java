@@ -93,6 +93,28 @@ public class MotifClustersView extends JPanel implements MotifView {
     }
 
     @Override
+    public void setSelectedMotif(final AbstractMotif motif) {
+        final MotifTableModel model = (MotifTableModel) table.getModel();
+        final int modelIdx = findModelIndexForMotif(motif);
+        if (modelIdx < 0) table.getSelectionModel().clearSelection();
+        else {
+            final int viewIdx = table.convertRowIndexToView(modelIdx);
+            table.getSelectionModel().setSelectionInterval(viewIdx, viewIdx);
+        }
+    }
+
+    private int findModelIndexForMotif(final AbstractMotif motif) {
+        if (motif == null) return -1;
+        final MotifTableModel model = (MotifTableModel) table.getModel();
+        for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
+            if (model.getMotifAtRow(rowIndex).getDatabaseID() == motif.getDatabaseID()) {
+                return rowIndex;
+            }
+        }
+        return -1;
+    }
+
+    @Override
     public TranscriptionFactor getSelectedTranscriptionFactor() {
         return viewSupport.getSelectedTranscriptionFactor();
     }
@@ -145,12 +167,14 @@ public class MotifClustersView extends JPanel implements MotifView {
     }
 
     private void refreshImp() {
+        final AbstractMotif currentSelection = getSelectedMotif();
         this.clusters = results.getMotifClusters(networkSupport.getCurrentIDs());
         final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(
                 new BaseMotifClusterTableModel(this.clusters),
                 FilterAttribute.TRANSCRIPTION_FACTOR, "");
         table.setModel(model);
         installRenderers();
+        setSelectedMotif(currentSelection);
         detailPanel.refresh();
     }
 

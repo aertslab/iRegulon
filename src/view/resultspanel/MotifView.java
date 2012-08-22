@@ -23,6 +23,8 @@ public interface MotifView extends Refreshable {
 
     public AbstractMotif getSelectedMotif();
 
+    public void setSelectedMotif(AbstractMotif motif);
+
     public TranscriptionFactor getSelectedTranscriptionFactor();
 
     public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);

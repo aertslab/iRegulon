@@ -88,6 +88,11 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     }
 
     @Override
+    public void setSelectedMotif(AbstractMotif motif) {
+        //TODO:
+    }
+
+    @Override
     public TranscriptionFactor getSelectedTranscriptionFactor() {
         return viewSupport.getSelectedTranscriptionFactor();
     }

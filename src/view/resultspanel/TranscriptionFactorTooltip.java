@@ -22,6 +22,10 @@ public class TranscriptionFactorTooltip extends MouseMotionAdapter {
 
         final TranscriptionFactorTableModelIF model = (TranscriptionFactorTableModelIF) table.getModel();
         final TranscriptionFactor tf = model.getTranscriptionFactorAtRow(row);
+        if (tf == null) {
+            table.setToolTipText(null);
+            return;
+        }
 
         if (column == 1) {
             String orthology = "<html>";

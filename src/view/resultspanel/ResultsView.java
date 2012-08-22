@@ -127,13 +127,17 @@ public class ResultsView extends IRegulonResourceBundle {
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 final JTabbedPane pane = (JTabbedPane) changeEvent.getSource();
-                // 1. Refresh motif selection ...
                 final MotifView view = (MotifView) pane.getSelectedComponent();
+
+                // 1. Refresh this view ...
+                if (view != null) view.refresh();
+
+                // 2. Refresh motif selection ...
                 motifsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
                 tfsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
                 if (view != null) view.registerSelectionComponents(selectedMotif, transcriptionFactorCB);
 
-                // 2. Refresh table row filter ...
+                // 3. Refresh table row filter ...
                 motifsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
                 tfsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
                 if (view != null) view.registerFilterComponents(filterAttributeCB, filterValueTF);

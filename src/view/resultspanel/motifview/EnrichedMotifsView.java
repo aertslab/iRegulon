@@ -178,4 +178,9 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     public void unregisterFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
         viewSupport.unregisterFilterComponents(filterAttributeCB, filterValueTF);
     }
+
+    @Override
+    public void refresh() {
+        // NOP ...
+    }
 }

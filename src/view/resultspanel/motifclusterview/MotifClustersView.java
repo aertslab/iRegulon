@@ -2,6 +2,7 @@ package view.resultspanel.motifclusterview;
 
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class MotifClustersView extends JPanel implements MotifView {
     private final NetworkMembershipSupport networkSupport;
 
     private final Results results;
-    private final List<MotifCluster> clusters;
+    private List<MotifCluster> clusters;
 
     private JTable table;
     private DetailPanelIF detailPanel;
@@ -36,10 +37,11 @@ public class MotifClustersView extends JPanel implements MotifView {
         this.results = results;
 
         this.networkSupport = new NetworkMembershipSupport();
-        this.clusters = results.getMotifClusters(networkSupport.getCurrentIDs());
+        this.clusters = Collections.emptyList();
 
         setLayout(new BorderLayout());
         initPanel();
+        refreshImp();
 	}
 
     public Results getResults() {
@@ -107,7 +109,15 @@ public class MotifClustersView extends JPanel implements MotifView {
         header.setToolTipStrings(model.getTooltips().toArray(new String[model.getTooltips().size()]));
         header.setToolTipText("");
         table.setTableHeader(header);
+        installRenderers();
 
+        add(new JScrollPane(table), BorderLayout.CENTER);
+
+        detailPanel = new DetailPanel();
+        add((JPanel) detailPanel, BorderLayout.SOUTH);
+	}
+
+    private void installRenderers() {
         final ClusterColorRenderer clusterColorRenderer = new ClusterColorRenderer("ClusterCode");
         for (int i = 0; i < table.getModel().getColumnCount(); i++) {
             final CombinedRenderer renderer = new CombinedRenderer();
@@ -124,12 +134,24 @@ public class MotifClustersView extends JPanel implements MotifView {
         }
 
         final ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
-		columnWidth.setWidth();
-        add(new JScrollPane(table), BorderLayout.CENTER);
+        columnWidth.setWidth();
+    }
 
-        detailPanel = new DetailPanel();
-        add((JPanel) detailPanel, BorderLayout.SOUTH);
-	}
+    @Override
+    public void refresh() {
+        if (networkSupport.refresh()) {
+           refreshImp();
+        }
+    }
+
+    private void refreshImp() {
+        this.clusters = results.getMotifClusters(networkSupport.getCurrentIDs());
+        final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(
+                new BaseMotifClusterTableModel(this.clusters),
+                FilterAttribute.TRANSCRIPTION_FACTOR, "");
+        table.setModel(model);
+        installRenderers();
+    }
 
     public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
         if (selectionListener == null) {

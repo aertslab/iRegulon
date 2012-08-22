@@ -52,7 +52,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 final ExtendedTranscriptionFactorTableModel model = (ExtendedTranscriptionFactorTableModel) transcriptionFactorsTable.getModel();
-                model.setSelectedMotif((Motif) getSelectedMotif());
+                model.setSelectedMotif(getSelectedMotif());
                 model.fireTableDataChanged();
             }
         });
@@ -180,6 +180,27 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             final MotifTableModel model = (MotifTableModel) motifsTable.getModel();
             return model.getMotifAtRow(motifsTable.convertRowIndexToModel(rowIdx));
         }
+    }
+
+    public void setSelectedMotif(final AbstractMotif motif) {
+        final int rowIdx = findModelIndexForMotif(motif);
+        if (rowIdx < 0) {
+            motifsTable.getSelectionModel().clearSelection();
+        } else {
+            final int viewIdx = motifsTable.convertRowIndexToModel(rowIdx);
+            motifsTable.getSelectionModel().setSelectionInterval(viewIdx, viewIdx);
+        }
+    }
+
+    private int findModelIndexForMotif(final AbstractMotif motif) {
+        if (motif == null) return -1;
+        final MotifTableModel model = (MotifTableModel) motifsTable.getModel();
+        for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
+            if (model.getMotifAtRow(rowIndex).getDatabaseID() == motif.getDatabaseID()) {
+                return rowIndex;
+            }
+        }
+        return -1;
     }
 
     @Override

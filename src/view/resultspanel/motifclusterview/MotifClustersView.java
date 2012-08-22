@@ -25,7 +25,7 @@ public class MotifClustersView extends JPanel implements MotifView {
     private List<MotifCluster> clusters;
 
     private JTable table;
-    private DetailPanelIF detailPanel;
+    private DetailPanel detailPanel;
 
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
@@ -99,6 +99,12 @@ public class MotifClustersView extends JPanel implements MotifView {
         else {
             final int viewIdx = table.convertRowIndexToView(modelIdx);
             table.getSelectionModel().setSelectionInterval(viewIdx, viewIdx);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    detailPanel.setSelectedMotif(motif);
+                }
+            });
         }
     }
 

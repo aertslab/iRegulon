@@ -1,12 +1,19 @@
 package view.resultspanel;
 
+import cytoscape.CyNetworkEvent;
+import cytoscape.CyNetworkListener;
+import cytoscape.Cytoscape;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
+import giny.model.GraphPerspectiveChangeEvent;
+import giny.model.GraphPerspectiveChangeListener;
 import view.IRegulonResourceBundle;
 import view.resultspanel.motifview.EnrichedMotifsView;
 import view.resultspanel.actions.*;
 
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,6 +56,13 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		this.isSaved = false;
 
         this.selectedMotif = new SelectedMotif(results.getParameters().getAttributeName());
+
+        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_CREATED, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                refresh();
+            }
+        });
 	}
 
     public String getRunName() {

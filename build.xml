@@ -11,7 +11,9 @@
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="0.11"/>
     <property name="plugin.bin.filename" value="iRegulon-${plugin.version}-bin.jar"/>
+    <property name="plugin.bin.notransfac.filename" value="iRegulon-${plugin.version}-bin-no-transfac.jar"/>
     <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src.zip"/>
+    <property name="plugin.src.notransfac.filename" value="iRegulon-${plugin.version}-src-no-transfac.zip"/>
     <property name="plugin.package" value="view"/>
     <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
 
@@ -61,6 +63,12 @@
         </copy>
     </target>
 
+    <target name="copy_resources_no_transfac" depends="compile">
+        <copy todir="${build.folder}">
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.gif,**/*.jpg" excludes="**/transfac_pro-*.png" />
+        </copy>
+    </target>
+
     <!-- =================================================================== -->
     <!-- Generate plugin Cytoscape props file from template                  -->
     <!-- =================================================================== -->
@@ -79,7 +87,6 @@
             </filterchain>
         </copy>
     </target>
-
 
     <!-- =================================================================== -->
     <!-- Generate plugin JAVA properties file from template                  -->
@@ -125,6 +132,18 @@
         </jarjar>
     </target>
 
+    <target name="binary_distribution_no_transfac" depends="copy_resources_no_transfac,copy_help,generate_cytoscape_props_file,generate_java_props_file">
+        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
+        <jarjar jarfile="${build.folder}/${plugin.bin.notransfac.filename}">
+            <manifest>
+                <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
+            </manifest>
+            <fileset dir="${build.folder}" />
+            <zipfileset src="${lib.folder}/xstream-1.4.3-bin.jar"/>
+            <zipfileset src="${lib.folder}/kxml2-2.3.0-bin.jar"/>
+        </jarjar>
+    </target>
+
     <!-- =================================================================== -->
     <!-- Create the source distribution                                      -->
     <!-- =================================================================== -->
@@ -147,10 +166,29 @@
         </zip>
     </target>
 
+    <target name="source_distribution_no_transfac" depends="copy_resources,copy_help">
+        <zip destfile="${build.folder}/${plugin.src.notransfac.filename}">
+            <fileset dir="${basedir}"
+                     includes="src/**/*.properties,src/**/*.png,src/**/*.gif,src/**/*.jpg"  excludes="**/transfac_pro-*.png" />
+
+            <fileset dir="${basedir}" includes="src/**/*.java"/>
+
+            <fileset dir="${basedir}" includes="src/installation.template.xml,src/plugin.template.props,src/*.txt"/>
+
+            <fileset dir="${basedir}" includes="help/**/*"/>
+
+            <fileset dir="${basedir}" includes="test/**/*.java"/>
+
+            <fileset dir="${basedir}" includes="lib/*.jar"/>
+
+            <fileset dir="${basedir}" includes="build.xml"/>
+        </zip>
+    </target>
+
     <!-- =================================================================== -->
     <!-- All                                                                 -->
     <!-- =================================================================== -->
-    <target name="all" depends="binary_distribution,source_distribution"/>
+    <target name="all" depends="binary_distribution,binary_distribution_no_transfac,source_distribution,source_distribution_no_transfac"/>
 
     <!-- =================================================================== -->
     <!-- Generate plugin installation XML from template                      -->
@@ -162,6 +200,7 @@
                     <token key="pluginName" value="${plugin.name}"/>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
+                    <token key="binaryDistribution" value="${plugin.bin.notransfac.filename}"/>
                 </replacetokens>
             </filterchain>
         </copy>
@@ -193,7 +232,9 @@
                 <replacetokens>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="binaryDistribution" value="${plugin.bin.filename}"/>
+                    <token key="binaryDistributionNoTransfac" value="${plugin.bin.notransfac.filename}"/>
                     <token key="sourceDistribution" value="${plugin.src.filename}"/>
+                    <token key="sourceDistributionNoTransfac" value="${plugin.src.notransfac.filename}"/>
                     <token key="installationXml" value="installation.xml"/>
                 </replacetokens>
             </filterchain>
@@ -203,12 +244,14 @@
     <!-- =================================================================== -->
     <!-- Deploy to web server                                                -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="binary_distribution,source_distribution,generate_installation_file,generate_php_configuration_file,generate_html_file">
+    <target name="deploy" depends="binary_distribution_no_transfac,binary_distribution,source_distribution_no_transfac,source_distribution,generate_installation_file,generate_php_configuration_file,generate_html_file">
         <ftp server="${ftp.server}" port="21"
              remotedir="iRegulon/"
              userid="${ftp.username}" password="${ftp.password}"
              action="send" verbose="yes" depends="yes" binary="yes">
-            <fileset file="${build.folder}/${plugin.src.filename}" />
+            <fileset file="${build.folder}/${plugin.src.notransfac.filename}" />
+            <fileset file="${build.folder}/${plugin.src.notransfac.filename}" />
+            <fileset file="${build.folder}/${plugin.bin.filename}" />
             <fileset file="${build.folder}/${plugin.bin.filename}" />
             <fileset file="${build.folder}/installation.xml" />
             <fileset file="${build.folder}/LICENSE.txt" />

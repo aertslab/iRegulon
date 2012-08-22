@@ -24,7 +24,7 @@
           <url>http://med.kuleuven.be/lcb/iRegulon/LICENSE.txt</url>
         </license>
 
-        <url>http://med.kuleuven.be/lcb/iRegulon/@pluginName@-@pluginVersion@-bin.jar</url>
+        <url>http://med.kuleuven.be/lcb/iRegulon/@binaryDistribution@</url>
 
          <authorlist>
            <author>

@@ -18,10 +18,11 @@
     		<div id="content">
         		<h2>Downloads</h2>
 			 	For version @pluginVersion@ the following downloads are available:
-			 	<ol>
-			 		<a href="@sourceDistribution@">Source distribution</a>
-			 		<a href="@binaryDistribution@">Binary distribution</a>
-			    </ol>
+			 	<table>
+				  	<tr><th></th><th>with TRANSFAC</th><th>without TRANSFAC</th></tr>
+				  	<tr><td>Source distribution</td><td><a href="@sourceDistribution@">Download</a></td><td><a href="@sourceDistributionNoTransfac@">Download</a></td></tr>
+				  	<tr><td>Binary distribution</td><td><a href="@binaryDistribution@">Download</a></td><td><a href="@binaryDistributionNoTransfac@">Download</a></td></tr>
+			 	</table>
         		<h2>Installation</h2>
 			 	Use the following link to automatically install the plugin in Cytoscape: <a href="@installationXml@">XML file</a>.
 			 	<br/>

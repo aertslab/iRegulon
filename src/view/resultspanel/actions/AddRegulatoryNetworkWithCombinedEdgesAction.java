@@ -27,10 +27,10 @@ import cytoscape.view.CyNetworkView;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
 
-public class DrawMergedEdgesNetworkAction extends TranscriptionFactorDependentAction {
+public class AddRegulatoryNetworkWithCombinedEdgesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_merged_edges_network";
 	
-	public DrawMergedEdgesNetworkAction(SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox){
+	public AddRegulatoryNetworkWithCombinedEdgesAction(SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox){
 		super(NAME, selectedMotif, transcriptionFactorComboBox);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
@@ -101,7 +101,7 @@ public class DrawMergedEdgesNetworkAction extends TranscriptionFactorDependentAc
 		//get the edge attributes
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 		//hashmap, first argument the transcription factor, the second all the motifs
-		HashMap<String, NewEdgeAttr> edgesAttr = new HashMap<String, DrawMergedEdgesNetworkAction.NewEdgeAttr>();
+		HashMap<String, NewEdgeAttr> edgesAttr = new HashMap<String, AddRegulatoryNetworkWithCombinedEdgesAction.NewEdgeAttr>();
 		//list of all unmapped edges
 		ArrayList<CyEdge> unmappedEdges = new ArrayList<CyEdge>();
 		//iterate over the edges
@@ -162,15 +162,15 @@ public class DrawMergedEdgesNetworkAction extends TranscriptionFactorDependentAc
 				network2.addEdge(edge);
 				//System.out.println("Edge identifier=" + edge.getIdentifier());
 				//System.out.println("TF=" + edgeattr.getTF());
-				DrawEdgesAction.setAtribute(edge, "Regulator Gene", edgeattr.getTF());
+				AddRegulatoryInteractionsAction.setAtribute(edge, "Regulator Gene", edgeattr.getTF());
 				//System.out.println("TG=" + edgeattr.getTG());
-				DrawEdgesAction.setAtribute(edge, "Target Gene", edgeattr.getTG());
+				AddRegulatoryInteractionsAction.setAtribute(edge, "Target Gene", edgeattr.getTG());
 				List<String> motifs = new ArrayList<String>();
 				Iterator<String> motifit = edgeattr.getMotifs().iterator();
 				while(motifit.hasNext()){
 					motifs.add(motifit.next());
 				}
-				DrawEdgesAction.setAtribute(edge, "Motifs", motifs);
+				AddRegulatoryInteractionsAction.setAtribute(edge, "Motifs", motifs);
 				cyView.addEdgeView(edge.getRootGraphIndex());
 				cyView.updateView();
 			}

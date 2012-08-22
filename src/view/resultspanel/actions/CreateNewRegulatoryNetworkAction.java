@@ -25,15 +25,14 @@ import cytoscape.visual.CalculatorCatalog;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
 import domainmodel.CandidateTargetGene;
-import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
 
-public class CreateNewNetworkAction extends TranscriptionFactorDependentAction {
+public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_create_new_network";
 	
-	public CreateNewNetworkAction(SelectedMotif selectedRegulatoryTree,
-                                              final TFComboBox selectedTranscriptionFactor){
+	public CreateNewRegulatoryNetworkAction(SelectedMotif selectedRegulatoryTree,
+                                            final TFComboBox selectedTranscriptionFactor){
 		super(NAME, selectedRegulatoryTree, selectedTranscriptionFactor);
 		if (selectedRegulatoryTree == null)	throw new IllegalArgumentException();
 		setEnabled(false);
@@ -60,12 +59,12 @@ public class CreateNewNetworkAction extends TranscriptionFactorDependentAction {
 			DrawNodesAction.setAtribute(nodeChild, "ID", tf.getName());
 			//DrawNodesAction.addAtribute(nodeChild, "Regulatory function", "Target Gene");
 			CyEdge edge;
-			edge = DrawEdgesAction.addEdge(nodeParent, nodeChild, network, view, tree.getName());
-			DrawEdgesAction.setAtribute(edge, "Regulator Gene", tf.getName());
-			DrawEdgesAction.setAtribute(edge, "Target Gene", geneID.getGeneName());
-			DrawEdgesAction.setAtribute(edge, "Regulatory function", "Predicted");
-			DrawEdgesAction.setAtribute(edge, "Motif", tree.getName());
-			DrawEdgesAction.setAtribute(edge, "featureID", "" + tree.getDatabaseID());
+			edge = AddRegulatoryInteractionsAction.addEdge(nodeParent, nodeChild, network, view, tree.getName());
+			AddRegulatoryInteractionsAction.setAtribute(edge, "Regulator Gene", tf.getName());
+			AddRegulatoryInteractionsAction.setAtribute(edge, "Target Gene", geneID.getGeneName());
+			AddRegulatoryInteractionsAction.setAtribute(edge, "Regulatory function", "Predicted");
+			AddRegulatoryInteractionsAction.setAtribute(edge, "Motif", tree.getName());
+			AddRegulatoryInteractionsAction.setAtribute(edge, "featureID", "" + tree.getDatabaseID());
 			CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 			cyEdgeAttrs.setUserVisible("featureID", false);
 		}

@@ -8,10 +8,10 @@ import javax.swing.*;
 import view.actions.BedExportAction;
 import view.actions.BedLinkToBrowserAction;
 
-import view.resultspanel.actions.DrawEdgesAction;
-import view.resultspanel.actions.DrawMergedEdgesNetworkAction;
-import view.resultspanel.actions.CreateNewNetworkAction;
-import view.resultspanel.actions.DrawNodesAndEdgesAction;
+import view.resultspanel.actions.AddRegulatoryInteractionsAction;
+import view.resultspanel.actions.AddRegulatoryNetworkWithCombinedEdgesAction;
+import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
+import view.resultspanel.actions.AddRegulatoryNetworkAction;
 
 
 public class MotifPopUpMenu extends MouseAdapter {
@@ -25,16 +25,16 @@ public class MotifPopUpMenu extends MouseAdapter {
 
 		menu = new PopupMenu();
 
-		final CreateNewNetworkAction networkAction = new CreateNewNetworkAction(selectedMotif, transcriptionFactorComboBox);
+		final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(networkAction);
 			
-		final DrawNodesAndEdgesAction drawRegulonsAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif, transcriptionFactorComboBox);
+		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(drawRegulonsAndEdgesAction);
 			
-		final DrawEdgesAction drawEdgesAction = new DrawEdgesAction(selectedMotif, transcriptionFactorComboBox);
+		final AddRegulatoryInteractionsAction drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(drawEdgesAction);
 			
-		final DrawMergedEdgesNetworkAction drawMergedAction = new DrawMergedEdgesNetworkAction(selectedMotif, transcriptionFactorComboBox);
+		final AddRegulatoryNetworkWithCombinedEdgesAction drawMergedAction = new AddRegulatoryNetworkWithCombinedEdgesAction(selectedMotif, transcriptionFactorComboBox);
 		menu.addAction(drawMergedAction);
 		
 		if (isRegionBased) {

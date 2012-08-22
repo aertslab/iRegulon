@@ -15,8 +15,8 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import view.resultspanel.actions.CreateNewNetworkAction;
-import view.resultspanel.actions.DrawNodesAndEdgesAction;
+import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
+import view.resultspanel.actions.AddRegulatoryNetworkAction;
 
 import view.resultspanel.motifclusterview.MotifClustersView;
 
@@ -171,14 +171,14 @@ public class ResultsView extends IRegulonResourceBundle {
 		c.gridx = 0; c.gridy = 1;
 		c.weightx=0.1; c.weighty = 0.0;
         c.gridwidth = 1; c.gridheight = 1;
-        final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new DrawNodesAndEdgesAction(selectedMotif, transcriptionFactorComboBox);
+        final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
         final JButton buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
         buttonDrawEdges.setText("+");
         toolBar.add(buttonDrawEdges, c);
 
         c.gridx = 1; c.gridy = 1;
 		c.weightx = 0.1; c.weighty = 0.0;
-        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewNetworkAction(selectedMotif, transcriptionFactorComboBox);
+        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox);
         JButton buttonDrawNetwork = new JButton(drawNetworkAction);
         buttonDrawNetwork.setText("N");
 

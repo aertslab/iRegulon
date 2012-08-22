@@ -20,7 +20,7 @@ import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
 import cytoscape.view.CyNetworkView;
 
-public class DrawNodesAction extends TranscriptionFactorDependentAction {
+class DrawNodesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_nodes";
 		
 		public DrawNodesAction(SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox) {

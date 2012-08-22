@@ -23,11 +23,11 @@ import giny.view.*;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
 
-public class DrawEdgesAction extends TranscriptionFactorDependentAction {
+public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_edges";
 
 	
-	public DrawEdgesAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor) {
+	public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor) {
 		super(NAME, selectedMotif, selectedTranscriptionFactor);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);

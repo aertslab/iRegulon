@@ -20,16 +20,15 @@ import java.util.List;
 import java.util.Map;
 
 import domainmodel.CandidateTargetGene;
-import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
-public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction {
+public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_nodes_and_edges";
 
     private final TFComboBox selectedTranscriptionFactor;
 
 	
-	public DrawNodesAndEdgesAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor) {
+	public AddRegulatoryNetworkAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor) {
 		super(NAME, selectedMotif, selectedTranscriptionFactor);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
@@ -96,12 +95,12 @@ public class DrawNodesAndEdgesAction extends TranscriptionFactorDependentAction 
 						CyNetwork network, CyNetworkView view, AbstractMotif motif,
 						CandidateTargetGene tg, TranscriptionFactor tf){
 		CyEdge edge;
-		edge = DrawEdgesAction.addEdge(parent, target, network, view, motif.getName());
-		DrawEdgesAction.setAtribute(edge, "Regulator Gene", tf.getName());
-		DrawEdgesAction.setAtribute(edge, "Target Gene", tg.getGeneName());
-		DrawEdgesAction.setAtribute(edge, "Regulatory function", "Predicted");
-		DrawEdgesAction.setAtribute(edge, "Motif", motif.getName());
-		DrawEdgesAction.setAtribute(edge, "featureID", "" + motif.getDatabaseID());
+		edge = AddRegulatoryInteractionsAction.addEdge(parent, target, network, view, motif.getName());
+		AddRegulatoryInteractionsAction.setAtribute(edge, "Regulator Gene", tf.getName());
+		AddRegulatoryInteractionsAction.setAtribute(edge, "Target Gene", tg.getGeneName());
+		AddRegulatoryInteractionsAction.setAtribute(edge, "Regulatory function", "Predicted");
+		AddRegulatoryInteractionsAction.setAtribute(edge, "Motif", motif.getName());
+		AddRegulatoryInteractionsAction.setAtribute(edge, "featureID", "" + motif.getDatabaseID());
 		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
 		cyEdgeAttrs.setUserVisible("featureID", false);
 	}

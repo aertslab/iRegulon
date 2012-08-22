@@ -171,7 +171,7 @@ public class Results {
                     final TranscriptionFactorAttributes attributes = tf2attributes.get(tf);
                     attributes.update(motif);
                 } else {
-                    final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motif.getNEScore(), geneIDs.contains(tf.getName()));
+                    final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motif, geneIDs.contains(tf.getName()));
                     tf2attributes.put(tf, attributes);
                 }
             }
@@ -250,10 +250,10 @@ public class Results {
         private float NEScore;
         private final Set<AbstractMotif> motifs = new HashSet<AbstractMotif>();
 
-        private TranscriptionFactorAttributes(TranscriptionFactor transcriptionFactor, float NEScore, boolean presentInSignature) {
+        private TranscriptionFactorAttributes(TranscriptionFactor transcriptionFactor, final Motif motif, boolean presentInSignature) {
             this.transcriptionFactor = transcriptionFactor;
             this.isPresentInSignature = presentInSignature;
-            this.NEScore = NEScore;
+            update(motif);
         }
 
         public void update(final Motif motif) {

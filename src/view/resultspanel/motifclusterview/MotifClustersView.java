@@ -89,7 +89,7 @@ public class MotifClustersView extends JPanel implements MotifView {
 
     @Override
     public AbstractMotif getSelectedMotif() {
-        return viewSupport.getSelectedMotif();
+        return detailPanel.getSelectedMotif();
     }
 
     @Override

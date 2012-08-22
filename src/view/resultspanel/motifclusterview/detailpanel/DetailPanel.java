@@ -145,10 +145,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     }
 
     private void refresh() {
-        if (support.refresh()) {
-            transcriptionFactorHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
-            targetGeneHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
-        }
+        transcriptionFactorHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
+        targetGeneHighlighter.setIDsToBeHighlighted(support.getCurrentIDs());
 
         motifsTable.setModel(new BaseMotifTableModel(hasCurrentCluster() ? getCurrentCluster().getMotifs() : null));
         installRenderersOnMotifsTable();

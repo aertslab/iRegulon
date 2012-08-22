@@ -139,7 +139,7 @@ public class MotifClustersView extends JPanel implements MotifView {
 
     @Override
     public void refresh() {
-        if (networkSupport.refresh()) {
+        if (networkSupport.isRefreshNecessary()) {
            refreshImp();
         }
     }

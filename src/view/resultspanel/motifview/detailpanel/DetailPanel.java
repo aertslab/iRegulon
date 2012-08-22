@@ -227,10 +227,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 			this.jlbLogo.setMotif((Motif) motif);
 
 			//colors of the table
-			if (this.updateHLCR.refresh()){
-				this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
-				this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
-			}
+			this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
+            this.hlcrtf.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 		}
 		
 		//setting the table renderer

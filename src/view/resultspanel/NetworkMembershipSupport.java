@@ -17,25 +17,28 @@ public class NetworkMembershipSupport {
     private Set<String> currentIDs = Collections.emptySet();
 	
 	public NetworkMembershipSupport() {
-		refresh();
+		isRefreshNecessary();
 	}
 
     public CyNetwork getCurrentNetwork() {
         return currentNetwork;
     }
 
-    public boolean refresh() {
-        if (Cytoscape.getCurrentNetwork().equals(this.currentNetwork)) {
-            return false;
-        } else {
-            this.currentNetwork = Cytoscape.getCurrentNetwork();
-            return true;
-        }
+    public boolean isRefreshNecessary() {
+        return !Cytoscape.getCurrentNetwork().equals(this.currentNetwork);
     }
-	
+
 	public Set<String> getCurrentIDs() {
-        if (refresh()) this.currentIDs = retrieveIDs();
+        if (isRefreshNecessaryImp()) {
+            this.currentIDs = retrieveIDs();
+        }
         return currentIDs;
+    }
+
+    private boolean isRefreshNecessaryImp() {
+        if (!isRefreshNecessary()) return false;
+        this.currentNetwork = Cytoscape.getCurrentNetwork();
+        return true;
     }
 
     private Set<String> retrieveIDs() {
@@ -52,7 +55,6 @@ public class NetworkMembershipSupport {
                 }
             }
         }
-
         return IDs;
     }
 }

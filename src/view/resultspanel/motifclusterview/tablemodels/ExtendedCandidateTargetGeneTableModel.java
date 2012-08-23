@@ -58,6 +58,15 @@ public final class ExtendedCandidateTargetGeneTableModel extends AbstractTableMo
         }
     }
 
+    public Class<?> getColumnClass(int columnIndex) {
+    	switch (columnIndex){
+    	case 0 : return Integer.class;
+    	case 1 : return Integer.class;
+        case 2 : return String.class;
+        default: throw new IndexOutOfBoundsException();
+    	}
+    }
+
     @Override
     public String[] getTooltips() {
         return COLUMN_TOOLTIPS;

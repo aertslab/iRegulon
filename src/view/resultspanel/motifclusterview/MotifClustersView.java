@@ -183,13 +183,22 @@ public class MotifClustersView extends JPanel implements MotifView {
     @Override
     public void refresh() {
         final AbstractMotif currentSelection = getSelectedMotif();
+
+        final FilterMotifClusterTableModel oldModel = (FilterMotifClusterTableModel) table.getModel();
+        final FilterAttribute curFilterAttribute = oldModel.getFilterAttribute();
+        final String curFilterPattern = oldModel.getPattern();
+
         this.clusters = results.getMotifClusters(networkSupport.getCurrentIDs());
-        final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(
+        final FilterMotifClusterTableModel newModel = new FilterMotifClusterTableModel(
                 new BaseMotifClusterTableModel(this.clusters),
-                FilterAttribute.TRANSCRIPTION_FACTOR, "");
-        table.setModel(model);
+                curFilterAttribute, curFilterPattern);
+        table.setModel(newModel);
         installRenderers();
+
         setSelectedMotif(currentSelection);
+
+        //TODO: Bug restablish filter listeners ...
+
         detailPanel.refresh();
     }
 

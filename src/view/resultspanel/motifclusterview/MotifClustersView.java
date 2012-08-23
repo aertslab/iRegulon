@@ -113,7 +113,7 @@ public class MotifClustersView extends JPanel implements MotifView {
         final MotifTableModel model = (MotifTableModel) table.getModel();
         for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
             for (Motif memberMotif: model.getMotifAtRow(rowIndex).getMotifs()) {
-                if (model.getMotifAtRow(rowIndex).getDatabaseID() == memberMotif.getDatabaseID()) {
+                if (motif.getDatabaseID() == memberMotif.getDatabaseID()) {
                     return rowIndex;
                 }
             }

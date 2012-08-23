@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 
-public class PopupMouseListener extends MouseAdapter {
+class PopupMouseListener extends MouseAdapter {
 	private PopupMenu menu;
 	
 	public PopupMouseListener(JTable table, TFandMotifSelected tfMotif){

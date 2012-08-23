@@ -7,7 +7,7 @@ import javax.swing.event.ListSelectionListener;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.TranscriptionFactorTableModelIF;
 
-public class SelectedMotifListener implements ListSelectionListener{
+class SelectedMotifListener implements ListSelectionListener{
 
 	private JTable table;
 	private TFandMotifSelected tfMotif;

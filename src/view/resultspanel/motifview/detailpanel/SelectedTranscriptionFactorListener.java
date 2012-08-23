@@ -10,7 +10,7 @@ import javax.swing.event.ListSelectionListener;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.TranscriptionFactorTableModelIF;
 
-public class SelectedTranscriptionFactorListener implements ListSelectionListener {
+class SelectedTranscriptionFactorListener implements ListSelectionListener {
 	private final JTable table;
 	private final TFComboBox tfcombobox;
 	

@@ -43,7 +43,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         setLayout(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
         cc.fill = GridBagConstraints.BOTH;
-        cc.weighty = 1.0; cc.gridwidth = 1;
+        cc.gridwidth = 1;
 
         final BaseMotifTableModel motifsModel = new BaseMotifTableModel();
         motifsTable = new JTable(motifsModel);
@@ -63,25 +63,13 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	    header.setToolTipText("");
 	    motifsTable.setTableHeader(header);
 
-        cc.weightx = 2.0/5.0; cc.gridx = 0; cc.gridy = 0; cc.gridheight = 1;
+        cc.weightx = 2.0/5.0; cc.weighty = 1.0; cc.gridx = 0; cc.gridy = 0; cc.gridheight = 1;
         add(new JScrollPane(motifsTable), cc);
 
-        cc.weightx = 2.0/5.0; cc.gridx = 0; cc.gridy = 1; cc.gridheight = 1;
+        cc.weightx = 2.0/5.0; cc.weighty = 0.0; cc.gridx = 0; cc.gridy = 1; cc.gridheight = 1;
         final LogoThumbnail thumbnail = new LogoThumbnail();
+        motifsTable.getSelectionModel().addListSelectionListener(new UpdateLogoListener(motifsTable, thumbnail));
         add(thumbnail, cc);
-
-        motifsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                final int rowIdx = motifsTable.getSelectedRow();
-                if (rowIdx < 0) {
-                    thumbnail.setMotif(null);
-                } else {
-                    final MotifTableModel model = (MotifTableModel) motifsTable.getModel();
-                    thumbnail.setMotif((Motif) model.getMotifAtRow(motifsTable.convertRowIndexToModel(rowIdx)));
-                }
-            }
-        });
 
         final TranscriptionFactorTableModelIF tfModel = new ExtendedTranscriptionFactorTableModel();
         transcriptionFactorsTable = new JTable(tfModel);
@@ -96,7 +84,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         transcriptionFactorsTable.setTableHeader(tfHeader);
 
 
-        cc.weightx = 2.0/5.0; cc.gridx = 1; cc.gridy = 0; cc.gridheight = 2;
+        cc.weightx = 2.0/5.0; cc.weighty = 1.0; cc.gridx = 1; cc.gridy = 0; cc.gridheight = 2;
         add(new JScrollPane(transcriptionFactorsTable), cc);
 
         final CandidateTargetGeneTableModelIF tgModel = new ExtendedCandidateTargetGeneTableModel();
@@ -110,7 +98,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         tgHeader.setToolTipText("");
         targetGeneTable.setTableHeader(tgHeader);
 
-        cc.weightx = 1.0/5.0; cc.gridx = 2; cc.gridy = 0; cc.gridheight = 2;
+        cc.weightx = 1.0/5.0; cc.weighty = 1.0; cc.gridx = 2; cc.gridy = 0; cc.gridheight = 2;
         add(new JScrollPane(targetGeneTable), cc);
     }
 

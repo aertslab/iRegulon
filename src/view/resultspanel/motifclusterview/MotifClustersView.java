@@ -99,6 +99,7 @@ public class MotifClustersView extends JPanel implements MotifView {
         else {
             final int viewIdx = table.convertRowIndexToView(modelIdx);
             table.getSelectionModel().setSelectionInterval(viewIdx, viewIdx);
+            //TODO: necessary??
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -112,7 +113,7 @@ public class MotifClustersView extends JPanel implements MotifView {
         if (motif == null) return -1;
         final MotifTableModel model = (MotifTableModel) table.getModel();
         for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
-            for (Motif memberMotif: ((MotifCluster) model.getMotifAtRow(rowIndex)).getMotifs()) {
+            for (Motif memberMotif: model.getMotifAtRow(rowIndex).getMotifs()) {
                 if (model.getMotifAtRow(rowIndex).getDatabaseID() == memberMotif.getDatabaseID()) {
                     return rowIndex;
                 }
@@ -127,7 +128,24 @@ public class MotifClustersView extends JPanel implements MotifView {
     }
 
     private void initPanel() {
-		final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(
+        final JComponent masterPanel = createMasterPanel();
+        detailPanel = new DetailPanel();
+
+        //Create a split pane with the two scroll panes in it.
+        final JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, masterPanel, detailPanel);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(200);
+
+		//Provide minimum sizes for the two components in the split pane
+		final Dimension minimumSize = new Dimension(100, 50);
+		masterPanel.setMinimumSize(minimumSize);
+		detailPanel.setMinimumSize(minimumSize);
+
+        add(splitPane, BorderLayout.CENTER);
+	}
+
+    private JComponent createMasterPanel() {
+        final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(
                 new BaseMotifClusterTableModel(this.clusters),
                 FilterAttribute.TRANSCRIPTION_FACTOR, "");
         table = new JTable(model);
@@ -140,11 +158,8 @@ public class MotifClustersView extends JPanel implements MotifView {
         table.setTableHeader(header);
         installRenderers();
 
-        add(new JScrollPane(table), BorderLayout.CENTER);
-
-        detailPanel = new DetailPanel();
-        add((JPanel) detailPanel, BorderLayout.SOUTH);
-	}
+        return new JScrollPane(table);
+    }
 
     private void installRenderers() {
         final ClusterColorRenderer clusterColorRenderer = new ClusterColorRenderer("ClusterCode");

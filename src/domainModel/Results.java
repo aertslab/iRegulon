@@ -204,7 +204,7 @@ public class Results {
         final List<CandidateTargetGene> targetGenes = new ArrayList<CandidateTargetGene>();
         for (GeneIdentifier ID: geneID2attributes.keySet()) {
             final TargetGeneAttributes curAttributes = geneID2attributes.get(ID);
-            targetGenes.add(new CandidateTargetGene(ID, curAttributes.getMaxRank(), curAttributes.getMotifCount()));
+            targetGenes.add(new CandidateTargetGene(ID, curAttributes.getMinRank(), curAttributes.getMotifCount()));
         }
 
         Collections.sort(targetGenes);
@@ -213,12 +213,12 @@ public class Results {
     }
 
     private static class TargetGeneAttributes {
-        private int maxRank = 0;
+        private int minRank = 0;
         private int motifCount = 0;
 
         public TargetGeneAttributes(final int rank) {
             motifCount = 1;
-            maxRank = rank;
+            minRank = rank;
         }
 
         public void update(final int rank) {
@@ -227,15 +227,15 @@ public class Results {
         }
 
         private void updateRank(final int rank) {
-            maxRank = (rank > maxRank) ? rank : maxRank;
+            minRank = (rank < minRank) ? rank : minRank;
         }
 
         private void incrementMotifCount() {
             motifCount++;
         }
 
-        public int getMaxRank() {
-            return maxRank;
+        public int getMinRank() {
+            return minRank;
         }
 
         public int getMotifCount() {

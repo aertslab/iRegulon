@@ -99,7 +99,6 @@ public class MotifClustersView extends JPanel implements MotifView {
         else {
             final int viewIdx = table.convertRowIndexToView(modelIdx);
             table.getSelectionModel().setSelectionInterval(viewIdx, viewIdx);
-            //TODO: necessary??
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {

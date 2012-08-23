@@ -100,67 +100,6 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
 			cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")));
 		}
 	}
-	
-	/**
-	 * 
-	 * @param network where a attribute must be added to
-	 * @param attributeName the name of the attribute that must be added
-	 * @param AttributeValue the value that that attribute has for this edge
-	 */
-	static public void addAtribute(CyNetwork network, String attributeName, String attributeValue){
-		CyAttributes cyNetworkAttrs = Cytoscape.getEdgeAttributes();
-		List<Object> networkAtr = cyNetworkAttrs.getListAttribute(network.getIdentifier(), attributeName);
-		if (networkAtr == null){
-			networkAtr = new ArrayList<Object>();
-		}
-		networkAtr.add(attributeValue);
-		cyNetworkAttrs.setListAttribute(network.getIdentifier(), attributeName, networkAtr);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
-	
-	
-	/**
-	 * 
-	 * @param network where a attribute must be added to
-	 * @param attributeName the name of the attribute that must be added
-	 * @param AttributeValue the value that that attribute has for this edge
-	 */
-	static public void addAtribute(CyNetwork network, String attributeName, List attributeValueList){
-		CyAttributes cyNetworkAttrs = Cytoscape.getNetworkAttributes();
-		List<Object> networkAtr = cyNetworkAttrs.getListAttribute(network.getIdentifier(), attributeName);
-		if (networkAtr == null){
-			networkAtr = new ArrayList<Object>();
-		}
-		networkAtr.addAll(attributeValueList);
-		cyNetworkAttrs.setListAttribute(network.getIdentifier(), attributeName, networkAtr);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
-	
-	
-	/**
-	 * 
-	 * @param network where a attribute must be set to
-	 * @param attributeName the name of the attribute that must be added
-	 * @param AttributeValue the value that that attribute has for this edge
-	 */
-	static public void setAtribute(CyNetwork network, String attributeName, String attributeValue){
-		CyAttributes cyNetworkAttrs = Cytoscape.getEdgeAttributes();
-		cyNetworkAttrs.setAttribute(network.getIdentifier(), attributeName, attributeValue);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
-	
-	
-	/**
-	 * 
-	 * @param network where a attribute must be set to
-	 * @param attributeName the name of the attribute that must be added
-	 * @param AttributeValue the value that that attribute has for this edge
-	 */
-	static public void setAtribute(CyNetwork network, String attributeName, List attributeValueList){
-		CyAttributes cyNetworkAttrs = Cytoscape.getNetworkAttributes();
-		cyNetworkAttrs.setListAttribute(network.getIdentifier(), attributeName, attributeValueList);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
 
     /**
 		 *

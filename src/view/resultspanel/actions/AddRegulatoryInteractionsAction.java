@@ -77,57 +77,6 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
 	
 	/**
 	 * 
-	 * @param edge where a attribute must be added to
-	 * @param attributeName the name of the attribute that must be added
-	 * @param AttributeValue the value that that attribute has for this edge
-	 */
-	static public void addAtribute(CyEdge edge, String attributeName, String attributeValue){
-		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
-		List<Object> edgeAtr = new ArrayList<Object>();
-		edgeAtr.add(cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), attributeName));
-		boolean isIn = false;
-		String atrString;
-		for (Object atr : edgeAtr){
-			atrString = (String) atr;
-			if (atrString.equals(attributeValue)){
-				isIn = true;
-			}
-		}
-		if (! isIn){
-			edgeAtr.add(attributeValue);
-		}
-		cyEdgeAttrs.setListAttribute(edge.getIdentifier(), attributeName, edgeAtr);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
-	
-	/**
-	 * 
-	 * @param edge where a attribute must be added to
-	 * @param attributeName the name of the attribute that must be added
-	 * @param AttributeValue the value that that attribute has for this edge
-	 */
-	static public void addAtribute(CyEdge edge, String attributeName, List attributeValueList){
-		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
-		List<Object> edgeAtr = cyEdgeAttrs.getListAttribute(edge.getIdentifier(), attributeName);
-		if (edgeAtr == null){
-			edgeAtr = new ArrayList<Object>();
-		}
-		String atrString;
-		for (Object attributeValue : attributeValueList){
-			String attributeValueString = (String) attributeValue;
-			for (Object atr : edgeAtr){
-				atrString = (String) atr;
-				if (atrString.equals(attributeValueString)){
-					edgeAtr.add(attributeValue);
-				}
-			}
-		}
-		cyEdgeAttrs.setListAttribute(edge.getIdentifier(), attributeName, edgeAtr);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
-	
-	/**
-	 * 
 	 * @param edge where a attribute must be set to
 	 * @param attributeName the name of the attribute that must be added
 	 * @param AttributeValue the value that that attribute has for this edge

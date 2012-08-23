@@ -1,4 +1,4 @@
-package view.resultspanel;
+package view.resultspanel.guiwidgets;
 
 import domainmodel.Results;
 

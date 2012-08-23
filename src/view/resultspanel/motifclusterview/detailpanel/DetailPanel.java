@@ -1,13 +1,12 @@
 package view.resultspanel.motifclusterview.detailpanel;
 
 import domainmodel.AbstractMotif;
-import domainmodel.Motif;
 import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
+import view.resultspanel.guiwidgets.LogoThumbnail;
 import view.resultspanel.motifclusterview.tablemodels.ExtendedCandidateTargetGeneTableModel;
 import view.resultspanel.motifclusterview.tablemodels.ExtendedTranscriptionFactorTableModel;
-import view.resultspanel.LogoThumbnail;
 import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;
 import view.resultspanel.renderers.*;
 

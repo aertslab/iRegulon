@@ -2,7 +2,7 @@ package view.resultspanel.motifclusterview.detailpanel;
 
 
 import domainmodel.Motif;
-import view.resultspanel.LogoThumbnail;
+import view.resultspanel.guiwidgets.LogoThumbnail;
 import view.resultspanel.MotifTableModel;
 
 import javax.swing.*;

@@ -1,23 +1,17 @@
 package view.resultspanel;
 
-import cytoscape.CyNetworkEvent;
-import cytoscape.CyNetworkListener;
 import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
-import giny.model.GraphPerspectiveChangeEvent;
-import giny.model.GraphPerspectiveChangeListener;
 import view.IRegulonResourceBundle;
+import view.resultspanel.guiwidgets.SummaryLabel;
 import view.resultspanel.motifview.EnrichedMotifsView;
 import view.resultspanel.actions.*;
 
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

@@ -1,4 +1,4 @@
-package view.resultspanel;
+package view.resultspanel.guiwidgets;
 
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;

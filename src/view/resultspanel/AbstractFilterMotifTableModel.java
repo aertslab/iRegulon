@@ -33,6 +33,7 @@ public abstract class AbstractFilterMotifTableModel extends AbstractTableModel i
 
     public void setFilterAttribute(FilterAttribute filter){
         this.filterAttribute = filter;
+        //TODO: This resets the selection
         this.fireTableDataChanged();
     }
 
@@ -42,6 +43,7 @@ public abstract class AbstractFilterMotifTableModel extends AbstractTableModel i
 
     public void setPattern(String pattern){
         this.pattern = (pattern == null) ? "": pattern;
+        //TODO: This resets the selection
         this.fireTableDataChanged();
     }
 

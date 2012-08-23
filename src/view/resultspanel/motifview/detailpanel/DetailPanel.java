@@ -3,6 +3,7 @@ package view.resultspanel.motifview.detailpanel;
 
 import domainmodel.AbstractMotif;
 import view.resultspanel.*;
+import view.resultspanel.guiwidgets.LogoThumbnail;
 import view.resultspanel.motifview.tablemodels.CandidateTargetGeneTableModel;
 import view.resultspanel.motifview.tablemodels.TranscriptionFactorTableModel;
 import view.resultspanel.renderers.*;

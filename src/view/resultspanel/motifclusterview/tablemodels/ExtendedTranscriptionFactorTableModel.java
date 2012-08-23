@@ -43,7 +43,7 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
     }
 
     public void setSelectedMotif(final AbstractMotif motif) {
-        setSelectedMotifs(motif.getMotifs());
+        setSelectedMotifs(motif == null ? null : motif.getMotifs());
     }
 
     public void setSelectedMotifs(final List<Motif> motifs) {

@@ -43,11 +43,7 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
     }
 
     public void setSelectedMotif(final AbstractMotif motif) {
-        if (motif instanceof Motif) {
-            setSelectedMotifs(Collections.singletonList((Motif) motif));
-        } else if (motif instanceof MotifCluster) {
-            setSelectedMotifs(((MotifCluster) motif).getMotifs());
-        }
+        setSelectedMotifs(motif.getMotifs());
     }
 
     public void setSelectedMotifs(final List<Motif> motifs) {

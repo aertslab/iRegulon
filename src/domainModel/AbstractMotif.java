@@ -30,6 +30,10 @@ public abstract class AbstractMotif {
         return this.clusterCode;
     }
 
+    public abstract Motif getBestMotif();
+
+    public abstract List<Motif> getMotifs();
+
     public List<CandidateTargetGene> getCandidateTargetGenes(){
         return this.candidateTargetGenes;
     }

@@ -50,6 +50,14 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
 		return this.featureID;
 	}
 
+    public Motif getBestMotif() {
+        return this;
+    }
+
+    public List<Motif> getMotifs() {
+        return Collections.singletonList(this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

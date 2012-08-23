@@ -172,6 +172,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         installRenderersOnTranscriptionFactorsTable();
         targetGeneTable.setModel(new ExtendedCandidateTargetGeneTableModel(getCurrentCluster()));
         installRenderersOnTargetGeneTable();
+        setSelectedMotif(getCurrentCluster());
     }
 
     @Override

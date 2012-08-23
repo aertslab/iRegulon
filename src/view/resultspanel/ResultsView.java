@@ -3,6 +3,7 @@ package view.resultspanel;
 import cytoscape.CyNetworkEvent;
 import cytoscape.CyNetworkListener;
 import cytoscape.Cytoscape;
+import cytoscape.view.CytoscapeDesktop;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
 import giny.model.GraphPerspectiveChangeEvent;
@@ -69,16 +70,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 	}
 
     private void registerRefreshListeners() {
-        //TODO: Dit blijkt niet te werken ...
-        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_LOADED, refreshListener);
-        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_MODIFIED, refreshListener);
-        Cytoscape.getDesktop().addPropertyChangeListener(Cytoscape.NETWORK_DESTROYED, refreshListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUSED, refreshListener);
     }
 
     public void unregisterRefreshListeners() {
-        Cytoscape.getDesktop().removePropertyChangeListener(Cytoscape.NETWORK_LOADED, refreshListener);
-        Cytoscape.getDesktop().removePropertyChangeListener(Cytoscape.NETWORK_MODIFIED, refreshListener);
-        Cytoscape.getDesktop().removePropertyChangeListener(Cytoscape.NETWORK_DESTROYED, refreshListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().removePropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUSED, refreshListener);
     }
 
 

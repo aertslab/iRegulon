@@ -41,7 +41,7 @@ public class MotifClustersView extends JPanel implements MotifView {
 
         setLayout(new BorderLayout());
         initPanel();
-        refreshImp();
+        refresh();
 	}
 
     public Results getResults() {
@@ -182,12 +182,6 @@ public class MotifClustersView extends JPanel implements MotifView {
 
     @Override
     public void refresh() {
-        if (networkSupport.isRefreshNecessary()) {
-           refreshImp();
-        }
-    }
-
-    private void refreshImp() {
         final AbstractMotif currentSelection = getSelectedMotif();
         this.clusters = results.getMotifClusters(networkSupport.getCurrentIDs());
         final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(

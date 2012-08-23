@@ -63,18 +63,23 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         refreshListener = new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
-                refresh();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        refresh();
+                    }
+                });
             }
         };
         registerRefreshListeners();
 	}
 
     private void registerRefreshListeners() {
-        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUSED, refreshListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUS, refreshListener);
     }
 
     public void unregisterRefreshListeners() {
-        Cytoscape.getDesktop().getSwingPropertyChangeSupport().removePropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUSED, refreshListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().removePropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUS, refreshListener);
     }
 
 

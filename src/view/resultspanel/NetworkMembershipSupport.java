@@ -13,35 +13,26 @@ import cytoscape.data.CyAttributes;
 
 
 public class NetworkMembershipSupport {
-	private CyNetwork currentNetwork;
-    private Set<String> currentIDs = Collections.emptySet();
+	private static String CURRENT_NETWORK_ID = null;
+    private static Set<String> CURRENT_IDS = Collections.emptySet();
 	
 	public NetworkMembershipSupport() {
 		isRefreshNecessary();
 	}
 
-    public CyNetwork getCurrentNetwork() {
-        return currentNetwork;
-    }
-
-    public boolean isRefreshNecessary() {
-        return !Cytoscape.getCurrentNetwork().equals(this.currentNetwork);
-    }
-
 	public Set<String> getCurrentIDs() {
-        if (isRefreshNecessaryImp()) {
-            this.currentIDs = retrieveIDs();
+        if (isRefreshNecessary()) {
+            CURRENT_IDS = retrieveIDs();
+            CURRENT_NETWORK_ID = Cytoscape.getCurrentNetwork().getIdentifier();
         }
-        return currentIDs;
+        return CURRENT_IDS;
     }
 
-    private boolean isRefreshNecessaryImp() {
-        if (!isRefreshNecessary()) return false;
-        this.currentNetwork = Cytoscape.getCurrentNetwork();
-        return true;
+    private static boolean isRefreshNecessary() {
+        return !Cytoscape.getCurrentNetwork().getIdentifier().equals(CURRENT_NETWORK_ID);
     }
 
-    private Set<String> retrieveIDs() {
+    private static Set<String> retrieveIDs() {
         final Set<String> IDs = new HashSet<String>();
 
         final CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();

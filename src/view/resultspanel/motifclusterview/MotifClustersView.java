@@ -32,6 +32,9 @@ public class MotifClustersView extends JPanel implements MotifView {
     private FilterPatternDocumentListener filterPatternDocumentListener;
     private MouseListener popupListener;
 
+    private JComboBox filterAttributeCB;
+    private JTextField filterValueTF;
+
     public MotifClustersView(final Results results) {
         this.viewSupport = new MotifViewSupport(this);
         this.results = results;
@@ -184,6 +187,10 @@ public class MotifClustersView extends JPanel implements MotifView {
     public void refresh() {
         final AbstractMotif currentSelection = getSelectedMotif();
 
+        final JComboBox curFilterAttributeCB = filterAttributeCB;
+        final JTextField curFilterValueTF = filterValueTF;
+        if (curFilterAttributeCB != null) unregisterFilterComponents(filterAttributeCB, filterValueTF);
+
         final FilterMotifClusterTableModel oldModel = (FilterMotifClusterTableModel) table.getModel();
         final FilterAttribute curFilterAttribute = oldModel.getFilterAttribute();
         final String curFilterPattern = oldModel.getPattern();
@@ -195,9 +202,9 @@ public class MotifClustersView extends JPanel implements MotifView {
         table.setModel(newModel);
         installRenderers();
 
-        setSelectedMotif(currentSelection);
+        if (curFilterAttributeCB != null) registerFilterComponents(curFilterAttributeCB, curFilterValueTF);
 
-        //TODO: Bug restablish filter listeners ...
+        setSelectedMotif(currentSelection);
 
         detailPanel.refresh();
     }
@@ -232,10 +239,14 @@ public class MotifClustersView extends JPanel implements MotifView {
     @Override
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
         viewSupport.registerFilterComponents(filterAttributeCB, filterValueTF);
+        this.filterAttributeCB = filterAttributeCB;
+        this.filterValueTF = filterValueTF;
     }
 
     @Override
     public void unregisterFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
         viewSupport.unregisterFilterComponents(filterAttributeCB, filterValueTF);
+        this.filterAttributeCB = null;
+        this.filterValueTF = null;
     }
 }

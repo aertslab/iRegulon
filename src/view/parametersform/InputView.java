@@ -30,7 +30,7 @@ import javax.swing.border.TitledBorder;
 
 import cytoscape.Cytoscape;
 
-import domainmodel.Database;
+import domainmodel.RankingsDatabase;
 import domainmodel.Delineation;
 import domainmodel.InputParameters;
 import domainmodel.SpeciesNomenclature;
@@ -1041,11 +1041,11 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 		return (boolean) this.jcbBased.isRegionBased();
 	}
 	
-	public Database getDatabase(){
+	public RankingsDatabase getDatabase(){
 		if (this.isRegionBased()){
-			return (Database) this.jcbdatabase.getSelectedItem();
+			return (RankingsDatabase) this.jcbdatabase.getSelectedItem();
 		}else{
-			return (Database) this.jcbdatabase.getSelectedItem();
+			return (RankingsDatabase) this.jcbdatabase.getSelectedItem();
 		}
 	}
 	

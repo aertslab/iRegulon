@@ -21,7 +21,7 @@ public class InputParameters {
 	
 	//Database
 	private final boolean isRegionBased;
-	private final Database database;
+	private final RankingsDatabase database;
 	private final float overlap;
 	private final Delineation delineation;
 	private final int upstream;
@@ -34,7 +34,7 @@ public class InputParameters {
 	public InputParameters(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC,
                            int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
                            IRegulonType iRegulonType, String runName, float minOrthologous,
-                           float maxMotifSimilarityFDR, boolean isRegionBased, Database database,
+                           float maxMotifSimilarityFDR, boolean isRegionBased, RankingsDatabase database,
                            float overlap, Delineation delineation, int upstream, int downstream,
                            String attributeName){
 		this.genes = genes;
@@ -143,7 +143,7 @@ public class InputParameters {
 	 * 
 	 * @return the database
 	 */
-	public Database getDatabase(){
+	public RankingsDatabase getDatabase(){
 		return this.database;
 	}
 	

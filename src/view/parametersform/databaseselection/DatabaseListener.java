@@ -18,7 +18,7 @@ import javax.swing.event.DocumentListener;
 import cytoscape.Cytoscape;
 
 
-import domainmodel.Database;
+import domainmodel.RankingsDatabase;
 import domainmodel.Delineation;
 import domainmodel.SpeciesNomenclature;
 
@@ -163,7 +163,7 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private void refreshAUC(){
 		this.txtAUCvalue.setBackground(Color.WHITE);
 		if (this.changedDatabase){
-			Database dat = (Database) this.jcbDatabase.getSelectedItem();
+			RankingsDatabase dat = (RankingsDatabase) this.jcbDatabase.getSelectedItem();
 			this.txtAUCvalue.setText("" + dat.getAUCvalue());
 		}
 		try{
@@ -181,7 +181,7 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private void refreshVisualisation(){
 		this.txtVisualisation.setBackground(Color.WHITE);
 		if (this.changedDatabase){
-			Database dat = (Database) this.jcbDatabase.getSelectedItem();
+			RankingsDatabase dat = (RankingsDatabase) this.jcbDatabase.getSelectedItem();
 			this.txtVisualisation.setText("" + dat.getVisualisationValue());
 		}
 		
@@ -243,7 +243,7 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	}
 	
 	private void refreshDatabase(){
-		Database database = (Database) this.jcbDatabase.getSelectedItem();
+		RankingsDatabase database = (RankingsDatabase) this.jcbDatabase.getSelectedItem();
 		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
 		if (this.jcbBased.isGeneBased()){
 			this.jcbDatabase.updateDatabases(species.getGeneDatabases());

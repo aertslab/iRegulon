@@ -1,13 +1,13 @@
 package domainmodel;
 
-public class Database {
+public class RankingsDatabase {
 
 	private final String code;
 	private final String name;
 	private final float AUCvalue;
 	private final int visualisationValue;
 	
-	public Database(String code, String name, float AUCvalue, int visualisationValue){
+	public RankingsDatabase(String code, String name, float AUCvalue, int visualisationValue){
 		this.code = code;
 		this.name = name;
 		this.AUCvalue = AUCvalue;

@@ -46,8 +46,8 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	private final int code;
 	private final String name;
 
-	private final List<Database> geneDatabases;
-	private final List<Database> regionDatabases;
+	private final List<RankingsDatabase> geneDatabases;
+	private final List<RankingsDatabase> regionDatabases;
 	private final List<Delineation> regionDelineations;
 
     private SpeciesNomenclature() {
@@ -113,10 +113,10 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         }
     }
 
-    private List<Database> loadDatabasesFromBundle(final String databaseName, final String suffix,
+    private List<RankingsDatabase> loadDatabasesFromBundle(final String databaseName, final String suffix,
                                                    final Map<String,Float> dbName2AUCThreshold,
                                                    final Map<String,Integer> dbName2RankThreshold) {
-        final List<Database> databases = new ArrayList<Database>();
+        final List<RankingsDatabase> databases = new ArrayList<RankingsDatabase>();
         try {
             final String databasesString = getBundle().getString(databaseName.concat(suffix));
             if (databasesString.trim().equals("")) {
@@ -125,7 +125,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
             for (String database : databasesString.split(";")) {
                 final String[] databaseSplit = database.split("\\|");
                 if (databaseSplit.length == 2) {
-                    databases.add(new Database(databaseSplit[1], databaseSplit[0],
+                    databases.add(new RankingsDatabase(databaseSplit[1], databaseSplit[0],
                             getAUCThreshold(databaseSplit[1], dbName2AUCThreshold),
                             getRankThreshold(databaseSplit[1], dbName2RankThreshold)));
                 } else {
@@ -168,11 +168,11 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 		return this.code;
 	}
 	
-	public List<Database> getGeneDatabases(){
+	public List<RankingsDatabase> getGeneDatabases(){
 		return this.geneDatabases;
 	}
 	
-	public List<Database> getRegionDatabases(){
+	public List<RankingsDatabase> getRegionDatabases(){
 		return this.regionDatabases;
 	}
 	

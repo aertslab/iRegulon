@@ -5,26 +5,26 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import domainmodel.Database;
+import domainmodel.RankingsDatabase;
 
 public class DBCombobox extends JComboBox{
 
-	private List<Database> database;
+	private List<RankingsDatabase> database;
 	
 	public DBCombobox(){
 		super();
-		this.database = new ArrayList<Database>();
+		this.database = new ArrayList<RankingsDatabase>();
 	}
 	
-	public void updateDatabases(List<Database> newDatabase){
+	public void updateDatabases(List<RankingsDatabase> newDatabase){
 		this.database = newDatabase;
 		this.removeAllItems();
-		for (Database db : newDatabase){
+		for (RankingsDatabase db : newDatabase){
 			this.addItem(db);
 		}
 	}
 	
-	public boolean canBeSelected(Database aDatabase){
+	public boolean canBeSelected(RankingsDatabase aDatabase){
 		return this.database.contains(aDatabase);
 	}
 	

@@ -1,5 +1,6 @@
 package servercommunication;
 
+import domainmodel.*;
 import servercommunication.protocols.*;
 
 import java.util.ArrayList;
@@ -14,64 +15,39 @@ import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 
-import domainmodel.GeneIdentifier;
-import domainmodel.InputParameters;
-import domainmodel.Motif;
 
-public class ComputationalServiceHTTP implements ComputationalService{
-
+public class ComputationalServiceHTTP implements ComputationalService {
 	@Override
 	public List<Motif> findPredictedRegulators(InputParameters input) {
-		Service service = new HTTPService();
-		ClassicalTask task = new ClassicalTask(service, input);
+		final Service service = new HTTPService();
+		final ClassicalTask task = new ClassicalTask(service, input);
 		
-		// Configure JTask Dialog Pop-Up Box
-		JTaskConfig jTaskConfig = new JTaskConfig();
-		jTaskConfig.setOwner(Cytoscape.getDesktop());
-		jTaskConfig.displayCloseButton(true);
+		final JTaskConfig taskConfig = new JTaskConfig();
+		taskConfig.setOwner(Cytoscape.getDesktop());
+		taskConfig.displayCloseButton(true);
+		taskConfig.displayCancelButton(true);
+		taskConfig.displayStatus(true);
+		taskConfig.setAutoDispose(true);
 
-		jTaskConfig.displayCancelButton(true);
+		TaskManager.executeTask(task, taskConfig);
 
-		jTaskConfig.displayStatus(true);
-		jTaskConfig.setAutoDispose(true);
-
-		// Execute Task in New Thread; pops open JTask Dialog Box.
-		TaskManager.executeTask(task, jTaskConfig);
-		List<Motif> motifs = new ArrayList<Motif>();
-		if (task.getFinishedState().equals(State.ERROR) && ! task.getIsInterupted()){
+		if (task.getFinishedState().equals(State.ERROR) && !task.getIsInterupted()) {
 			JOptionPane.showMessageDialog(Cytoscape.getDesktop(), task.getErrorMessage());
-			motifs = Collections.EMPTY_LIST;
-		}else{
-			Collection<Motif> motifColl = task.getMotifs();
-			if (motifColl != null){
-				for (Motif mtf : motifColl){
-					motifs.add(mtf);
-				}
-			}
+			return Collections.emptyList();
+		} else {
+
+			final Collection<Motif> motifs = task.getMotifs();
+            return new ArrayList<Motif>(motifs);
 		}
-		return motifs;
 	}
 
-	@Override
-	public List<Motif> queryDatabaseForRegulators(GeneIdentifier geneID,
-			float minNEScore, float minOrthologousIdentity,
-			float minSimilarityFDR) {
-		return null;
-	}
+    @Override
+    public List<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-	@Override
-	public List<Motif> queryDatabaseForTargetome(GeneIdentifier geneID,
-			float minNEScore, float minOrthologousIdentity,
-			float minSimilarityFDR) {
-		return null;
-	}
-
-	@Override
-	public List<Motif> queryDatabaseNetworkAnnotations(
-			Collection<Collection<GeneIdentifier>> geneIDPairs,
-			float minNEScore, float minOrthologousIdentity,
-			float minSimilarityFDR) {
-		return null;
-	}
-
+    @Override
+    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> databases) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

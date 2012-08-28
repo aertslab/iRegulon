@@ -9,7 +9,6 @@ import domainmodel.Motif;
 import servercommunication.SentRequestException;
 
 public interface Service {
-
 	public int sentJob(InputParameters input) throws SentRequestException;
 	
 	public State getState(int jobID);

@@ -9,24 +9,14 @@ import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.SwingConstants;
+import java.util.*;
 
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
-import cytoscape.data.Semantics;
 import cytoscape.view.CyNetworkView;
-import cytoscape.view.CytoscapeDesktop;
-import cytoscape.view.cytopanels.CytoPanel;
 
 public class AddRegulatoryNetworkWithCombinedEdgesAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_merged_edges_network";
@@ -39,155 +29,116 @@ public class AddRegulatoryNetworkWithCombinedEdgesAction extends TranscriptionFa
 		setEnabled(false);
 	}
 
-	//inner class data edge
-	private class NewEdgeAttr{
-			
-		private String TF;
-		private String TG;
-		private HashSet<String> motifs;
-		
-		public NewEdgeAttr(String TF, String TG, List<String> motif){
-			this.TF = TF;
-			this.TG = TG;
-			this.motifs = new HashSet<String>();
-			this.motifs.addAll(motif);
-		}
-		
-		public void addMotif(List<String> motif){
-			motifs.addAll(motif);
-		}
-		
-		public String getTF(){
-			return this.TF;
-		}
-		
-		public String getTG(){
-			return this.TG;
-		}
-		
-		public Collection<String> getMotifs(){
-			return this.motifs;
-		}
-			
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// get all the information of the old network
-		CyNetwork oldNetwork = Cytoscape.getCurrentNetwork();
-		CyNetworkView oldView = Cytoscape.getCurrentNetworkView();
+		final CyNetwork oldNetwork = Cytoscape.getCurrentNetwork();
+		final CyNetworkView oldView = Cytoscape.getCurrentNetworkView();
 		
-		//Create a new network
-		//CyNetwork network = Cytoscape.createNetwork(CisTargetXNodes.getAllNodes(), this.getAllEdges(), "test");
-		CyNetwork network2 = Cytoscape.createNetwork(CytoscapeNetworkUtilities.getAllNodes(), CytoscapeNetworkUtilities.getAllEdges(), "Merged iRegulon network", Cytoscape.getCurrentNetwork());
-		Cytoscape.setCurrentNetwork(network2.getIdentifier());
-		CyNetworkView cyView = Cytoscape.createNetworkView(network2, "merged iRegulon network view");
+		// Create a new network ...
+		final CyNetwork network = Cytoscape.createNetwork(
+                CytoscapeNetworkUtilities.getAllNodes(),
+                CytoscapeNetworkUtilities.getAllEdges(),
+                "Merged iRegulon network",
+                Cytoscape.getCurrentNetwork());
+		Cytoscape.setCurrentNetwork(network.getIdentifier());
+		final CyNetworkView view = Cytoscape.createNetworkView(network, "Merged iRegulon network view");
 		
-		//copy the place of all nodes on the old network to the new network
-		Iterator it = oldNetwork.nodesIterator();
-		while(it.hasNext()){
-			CyNode node = (CyNode) it.next();
-			NodeView nodev = oldView.getNodeView(node);
-			if (nodev != null){
-				double xpos = nodev.getXPosition();
-				double ypos = nodev.getYPosition();
-				NodeView newnodev = cyView.getNodeView(node);
-				newnodev.setXPosition(xpos);
-				newnodev.setYPosition(ypos);
-				network2.addNode(node);
+		// Copy the place of all nodes on the old network to the new network ...
+		final Iterator nodesIterator = oldNetwork.nodesIterator();
+		while(nodesIterator.hasNext()) {
+			final CyNode node = (CyNode) nodesIterator.next();
+			final NodeView nodeView = oldView.getNodeView(node);
+			if (nodeView == null) continue;
+      		final NodeView newNodeView = view.getNodeView(node);
+			newNodeView.setXPosition(nodeView.getXPosition());
+			newNodeView.setYPosition(nodeView.getYPosition());
+			network.addNode(node);
+		}
+
+		// Run over all edges ...
+		final Iterator edgesIterator = network.edgesIterator();
+		final CyAttributes attributes = Cytoscape.getEdgeAttributes();
+        final HashMap<String, EdgeAttributes> name2edgeAttributes = new HashMap<String, EdgeAttributes>();
+		while(edgesIterator.hasNext()) {
+			final CyEdge edge = (CyEdge) edgesIterator.next();
+			if (isRegulatoryEdge(edge)) {
+                final String TF = attributes.getStringAttribute(edge.getIdentifier(), REGULATOR_GENE_ATTRIBUTE_NAME);
+				final String TG = attributes.getStringAttribute(edge.getIdentifier(), TARGET_GENE_ATTRIBUTE_NAME);
+                final String name = TF + " regulates " + TG;
+                @SuppressWarnings("unchecked")
+                final List<String> motifs = (List<String>) attributes.getListAttribute(edge.getIdentifier(), MOTIF_ATTRIBUTE_NAME);
+
+                if (name2edgeAttributes.containsKey(name)) {
+					name2edgeAttributes.get(name).addMotifNames(motifs);
+				} else {
+					name2edgeAttributes.put(name, new EdgeAttributes(TF, TG, motifs));
+				}
+
+                network.removeEdge(edge.getRootGraphIndex(), true);
 			}
 		}
-		/*
-		 * run over all edges
-		 */
-		it = network2.edgesIterator();
-		//get the edge attributes
-		CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
-		//hashmap, first argument the transcription factor, the second all the motifs
-		HashMap<String, NewEdgeAttr> edgesAttr = new HashMap<String, AddRegulatoryNetworkWithCombinedEdgesAction.NewEdgeAttr>();
-		//list of all unmapped edges
-		ArrayList<CyEdge> unmappedEdges = new ArrayList<CyEdge>();
-		//iterate over the edges
-		while(it.hasNext()){
-			CyEdge edge = (CyEdge) it.next();
-			//check if edge is a regulates interaction, from a valid regulator gene to a target gene
-			if (cyEdgeAttrs.getAttribute(edge.getIdentifier(), "interaction").toString().contains("regulates")
-					&& cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Regulator Gene") != null
-					&& cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Target Gene") != null){
-				//take the atributes
-				String TF = (String) cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Regulator Gene");
-				String TG = (String) cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Target Gene");
-				List<String> motifs = new ArrayList<String>();
-				motifs.add(cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Motif"));
-				if (motifs.size() == 0){
-					motifs = (List<String>) cyEdgeAttrs.getListAttribute(edge.getIdentifier(), "Motifs");
-				}
-				String name = TF + " regulates " + TG;
-				if (edgesAttr.containsKey(name)){
-					//if there is already an interaction between the 2
-					NewEdgeAttr edgeattr = edgesAttr.get(name);
-					// add the motifs to the interaction
-					edgeattr.addMotif(motifs);
-				}else{
-					//create a new interaction between the 2
-					NewEdgeAttr edgeattr = new NewEdgeAttr(TF, TG, motifs);
-					edgesAttr.put(name, edgeattr);
-				}
-				network2.removeEdge(edge.getRootGraphIndex(), true);
-			}else{
-				//unmapped edge
-				unmappedEdges.add(edge);
-			}
+
+		// Draw all edges ...
+        @SuppressWarnings("unchecked")
+        final Map<String,List<CyNode>> name2nodes = getNodeMap(getSelectedMotif().getAttributeName(), network.nodesList());
+		for (String key : name2edgeAttributes.keySet()) {
+			final EdgeAttributes edgeAttributes = name2edgeAttributes.get(key);
+            if (!name2nodes.containsKey(edgeAttributes.getFactorName()) || !name2nodes.containsKey(edgeAttributes.getTargetName()))
+                continue;
+            for (final CyNode sourceNode : name2nodes.get(edgeAttributes.getFactorName())) {
+                for (final CyNode targetNode : name2nodes.get(edgeAttributes.getTargetName())) {
+                    final CyEdge edge = addEdge(sourceNode, targetNode, network, view, "");
+	    			setEdgeAttribute(edge, REGULATOR_GENE_ATTRIBUTE_NAME, edgeAttributes.getFactorName());
+		    		setEdgeAttribute(edge, TARGET_GENE_ATTRIBUTE_NAME, edgeAttributes.getTargetName());
+                    setEdgeAttribute(edge, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_PREDICTED);
+                    for (final String motifName : edgeAttributes.getMotifNames()) {
+                        addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, motifName);
+                    }
+                }
+            }
 		}
-		/*
-		 * draw all edges
-		 */
-		for (String key : edgesAttr.keySet()){
-			//every new edge
-			NewEdgeAttr edgeattr = edgesAttr.get(key);
-			CyNode node1 = null;
-			CyNode node2 = null;
-			it = network2.nodesIterator();
-			while(it.hasNext()){
-				//get the nodes for the TF and the TG
-				CyNode node = (CyNode) it.next();
-				if (node.getIdentifier().equals(edgeattr.getTF())){
-					node1 = node;
-				}
-				if (node.getIdentifier().equals(edgeattr.getTG())){
-					node2 = node;
-				}
-			}
-			//if the nodes are matched, the edge can been drawn
-			if (node1 != null && node2 != null){
-				CyEdge edge = Cytoscape.getCyEdge(node1, node2, Semantics.INTERACTION, 
-					"regulates", true);
-				network2.addEdge(edge);
-				//System.out.println("Edge identifier=" + edge.getIdentifier());
-				//System.out.println("TF=" + edgeattr.getTF());
-				AddRegulatoryInteractionsAction.setAtribute(edge, "Regulator Gene", edgeattr.getTF());
-				//System.out.println("TG=" + edgeattr.getTG());
-				AddRegulatoryInteractionsAction.setAtribute(edge, "Target Gene", edgeattr.getTG());
-				List<String> motifs = new ArrayList<String>();
-				Iterator<String> motifit = edgeattr.getMotifs().iterator();
-				while(motifit.hasNext()){
-					motifs.add(motifit.next());
-				}
-				AddRegulatoryInteractionsAction.setAtribute(edge, "Motifs", motifs);
-				cyView.addEdgeView(edge.getRootGraphIndex());
-				cyView.updateView();
-			}
-			
-		}
-		cyView.updateView();
-		CytoscapeDesktop desktop = Cytoscape.getDesktop();
-		CytoPanel cytoPanel = desktop.getCytoPanel (SwingConstants.WEST);
-		if (cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")) == -1){
-			cytoPanel.setSelectedIndex(0);
-		}else{
-			cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(getBundle().getString("plugin_visual_name")));
-		}
+
+		view.updateView();
+
         getView().refresh();
+
+        activeSidePanel();
+	}
+
+    private boolean isRegulatoryEdge(CyEdge edge) {
+        final CyAttributes attributes = Cytoscape.getEdgeAttributes();
+        return attributes.getAttribute(edge.getIdentifier(), "interaction").toString().contains("regulates")
+                && attributes.getStringAttribute(edge.getIdentifier(), REGULATOR_GENE_ATTRIBUTE_NAME) != null
+                && attributes.getStringAttribute(edge.getIdentifier(), TARGET_GENE_ATTRIBUTE_NAME) != null;
+    }
+
+    private static class EdgeAttributes {
+		private final String factorName;
+		private final String targetName;
+		private final Set<String> motifNames;
+
+		public EdgeAttributes(String factorName, String targetName, List<String> motifNames){
+			this.factorName = factorName;
+			this.targetName = targetName;
+			this.motifNames = new HashSet<String>();
+			this.motifNames.addAll(motifNames);
+		}
+
+		public void addMotifNames(List<String> motifNames){
+			this.motifNames.addAll(motifNames);
+		}
+
+		public String getFactorName(){
+			return this.factorName;
+		}
+
+		public String getTargetName(){
+			return this.targetName;
+		}
+
+		public Collection<String> getMotifNames(){
+			return this.motifNames;
+		}
 	}
 }
 

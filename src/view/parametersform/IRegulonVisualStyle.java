@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
@@ -17,24 +18,26 @@ import cytoscape.visual.mappings.PassThroughMapping;
 import view.IRegulonResourceBundle;
 
 public class IRegulonVisualStyle extends IRegulonResourceBundle {
-
-	public final String vsName;
+	public static final String NAME = ResourceBundle.getBundle("iRegulon").getString("vizmap_name");
 	
 	public IRegulonVisualStyle(){
-		vsName = getBundle().getString("vizmap_name");
-		this.refreshVisualStyle();
+		refreshVisualStyle();
 	}
+
+    public static VisualStyle getVisualStyle() {
+        final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
+		return manager.getCalculatorCatalog().getVisualStyle(NAME);
+    }
 	
 	public void refreshVisualStyle(){
 		VisualMappingManager manager = Cytoscape.getVisualMappingManager();
 		CalculatorCatalog catalog = manager.getCalculatorCatalog();
-		VisualStyle vs = catalog.getVisualStyle(vsName);
+		VisualStyle vs = catalog.getVisualStyle(NAME);
 		if (vs != null){
-			catalog.removeVisualStyle(vsName);
+			catalog.removeVisualStyle(NAME);
 		}
 		this.createVizMap();
 	}
-	
 	
 	public void createVizMap(){
 		// get the network and view
@@ -45,7 +48,7 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
         CalculatorCatalog catalog = manager.getCalculatorCatalog();
 
         // check to see if a visual style with this name already exists
-        VisualStyle vs = catalog.getVisualStyle(vsName);
+        VisualStyle vs = catalog.getVisualStyle(NAME);
         if (vs == null) {
                 // if not, create it and add it to the catalog
                 vs = createVisualStyle(network);
@@ -206,7 +209,7 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
 
 
             // Create the visual style
-            VisualStyle visualStyle = new VisualStyle(vsName, nodeAppCalc, edgeAppCalc, globalAppCalc);
+            VisualStyle visualStyle = new VisualStyle(NAME, nodeAppCalc, edgeAppCalc, globalAppCalc);
 
             return visualStyle;
     }

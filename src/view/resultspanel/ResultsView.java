@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -52,9 +51,10 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private JTabbedPane tabbedPane;
 
     private final PropertyChangeListener refreshListener;
+    private CreateNewCombinedRegulatoryNetworkAction createNewCombinedRegulatoryNetworkAction;
 
 
-	public ResultsView(final String runName, final Results results) {
+    public ResultsView(final String runName, final Results results) {
 		this.runName = runName;
         this.results = results;
 		this.isSaved = false;
@@ -77,10 +77,12 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     private void registerRefreshListeners() {
         Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUS, refreshListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_DESTROYED, refreshListener);
     }
 
     public void unregisterRefreshListeners() {
         Cytoscape.getDesktop().getSwingPropertyChangeSupport().removePropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUS, refreshListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().removePropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_DESTROYED, refreshListener);
     }
 
 
@@ -132,6 +134,8 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     @Override
     public void refresh() {
+        createNewCombinedRegulatoryNetworkAction.refresh();
+
         final MotifView view = (MotifView) tabbedPane.getSelectedComponent();
         if (view != null) view.refresh();
     }
@@ -215,6 +219,8 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         final JPanel toolBar = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
 
+        //TODO: Wrong enabledness of TFdep actions after filtering!
+
         // First line ...
         c.gridx = 0; c.gridy = 0;
 		c.weightx = 1.0; c.weighty = 0;
@@ -253,57 +259,10 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        //TODO: Also refresh view ...
-        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction();
-        transcriptionFactorComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
-                    @Override
-                    public GeneIdentifier getTranscriptionFactor() {
-                        final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
-                        return (factor == null) ? null : factor;
-                    }
-
-                    @Override
-                    public List<TargetomeDatabase> getDatabases() {
-                        return TargetomeDatabase.getAllDatabases();
-                    }
-                });
-            }
-        });
+        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction(this);
+        transcriptionFactorComboBox.addActionListener(new QueryMetatargetomeActionListener(queryMetatargetomeAction, transcriptionFactorComboBox));
         final JTextComponent textComponent = (JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent();
-        textComponent.getDocument().addDocumentListener(new DocumentListener() {
-            private void refresh() {
-                queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
-                    @Override
-                    public GeneIdentifier getTranscriptionFactor() {
-                        final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
-                        return (factor == null) ? null : factor;
-                    }
-
-                    @Override
-                    public List<TargetomeDatabase> getDatabases() {
-                        return TargetomeDatabase.getAllDatabases();
-                    }
-                });
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                refresh();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                refresh();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                refresh();
-            }
-        });
+        textComponent.getDocument().addDocumentListener(new QueryMetatargetomeDocumentListener(queryMetatargetomeAction, transcriptionFactorComboBox));
         JButton buttonQueryMetatargetome = new JButton(queryMetatargetomeAction);
         buttonQueryMetatargetome.setText("");
         toolBar.add(buttonQueryMetatargetome, c);
@@ -326,9 +285,8 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        //TODO: Implement good wiring ...
-        final AddRegulatoryNetworkWithCombinedEdgesAction drawMergedAction = new AddRegulatoryNetworkWithCombinedEdgesAction(selectedMotif, transcriptionFactorComboBox, this);
-		JButton drawMergedButton = new JButton(drawMergedAction);
+        createNewCombinedRegulatoryNetworkAction = new CreateNewCombinedRegulatoryNetworkAction(results.getParameters().getAttributeName(), this);
+		JButton drawMergedButton = new JButton(createNewCombinedRegulatoryNetworkAction);
         drawMergedButton.setText("");
         toolBar.add(drawMergedButton, c);
 
@@ -375,5 +333,71 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private ImageIcon loadIcon(final String keyName) {
         final String resourceName = getBundle().getString(keyName);
 		return new ImageIcon(getClass().getResource(resourceName));
+    }
+
+    private static class QueryMetatargetomeActionListener implements ActionListener {
+        private final QueryMetatargetomeAction queryMetatargetomeAction;
+        private final TFComboBox transcriptionFactorComboBox;
+
+        public QueryMetatargetomeActionListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox) {
+            this.queryMetatargetomeAction = queryMetatargetomeAction;
+            this.transcriptionFactorComboBox = transcriptionFactorComboBox;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
+                @Override
+                public GeneIdentifier getTranscriptionFactor() {
+                    final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
+                    return (factor == null) ? null : factor;
+                }
+
+                @Override
+                public List<TargetomeDatabase> getDatabases() {
+                    return TargetomeDatabase.getAllDatabases();
+                }
+            });
+        }
+    }
+
+    private static class QueryMetatargetomeDocumentListener implements DocumentListener {
+        private final QueryMetatargetomeAction queryMetatargetomeAction;
+        private final TFComboBox transcriptionFactorComboBox;
+
+        public QueryMetatargetomeDocumentListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox) {
+            this.queryMetatargetomeAction = queryMetatargetomeAction;
+            this.transcriptionFactorComboBox = transcriptionFactorComboBox;
+        }
+
+        private void refresh() {
+            queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
+                @Override
+                public GeneIdentifier getTranscriptionFactor() {
+                    final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
+                    return (factor == null) ? null : factor;
+                }
+
+                @Override
+                public List<TargetomeDatabase> getDatabases() {
+                    return TargetomeDatabase.getAllDatabases();
+                }
+            });
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            refresh();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            refresh();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            refresh();
+        }
     }
 }

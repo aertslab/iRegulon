@@ -65,14 +65,14 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
     private MetatargetomeParameters parameters;
 
-    public QueryMetatargetomeAction(final MetatargetomeParameters parameters) {
-        super(NAME);
+    public QueryMetatargetomeAction(final MetatargetomeParameters parameters, final Refreshable view) {
+        super(NAME, view);
         this.parameters = parameters;
         refresh();
     }
 
-    public QueryMetatargetomeAction() {
-        this(null);
+    public QueryMetatargetomeAction(final Refreshable view) {
+        this(null, view);
     }
 
     public MetatargetomeParameters getParameters() {
@@ -109,6 +109,8 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
         Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);
 
         view.redrawGraph(true, true);
+
+        if (getView() != null) getView().refresh();
 
         activeSidePanel();
     }

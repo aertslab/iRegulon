@@ -33,8 +33,22 @@ public abstract class NetworkDrawAction extends ResourceAction {
     protected static final String REGULATORY_FUNCTION_TARGET_GENE = "Regulated";
     protected static final String REGULATORY_FUNCTION_PREDICTED = "Predicted";
 
-    public NetworkDrawAction(String actionName) {
+
+    private static final Refreshable NO_VIEW = new Refreshable() {
+        @Override
+        public void refresh() {
+            //Nop ...
+            }
+    };
+    private final Refreshable view;
+
+    public NetworkDrawAction(String actionName, Refreshable view) {
         super(actionName);
+        this.view = view == null ? NO_VIEW : view;
+    }
+
+    public Refreshable getView() {
+        return view;
     }
 
     protected void addNodeAttribute(CyNode node, String attributeName, String attributeValue) {

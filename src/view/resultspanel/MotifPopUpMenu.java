@@ -9,7 +9,6 @@ import view.actions.BedExportAction;
 import view.actions.BedLinkToBrowserAction;
 
 import view.resultspanel.actions.AddRegulatoryInteractionsAction;
-import view.resultspanel.actions.AddRegulatoryNetworkWithCombinedEdgesAction;
 import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
 import view.resultspanel.actions.AddRegulatoryNetworkAction;
 

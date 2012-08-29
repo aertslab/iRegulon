@@ -3,10 +3,7 @@ package view.resultspanel.actions;
 import giny.view.NodeView;
 
 import view.CytoscapeNetworkUtilities;
-import view.resultspanel.Refreshable;
-import view.resultspanel.TFComboBox;
-import view.resultspanel.TranscriptionFactorDependentAction;
-import view.resultspanel.SelectedMotif;
+import view.resultspanel.*;
 
 import java.awt.event.ActionEvent;
 import java.util.*;
@@ -18,18 +15,25 @@ import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
 import cytoscape.view.CyNetworkView;
 
-public class AddRegulatoryNetworkWithCombinedEdgesAction extends TranscriptionFactorDependentAction {
+public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction implements Refreshable {
     private static final String NAME = "action_draw_merged_edges_network";
-	
-	public AddRegulatoryNetworkWithCombinedEdgesAction(SelectedMotif selectedMotif,
-                                                       final TFComboBox transcriptionFactorComboBox,
-                                                       final Refreshable view){
-		super(NAME, selectedMotif, transcriptionFactorComboBox, view);
-		if (selectedMotif == null) throw new IllegalArgumentException();
-		setEnabled(false);
+
+    private final String attributeName;
+
+	public CreateNewCombinedRegulatoryNetworkAction(final String attributeName,
+                                                    final Refreshable view){
+		super(NAME, view);
+		if (attributeName == null) throw new IllegalArgumentException();
+        this.attributeName = attributeName;
+		refresh();
 	}
 
-	@Override
+    @Override
+    public void refresh() {
+        setEnabled(!Cytoscape.getCurrentNetworkView().equals(Cytoscape.getNullNetworkView()));
+    }
+
+    @Override
 	public void actionPerformed(ActionEvent e) {
 		final CyNetwork oldNetwork = Cytoscape.getCurrentNetwork();
 		final CyNetworkView oldView = Cytoscape.getCurrentNetworkView();
@@ -80,7 +84,7 @@ public class AddRegulatoryNetworkWithCombinedEdgesAction extends TranscriptionFa
 
 		// Draw all edges ...
         @SuppressWarnings("unchecked")
-        final Map<String,List<CyNode>> name2nodes = getNodeMap(getSelectedMotif().getAttributeName(), network.nodesList());
+        final Map<String,List<CyNode>> name2nodes = getNodeMap(attributeName, network.nodesList());
 		for (String key : name2edgeAttributes.keySet()) {
 			final EdgeAttributes edgeAttributes = name2edgeAttributes.get(key);
             if (!name2nodes.containsKey(edgeAttributes.getFactorName()) || !name2nodes.containsKey(edgeAttributes.getTargetName()))

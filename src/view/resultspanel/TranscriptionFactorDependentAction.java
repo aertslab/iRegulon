@@ -28,17 +28,16 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
 
     private SelectedMotif selectedMotif;
 	private TranscriptionFactor transcriptionFactor;
-    private Refreshable view;
-	
+
 	public TranscriptionFactorDependentAction(final String actionName,
                                               final SelectedMotif selectedMotif,
                                               final TFComboBox selectedTranscriptionFactor,
                                               final Refreshable view) {
-        super(actionName);
+        super(actionName, view);
 		setEnabled(false);
 		this.selectedMotif = selectedMotif;
 		transcriptionFactor = null;
-        this.view = view;
+
 
         selectedTranscriptionFactor.registerAction(this);
 
@@ -50,10 +49,6 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
         // the creation of UndoableEdit objects, combining them in a composite UndoableEdit and
         // registering this compound object with Cytoscape.
 	}
-
-    protected Refreshable getView() {
-        return view;
-    }
 
     public SelectedMotif getSelectedMotif() {
         return this.selectedMotif;

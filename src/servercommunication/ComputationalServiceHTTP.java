@@ -56,7 +56,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     public List<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException {
         if (speciesNomenclature == null) throw new IllegalArgumentException();
         try {
-		    final URLConnection connection = createConnection("URL_targetomes");
+		    final URLConnection connection = createConnection("URL_metatargetomes_query_factors");
 
             // Send the nomenclature code ...
             final StringBuilder builder = new StringBuilder();
@@ -68,9 +68,67 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 		    final List<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
             read(connection, new LineProcessor() {
                 @Override
-                public void process(final String line) {
-                    if (line.startsWith("ID=")) {
-                        result.add(new GeneIdentifier(line.trim().substring(3), speciesNomenclature));
+                public void process(final String line) throws ServerCommunicationException {
+                    final String prefix = "ID=";
+                    if (line.startsWith(prefix)) {
+                        result.add(new GeneIdentifier(line.substring(prefix.length()), speciesNomenclature));
+                    } else {
+                        throw new ServerCommunicationException("Invalid format of message received from server.");
+                    }
+                }
+            });
+
+            return result;
+		} catch (IOException e) {
+            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            throw new ServerCommunicationException("Error while trying to communicate with server.", e);
+		}
+    }
+
+    @Override
+    public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases) throws ServerCommunicationException {
+        if (factor == null || databases == null) {
+            throw new IllegalArgumentException();
+        }
+        try {
+		    final URLConnection connection = createConnection("URL_metatargetomes_query_targetome");
+
+            // Send the necessary information ...
+            final StringBuilder builder = new StringBuilder();
+            builder.append("SpeciesNomenclatureCode=");
+            builder.append(factor.getSpeciesNomenclature().getCode());
+            builder.append("\n");
+            builder.append("GeneIdentifier=");
+            builder.append(factor.getGeneName());
+            builder.append("\n");
+            for (TargetomeDatabase database : databases) {
+                builder.append("TargetomeDatabaseCode=");
+                builder.append(database.getDbCode());
+                builder.append("\n");
+            }
+            send(connection, builder.toString());
+
+		    // Get the response ...
+		    final List<CandidateTargetGene> result = new ArrayList<CandidateTargetGene>();
+            read(connection, new LineProcessor() {
+                @Override
+                public void process(final String line) throws ServerCommunicationException {
+                    final String prefix = "ID_occurenceCount=";
+                    if (line.startsWith(prefix)) {
+                        final String[] columns = line.substring(prefix.length()).split(";");
+                        if (columns.length != 2) {
+                            throw new ServerCommunicationException("Invalid format of message received from server.");
+                        }
+                        try {
+                            int occurenceCount = Integer.parseInt(columns[1]);
+                            result.add(new CandidateTargetGene(
+                                new GeneIdentifier(columns[0], factor.getSpeciesNomenclature()),
+                                occurenceCount));
+                        } catch (NumberFormatException e) {
+                            throw new ServerCommunicationException("Invalid format of message received from server.");
+                        }
+                    } else {
+                        throw new ServerCommunicationException("Invalid format of message received from server.");
                     }
                 }
             });
@@ -97,22 +155,16 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         writer.flush();
     }
 
-    private void read(final URLConnection connection, final LineProcessor processor) throws IOException {
+    private void read(final URLConnection connection, final LineProcessor processor) throws IOException, ServerCommunicationException {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-		final List<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
         String line;
         while ((line = reader.readLine()) != null) {
-		     processor.process(line);
+		     processor.process(line.trim());
 		}
 		reader.close();
     }
 
-    @Override
-    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> databases) throws ServerCommunicationException {
-        return Collections.emptyList(); //TODO: implement this ...
-    }
-
     private static interface LineProcessor {
-        public void process(String line);
+        public void process(String line) throws ServerCommunicationException;
     }
 }

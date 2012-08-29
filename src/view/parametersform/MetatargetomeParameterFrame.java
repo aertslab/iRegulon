@@ -5,8 +5,6 @@ import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
-import servercommunication.ComputationalService;
-import servercommunication.ComputationalServiceHTTP;
 import view.actions.QueryMetatargetomeAction;
 
 import javax.swing.*;
@@ -18,23 +16,17 @@ import java.util.*;
 public final class MetatargetomeParameterFrame extends JFrame {
     private static final String TITLE = "Query metatargetome for a factor";
 
-    public MetatargetomeParameterFrame(final GeneIdentifier factor) {
+    public MetatargetomeParameterFrame(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.List<GeneIdentifier>> speciesNomenclature2factors) {
         super(TITLE);
-        setContentPane(new ContentPane(factor));
+        setContentPane(new ContentPane(factor, speciesNomenclature2factors));
         pack();
         setLocationRelativeTo(Cytoscape.getDesktop());
         setAlwaysOnTop(true);
     }
 
     private class ContentPane extends JPanel {
-        private ContentPane(final GeneIdentifier factor) {
+        private ContentPane(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.List<GeneIdentifier>> speciesNomenclature2factors) {
             super(new BorderLayout());
-            final ComputationalService service = new ComputationalServiceHTTP();
-
-            final Map<SpeciesNomenclature,java.util.List<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,java.util.List<GeneIdentifier>>();
-            for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
-                speciesNomenclature2factors.put(speciesNomenclature, service.queryTranscriptionFactorsWithPredictedTargetome(speciesNomenclature));
-            }
 
             final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
             add(parameterForm, BorderLayout.CENTER);

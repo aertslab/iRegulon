@@ -11,9 +11,11 @@ import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
+import servercommunication.ServerCommunicationException;
 import view.parametersform.MetatargetomeParameters;
 import view.resultspanel.NetworkDrawAction;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Collections;
 import java.util.List;
@@ -74,9 +76,15 @@ public class QueryMetatargetomeAction extends NetworkDrawAction {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         final ComputationalService service = new ComputationalServiceHTTP();
-        final List<CandidateTargetGene> targetome = service.queryPredictedTargetome(
-                getParameters().getTranscriptionFactor(),
-                getParameters().getDatabases());
+        final List<CandidateTargetGene> targetome;
+        try {
+            targetome = service.queryPredictedTargetome(
+                    getParameters().getTranscriptionFactor(),
+                    getParameters().getDatabases());
+        } catch (ServerCommunicationException e) {
+            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         final CyNetwork network =  Cytoscape.getCurrentNetwork();
 		final CyNetworkView view = Cytoscape.getCurrentNetworkView();

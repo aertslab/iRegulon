@@ -1,0 +1,1 @@
+Icons were taken from the free Tango icon collection.

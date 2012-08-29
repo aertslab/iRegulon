@@ -3,6 +3,11 @@ package servercommunication;
 import domainmodel.*;
 import servercommunication.protocols.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,12 +19,14 @@ import javax.swing.JOptionPane;
 import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
+import view.IRegulonResourceBundle;
 
 
-public class ComputationalServiceHTTP implements ComputationalService {
-	@Override
+public class ComputationalServiceHTTP extends IRegulonResourceBundle implements ComputationalService {
+    private Service service = new HTTPService();
+
+    @Override
 	public List<Motif> findPredictedRegulators(InputParameters input) {
-		final Service service = new HTTPService();
 		final ClassicalTask task = new ClassicalTask(service, input);
 		
 		final JTaskConfig taskConfig = new JTaskConfig();
@@ -43,11 +50,32 @@ public class ComputationalServiceHTTP implements ComputationalService {
 
     @Override
     public List<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        try {
+			// Do the request ...
+			final URL url = new URL(getBundle().getString("URL_targetomes"));
+		    final URLConnection connection = url.openConnection();
+		    connection.setDoInput(true);
+		    connection.setDoOutput(false);
+            connection.connect();
+
+		    // Get the response ... TODO: Check for errors ...
+		    final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		    final List<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+		        result.add(new GeneIdentifier(line.trim(), SpeciesNomenclature.HOMO_SAPIENS_HGNC));
+		    }
+		    reader.close();
+            return result;
+		} catch (Exception e) {
+            //TODO: use error handling ...
+			System.out.println(e.toString());
+            return Collections.emptyList();
+		}
     }
 
     @Override
     public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> databases) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return Collections.emptyList(); //TODO: implement this ...
     }
 }

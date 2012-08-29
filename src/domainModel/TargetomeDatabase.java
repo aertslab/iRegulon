@@ -1,7 +1,9 @@
 package domainmodel;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class TargetomeDatabase {
@@ -17,6 +19,12 @@ public final class TargetomeDatabase {
             return CODE2DATABASE.get(code);
         }
         return UNKNOWN;
+    }
+
+    public static List<TargetomeDatabase> getAllDatabases() {
+        final List<TargetomeDatabase> result = new ArrayList<TargetomeDatabase>(CODE2DATABASE.values());
+        result.remove(UNKNOWN);
+        return result;
     }
 
     private final String dbCode;

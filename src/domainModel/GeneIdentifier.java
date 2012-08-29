@@ -2,68 +2,52 @@ package domainmodel;
 
 
 public class GeneIdentifier implements Comparable<GeneIdentifier>{
-
 	private final String geneName;
 	private final SpeciesNomenclature speciesNomenclature;
 	
-	public GeneIdentifier(String geneName, SpeciesNomenclature speciesNomenclature){
+	public GeneIdentifier(String geneName, SpeciesNomenclature speciesNomenclature) {
+        if (geneName == null || speciesNomenclature == null) {
+            throw new IllegalArgumentException();
+        }
 		this.geneName = geneName;
 		this.speciesNomenclature = speciesNomenclature;
 	}
 	
-	/**
-	 * 
-	 * @return the gene name of this gene identifier
-	 */
 	public String getGeneName(){
 		return this.geneName;
 	}
 	
-	/**
-	 * 
-	 * @return the species and nomenclature of this geneID
-	 */
 	public SpeciesNomenclature getSpeciesNomenclature(){
 		return this.speciesNomenclature;
 	}
 	
 	public int compareTo(GeneIdentifier o) {
-		return -1;
+        final int r = speciesNomenclature.getName().compareTo(o.getSpeciesNomenclature().getName());
+        if (r != 0) return r;
+		return geneName.compareTo(o.getGeneName());
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((geneName == null) ? 0 : geneName.hashCode());
-		result = prime
-				* result
-				+ ((speciesNomenclature == null) ? 0 : speciesNomenclature
-						.hashCode());
-		return result;
-	}
+    public String toString() {
+        return geneName;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GeneIdentifier other = (GeneIdentifier) obj;
-		if (geneName == null) {
-			if (other.geneName != null)
-				return false;
-		} else if (!geneName.equals(other.geneName))
-			return false;
-		if (speciesNomenclature != other.speciesNomenclature)
-			return false;
-		return true;
-	}
-	
-	
-	
-	
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GeneIdentifier that = (GeneIdentifier) o;
+
+        if (!geneName.equals(that.geneName)) return false;
+        if (!speciesNomenclature.equals(that.speciesNomenclature)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = geneName.hashCode();
+        result = 31 * result + speciesNomenclature.hashCode();
+        return result;
+    }
 }

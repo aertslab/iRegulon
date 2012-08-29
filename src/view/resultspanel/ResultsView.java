@@ -230,6 +230,10 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         JButton buttonDrawNetwork = new JButton(drawNetworkAction);
         buttonDrawNetwork.setText("N");
 
+        //TODO: add combine action ...
+
+        //TODO: add query metatargetome action ...
+
 		toolBar.add(buttonDrawNetwork, c);
 
         c.gridx = 2; c.gridy = 1;

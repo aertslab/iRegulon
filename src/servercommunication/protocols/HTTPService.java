@@ -1,6 +1,6 @@
 package servercommunication.protocols;
 
-import servercommunication.SentRequestException;
+import servercommunication.ServerCommunicationException;
 import view.IRegulonResourceBundle;
 
 import java.io.BufferedReader;
@@ -33,9 +33,9 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 	 * @param rankThreshold
 	 * @param NESThreshold
 	 * @return the id of the job
-	 * @throws SentRequestException 
+	 * @throws servercommunication.ServerCommunicationException
 	 */
-	public int sentJob(InputParameters input) throws SentRequestException{
+	public int sentJob(InputParameters input) throws ServerCommunicationException {
 		String name = input.getName();
 		Collection<GeneIdentifier> geneIDs = input.getGenes();
 		float AUCThreshold = input.getROCthresholdAUC();
@@ -115,7 +115,7 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 			if (lines.isEmpty()){
 				lines = e.getMessage();
 			}
-			throw new SentRequestException(lines, e);
+			throw new ServerCommunicationException(lines, e);
 		}
 	}
 	

@@ -6,10 +6,10 @@ import java.util.Collection;
 
 import domainmodel.InputParameters;
 import domainmodel.Motif;
-import servercommunication.SentRequestException;
+import servercommunication.ServerCommunicationException;
 
 public interface Service {
-	public int sentJob(InputParameters input) throws SentRequestException;
+	public int sentJob(InputParameters input) throws ServerCommunicationException;
 	
 	public State getState(int jobID);
 	

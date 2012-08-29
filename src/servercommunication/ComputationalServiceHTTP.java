@@ -6,10 +6,8 @@ import cytoscape.logger.LogLevel;
 import domainmodel.*;
 import servercommunication.protocols.*;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -55,38 +53,66 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 	}
 
     @Override
-    public List<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) {
+    public List<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException {
+        if (speciesNomenclature == null) throw new IllegalArgumentException();
         try {
-			// Do the request ...
-			final URL url = new URL(getBundle().getString("URL_targetomes"));
-		    final URLConnection connection = url.openConnection();
-		    connection.setDoInput(true);
-		    connection.setDoOutput(true);
+		    final URLConnection connection = createConnection("URL_targetomes");
 
             // Send the nomenclature code ...
-            final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-            writer.write(Integer.toString(speciesNomenclature.getCode()));
-            writer.newLine();
-            writer.flush();
+            final StringBuilder builder = new StringBuilder();
+            builder.append("SpeciesNomenclatureCode=");
+            builder.append(speciesNomenclature.getCode());
+            send(connection, builder.toString());
 
-		    // Get the response ... TODO: Check for errors ...
-		    final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		    // Get the response ...
 		    final List<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
-            String line;
-            while ((line = reader.readLine()) != null) {
-		        result.add(new GeneIdentifier(line.trim(), speciesNomenclature));
-		    }
-		    reader.close();
+            read(connection, new LineProcessor() {
+                @Override
+                public void process(final String line) {
+                    if (line.startsWith("ID=")) {
+                        result.add(new GeneIdentifier(line.trim().substring(3), speciesNomenclature));
+                    }
+                }
+            });
 
             return result;
-		} catch (Exception e) {
+		} catch (IOException e) {
             logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
-            return Collections.emptyList();
+            throw new ServerCommunicationException("Error while trying to communicate with server.", e);
 		}
     }
 
+    private URLConnection createConnection(String bundleKey) throws IOException {
+        final URL url = new URL(getBundle().getString(bundleKey));
+		final URLConnection connection = url.openConnection();
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
+        return connection;
+    }
+
+    private void send(final URLConnection connection, String message) throws IOException {
+        final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        writer.write(message);
+        writer.newLine();
+        writer.flush();
+    }
+
+    private void read(final URLConnection connection, final LineProcessor processor) throws IOException {
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		final List<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
+        String line;
+        while ((line = reader.readLine()) != null) {
+		     processor.process(line);
+		}
+		reader.close();
+    }
+
     @Override
-    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> databases) {
+    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> databases) throws ServerCommunicationException {
         return Collections.emptyList(); //TODO: implement this ...
+    }
+
+    private static interface LineProcessor {
+        public void process(String line);
     }
 }

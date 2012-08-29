@@ -4,25 +4,32 @@ package view.parametersform;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
+import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
-final class MetatargetomeParameterForm extends JPanel implements MetatargetomeParameters {
+final class MetatargetomeParameterForm extends JPanel implements MetatargetomeParameters, Refreshable {
     private static final int MARGIN_IN_PIXELS = 5;
 
-    private final List<GeneIdentifier> factors;
+    private final Map<SpeciesNomenclature, List<GeneIdentifier>> nomenclature2factors;
 
     private JComboBox transcriptionFactorCB;
+    private JComboBox speciesNomenclatureCB;
     private JList databaseList;
 
-    public MetatargetomeParameterForm(List<GeneIdentifier> factors) {
+
+    public MetatargetomeParameterForm(Map<SpeciesNomenclature, List<GeneIdentifier>> nomenclature2factors) {
         super();
-        this.factors = factors;
+        this.nomenclature2factors = nomenclature2factors;
         initPanel();
+        refresh();
     }
 
     @Override
@@ -32,6 +39,14 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
 
     public void setTranscriptionFactor(final GeneIdentifier geneID) {
         transcriptionFactorCB.setSelectedItem(geneID);
+    }
+
+    public SpeciesNomenclature getSpeciesNomenclature() {
+        return (SpeciesNomenclature) speciesNomenclatureCB.getSelectedItem();
+    }
+
+    public void setSpeciesNomenclature(final SpeciesNomenclature speciesNomenclature) {
+        speciesNomenclatureCB.setSelectedItem(speciesNomenclature == null ? SpeciesNomenclature.HOMO_SAPIENS_HGNC : speciesNomenclature);
     }
 
     public void setDatabases(List<TargetomeDatabase> databases) {
@@ -67,7 +82,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         final GridBagConstraints cc = new GridBagConstraints();
 
         final JLabel transcriptionFactorLB = new JLabel("Transcription Factor:");
-        transcriptionFactorCB = new JComboBox(new GeneIdentifierComboBoxModel(factors));
+        transcriptionFactorCB = new JComboBox();
         transcriptionFactorLB.setLabelFor(transcriptionFactorCB);
 
         cc.gridx = 0; cc.gridy = 0;
@@ -86,10 +101,8 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         add(transcriptionFactorCB, cc);
 
         final JLabel speciesNomenclatureLB = new JLabel("Species and nomemclature:");
-        final JComboBox speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(SpeciesNomenclature.getAllNomenclatures()));
-        speciesNomenclatureCB.setSelectedItem(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(nomenclature2factors.keySet()));
         speciesNomenclatureLB.setLabelFor(speciesNomenclatureCB);
-        speciesNomenclatureCB.setEnabled(false);
 
         cc.gridx = 0; cc.gridy = 1;
         cc.gridwidth = 1; cc.gridheight = 1;
@@ -125,5 +138,19 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.fill = GridBagConstraints.BOTH;
         cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
         add(new JScrollPane(databaseList), cc);
+
+
+        speciesNomenclatureCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refresh();
+            }
+        });
+    }
+
+    @Override
+    public void refresh() {
+        transcriptionFactorCB.setModel(new GeneIdentifierComboBoxModel(nomenclature2factors.get(getSpeciesNomenclature())));
+
     }
 }

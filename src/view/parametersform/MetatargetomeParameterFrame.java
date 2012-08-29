@@ -3,6 +3,7 @@ package view.parametersform;
 
 import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
@@ -11,6 +12,7 @@ import view.actions.QueryMetatargetomeAction;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.*;
 
 
 public final class MetatargetomeParameterFrame extends JFrame {
@@ -28,7 +30,13 @@ public final class MetatargetomeParameterFrame extends JFrame {
         private ContentPane(final GeneIdentifier factor) {
             super(new BorderLayout());
             final ComputationalService service = new ComputationalServiceHTTP();
-            final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(service.queryTranscriptionFactorsWithPredictedTargetome());
+
+            final Map<SpeciesNomenclature,java.util.List<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,java.util.List<GeneIdentifier>>();
+            for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
+                speciesNomenclature2factors.put(speciesNomenclature, service.queryTranscriptionFactorsWithPredictedTargetome(speciesNomenclature));
+            }
+
+            final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
             add(parameterForm, BorderLayout.CENTER);
             add(new JPanel(new FlowLayout()) {
                 {
@@ -36,6 +44,7 @@ public final class MetatargetomeParameterFrame extends JFrame {
                     add(new JButton(new QueryMetatargetomeAction(parameterForm)));
                 }
             }, BorderLayout.SOUTH);
+            parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
             parameterForm.setTranscriptionFactor(factor);
             parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
         }

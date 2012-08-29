@@ -36,10 +36,7 @@ public class MotifPopUpMenu extends MouseAdapter {
 			
 		final AddRegulatoryInteractionsAction drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox, view);
 		menu.addAction(drawEdgesAction);
-			
-		final AddRegulatoryNetworkWithCombinedEdgesAction drawMergedAction = new AddRegulatoryNetworkWithCombinedEdgesAction(selectedMotif, transcriptionFactorComboBox, view);
-		menu.addAction(drawMergedAction);
-		
+
 		if (isRegionBased) {
 			final BedExportAction bedExportAction = new BedExportAction(selectedMotif);
 			menu.addAction(bedExportAction);

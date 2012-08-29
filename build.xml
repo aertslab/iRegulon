@@ -59,13 +59,13 @@
     <!-- =================================================================== -->
     <target name="copy_resources" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.gif,**/*.jpg" />
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg" />
         </copy>
     </target>
 
     <target name="copy_resources_no_transfac" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.gif,**/*.jpg" excludes="**/transfac_pro-*.png" />
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg" excludes="**/transfac_pro-*.png" />
         </copy>
     </target>
 
@@ -150,7 +150,7 @@
     <target name="source_distribution" depends="copy_resources,copy_help">
         <zip destfile="${build.folder}/${plugin.src.filename}">
             <fileset dir="${basedir}"
-                     includes="src/**/*.properties,src/**/*.png,src/**/*.gif,src/**/*.jpg" />
+                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg" />
 
             <fileset dir="${basedir}" includes="src/**/*.java"/>
 
@@ -169,7 +169,7 @@
     <target name="source_distribution_no_transfac" depends="copy_resources,copy_help">
         <zip destfile="${build.folder}/${plugin.src.notransfac.filename}">
             <fileset dir="${basedir}"
-                     includes="src/**/*.properties,src/**/*.png,src/**/*.gif,src/**/*.jpg"  excludes="**/transfac_pro-*.png" />
+                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg"  excludes="**/transfac_pro-*.png" />
 
             <fileset dir="${basedir}" includes="src/**/*.java"/>
 

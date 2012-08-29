@@ -7,6 +7,7 @@ import cytoscape.logger.LogLevel;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.Results;
+import persistence.LoadException;
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
 import view.resultspanel.ResultsView;
@@ -35,9 +36,8 @@ public class LoadResultsAction extends ResourceAction {
                 final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
                 panel.setState(CytoPanelState.DOCK);
                 output.addToPanel(panel);
-            } catch (Exception exception) {
+            } catch (LoadException exception) {
                 logger.handleLog(LogLevel.LOG_ERROR, exception.getMessage());
-                logger.handleLog(LogLevel.LOG_ERROR, exception.getCause().getMessage());
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(), exception.getMessage());
             }
         }

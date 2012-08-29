@@ -14,13 +14,14 @@ import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
 import view.parametersform.MetatargetomeParameters;
 import view.resultspanel.NetworkDrawAction;
+import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Collections;
 import java.util.List;
 
-public class QueryMetatargetomeAction extends NetworkDrawAction {
+public class QueryMetatargetomeAction extends NetworkDrawAction implements Refreshable {
     private static final String NAME = "action_query_metatargetome";
 
     private static final AbstractMotif NO_MOTIF = new AbstractMotif(-1,
@@ -62,15 +63,25 @@ public class QueryMetatargetomeAction extends NetworkDrawAction {
         }
     };
 
-    private final MetatargetomeParameters parameters;
+    private MetatargetomeParameters parameters;
 
     public QueryMetatargetomeAction(final MetatargetomeParameters parameters) {
         super(NAME);
         this.parameters = parameters;
+        refresh();
+    }
+
+    public QueryMetatargetomeAction() {
+        this(null);
     }
 
     public MetatargetomeParameters getParameters() {
         return parameters;
+    }
+
+    public void setParameters(final MetatargetomeParameters parameters) {
+        this.parameters = parameters;
+        refresh();
     }
 
     @Override
@@ -100,5 +111,10 @@ public class QueryMetatargetomeAction extends NetworkDrawAction {
         view.redrawGraph(true, true);
 
         activeSidePanel();
+    }
+
+    @Override
+    public void refresh() {
+        setEnabled(getParameters() != null && getParameters().getTranscriptionFactor() != null);
     }
 }

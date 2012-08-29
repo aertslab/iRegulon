@@ -11,6 +11,8 @@ import view.resultspanel.motifview.EnrichedMotifsView;
 import view.resultspanel.actions.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
@@ -22,6 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
 
 import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
 import view.resultspanel.actions.AddRegulatoryNetworkAction;
@@ -141,7 +146,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 	
 	private JPanel createMainPanel() {
         // 1. Create toolbar ...
-        this.transcriptionFactorCB = new TFComboBox(this.selectedMotif);
+        this.transcriptionFactorCB = new TFComboBox(this.selectedMotif, this.results.getSpeciesNomenclature());
         this.filterAttributeCB = new JComboBox(FilterAttribute.values());
         this.filterAttributeCB.setSelectedItem(FilterAttribute.MOTIF);
         this.filterValueTF = new JTextField();
@@ -248,16 +253,55 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        //TODO: Implement good wiring ...
-        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction(new MetatargetomeParameters() {
+        //TODO: Also refresh view ...
+        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction();
+        transcriptionFactorComboBox.addActionListener(new ActionListener() {
             @Override
-            public GeneIdentifier getTranscriptionFactor() {
-                return getSelectedTranscriptionFactor() != null ? getSelectedTranscriptionFactor().getGeneID() : null;
+            public void actionPerformed(ActionEvent e) {
+                queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
+                    @Override
+                    public GeneIdentifier getTranscriptionFactor() {
+                        final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
+                        return (factor == null) ? null : factor;
+                    }
+
+                    @Override
+                    public List<TargetomeDatabase> getDatabases() {
+                        return TargetomeDatabase.getAllDatabases();
+                    }
+                });
+            }
+        });
+        final JTextComponent textComponent = (JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent();
+        textComponent.getDocument().addDocumentListener(new DocumentListener() {
+            private void refresh() {
+                queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
+                    @Override
+                    public GeneIdentifier getTranscriptionFactor() {
+                        final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
+                        return (factor == null) ? null : factor;
+                    }
+
+                    @Override
+                    public List<TargetomeDatabase> getDatabases() {
+                        return TargetomeDatabase.getAllDatabases();
+                    }
+                });
             }
 
             @Override
-            public List<TargetomeDatabase> getDatabases() {
-                return TargetomeDatabase.getAllDatabases();
+            public void insertUpdate(DocumentEvent e) {
+                refresh();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                refresh();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                refresh();
             }
         });
         JButton buttonQueryMetatargetome = new JButton(queryMetatargetomeAction);

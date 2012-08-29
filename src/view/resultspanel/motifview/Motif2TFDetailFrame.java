@@ -1,5 +1,6 @@
 package view.resultspanel.motifview;
 
+import cytoscape.Cytoscape;
 import view.resultspanel.guiwidgets.LogoUtilities;
 import view.resultspanel.motifview.tablemodels.CandidateTargetGeneTableModel;
 import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
@@ -26,6 +27,9 @@ public class Motif2TFDetailFrame {
 		frame.add(this.getDetailPane());
 		
 		frame.pack();
+        frame.setLocationRelativeTo(Cytoscape.getDesktop());
+        frame.setAlwaysOnTop(true);
+
 		frame.setVisible(true);
 	}
 	

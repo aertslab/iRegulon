@@ -1,5 +1,6 @@
 package view.actions;
 
+import cytoscape.Cytoscape;
 import view.ResourceAction;
 import view.parametersform.InputView;
 
@@ -25,6 +26,9 @@ public class OpenParametersFormAction extends ResourceAction {
 		frame.add(input.createClassicalInputView());
 		
 		frame.pack();
+        frame.setLocationRelativeTo(Cytoscape.getDesktop());
+        frame.setAlwaysOnTop(true);
+
 		frame.setVisible(true);
 	}
 }

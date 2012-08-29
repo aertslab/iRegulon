@@ -1,6 +1,7 @@
 package view.parametersform;
 
 
+import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
 import domainmodel.TargetomeDatabase;
 import servercommunication.ComputationalService;
@@ -19,6 +20,8 @@ public final class MetatargetomeParameterFrame extends JFrame {
         super(TITLE);
         setContentPane(new ContentPane(factor));
         pack();
+        setLocationRelativeTo(Cytoscape.getDesktop());
+        setAlwaysOnTop(true);
     }
 
     private class ContentPane extends JPanel {

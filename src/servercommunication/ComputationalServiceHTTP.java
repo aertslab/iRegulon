@@ -69,6 +69,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             return result;
 		} catch (Exception e) {
             //TODO: use error handling ...
+
 			System.out.println(e.toString());
             return Collections.emptyList();
 		}

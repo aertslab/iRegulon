@@ -2,6 +2,7 @@ package view.parametersform;
 
 
 import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 
 import javax.swing.*;
@@ -11,6 +12,8 @@ import java.util.List;
 
 
 final class MetatargetomeParameterForm extends JPanel implements MetatargetomeParameters {
+    private static final int MARGIN_IN_PIXELS = 5;
+
     private final List<GeneIdentifier> factors;
 
     private JComboBox transcriptionFactorCB;
@@ -34,8 +37,20 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
     public void setDatabases(List<TargetomeDatabase> databases) {
         databaseList.clearSelection();
         for (TargetomeDatabase database: databases) {
-            databaseList.setSelectedValue(database, true);
+            final int idx = findDatabase(database);
+            if (idx >= 0) {
+                databaseList.getSelectionModel().addSelectionInterval(idx, idx);
+            }
         }
+    }
+
+    private int findDatabase(TargetomeDatabase database) {
+        for (int idx = 0; idx < databaseList.getModel().getSize(); idx++) {
+             if (databaseList.getModel().getElementAt(idx).equals(database)) {
+                 return idx;
+             }
+        }
+        return -1;
     }
 
     @Override
@@ -59,31 +74,56 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 0.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.insets = new Insets(MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0, 0);
         add(transcriptionFactorLB, cc);
 
         cc.gridx++; cc.gridy = 0;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
+        cc.insets = new Insets(MARGIN_IN_PIXELS, 0, 0, MARGIN_IN_PIXELS);
         add(transcriptionFactorCB, cc);
 
-        //TODO: Add Species and nomenclature ComboBox but fixed ...
+        final JLabel speciesNomenclatureLB = new JLabel("Species and nomemclature:");
+        final JComboBox speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(SpeciesNomenclature.getAllNomenclatures()));
+        speciesNomenclatureCB.setSelectedItem(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        speciesNomenclatureLB.setLabelFor(speciesNomenclatureCB);
+        speciesNomenclatureCB.setEnabled(false);
+
+        cc.gridx = 0; cc.gridy = 1;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
+        add(speciesNomenclatureLB, cc);
+
+        cc.gridx++; cc.gridy = 1;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
+        add(speciesNomenclatureCB, cc);
 
         final JLabel databasesLB = new JLabel("Databases:");
         databaseList = new JList(new TargetomeDatabaseListModel(TargetomeDatabase.getAllDatabases()));
         databasesLB.setLabelFor(databaseList);
         databaseList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        cc.gridx = 0; cc.gridy = 1;
+        cc.gridx = 0; cc.gridy = 2;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 0.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
         add(databasesLB, cc);
 
-        cc.gridx++; cc.gridy = 1;
+        cc.gridx++; cc.gridy = 2;
         cc.gridwidth = 1; cc.gridheight = 2;
         cc.weightx = 1.0; cc.weighty = 1.0;
         cc.fill = GridBagConstraints.BOTH;
-        add(databaseList, cc);
+        cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
+        add(new JScrollPane(databaseList), cc);
     }
 }

@@ -18,8 +18,8 @@ import domainmodel.TranscriptionFactor;
 public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_nodes_and_edges";
 
-	public AddRegulatoryNetworkAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor, final Refreshable view) {
-		super(NAME, selectedMotif, selectedTranscriptionFactor, view);
+	public AddRegulatoryNetworkAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor, final Refreshable view, final String attributeName) {
+		super(NAME, selectedMotif, selectedTranscriptionFactor, view, attributeName);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}

@@ -100,6 +100,13 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.insets = new Insets(MARGIN_IN_PIXELS, 0, 0, MARGIN_IN_PIXELS);
         add(transcriptionFactorCB, cc);
 
+
+        //TODO: add attribute name field ...
+        final JLabel attributeNameLB = new JLabel("Attribute name:");
+        final JComboBox attributeNameCB = new JComboBox();
+
+
+
         final JLabel speciesNomenclatureLB = new JLabel("Species and nomemclature:");
         speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(nomenclature2factors.keySet()));
         speciesNomenclatureLB.setLabelFor(speciesNomenclatureCB);

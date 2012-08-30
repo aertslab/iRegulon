@@ -32,8 +32,9 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
 	public TranscriptionFactorDependentAction(final String actionName,
                                               final SelectedMotif selectedMotif,
                                               final TFComboBox selectedTranscriptionFactor,
-                                              final Refreshable view) {
-        super(actionName, view);
+                                              final Refreshable view,
+                                              final String attributeName) {
+        super(actionName, view,attributeName);
 		setEnabled(false);
 		this.selectedMotif = selectedMotif;
 		transcriptionFactor = null;
@@ -113,7 +114,7 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
     protected boolean addEdges(final CyNetwork network, final CyNetworkView view,
                                final TranscriptionFactor factor, final AbstractMotif motif,
                                final boolean createNodesIfNecessary) {
-        final Map<String,List<CyNode>> name2nodes = getNodeMap(selectedMotif.getAttributeName(), CytoscapeNetworkUtilities.getAllNodes());
+        final Map<String,List<CyNode>> name2nodes = getNodeMap(getAttributeName(), CytoscapeNetworkUtilities.getAllNodes());
 
         final List<CyNode> sourceNodes = createNodesIfNecessary
                 ? Collections.singletonList(createSourceNode(network, view, factor, motif))

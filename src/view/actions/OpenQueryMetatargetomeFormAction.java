@@ -2,11 +2,9 @@ package view.actions;
 
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
+
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
-import servercommunication.ComputationalService;
-import servercommunication.ComputationalServiceHTTP;
-import servercommunication.ServerCommunicationException;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterFrame;
 
@@ -27,25 +25,13 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        final Map<SpeciesNomenclature,List<GeneIdentifier>> speciesNomenclature2factors;
-        try {
-            speciesNomenclature2factors = queryForFactors();
-        } catch (ServerCommunicationException e) {
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        final Map<SpeciesNomenclature,List<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,List<GeneIdentifier>>();
+        for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
+            speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
 
         final JFrame frame = new MetatargetomeParameterFrame(getSelectedFactor(), speciesNomenclature2factors);
         frame.setVisible(true);
-    }
-
-    private Map<SpeciesNomenclature,List<GeneIdentifier>> queryForFactors() throws ServerCommunicationException {
-        final ComputationalService service = new ComputationalServiceHTTP();
-        final Map<SpeciesNomenclature,List<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,List<GeneIdentifier>>();
-        for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
-            speciesNomenclature2factors.put(speciesNomenclature, service.queryTranscriptionFactorsWithPredictedTargetome(speciesNomenclature));
-        }
-        return speciesNomenclature2factors;
     }
 
     private GeneIdentifier getSelectedFactor() {

@@ -241,7 +241,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         c.gridwidth = 1; c.gridheight = 1;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-		final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this);
+		final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
         final JButton buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
         buttonDrawEdges.setText("");
         toolBar.add(buttonDrawEdges, c);
@@ -250,7 +250,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this);
+        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
         JButton buttonDrawNetwork = new JButton(drawNetworkAction);
         buttonDrawNetwork.setText("");
         toolBar.add(buttonDrawNetwork, c);
@@ -259,7 +259,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction(this);
+        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction(this, results.getParameters().getAttributeName());
         transcriptionFactorComboBox.addActionListener(new QueryMetatargetomeActionListener(queryMetatargetomeAction, transcriptionFactorComboBox));
         final JTextComponent textComponent = (JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent();
         textComponent.getDocument().addDocumentListener(new QueryMetatargetomeDocumentListener(queryMetatargetomeAction, transcriptionFactorComboBox));

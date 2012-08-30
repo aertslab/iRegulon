@@ -33,7 +33,7 @@ public final class MetatargetomeParameterFrame extends JFrame {
             add(new JPanel(new FlowLayout()) {
                 {
                     add(new JButton(new CancelAction()));
-                    add(new JButton(new QueryMetatargetomeAction(parameterForm)));
+                    add(new JButton(new QueryMetatargetomeAction(parameterForm, null)));
                 }
             }, BorderLayout.SOUTH);
             parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);

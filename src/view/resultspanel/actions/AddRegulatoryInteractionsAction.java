@@ -20,8 +20,8 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
     private static final String NAME = "action_draw_edges";
 
     public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor,
-                                              final Refreshable view) {
-		super(NAME, selectedMotif, selectedTranscriptionFactor, view);
+                                              final Refreshable view, final String attributeName) {
+		super(NAME, selectedMotif, selectedTranscriptionFactor, view, attributeName);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
 	}

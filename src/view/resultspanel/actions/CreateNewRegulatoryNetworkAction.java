@@ -28,8 +28,8 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
 
 	public CreateNewRegulatoryNetworkAction(SelectedMotif selectedRegulatoryTree,
                                             final TFComboBox selectedTranscriptionFactor,
-                                            final Refreshable view){
-		super(NAME, selectedRegulatoryTree, selectedTranscriptionFactor,view);
+                                            final Refreshable view, final String attributeName){
+		super(NAME, selectedRegulatoryTree, selectedTranscriptionFactor,view, attributeName);
 		if (selectedRegulatoryTree == null)	throw new IllegalArgumentException();
 		setEnabled(false);
 	}

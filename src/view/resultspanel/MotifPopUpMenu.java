@@ -20,20 +20,21 @@ public class MotifPopUpMenu extends MouseAdapter {
 	public MotifPopUpMenu(final SelectedMotif selectedMotif,
                           final TFComboBox transcriptionFactorComboBox,
                           final boolean isRegionBased,
-                          final Refreshable view) {
+                          final Refreshable view,
+                          final String attributeName) {
 		if (selectedMotif == null || transcriptionFactorComboBox == null || view == null) {
 			throw new IllegalArgumentException();
 		}
 
 		menu = new PopupMenu();
 
-		final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view);
+		final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(networkAction);
 			
-		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view);
+		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(drawRegulonsAndEdgesAction);
 			
-		final AddRegulatoryInteractionsAction drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox, view);
+		final AddRegulatoryInteractionsAction drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(drawEdgesAction);
 
 		if (isRegionBased) {

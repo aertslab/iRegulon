@@ -40,15 +40,23 @@ public abstract class NetworkDrawAction extends ResourceAction {
             //Nop ...
             }
     };
+
+    private final String attributeName;
     private final Refreshable view;
 
-    public NetworkDrawAction(String actionName, Refreshable view) {
+    public NetworkDrawAction(final String actionName, final Refreshable view, final String attributeName) {
         super(actionName);
+        //TODO: Remove view dependency! Use listener registration! Better for multiple resultsviews.
         this.view = view == null ? NO_VIEW : view;
+        this.attributeName = attributeName == null ? ID_ATTRIBUTE_NAME : attributeName;
     }
 
     public Refreshable getView() {
         return view;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
     }
 
     protected void addNodeAttribute(CyNode node, String attributeName, String attributeValue) {
@@ -87,7 +95,7 @@ public abstract class NetworkDrawAction extends ResourceAction {
         final CyNode node = Cytoscape.getCyNode(nodeID, true);
         network.addNode(node);
         view.addNodeView(node.getRootGraphIndex());
-        view.updateView();
+        //view.updateView();
         return node;
     }
 
@@ -95,7 +103,7 @@ public abstract class NetworkDrawAction extends ResourceAction {
 		final CyEdge edge = Cytoscape.getCyEdge(node1, node2, Semantics.INTERACTION, "regulates " + motif, true);
 		network.addEdge(edge);
         view.addEdgeView(edge.getRootGraphIndex());
-		view.updateView();
+		//view.updateView();
 		return edge;
 	}
 
@@ -147,6 +155,9 @@ public abstract class NetworkDrawAction extends ResourceAction {
     protected CyNode createSourceNode(final CyNetwork network, final CyNetworkView view, final GeneIdentifier factorID, final AbstractMotif motif) {
         final CyNode node = addNode(factorID.getGeneName(), network, view);
 		setNodeAttribute(node, ID_ATTRIBUTE_NAME, factorID.getGeneName());
+        if (!getAttributeName().equals(ID_ATTRIBUTE_NAME)) {
+            setNodeAttribute(node, getAttributeName(), factorID.getGeneName());
+        }
 	    setNodeAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_REGULATOR);
         for (AbstractMotif curMotif : motif.getMotifs()) {
 		    addNodeAttribute(node, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
@@ -161,6 +172,9 @@ public abstract class NetworkDrawAction extends ResourceAction {
     protected CyNode createTargetNode(final CyNetwork network, final CyNetworkView view, final CandidateTargetGene targetGene, final AbstractMotif motif) {
         final CyNode node = addNode(targetGene.getGeneName(), network, view);
 		setNodeAttribute(node, ID_ATTRIBUTE_NAME, targetGene.getGeneName());
+        if (!getAttributeName().equals(ID_ATTRIBUTE_NAME)) {
+            setNodeAttribute(node, getAttributeName(), targetGene.getGeneName());
+        }
         //if the node is a regulator and target at the same time, it must stay a regulator ...
         if (!REGULATORY_FUNCTION_REGULATOR.equals(getNodeStringAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME))) {
 		    setNodeAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_TARGET_GENE);

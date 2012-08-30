@@ -18,13 +18,9 @@ import cytoscape.view.CyNetworkView;
 public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction implements Refreshable {
     private static final String NAME = "action_draw_merged_edges_network";
 
-    private final String attributeName;
-
 	public CreateNewCombinedRegulatoryNetworkAction(final String attributeName,
                                                     final Refreshable view){
-		super(NAME, view);
-		if (attributeName == null) throw new IllegalArgumentException();
-        this.attributeName = attributeName;
+		super(NAME, view, attributeName);
 		refresh();
 	}
 
@@ -84,7 +80,7 @@ public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction 
 
 		// Draw all edges ...
         @SuppressWarnings("unchecked")
-        final Map<String,List<CyNode>> name2nodes = getNodeMap(attributeName, network.nodesList());
+        final Map<String,List<CyNode>> name2nodes = getNodeMap(getAttributeName(), network.nodesList());
 		for (String key : name2edgeAttributes.keySet()) {
 			final EdgeAttributes edgeAttributes = name2edgeAttributes.get(key);
             if (!name2nodes.containsKey(edgeAttributes.getFactorName()) || !name2nodes.containsKey(edgeAttributes.getTargetName()))

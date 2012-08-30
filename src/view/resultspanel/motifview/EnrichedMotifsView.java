@@ -156,7 +156,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
             selectedMotif.registerListener(detailPanel);
         }
         if (popupListener == null) {
-            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, this.results.isRegionBased(), this);
+            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, this.results.isRegionBased(), this, results.getParameters().getAttributeName());
             table.addMouseListener(popupListener);
         }
     }

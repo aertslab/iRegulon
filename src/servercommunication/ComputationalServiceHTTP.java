@@ -74,7 +74,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                     if (line.startsWith(prefix)) {
                         result.add(new GeneIdentifier(line.substring(prefix.length()), speciesNomenclature));
                     } else {
-                        throw new ServerCommunicationException("Invalid format of message received from server.");
+                        throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
                     }
                 }
             });
@@ -82,7 +82,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             return result;
 		} catch (IOException e) {
             logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
-            throw new ServerCommunicationException("Error while trying to communicate with server.", e);
+            throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
 		}
     }
 
@@ -125,7 +125,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                     if (line.startsWith(prefix)) {
                         final String[] columns = line.substring(prefix.length()).split(";");
                         if (columns.length != 2) {
-                            throw new ServerCommunicationException("Invalid format of message received from server.");
+                            throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
                         }
                         try {
                             int occurenceCount = Integer.parseInt(columns[1]);
@@ -133,10 +133,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                                 new GeneIdentifier(columns[0], factor.getSpeciesNomenclature()),
                                 occurenceCount));
                         } catch (NumberFormatException e) {
-                            throw new ServerCommunicationException("Invalid format of message received from server.");
+                            throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
                         }
                     } else {
-                        throw new ServerCommunicationException("Invalid format of message received from server.");
+                        throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
                     }
                 }
             });
@@ -144,7 +144,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             return result;
 		} catch (IOException e) {
             logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
-            throw new ServerCommunicationException("Error while trying to communicate with server.", e);
+            throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
 		}
     }
 

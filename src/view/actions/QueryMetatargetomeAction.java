@@ -164,6 +164,7 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
     public void refresh() {
         setEnabled(getParameters() != null
                 && getParameters().getTranscriptionFactor() != null
+                && SPECIES_NOMENCLATURE2FACTORS.containsKey(getParameters().getTranscriptionFactor().getSpeciesNomenclature())
                 && SPECIES_NOMENCLATURE2FACTORS.get(getParameters().getTranscriptionFactor().getSpeciesNomenclature()).contains(getParameters().getTranscriptionFactor()));
     }
 }

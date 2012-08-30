@@ -23,6 +23,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
     private JComboBox transcriptionFactorCB;
     private JComboBox speciesNomenclatureCB;
     private JList databaseList;
+    private JComboBox attributeNameCB;
 
 
     public MetatargetomeParameterForm(Map<SpeciesNomenclature, List<GeneIdentifier>> nomenclature2factors) {
@@ -77,6 +78,16 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         return result;
     }
 
+    @Override
+    public String getAttributeName() {
+        final String attributeName = (String) attributeNameCB.getSelectedItem();
+        return attributeName == null ? AttributeComboBox.ID_ATTRIBUTE_NAME : attributeName;
+    }
+
+    public void setAttributeName(final String attributeName) {
+        attributeNameCB.setSelectedItem(attributeName);
+    }
+
     private void initPanel() {
         setLayout(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
@@ -99,13 +110,6 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.fill = GridBagConstraints.HORIZONTAL;
         cc.insets = new Insets(MARGIN_IN_PIXELS, 0, 0, MARGIN_IN_PIXELS);
         add(transcriptionFactorCB, cc);
-
-
-        //TODO: add attribute name field ...
-        final JLabel attributeNameLB = new JLabel("Attribute name:");
-        final JComboBox attributeNameCB = new JComboBox();
-
-
 
         final JLabel speciesNomenclatureLB = new JLabel("Species and nomemclature:");
         speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(nomenclature2factors.keySet()));
@@ -145,6 +149,24 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.fill = GridBagConstraints.BOTH;
         cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
         add(new JScrollPane(databaseList), cc);
+
+        final JLabel attributeNameLB = new JLabel("Attribute name:");
+        attributeNameCB = new JComboBox(AttributeComboBox.getPossibleGeneIDAttributes().toArray());
+
+        cc.gridx = 0; cc.gridy = 3;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
+        add(attributeNameLB, cc);
+
+        cc.gridx++; cc.gridy = 3;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
+        add(attributeNameCB, cc);
 
 
         speciesNomenclatureCB.addActionListener(new ActionListener() {

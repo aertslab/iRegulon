@@ -10,58 +10,62 @@ import javax.swing.JComboBox;
 
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
+import cytoscape.data.CyAttributes;
 import view.CytoscapeNetworkUtilities;
 
 
-public class AttributeComboBox  extends JComboBox implements FocusListener{
+public class AttributeComboBox  extends JComboBox implements FocusListener {
+    public static final String ID_ATTRIBUTE_NAME = "ID";
+    private static final String HIDDEN_LABEL_ATTRIBUTE_NAME = "hiddenLabel";
 
+    public static List<String> getPossibleGeneIDAttributes() {
+        final List<String> results = new ArrayList<String>();
+
+        final List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
+        final CyAttributes nodeAttributes = Cytoscape.getNodeAttributes();
+        final float minFraction = Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null"));
+		for (String attributeName : nodeAttributes.getAttributeNames()){
+			if (Cytoscape.getNodeAttributes().getType(attributeName) == CyAttributes.TYPE_STRING
+					&& !attributeName.equals(ID_ATTRIBUTE_NAME)
+                    && !attributeName.equals(HIDDEN_LABEL_ATTRIBUTE_NAME)){
+
+                int nullCount = 0;
+				for (CyNode node : nodes) {
+					if (nodeAttributes.getStringAttribute(node.getIdentifier(), attributeName) == null) {
+						nullCount++;
+					}
+				}
+				if (nullCount < (nodes.size() * minFraction)) {
+					results.add(attributeName);
+				}
+			}
+		}
+
+        return results;
+    }
 
 	public AttributeComboBox(){
 		super();
-		this.focusGained(null);
-		this.addFocusListener(this);
-	}
-	
-	public Object getItemAt(int index){
-		return super.getItemAt(index);
-	}
-	
-	public int getItemCount(){
-		return super.getItemCount();
+		focusGained(null);
+		addFocusListener(this);
 	}
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		String selected = (String) this.getSelectedItem();
-		boolean contains = false;
-		this.removeAllItems();
-		String [] attr = Cytoscape.getNodeAttributes().getAttributeNames();
-		List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
-		for (String atName : attr){
-			if (Cytoscape.getNodeAttributes().getType(atName) == Cytoscape.getNodeAttributes().TYPE_STRING
-					&& ! atName.equals("ID") && ! atName.equals("hiddenLabel")){
-				int amountNull = 0;
-				for (CyNode node : nodes){
-					if (Cytoscape.getNodeAttributes().getStringAttribute(node.getIdentifier(), atName) == null){
-						amountNull++;
-					}
-				}
-				if (amountNull < (nodes.size() * Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null")))){
-					this.addItem(atName);
-					if (!contains && atName.equals(selected)){
-						contains = true;
-					}
-				}
-			}
-		}
+		final String selectedAttributeName = (String) getSelectedItem();
+		removeAllItems();
+
+        final List<String> attributeNames = getPossibleGeneIDAttributes();
+        for (String name: attributeNames) {
+            addItem(name);
+        }
 		
-		if (contains){
-			this.setSelectedItem(selected);
+		if (attributeNames.contains(selectedAttributeName)) {
+			setSelectedItem(selectedAttributeName);
 		}
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
 	}
-
 }

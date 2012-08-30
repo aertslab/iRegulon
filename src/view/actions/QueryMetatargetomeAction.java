@@ -96,14 +96,14 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
     private MetatargetomeParameters parameters;
 
-    public QueryMetatargetomeAction(final MetatargetomeParameters parameters, final Refreshable view, final String attributeName) {
-        super(NAME, view, attributeName);
+    public QueryMetatargetomeAction(final MetatargetomeParameters parameters, final Refreshable view) {
+        super(NAME, view, null);
         this.parameters = parameters;
         refresh();
     }
 
-    public QueryMetatargetomeAction(final Refreshable view, final String attributeName) {
-        this(null, view, attributeName);
+    public QueryMetatargetomeAction(final Refreshable view) {
+        this(null, view);
     }
 
     public MetatargetomeParameters getParameters() {
@@ -113,6 +113,15 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
     public void setParameters(final MetatargetomeParameters parameters) {
         this.parameters = parameters;
         refresh();
+    }
+
+    @Override
+    public String getAttributeName() {
+        if (getParameters() != null) {
+            return getParameters().getAttributeName();
+        } else {
+            return super.getAttributeName();
+        }
     }
 
     @Override

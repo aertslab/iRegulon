@@ -259,10 +259,10 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction(this, results.getParameters().getAttributeName());
-        transcriptionFactorComboBox.addActionListener(new QueryMetatargetomeActionListener(queryMetatargetomeAction, transcriptionFactorComboBox));
+        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction(this);
+        transcriptionFactorComboBox.addActionListener(new QueryMetatargetomeActionListener(queryMetatargetomeAction, transcriptionFactorComboBox, results.getParameters().getAttributeName()));
         final JTextComponent textComponent = (JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent();
-        textComponent.getDocument().addDocumentListener(new QueryMetatargetomeDocumentListener(queryMetatargetomeAction, transcriptionFactorComboBox));
+        textComponent.getDocument().addDocumentListener(new QueryMetatargetomeDocumentListener(queryMetatargetomeAction, transcriptionFactorComboBox, results.getParameters().getAttributeName()));
         JButton buttonQueryMetatargetome = new JButton(queryMetatargetomeAction);
         buttonQueryMetatargetome.setText("");
         toolBar.add(buttonQueryMetatargetome, c);
@@ -338,10 +338,12 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private static class QueryMetatargetomeActionListener implements ActionListener {
         private final QueryMetatargetomeAction queryMetatargetomeAction;
         private final TFComboBox transcriptionFactorComboBox;
+        private final String attributeName;
 
-        public QueryMetatargetomeActionListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox) {
+        public QueryMetatargetomeActionListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox, final String attributeName) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
             this.transcriptionFactorComboBox = transcriptionFactorComboBox;
+            this.attributeName = attributeName;
         }
 
         @Override
@@ -357,6 +359,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
                 public List<TargetomeDatabase> getDatabases() {
                     return TargetomeDatabase.getAllDatabases();
                 }
+
+                @Override
+                public String getAttributeName() {
+                    return attributeName;
+                }
             });
         }
     }
@@ -364,10 +371,12 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private static class QueryMetatargetomeDocumentListener implements DocumentListener {
         private final QueryMetatargetomeAction queryMetatargetomeAction;
         private final TFComboBox transcriptionFactorComboBox;
+        private final String attributeName;
 
-        public QueryMetatargetomeDocumentListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox) {
+        public QueryMetatargetomeDocumentListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox, final String attributeName) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
             this.transcriptionFactorComboBox = transcriptionFactorComboBox;
+            this.attributeName = attributeName;
         }
 
         private void refresh() {
@@ -381,6 +390,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
                 @Override
                 public List<TargetomeDatabase> getDatabases() {
                     return TargetomeDatabase.getAllDatabases();
+                }
+
+                @Override
+                public String getAttributeName() {
+                    return attributeName;
                 }
             });
         }

@@ -6,7 +6,7 @@ import cytoscape.view.CyNetworkView;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.Refreshable;
-import view.resultspanel.TFComboBox;
+import view.resultspanel.TranscriptionFactorComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
@@ -19,11 +19,12 @@ import cytoscape.Cytoscape;
 public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependentAction {
     private static final String NAME = "action_draw_edges";
 
-    public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TFComboBox selectedTranscriptionFactor,
+    public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TranscriptionFactorComboBox selectedTranscriptionFactor,
                                               final Refreshable view, final String attributeName) {
 		super(NAME, selectedMotif, selectedTranscriptionFactor, view, attributeName);
 		if (selectedMotif == null) throw new IllegalArgumentException();
 		setEnabled(false);
+        //TODO: only enabled when network view is selected ..
 	}
 	
 	@Override

@@ -18,7 +18,7 @@ public class MotifPopUpMenu extends MouseAdapter {
 	
 	
 	public MotifPopUpMenu(final SelectedMotif selectedMotif,
-                          final TFComboBox transcriptionFactorComboBox,
+                          final TranscriptionFactorComboBox transcriptionFactorComboBox,
                           final boolean isRegionBased,
                           final Refreshable view,
                           final String attributeName) {

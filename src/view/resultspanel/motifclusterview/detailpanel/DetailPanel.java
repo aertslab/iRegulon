@@ -224,7 +224,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     }
 
     @Override
-    public void registerSelectionComponents(TFComboBox tfcombobox) {
+    public void registerSelectionComponents(TranscriptionFactorComboBox tfcombobox) {
         if (transcriptionFactorSelectionListener == null) {
             transcriptionFactorSelectionListener = new TranscriptionFactorSelectionListener(tfcombobox);
             transcriptionFactorsTable.getSelectionModel().addListSelectionListener(transcriptionFactorSelectionListener);
@@ -245,9 +245,9 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     }
 
     private class TranscriptionFactorSelectionListener implements ListSelectionListener {
-        private final TFComboBox comboBox;
+        private final TranscriptionFactorComboBox comboBox;
 
-        private TranscriptionFactorSelectionListener(TFComboBox comboBox) {
+        private TranscriptionFactorSelectionListener(TranscriptionFactorComboBox comboBox) {
             this.comboBox = comboBox;
         }
 

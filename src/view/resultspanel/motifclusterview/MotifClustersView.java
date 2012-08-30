@@ -209,7 +209,7 @@ public class MotifClustersView extends JPanel implements MotifView {
         detailPanel.refresh();
     }
 
-    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB) {
         if (selectionListener == null) {
             selectionListener = TableMotifClusterSelectionConnector.connect(table, selectedMotif);
             selectedMotif.setMotif(getSelectedMotif());
@@ -223,7 +223,7 @@ public class MotifClustersView extends JPanel implements MotifView {
         selectedMotif.registerListener(detailPanel);
     }
 
-    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB) {
         if (selectionListener != null) {
             TableMotifClusterSelectionConnector.unconnect(table, selectionListener);
             selectionListener = null;

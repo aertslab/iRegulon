@@ -44,7 +44,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private SelectedMotif selectedMotif;
     private JComboBox filterAttributeCB;
     private JTextField filterValueTF;
-    private TFComboBox transcriptionFactorCB;
+    private TranscriptionFactorComboBox transcriptionFactorCB;
 
     private JButton closeButton;
 	private JPanel mainPanel = null;
@@ -150,7 +150,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 	
 	private JPanel createMainPanel() {
         // 1. Create toolbar ...
-        this.transcriptionFactorCB = new TFComboBox(this.selectedMotif, this.results.getSpeciesNomenclature());
+        this.transcriptionFactorCB = new TranscriptionFactorComboBox(this.selectedMotif, this.results.getSpeciesNomenclature());
         this.filterAttributeCB = new JComboBox(FilterAttribute.values());
         this.filterAttributeCB.setSelectedItem(FilterAttribute.MOTIF);
         this.filterValueTF = new JTextField();
@@ -214,12 +214,10 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         return result;
 	}
 
-    private JPanel createToolBar(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorComboBox,
+    private JPanel createToolBar(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorComboBox,
                                  final JButton closeButton, final JComboBox filterAttributeCB, final JTextField filterValueTF) {
         final JPanel toolBar = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
-
-        //TODO: Wrong enabledness of TFdep actions after filtering!
 
         // First line ...
         c.gridx = 0; c.gridy = 0;
@@ -337,10 +335,10 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     private static class QueryMetatargetomeActionListener implements ActionListener {
         private final QueryMetatargetomeAction queryMetatargetomeAction;
-        private final TFComboBox transcriptionFactorComboBox;
+        private final TranscriptionFactorComboBox transcriptionFactorComboBox;
         private final String attributeName;
 
-        public QueryMetatargetomeActionListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox, final String attributeName) {
+        public QueryMetatargetomeActionListener(QueryMetatargetomeAction queryMetatargetomeAction, TranscriptionFactorComboBox transcriptionFactorComboBox, final String attributeName) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
             this.transcriptionFactorComboBox = transcriptionFactorComboBox;
             this.attributeName = attributeName;
@@ -370,10 +368,10 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     private static class QueryMetatargetomeDocumentListener implements DocumentListener {
         private final QueryMetatargetomeAction queryMetatargetomeAction;
-        private final TFComboBox transcriptionFactorComboBox;
+        private final TranscriptionFactorComboBox transcriptionFactorComboBox;
         private final String attributeName;
 
-        public QueryMetatargetomeDocumentListener(QueryMetatargetomeAction queryMetatargetomeAction, TFComboBox transcriptionFactorComboBox, final String attributeName) {
+        public QueryMetatargetomeDocumentListener(QueryMetatargetomeAction queryMetatargetomeAction, TranscriptionFactorComboBox transcriptionFactorComboBox, final String attributeName) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
             this.transcriptionFactorComboBox = transcriptionFactorComboBox;
             this.attributeName = attributeName;

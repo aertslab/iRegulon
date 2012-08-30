@@ -36,6 +36,7 @@ public class NetworkMembershipSupport {
         final Set<String> IDs = new HashSet<String>();
 
         final CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
+        //TODO: this is wrong ..
         for (CyNode node : CytoscapeNetworkUtilities.getAllNodes()) {
             for (String attributeName : cyNodeAttrs.getAttributeNames()) {
                 if (cyNodeAttrs.getType(attributeName) == CyAttributes.TYPE_STRING) {

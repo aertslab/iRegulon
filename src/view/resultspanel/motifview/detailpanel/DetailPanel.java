@@ -166,7 +166,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     }
 
     @Override
-    public void registerSelectionComponents(final TFComboBox tfcombobox) {
+    public void registerSelectionComponents(final TranscriptionFactorComboBox tfcombobox) {
         if (selectedTranscriptionFactorListener == null) {
             selectedTranscriptionFactorListener = new SelectedTranscriptionFactorListener(this.transcriptionFactorTable, tfcombobox);
 		    this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(selectedTranscriptionFactorListener);

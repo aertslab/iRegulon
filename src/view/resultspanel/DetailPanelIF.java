@@ -10,7 +10,7 @@ public interface DetailPanelIF extends MotifListener, Refreshable {
 
     public TranscriptionFactor getSelectedTranscriptionFactor();
 
-    public void registerSelectionComponents(final TFComboBox tfcombobox);
+    public void registerSelectionComponents(final TranscriptionFactorComboBox tfcombobox);
 
     public void unregisterSelectionComponents();
 }

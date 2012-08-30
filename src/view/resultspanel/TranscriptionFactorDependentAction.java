@@ -7,40 +7,41 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 
-import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-import cytoscape.data.CyAttributes;
-import cytoscape.data.Semantics;
 import cytoscape.view.CyNetworkView;
-import cytoscape.view.cytopanels.CytoPanel;
 import domainmodel.*;
 import view.CytoscapeNetworkUtilities;
-import view.ResourceAction;
 
 import java.util.*;
 
 
-public abstract class TranscriptionFactorDependentAction extends NetworkDrawAction
-        implements ListSelectionListener, DocumentListener {
-
-
+public abstract class TranscriptionFactorDependentAction extends NetworkDrawAction {
     private SelectedMotif selectedMotif;
-	private TranscriptionFactor transcriptionFactor;
+	private TranscriptionFactorComboBox selectedTranscriptionFactor;
 
 	public TranscriptionFactorDependentAction(final String actionName,
                                               final SelectedMotif selectedMotif,
-                                              final TFComboBox selectedTranscriptionFactor,
+                                              final TranscriptionFactorComboBox selectedTranscriptionFactor,
                                               final Refreshable view,
                                               final String attributeName) {
         super(actionName, view,attributeName);
 		setEnabled(false);
 		this.selectedMotif = selectedMotif;
-		transcriptionFactor = null;
+        this.selectedTranscriptionFactor = selectedTranscriptionFactor;
 
-
-        selectedTranscriptionFactor.registerAction(this);
+        selectedTranscriptionFactor.addListener(new TranscriptionFactorListener() {
+            @Override
+            public void factorChanged() {
+                setEnabled(checkEnabled());
+            }
+        });
+        selectedMotif.registerListener(new MotifListener() {
+            @Override
+            public void newMotifSelected(AbstractMotif currentSelection) {
+                setEnabled(checkEnabled());
+            }
+        });
 
         //TODO: Implementation of undo functionality can be done via cytoscape.util.undo.CyUndo: a tiny class
         // for supporting undo in the Cytoscape context. If you want to post an edit, use
@@ -51,64 +52,18 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
         // registering this compound object with Cytoscape.
 	}
 
+    private boolean checkEnabled() {
+        return this.selectedMotif.getMotif() != null
+                && this.selectedTranscriptionFactor.getTranscriptionFactor() != null;
+    }
+
     public SelectedMotif getSelectedMotif() {
         return this.selectedMotif;
     }
 
 	public TranscriptionFactor getTranscriptionFactor() {
-		return this.transcriptionFactor;
-	}
-
-	private void setTranscriptionFactorByName(String geneName){
-		GeneIdentifier geneID = new GeneIdentifier(geneName, SpeciesNomenclature.UNKNOWN);
-		this.transcriptionFactor = new TranscriptionFactor(geneID, Float.NaN, Float.NaN, null, null, null, null);
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		final ListSelectionModel model = (ListSelectionModel) e.getSource();
-		setEnabled(!model.isSelectionEmpty());
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		if (e.getDocument().getLength() <= 0){
-			this.setEnabled(false);
-		} else {
-			this.setEnabled(true);
-			try {
-				this.setTranscriptionFactorByName(e.getDocument().getText(0, e.getDocument().getLength()));
-			} catch (BadLocationException e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		if (e.getDocument().getLength() <= 0){
-			this.setEnabled(false);
-		}else{
-			try {
-				this.setTranscriptionFactorByName(e.getDocument().getText(0, e.getDocument().getLength()));
-			} catch (BadLocationException e1) {
-				e1.printStackTrace();
-			}
-		}
-	}
-
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		if (e.getDocument().getLength() <= 0){
-			this.setEnabled(false);
-		}else{
-			this.setEnabled(true);
-			try {
-				this.setTranscriptionFactorByName(e.getDocument().getText(0, e.getDocument().getLength()));
-			} catch (BadLocationException e1) {
-				e1.printStackTrace();
-			}
-		}
+        final GeneIdentifier factor = selectedTranscriptionFactor.getTranscriptionFactor();
+        return factor == null ? null : new TranscriptionFactor(factor, Float.NaN, Float.NaN, null, null, null, null);
 	}
 
     protected boolean addEdges(final CyNetwork network, final CyNetworkView view,

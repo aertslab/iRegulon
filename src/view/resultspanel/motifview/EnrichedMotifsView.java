@@ -147,7 +147,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 		return new JScrollPane(table);
 	}
 
-    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB) {
         if (selectionListener == null) {
             selectionListener = TableMotifSelectionConnector.connect(table, selectedMotif);
             selectedMotif.setMotif(getSelectedMotif());
@@ -161,7 +161,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
         }
     }
 
-    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB) {
+    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB) {
         if (selectionListener != null) {
             TableMotifSelectionConnector.unconnect(table, selectionListener);
             selectionListener = null;

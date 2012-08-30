@@ -1,6 +1,6 @@
 package view.resultspanel.motifview.detailpanel;
 
-import view.resultspanel.TFComboBox;
+import view.resultspanel.TranscriptionFactorComboBox;
 
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
@@ -12,9 +12,9 @@ import view.resultspanel.TranscriptionFactorTableModelIF;
 
 class SelectedTranscriptionFactorListener implements ListSelectionListener {
 	private final JTable table;
-	private final TFComboBox tfcombobox;
+	private final TranscriptionFactorComboBox tfcombobox;
 	
-	public SelectedTranscriptionFactorListener(JTable table, TFComboBox tfcombobox){
+	public SelectedTranscriptionFactorListener(JTable table, TranscriptionFactorComboBox tfcombobox){
 		this.table = table;
 		this.tfcombobox = tfcombobox;
 	}

@@ -27,9 +27,9 @@ public interface MotifView extends Refreshable {
 
     public TranscriptionFactor getSelectedTranscriptionFactor();
 
-    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);
+    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB);
 
-    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TFComboBox transcriptionFactorCB);
+    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB);
 
     public void registerFilterComponents(final JComboBox filterAttributeTF, final JTextField filterValueTF);
 

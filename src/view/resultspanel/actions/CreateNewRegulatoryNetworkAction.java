@@ -3,20 +3,16 @@ package view.resultspanel.actions;
 import domainmodel.AbstractMotif;
 import view.parametersform.IRegulonVisualStyle;
 import view.resultspanel.Refreshable;
-import view.resultspanel.TFComboBox;
+import view.resultspanel.TranscriptionFactorComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.SwingConstants;
-
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
-import cytoscape.data.CyAttributes;
 import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
-import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
 
@@ -27,7 +23,7 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
     private static final String NAME = "action_create_new_network";
 
 	public CreateNewRegulatoryNetworkAction(SelectedMotif selectedRegulatoryTree,
-                                            final TFComboBox selectedTranscriptionFactor,
+                                            final TranscriptionFactorComboBox selectedTranscriptionFactor,
                                             final Refreshable view, final String attributeName){
 		super(NAME, selectedRegulatoryTree, selectedTranscriptionFactor,view, attributeName);
 		if (selectedRegulatoryTree == null)	throw new IllegalArgumentException();

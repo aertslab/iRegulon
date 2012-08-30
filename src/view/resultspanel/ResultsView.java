@@ -7,6 +7,7 @@ import view.IRegulonResourceBundle;
 import view.actions.QueryMetatargetomeAction;
 import view.parametersform.MetatargetomeParameters;
 import view.resultspanel.guiwidgets.SummaryLabel;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifview.EnrichedMotifsView;
 import view.resultspanel.actions.*;
 

@@ -40,7 +40,10 @@ public final class CytoscapeNetworkUtilities {
 	 * Get all the nodes in the current network.
      */
 	public static List<CyNode> getAllNodes() {
-        final CyNetwork currentNetwork = Cytoscape.getCurrentNetwork();
+        if (Cytoscape.getCurrentNetworkView().getNetwork() == null)
+            return Collections.emptyList();
+
+        final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
         @SuppressWarnings("unchecked")
 		final Iterator<CyNode> it = currentNetwork.nodesIterator();
 		final List<CyNode> result = new ArrayList<CyNode>();

@@ -3,7 +3,7 @@ package view.resultspanel.actions;
 import domainmodel.AbstractMotif;
 import view.parametersform.IRegulonVisualStyle;
 import view.resultspanel.Refreshable;
-import view.resultspanel.TranscriptionFactorComboBox;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 

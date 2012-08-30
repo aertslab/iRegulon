@@ -1,6 +1,6 @@
 package view.resultspanel.motifview.detailpanel;
 
-import view.resultspanel.TranscriptionFactorComboBox;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;

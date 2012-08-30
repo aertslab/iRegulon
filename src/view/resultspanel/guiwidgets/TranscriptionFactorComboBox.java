@@ -1,4 +1,4 @@
-package view.resultspanel;
+package view.resultspanel.guiwidgets;
 
 
 import java.util.ArrayList;
@@ -13,6 +13,8 @@ import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
 import domainmodel.*;
+import view.resultspanel.MotifListener;
+import view.resultspanel.SelectedMotif;
 
 
 public final class TranscriptionFactorComboBox extends JComboBox {

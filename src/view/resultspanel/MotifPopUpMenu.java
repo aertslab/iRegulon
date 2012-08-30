@@ -11,6 +11,7 @@ import view.actions.BedLinkToBrowserAction;
 import view.resultspanel.actions.AddRegulatoryInteractionsAction;
 import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
 import view.resultspanel.actions.AddRegulatoryNetworkAction;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 
 public class MotifPopUpMenu extends MouseAdapter implements Refreshable {

@@ -1,17 +1,12 @@
 package view.resultspanel;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.text.BadLocationException;
-
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
 import view.CytoscapeNetworkUtilities;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
+import view.resultspanel.guiwidgets.TranscriptionFactorListener;
 
 import java.util.*;
 

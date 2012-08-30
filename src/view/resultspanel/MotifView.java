@@ -3,6 +3,8 @@ package view.resultspanel;
 
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
+
 import javax.swing.*;
 
 

@@ -6,6 +6,7 @@ import domainmodel.Motif;
 import domainmodel.Results;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifview.detailpanel.DetailPanel;
 import view.resultspanel.motifview.tablemodels.*;
 import view.resultspanel.renderers.*;
@@ -14,7 +15,6 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 

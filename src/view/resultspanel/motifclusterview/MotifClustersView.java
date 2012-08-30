@@ -1,7 +1,6 @@
 package view.resultspanel.motifclusterview;
 
 import java.awt.*;
-import java.awt.event.MouseListener;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import javax.swing.table.TableColumn;
 
 import domainmodel.*;
 import view.resultspanel.*;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifclusterview.detailpanel.DetailPanel;
 import view.resultspanel.renderers.*;
 import view.resultspanel.motifclusterview.tablemodels.BaseMotifClusterTableModel;

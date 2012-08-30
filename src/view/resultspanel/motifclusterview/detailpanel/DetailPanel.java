@@ -5,6 +5,7 @@ import domainmodel.MotifCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.guiwidgets.LogoThumbnail;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifclusterview.tablemodels.ExtendedCandidateTargetGeneTableModel;
 import view.resultspanel.motifclusterview.tablemodels.ExtendedTranscriptionFactorTableModel;
 import view.resultspanel.motifview.tablemodels.BaseMotifTableModel;

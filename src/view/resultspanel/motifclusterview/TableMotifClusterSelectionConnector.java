@@ -3,7 +3,7 @@ package view.resultspanel.motifclusterview;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.MotifTableModel;
 import view.resultspanel.SelectedMotif;
-import view.resultspanel.TranscriptionFactorComboBox;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.TableMotifSelectionConnector;
 
 import javax.swing.*;

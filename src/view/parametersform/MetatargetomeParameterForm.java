@@ -7,6 +7,8 @@ import domainmodel.TargetomeDatabase;
 import view.resultspanel.Refreshable;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +26,8 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
     private JComboBox speciesNomenclatureCB;
     private JList databaseList;
     private JComboBox attributeNameCB;
+
+    private final List<ParameterChangeListener> listeners = new ArrayList<ParameterChangeListener>();
 
 
     public MetatargetomeParameterForm(Map<SpeciesNomenclature, List<GeneIdentifier>> nomenclature2factors) {
@@ -151,9 +155,9 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         add(new JScrollPane(databaseList), cc);
 
         final JLabel attributeNameLB = new JLabel("Attribute name:");
-        attributeNameCB = new JComboBox(AttributeComboBox.getPossibleGeneIDAttributes().toArray());
+        attributeNameCB = new JComboBox(AttributeComboBox.getPossibleGeneIDAttributesWithDefault().toArray());
 
-        cc.gridx = 0; cc.gridy = 3;
+        cc.gridx = 0; cc.gridy = 4;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 0.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
@@ -161,7 +165,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
         add(attributeNameLB, cc);
 
-        cc.gridx++; cc.gridy = 3;
+        cc.gridx++; cc.gridy = 4;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
@@ -175,11 +179,38 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
                 refresh();
             }
         });
+        attributeNameCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fireParametersChanged();
+            }
+        });
+        databaseList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                fireParametersChanged();
+            }
+        });
+        transcriptionFactorCB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fireParametersChanged();
+            }
+        });
     }
 
     @Override
     public void refresh() {
         transcriptionFactorCB.setModel(new GeneIdentifierComboBoxModel(nomenclature2factors.get(getSpeciesNomenclature())));
+    }
 
+    public void addParameterChangeListener(final ParameterChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    private void fireParametersChanged() {
+        for (ParameterChangeListener listener: new ArrayList<ParameterChangeListener>(listeners)) {
+            listener.parametersChanged();
+        }
     }
 }

@@ -162,9 +162,15 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
     @Override
     public void refresh() {
-        setEnabled(getParameters() != null
-                && getParameters().getTranscriptionFactor() != null
-                && SPECIES_NOMENCLATURE2FACTORS.containsKey(getParameters().getTranscriptionFactor().getSpeciesNomenclature())
-                && SPECIES_NOMENCLATURE2FACTORS.get(getParameters().getTranscriptionFactor().getSpeciesNomenclature()).contains(getParameters().getTranscriptionFactor()));
+        setEnabled(checkEnabled());
+    }
+
+    private boolean checkEnabled() {
+        if (getParameters() == null) return false;
+        if (getParameters().getDatabases().isEmpty()) return false;
+        final GeneIdentifier factor = getParameters().getTranscriptionFactor();
+        if (factor == null) return false;
+        if (!SPECIES_NOMENCLATURE2FACTORS.containsKey(factor.getSpeciesNomenclature())) return false;
+        return SPECIES_NOMENCLATURE2FACTORS.get(factor.getSpeciesNomenclature()).contains(factor);
     }
 }

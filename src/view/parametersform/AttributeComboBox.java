@@ -3,6 +3,7 @@ package view.parametersform;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -42,6 +43,12 @@ public class AttributeComboBox  extends JComboBox implements FocusListener {
 		}
 
         return results;
+    }
+
+    public static List<String> getPossibleGeneIDAttributesWithDefault() {
+        final List<String> names = getPossibleGeneIDAttributes();
+        if (names.isEmpty()) return Collections.singletonList(ID_ATTRIBUTE_NAME);
+        else return names;
     }
 
 	public AttributeComboBox(){

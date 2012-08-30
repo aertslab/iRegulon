@@ -29,16 +29,25 @@ public final class MetatargetomeParameterFrame extends JFrame {
             super(new BorderLayout());
 
             final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
+            final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null);
             add(parameterForm, BorderLayout.CENTER);
             add(new JPanel(new FlowLayout()) {
                 {
                     add(new JButton(new CancelAction()));
-                    add(new JButton(new QueryMetatargetomeAction(parameterForm, null)));
+                    final JButton submitButton = new JButton(submitAction);
+                    submitButton.setIcon(null);
+                    add(submitButton);
                 }
             }, BorderLayout.SOUTH);
             parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
             parameterForm.setTranscriptionFactor(factor);
             parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
+
+            parameterForm.addParameterChangeListener(new ParameterChangeListener() {
+                public void parametersChanged() {
+                    submitAction.refresh();
+                }
+            });
         }
     }
 

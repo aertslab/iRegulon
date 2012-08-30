@@ -46,7 +46,6 @@ public abstract class NetworkDrawAction extends ResourceAction {
 
     public NetworkDrawAction(final String actionName, final Refreshable view, final String attributeName) {
         super(actionName);
-        //TODO: Remove view dependency! Use listener registration! Better for multiple resultsviews.
         this.view = view == null ? NO_VIEW : view;
         this.attributeName = attributeName == null ? ID_ATTRIBUTE_NAME : attributeName;
     }

@@ -104,11 +104,14 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             builder.append("&");
             builder.append("TargetomeDatabaseCode=");
             if (!databases.isEmpty()) {
-               builder.append(databases.get(0).getDbCode());
+                builder.append("\"");
+                builder.append(databases.get(0).getDbCode());
+                builder.append("\"");
             }
             for (TargetomeDatabase database : databases.subList(1, databases.size())) {
-                builder.append(";");
+                builder.append(",\"");
                 builder.append(database.getDbCode());
+                builder.append("\"");
             }
             builder.append("\n");
             send(connection, builder.toString());

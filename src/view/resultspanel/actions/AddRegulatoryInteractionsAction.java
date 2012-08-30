@@ -16,18 +16,27 @@ import cytoscape.Cytoscape;
 
 
 
-public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependentAction {
+public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependentAction implements Refreshable {
     private static final String NAME = "action_draw_edges";
 
     public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TranscriptionFactorComboBox selectedTranscriptionFactor,
                                               final Refreshable view, final String attributeName) {
 		super(NAME, selectedMotif, selectedTranscriptionFactor, view, attributeName);
 		if (selectedMotif == null) throw new IllegalArgumentException();
-		setEnabled(false);
-        //TODO: only enabled when network view is selected ..
+		refresh();
 	}
-	
-	@Override
+
+    @Override
+    public void refresh() {
+        setEnabled(checkEnabled());
+    }
+
+    @Override
+    protected boolean checkEnabled() {
+        return super.checkEnabled() && !Cytoscape.getCurrentNetworkView().equals(Cytoscape.getNullNetworkView());
+    }
+
+    @Override
 	public void actionPerformed(ActionEvent e) {
         final AbstractMotif motif = this.getSelectedMotif().getMotif();
 		final TranscriptionFactor factor = this.getTranscriptionFactor();

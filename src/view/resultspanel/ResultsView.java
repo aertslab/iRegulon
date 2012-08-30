@@ -52,7 +52,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     private final PropertyChangeListener refreshListener;
     private CreateNewCombinedRegulatoryNetworkAction createNewCombinedRegulatoryNetworkAction;
-
+    private AddRegulatoryNetworkAction drawNodesAndEdgesAction;
 
     public ResultsView(final String runName, final Results results) {
 		this.runName = runName;
@@ -135,6 +135,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     @Override
     public void refresh() {
         createNewCombinedRegulatoryNetworkAction.refresh();
+        drawNodesAndEdgesAction.refresh();
 
         final MotifView view = (MotifView) tabbedPane.getSelectedComponent();
         if (view != null) view.refresh();
@@ -239,7 +240,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         c.gridwidth = 1; c.gridheight = 1;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-		final TranscriptionFactorDependentAction drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
+		drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
         final JButton buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
         buttonDrawEdges.setText("");
         toolBar.add(buttonDrawEdges, c);

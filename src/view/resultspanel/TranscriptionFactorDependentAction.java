@@ -42,17 +42,9 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
                 setEnabled(checkEnabled());
             }
         });
-
-        //TODO: Implementation of undo functionality can be done via cytoscape.util.undo.CyUndo: a tiny class
-        // for supporting undo in the Cytoscape context. If you want to post an edit, use
-        // CyUndo.getUndoableEditSupport().postEdit(yourEdit) where yourEdit implements the UndoableEdit.
-        // Every implementing action needs to use basic operations like addNode, addEdge which
-        // are implemented in this abstract class. Adding undo functionality is just adding
-        // the creation of UndoableEdit objects, combining them in a composite UndoableEdit and
-        // registering this compound object with Cytoscape.
 	}
 
-    private boolean checkEnabled() {
+    protected boolean checkEnabled() {
         return this.selectedMotif.getMotif() != null
                 && this.selectedTranscriptionFactor.getTranscriptionFactor() != null;
     }

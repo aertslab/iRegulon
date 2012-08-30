@@ -29,7 +29,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
     private FilterPatternDocumentListener filterPatternDocumentListener;
-    private MouseListener popupListener;
+    private MotifPopUpMenu popupListener;
 
     public EnrichedMotifsView(final Results results) {
         this.viewSupport = new MotifViewSupport(this);
@@ -186,6 +186,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifView {
 
     @Override
     public void refresh() {
+        if (popupListener != null) popupListener.refresh();
         detailPanel.refresh();
     }
 }

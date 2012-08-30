@@ -30,7 +30,7 @@ public class MotifClustersView extends JPanel implements MotifView {
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
     private FilterPatternDocumentListener filterPatternDocumentListener;
-    private MouseListener popupListener;
+    private MotifPopUpMenu popupListener;
 
     private JComboBox filterAttributeCB;
     private JTextField filterValueTF;
@@ -206,6 +206,7 @@ public class MotifClustersView extends JPanel implements MotifView {
 
         setSelectedMotif(currentSelection);
 
+        if (popupListener != null) popupListener.refresh();
         detailPanel.refresh();
     }
 

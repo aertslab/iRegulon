@@ -13,9 +13,10 @@ import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
 import view.resultspanel.actions.AddRegulatoryNetworkAction;
 
 
-public class MotifPopUpMenu extends MouseAdapter {
+public class MotifPopUpMenu extends MouseAdapter implements Refreshable {
 	private PopupMenu menu;
-	
+
+    private final AddRegulatoryInteractionsAction drawEdgesAction;
 	
 	public MotifPopUpMenu(final SelectedMotif selectedMotif,
                           final TranscriptionFactorComboBox transcriptionFactorComboBox,
@@ -34,7 +35,7 @@ public class MotifPopUpMenu extends MouseAdapter {
 		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(drawRegulonsAndEdgesAction);
 			
-		final AddRegulatoryInteractionsAction drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
+		drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(drawEdgesAction);
 
 		if (isRegionBased) {
@@ -46,6 +47,9 @@ public class MotifPopUpMenu extends MouseAdapter {
 		}
 	}
 
+    public void refresh() {
+        drawEdgesAction.refresh();
+    }
 
     public void mouseClicked(MouseEvent e){
 		if (e.getButton() == MouseEvent.BUTTON3) {

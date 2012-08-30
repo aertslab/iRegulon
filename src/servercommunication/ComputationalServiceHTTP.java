@@ -62,6 +62,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");
             builder.append(speciesNomenclature.getCode());
+            builder.append("\n");
             send(connection, builder.toString());
 
 		    // Get the response ...
@@ -97,15 +98,19 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");
             builder.append(factor.getSpeciesNomenclature().getCode());
-            builder.append("\n");
+            builder.append("&");
             builder.append("GeneIdentifier=");
             builder.append(factor.getGeneName());
-            builder.append("\n");
-            for (TargetomeDatabase database : databases) {
-                builder.append("TargetomeDatabaseCode=");
-                builder.append(database.getDbCode());
-                builder.append("\n");
+            builder.append("&");
+            builder.append("TargetomeDatabaseCode=");
+            if (!databases.isEmpty()) {
+               builder.append(databases.get(0).getDbCode());
             }
+            for (TargetomeDatabase database : databases.subList(1, databases.size())) {
+                builder.append(";");
+                builder.append(database.getDbCode());
+            }
+            builder.append("\n");
             send(connection, builder.toString());
 
 		    // Get the response ...

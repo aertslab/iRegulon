@@ -8,7 +8,7 @@ import domainmodel.InputParameters;
 import domainmodel.Motif;
 import servercommunication.ServerCommunicationException;
 
-public interface Service {
+public interface Protocol {
 	public int sentJob(InputParameters input) throws ServerCommunicationException;
 	
 	public State getState(int jobID);
@@ -18,6 +18,4 @@ public interface Service {
 	public Collection<Motif> getMotifs(int jobID);
 	
 	public String getErrorMessage(int jobID);
-		
-	
 }

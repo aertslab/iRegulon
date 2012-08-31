@@ -11,10 +11,10 @@ import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
-import servercommunication.protocols.Service;
+import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
 
-public class HTTPServiceStub implements Service {
+public class HTTPServiceStub implements Protocol {
 
 	private int jobsBefore;
 	private int attemts = 10;

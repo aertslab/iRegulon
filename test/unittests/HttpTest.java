@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import servercommunication.protocols.HTTPService;
+import servercommunication.protocols.HTTPProtocol;
 
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class HttpTest {
 	@Test
 	public void testSubmitJob() {
 		//fail("Not yet implemented");
-		HTTPService http = new HTTPService();
+		HTTPProtocol http = new HTTPProtocol();
 		Collection<GeneIdentifier> geneIDs = new ArrayList<GeneIdentifier>();
 		GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
 		geneIDs.add(gene);
@@ -36,7 +36,7 @@ public class HttpTest {
 	
 	@Test
 	public void testGetState(){
-		HTTPService http = new HTTPService();
+		HTTPProtocol http = new HTTPProtocol();
 		//assertEquals(State.ERROR, http.getState(5));
 		//assertEquals(State.FINISHED, http.getState(3));
 		//assertEquals(State.RUNNING, http.getState(2));
@@ -45,7 +45,7 @@ public class HttpTest {
 	
 	@Test
 	public void testIsReQuested(){
-		HTTPService http = new HTTPService();
+		HTTPProtocol http = new HTTPProtocol();
 		Collection<GeneIdentifier> geneIDs = new ArrayList<GeneIdentifier>();
 		GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
 		geneIDs.add(gene);
@@ -58,7 +58,7 @@ public class HttpTest {
 	
 	@Test
 	public void testGetMotifs(){
-		HTTPService http = new HTTPService();
+		HTTPProtocol http = new HTTPProtocol();
 		Collection<Motif> motifs = http.getMotifs(1);
 		assertEquals(0, motifs.size());
 	}

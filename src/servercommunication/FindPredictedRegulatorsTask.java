@@ -11,30 +11,29 @@ import cytoscape.task.TaskMonitor;
 import domainmodel.InputParameters;
 import domainmodel.Motif;
 
-public class ClassicalTask extends IRegulonResourceBundle implements Task {
+public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implements Task {
 	private cytoscape.task.TaskMonitor taskMonitor;
 	
 	private Collection<Motif> motifs;
 	private State state = State.ERROR;
 	private boolean interrupted = false;
-	private Service service;
+	private Protocol service;
 	private String errorMessage = "No error has occured";
 
 	private InputParameters input;
 
 	
-	public ClassicalTask(Service service, InputParameters input) {
+	public FindPredictedRegulatorsTask(Protocol service, InputParameters input) {
 		this.service = service;
 		this.input = input;
 	}
 	
 	public void halt() {
-		// not implemented
 		this.interrupted = true;
 	}
 
 	public String getTitle() {
-		return getBundle().getString("plugin_name") + ": Prediction of casual transcription factors" ;
+		return getBundle().getString("plugin_name") + ": Prediction of transcription factors" ;
 	}
 
 	public void run() {
@@ -89,7 +88,6 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 		while(this.service.getState(jobID).equals(State.RUNNING)  && ! this.interrupted){
 			try {
 				Thread.sleep(3000);
-				//System.out.println("check");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -116,8 +114,7 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 	}
 
 	@Override
-	public void setTaskMonitor(TaskMonitor monitor)
-			throws IllegalThreadStateException {
+	public void setTaskMonitor(TaskMonitor monitor) throws IllegalThreadStateException {
 		taskMonitor = monitor;
 	}
 	

@@ -20,9 +20,9 @@ import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
 
-public class HTTPService extends IRegulonResourceBundle implements Service{
+public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
-	public HTTPService(){
+	public HTTPProtocol(){
 		
 	}
 	

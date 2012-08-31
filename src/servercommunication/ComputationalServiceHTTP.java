@@ -7,7 +7,6 @@ import domainmodel.*;
 import servercommunication.protocols.*;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -25,11 +24,11 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     private static final boolean DEBUG = false;
 
     private final CyLogHandler logger = ConsoleLogger.getLogger();
-    private final Service service = new HTTPService();
+    private final Protocol service = new HTTPProtocol();
 
     @Override
 	public List<Motif> findPredictedRegulators(InputParameters input) {
-		final ClassicalTask task = new ClassicalTask(service, input);
+		final FindPredictedRegulatorsTask task = new FindPredictedRegulatorsTask(service, input);
 		
 		final JTaskConfig taskConfig = new JTaskConfig();
 		taskConfig.setOwner(Cytoscape.getDesktop());
@@ -44,7 +43,6 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 			JOptionPane.showMessageDialog(Cytoscape.getDesktop(), task.getErrorMessage());
 			return Collections.emptyList();
 		} else {
-
 			final Collection<Motif> motifs = task.getMotifs();
             return new ArrayList<Motif>(motifs);
 		}
@@ -53,10 +51,14 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     @Override
     public Set<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException {
         if (speciesNomenclature == null) throw new IllegalArgumentException();
+        final URLConnection connection;
         try {
-		    final URLConnection connection = createConnection("URL_metatargetomes_query_factors");
-
-            // Send the nomenclature code ...
+            connection = createConnection("URL_metatargetomes_query_targetome");
+        } catch (IOException e) {
+            throw new ServerCommunicationException("Server is not available.");
+        }
+        try {
+		    // Send the nomenclature code ...
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");
             builder.append(speciesNomenclature.getCode());
@@ -89,14 +91,19 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     }
 
     @Override
-    public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases, final int occurenceCountThreshold)
+    public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases,
+                                                             final int occurenceCountThreshold)
             throws ServerCommunicationException {
         if (factor == null || databases == null) {
             throw new IllegalArgumentException();
         }
+        final URLConnection connection;
         try {
-		    final URLConnection connection = createConnection("URL_metatargetomes_query_targetome");
-
+            connection = createConnection("URL_metatargetomes_query_targetome");
+        } catch (IOException e) {
+            throw new ServerCommunicationException("Server is not available.");
+        }
+        try {
             // Send the necessary information ...
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");

@@ -14,16 +14,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 
 final class MetatargetomeParameterForm extends JPanel implements MetatargetomeParameters, Refreshable {
     private static final int MARGIN_IN_PIXELS = 5;
 
-    private final Map<SpeciesNomenclature, List<GeneIdentifier>> nomenclature2factors;
+    private final Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors;
 
     private JComboBox transcriptionFactorCB;
     private JComboBox speciesNomenclatureCB;
@@ -38,7 +36,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
     private final ListSelectionListener selectionListener;
 
 
-    public MetatargetomeParameterForm(Map<SpeciesNomenclature, List<GeneIdentifier>> nomenclature2factors) {
+    public MetatargetomeParameterForm(Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors) {
         super();
         this.nomenclature2factors = nomenclature2factors;
         initPanel();
@@ -232,14 +230,14 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
 
         final GeneIdentifier curID = getTranscriptionFactor();
 
-        final List<GeneIdentifier> IDs = nomenclature2factors.containsKey(getSpeciesNomenclature())
+        final Set<GeneIdentifier> IDs = nomenclature2factors.containsKey(getSpeciesNomenclature())
                 ? nomenclature2factors.get(getSpeciesNomenclature())
-                : Collections.<GeneIdentifier>emptyList();
+                : Collections.<GeneIdentifier>emptySet();
         transcriptionFactorCB.setModel(new GeneIdentifierComboBoxModel(IDs));
         transcriptionFactorCB.setEnabled(transcriptionFactorCB.getModel().getSize() != 0);
 
         if (IDs.contains(curID)) setTranscriptionFactor(curID);
-        else if (!IDs.isEmpty()) setTranscriptionFactor(IDs.get(0));
+        else if (!IDs.isEmpty()) setTranscriptionFactor(IDs.iterator().next());
 
         registerListeners();
         fireParametersChanged();

@@ -25,7 +25,7 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        final Map<SpeciesNomenclature,List<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,List<GeneIdentifier>>();
+        final Map<SpeciesNomenclature,Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }

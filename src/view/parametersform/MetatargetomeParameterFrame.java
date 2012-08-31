@@ -16,7 +16,7 @@ import java.util.*;
 public final class MetatargetomeParameterFrame extends JFrame {
     private static final String TITLE = "Query metatargetome for a factor";
 
-    public MetatargetomeParameterFrame(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.List<GeneIdentifier>> speciesNomenclature2factors) {
+    public MetatargetomeParameterFrame(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors) {
         super(TITLE);
         setContentPane(new ContentPane(factor, speciesNomenclature2factors));
         pack();
@@ -25,7 +25,7 @@ public final class MetatargetomeParameterFrame extends JFrame {
     }
 
     private class ContentPane extends JPanel {
-        private ContentPane(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.List<GeneIdentifier>> speciesNomenclature2factors) {
+        private ContentPane(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors) {
             super(new BorderLayout());
 
             final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);

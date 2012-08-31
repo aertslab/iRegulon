@@ -10,10 +10,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.JOptionPane;
 
@@ -54,7 +51,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 	}
 
     @Override
-    public List<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException {
+    public Set<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException {
         if (speciesNomenclature == null) throw new IllegalArgumentException();
         try {
 		    final URLConnection connection = createConnection("URL_metatargetomes_query_factors");
@@ -67,7 +64,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             send(connection, builder.toString());
 
 		    // Get the response ...
-		    final List<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
+		    final Set<GeneIdentifier> result = new HashSet<GeneIdentifier>();
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
@@ -109,14 +106,14 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             builder.append("&");
             builder.append("TargetomeDatabaseCode=");
             if (!databases.isEmpty()) {
-                builder.append("\"");
+                builder.append("\'");
                 builder.append(databases.get(0).getDbCode());
-                builder.append("\"");
+                builder.append("\'");
             }
             for (TargetomeDatabase database : databases.subList(1, databases.size())) {
-                builder.append(",\"");
+                builder.append(",\'");
                 builder.append(database.getDbCode());
-                builder.append("\"");
+                builder.append("\'");
             }
             builder.append("\n");
             send(connection, builder.toString());

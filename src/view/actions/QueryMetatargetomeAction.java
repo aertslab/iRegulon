@@ -18,17 +18,14 @@ import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class QueryMetatargetomeAction extends NetworkDrawAction implements Refreshable {
     private static final String NAME = "action_query_metatargetome";
 
     private static final CyLogHandler logger = ConsoleLogger.getLogger();
 
-    private static Map<SpeciesNomenclature,List<GeneIdentifier>> SPECIES_NOMENCLATURE2FACTORS;
+    private static Map<SpeciesNomenclature,Set<GeneIdentifier>> SPECIES_NOMENCLATURE2FACTORS;
     static {
         try {
             SPECIES_NOMENCLATURE2FACTORS = queryForFactors();
@@ -38,20 +35,20 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
         }
     }
 
-    private static Map<SpeciesNomenclature,List<GeneIdentifier>> queryForFactors() throws ServerCommunicationException {
+    private static Map<SpeciesNomenclature,Set<GeneIdentifier>> queryForFactors() throws ServerCommunicationException {
         final ComputationalService service = new ComputationalServiceHTTP();
-        final Map<SpeciesNomenclature,List<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,List<GeneIdentifier>>();
+        final Map<SpeciesNomenclature,Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, service.queryTranscriptionFactorsWithPredictedTargetome(speciesNomenclature));
         }
         return speciesNomenclature2factors;
     }
 
-    public static List<GeneIdentifier> getAvailableFactors(final SpeciesNomenclature speciesNomenclature) {
+    public static Set<GeneIdentifier> getAvailableFactors(final SpeciesNomenclature speciesNomenclature) {
         if (SPECIES_NOMENCLATURE2FACTORS.containsKey(speciesNomenclature)) {
             return SPECIES_NOMENCLATURE2FACTORS.get(speciesNomenclature);
         } else {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
     }
 

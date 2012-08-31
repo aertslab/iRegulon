@@ -5,14 +5,15 @@ import domainmodel.GeneIdentifier;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
-import java.util.List;
+import java.util.*;
 
 final class GeneIdentifierComboBoxModel implements ComboBoxModel {
     private Object selection;
     private final List<GeneIdentifier> identifiers;
 
-    GeneIdentifierComboBoxModel(List<GeneIdentifier> identifiers) {
-        this.identifiers = identifiers;
+    GeneIdentifierComboBoxModel(Set<GeneIdentifier> identifiers) {
+        this.identifiers = new ArrayList<GeneIdentifier>(identifiers);
+        Collections.sort(this.identifiers);
     }
 
     @Override

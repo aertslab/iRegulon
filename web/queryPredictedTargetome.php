@@ -12,17 +12,16 @@ $database_ids = $_POST["TargetomeDatabaseCode"];
 $connection = mysql_connect($servername, $username, $password);
 mysql_select_db($database, $connection) or die(mysql_error($connection));
 
-$query = "SELECT geneName, SUM(occurenceCount)
-FROM metatargetomeMetaData AS m, metatargetome AS t
-WHERE m.sourceName IN (" . $database_ids . ")
-AND m.speciesNomenclatureCode = " . $speciesnomenclature_code .
-"AND m.tfName = '" . $gene_id . "'AND m.metaID = t.ID
-GROUP BY geneName;";
+$databases = explode(",", rtrim($database_ids));
+$database_str = "'" . implode("','", $databases) . "'";
+
+$query = "SELECT geneName, SUM(occurenceCount) FROM metatargetomeMetaData AS m, metatargetome AS t WHERE m.sourceName IN (" . $database_str . ") AND m.speciesNomenclatureCode = " . $speciesnomenclature_code . " AND m.tfName = '" . $gene_id . "' AND m.ID = t.metaID GROUP BY geneName";
 
 $result = mysql_query($query, $connection);
 if (mysql_errno($connection)) die (mysql_error($connection));
 
+echo "#Metatargetome for factor " . $gene_id . "\n";
 while($row = mysql_fetch_array($result)){
-	print "ID_occurenceCount=" . $row[0] . ";" . $row[1] . "\n";
+	echo "ID_occurenceCount=" . $row[0] . ";" . $row[1] . "\n";
 }
 ?>

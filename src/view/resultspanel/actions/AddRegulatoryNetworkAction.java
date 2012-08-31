@@ -5,6 +5,8 @@ import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
 
 import domainmodel.AbstractMotif;
+import domainmodel.CandidateTargetGene;
+import domainmodel.GeneIdentifier;
 import view.CytoscapeNetworkUtilities;
 import view.resultspanel.Refreshable;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
@@ -12,6 +14,9 @@ import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.SelectedMotif;
 
 import java.awt.event.ActionEvent;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import domainmodel.TranscriptionFactor;
 
@@ -40,10 +45,31 @@ public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentActi
 		final AbstractMotif motif = this.getSelectedMotif().getMotif();
 		final TranscriptionFactor factor = this.getTranscriptionFactor();
 
-		final CyNetwork network =  Cytoscape.getCurrentNetwork();
 		final CyNetworkView view = Cytoscape.getCurrentNetworkView();
 
-        addEdges(network, view, factor, motif, true);
+        final Map<String,List<CyNode>> name2nodes = CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), CytoscapeNetworkUtilities.getAllNodes());
+
+        final List<CyNode> sourceNodes = name2nodes.containsKey(factor.getName())
+                ? name2nodes.get(factor.getName())
+                : Collections.<CyNode>emptyList();
+        if (sourceNodes.isEmpty()) return;
+
+        for (final CyNode sourceNode : sourceNodes) {
+            CytoscapeNetworkUtilities.adjustSourceNode(sourceNode, getAttributeName(), factor.getGeneID(), motif);
+
+            for (CandidateTargetGene targetGene : motif.getCandidateTargetGenes()) {
+                final GeneIdentifier geneID = targetGene.getGeneID();
+
+                final List<CyNode> targetNodes = name2nodes.containsKey(targetGene.getGeneName())
+                    ? name2nodes.get(targetGene.getGeneName())
+                    : Collections.<CyNode>emptyList();
+                for (final CyNode targetNode : targetNodes) {
+                    CytoscapeNetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, motif);
+                    final CyEdge edge = createEdge(sourceNode, targetNode, factor, motif, geneID);
+                    setEdgeAttribute(edge, CytoscapeNetworkUtilities.RANK_ATTRIBUTE_NAME, targetGene.getRank());
+                }
+		    }
+        }
 
         Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
 

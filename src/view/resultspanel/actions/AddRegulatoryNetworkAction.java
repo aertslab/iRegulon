@@ -5,6 +5,7 @@ import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
 
 import domainmodel.AbstractMotif;
+import view.CytoscapeNetworkUtilities;
 import view.resultspanel.Refreshable;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
@@ -44,7 +45,7 @@ public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentActi
 
         addEdges(network, view, factor, motif, true);
 
-        Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);
+        Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
 
         view.applyLayout(CyLayouts.getDefaultLayout());
 
@@ -52,6 +53,6 @@ public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentActi
 
         getView().refresh();
 
-        activeSidePanel();
+        CytoscapeNetworkUtilities.activeSidePanel();
 	}
 }

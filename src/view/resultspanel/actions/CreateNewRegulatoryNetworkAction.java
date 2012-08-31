@@ -1,6 +1,7 @@
 package view.resultspanel.actions;
 
 import domainmodel.AbstractMotif;
+import view.CytoscapeNetworkUtilities;
 import view.parametersform.IRegulonVisualStyle;
 import view.resultspanel.Refreshable;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
@@ -40,17 +41,17 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
 
 		addEdges(network, view, factor, motif, true);
 
-        Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);
+        Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
 
         view.applyLayout(CyLayouts.getDefaultLayout());
 
-        applyVisualStyle();
+        CytoscapeNetworkUtilities.applyVisualStyle();
 
         view.redrawGraph(true, true);
 
         getView().refresh();
 
-        activeSidePanel();
+        CytoscapeNetworkUtilities.activeSidePanel();
     }
 
     private String createTitle(AbstractMotif motif, TranscriptionFactor factor) {

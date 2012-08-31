@@ -1,30 +1,30 @@
 package view.actions;
 
 
-import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
-import cytoscape.CyNode;
 import cytoscape.Cytoscape;
-import cytoscape.layout.CyLayouts;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
+import cytoscape.task.ui.JTaskConfig;
+import cytoscape.task.util.TaskManager;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
+import view.ResourceAction;
 import view.parametersform.MetatargetomeParameters;
-import view.resultspanel.NetworkDrawAction;
 import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 
-public class QueryMetatargetomeAction extends NetworkDrawAction implements Refreshable {
+
+public class QueryMetatargetomeAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_query_metatargetome";
-    private static final String STRENGTH_ATTRIBUTE_NAME = "Strength";
+    private static final int MAX_NODE_COUNT = 100;
 
     private static final CyLogHandler logger = ConsoleLogger.getLogger();
 
@@ -60,50 +60,13 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
         }
     }
 
-    private static final AbstractMotif NO_MOTIF = new AbstractMotif(-1,
-            Collections.<CandidateTargetGene>emptyList(),
-            Collections.<TranscriptionFactor>emptyList()) {
-        @Override
-        public int getDatabaseID() {
-            return Integer.MIN_VALUE;
-        }
-
-        @Override
-        public String getName() {
-            return "";
-        }
-
-        @Override
-        public String getDescription() {
-            return "";
-        }
-
-        @Override
-        public float getAUCValue() {
-            return Float.NaN;
-        }
-
-        @Override
-        public float getNEScore() {
-            return Float.NaN;
-        }
-
-        @Override
-        public Motif getBestMotif() {
-            return null;
-        }
-
-        @Override
-        public List<Motif> getMotifs() {
-            return Collections.emptyList();
-        }
-    };
-
     private MetatargetomeParameters parameters;
+    private final Refreshable resultsPanel;
 
     public QueryMetatargetomeAction(final MetatargetomeParameters parameters, final Refreshable view) {
-        super(NAME, view, null);
+        super(NAME);
         this.parameters = parameters;
+        this.resultsPanel = view;
         refresh();
     }
 
@@ -120,13 +83,8 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
         refresh();
     }
 
-    @Override
-    public String getAttributeName() {
-        if (getParameters() != null) {
-            return getParameters().getAttributeName();
-        } else {
-            return super.getAttributeName();
-        }
+    public Refreshable getResultsPanel() {
+        return resultsPanel;
     }
 
     @Override
@@ -148,39 +106,36 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
             return;
         }
 
-        final CyNetwork network;
         final CyNetworkView view;
+        final MetatargetomeTask task;
         boolean useCurrentNetwork = Cytoscape.getCurrentNetworkView() != null
                 && Cytoscape.getCurrentNetworkView().getNetwork() != null
                 && !Cytoscape.getCurrentNetworkView().getNetwork().equals(Cytoscape.getNullNetwork());
         if (useCurrentNetwork) {
-            network = Cytoscape.getCurrentNetwork();
+            final CyNetwork network = Cytoscape.getCurrentNetwork();
 		    view = Cytoscape.getCurrentNetworkView();
+            task = new AddMetatargetomeTask(network, view,
+                    getResultsPanel(), getParameters().getAttributeName(),
+                    getParameters().getTranscriptionFactor(), targetome);
         } else {
-            network = Cytoscape.createNetwork(createTitle(getParameters()));
-             view = Cytoscape.createNetworkView(network, createTitle(getParameters()));
-         }
-
-        final CyNode sourceNode = createSourceNode(network, view, parameters.getTranscriptionFactor(), NO_MOTIF);
-        for (CandidateTargetGene targetGene : targetome) {
-            final CyNode targetNode = createTargetNode(network, view, targetGene, NO_MOTIF);
-            final CyEdge edge = addEdge(sourceNode, targetNode, network, view, null);
-            setEdgeAttribute(edge, STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
+            final CyNetwork network = Cytoscape.createNetwork(createTitle(getParameters()));
+            view = Cytoscape.createNetworkView(network, createTitle(getParameters()));
+            task = new CreateMetatargetomeTask(network, view,
+                    getResultsPanel(), getParameters().getAttributeName(),
+                    getParameters().getTranscriptionFactor(), targetome);
         }
 
-        Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);
-
-        view.applyLayout(CyLayouts.getDefaultLayout());
-
-        if (!useCurrentNetwork) {
-            applyVisualStyle();
+        if (targetome.size() < MAX_NODE_COUNT) {
+            task.run();
+        } else {
+            final JTaskConfig taskConfig = new JTaskConfig();
+		    taskConfig.setOwner(Cytoscape.getDesktop());
+		    taskConfig.displayCloseButton(true);
+		    taskConfig.displayCancelButton(true);
+		    taskConfig.displayStatus(true);
+		    taskConfig.setAutoDispose(true);
+            TaskManager.executeTask(task, taskConfig);
         }
-
-        view.redrawGraph(true, true);
-
-        if (getView() != null) getView().refresh();
-
-        activeSidePanel();
     }
 
     private String createTitle(final MetatargetomeParameters parameters) {

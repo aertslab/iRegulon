@@ -28,10 +28,6 @@ public class HTTPService extends IRegulonResourceBundle implements Service{
 	
 	/**
 	 * Sent a request for a job in iRegulon
-	 * @param geneIDs
-	 * @param AUCThreshold
-	 * @param rankThreshold
-	 * @param NESThreshold
 	 * @return the id of the job
 	 * @throws servercommunication.ServerCommunicationException
 	 */

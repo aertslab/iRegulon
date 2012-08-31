@@ -34,12 +34,12 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 	}
 
 	public String getTitle() {
-		return "Classical " + this.getBundle().getString("plugin_name");
+		return getBundle().getString("plugin_name") + ": Prediction of casual transcription factors" ;
 	}
 
 	public void run() {
 		int progress = -1;
-		taskMonitor.setStatus("Starting Request");
+		taskMonitor.setStatus("Starting request");
 		taskMonitor.setPercentCompleted(progress);
 		
 		int jobID;
@@ -99,7 +99,7 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 			taskMonitor.setPercentCompleted(progress);
 			this.state = this.service.getState(jobID);
 			if (this.service.getState(jobID).equals(State.FINISHED)){
-				taskMonitor.setStatus("Recalculating your motifs");
+				taskMonitor.setStatus("Receiving analysis results");
 				Collection<Motif> motifs = this.service.getMotifs(jobID);
 				this.motifs = motifs;
 				this.state = this.service.getState(jobID);
@@ -136,9 +136,4 @@ public class ClassicalTask extends IRegulonResourceBundle implements Task {
 	public String getErrorMessage(){
 		return this.errorMessage;
 	}
-	
-	
-	
-	
-	
 }

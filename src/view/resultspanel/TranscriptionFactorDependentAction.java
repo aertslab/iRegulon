@@ -63,7 +63,7 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
     protected boolean addEdges(final CyNetwork network, final CyNetworkView view,
                                final TranscriptionFactor factor, final AbstractMotif motif,
                                final boolean createNodesIfNecessary) {
-        final Map<String,List<CyNode>> name2nodes = createNodesIfNecessary
+        final Map<String,List<CyNode>> name2nodes = !createNodesIfNecessary
                 ? CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), CytoscapeNetworkUtilities.getAllNodes())
                 : Collections.<String, List<CyNode>>emptyMap();
 

@@ -53,7 +53,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         if (speciesNomenclature == null) throw new IllegalArgumentException();
         final URLConnection connection;
         try {
-            connection = createConnection("URL_metatargetomes_query_targetome");
+            connection = createConnection("URL_metatargetomes_query_factors");
         } catch (IOException e) {
             throw new ServerCommunicationException("Server is not available.");
         }

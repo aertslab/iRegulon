@@ -155,7 +155,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         try {
             return Integer.parseInt(occurenceCountLimitTF.getText());
         } catch (NumberFormatException e) {
-            return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
+            return Integer.MIN_VALUE;
         }
     }
 

@@ -152,6 +152,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         if (getParameters().getDatabases().isEmpty()) return false;
         final GeneIdentifier factor = getParameters().getTranscriptionFactor();
         if (factor == null) return false;
+        if (getParameters().getOccurenceCountThreshold() < 0) return false;
         if (!SPECIES_NOMENCLATURE2FACTORS.containsKey(factor.getSpeciesNomenclature())) return false;
         return SPECIES_NOMENCLATURE2FACTORS.get(factor.getSpeciesNomenclature()).contains(factor);
     }

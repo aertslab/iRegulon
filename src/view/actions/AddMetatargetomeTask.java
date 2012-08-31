@@ -34,7 +34,7 @@ final class AddMetatargetomeTask extends MetatargetomeTask {
         final List<CyNode> sourceNodes =
                   name2nodes.containsKey(getTranscriptionFactor().getGeneName())
                 ? name2nodes.get(getTranscriptionFactor().getGeneName())
-                : Collections.<CyNode>emptyList();
+                : Collections.singletonList(CytoscapeNetworkUtilities.createSourceNode(getNetwork(), getView(), getAttributeName(), getTranscriptionFactor(), NO_MOTIF));
         final int totalCount = sourceNodes.size() * getTargetome().size();
         int count = 0;
         for(final CyNode sourceNode : sourceNodes) {
@@ -47,7 +47,7 @@ final class AddMetatargetomeTask extends MetatargetomeTask {
                 final List<CyNode> targetNodes =
                                 name2nodes.containsKey(targetGene.getGeneName())
                               ? name2nodes.get(targetGene.getGeneName())
-                              : Collections.<CyNode>emptyList();
+                              : Collections.singletonList(CytoscapeNetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF));
                 for (final CyNode targetNode : targetNodes) {
                     CytoscapeNetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, NO_MOTIF);
 

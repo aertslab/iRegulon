@@ -45,13 +45,14 @@ public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentActi
 		final AbstractMotif motif = this.getSelectedMotif().getMotif();
 		final TranscriptionFactor factor = this.getTranscriptionFactor();
 
+        final CyNetwork network = Cytoscape.getCurrentNetwork();
 		final CyNetworkView view = Cytoscape.getCurrentNetworkView();
 
         final Map<String,List<CyNode>> name2nodes = CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), CytoscapeNetworkUtilities.getAllNodes());
 
         final List<CyNode> sourceNodes = name2nodes.containsKey(factor.getName())
                 ? name2nodes.get(factor.getName())
-                : Collections.<CyNode>emptyList();
+                : Collections.singletonList(CytoscapeNetworkUtilities.createSourceNode(network, view, getAttributeName(), factor.getGeneID(), motif));
         if (sourceNodes.isEmpty()) return;
 
         for (final CyNode sourceNode : sourceNodes) {
@@ -62,7 +63,7 @@ public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentActi
 
                 final List<CyNode> targetNodes = name2nodes.containsKey(targetGene.getGeneName())
                     ? name2nodes.get(targetGene.getGeneName())
-                    : Collections.<CyNode>emptyList();
+                    : Collections.singletonList(CytoscapeNetworkUtilities.createTargetNode(network, view, getAttributeName(), targetGene, motif));
                 for (final CyNode targetNode : targetNodes) {
                     CytoscapeNetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, motif);
                     final CyEdge edge = createEdge(sourceNode, targetNode, factor, motif, geneID);

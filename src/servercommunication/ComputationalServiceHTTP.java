@@ -25,9 +25,10 @@ import view.IRegulonResourceBundle;
 
 
 public class ComputationalServiceHTTP extends IRegulonResourceBundle implements ComputationalService {
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
+    private static final boolean DEBUG = true;
 
-    private Service service = new HTTPService();
+    private final CyLogHandler logger = ConsoleLogger.getLogger();
+    private final Service service = new HTTPService();
 
     @Override
 	public List<Motif> findPredictedRegulators(InputParameters input) {
@@ -70,6 +71,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
+                    if (DEBUG) logger.handleLog(LogLevel.LOG_ERROR, line);
+
+                    if (line.startsWith("#") || line.trim().equals("")) return;
+
                     final String prefix = "ID=";
                     if (line.startsWith(prefix)) {
                         result.add(new GeneIdentifier(line.substring(prefix.length()), speciesNomenclature));
@@ -121,6 +126,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
+                    if (DEBUG) logger.handleLog(LogLevel.LOG_ERROR, line);
+
+                    if (line.startsWith("#") || line.trim().equals("")) return;
+
                     final String prefix = "ID_occurenceCount=";
                     if (line.startsWith(prefix)) {
                         final String[] columns = line.substring(prefix.length()).split(";");

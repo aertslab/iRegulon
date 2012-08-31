@@ -12,7 +12,10 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +32,43 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
 
     private final List<ParameterChangeListener> listeners = new ArrayList<ParameterChangeListener>();
 
+    private final ActionListener actionListener;
+    private final ItemListener refreshListener;
+    private final ItemListener itemListener;
+    private final ListSelectionListener selectionListener;
+
 
     public MetatargetomeParameterForm(Map<SpeciesNomenclature, List<GeneIdentifier>> nomenclature2factors) {
         super();
         this.nomenclature2factors = nomenclature2factors;
         initPanel();
+
+        actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fireParametersChanged();
+            }
+        };
+        itemListener = new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                fireParametersChanged();
+            }
+        };
+        selectionListener = new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                fireParametersChanged();
+            }
+        };
+        refreshListener = new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                refresh();
+            }
+        };
+        registerListeners();
+
         refresh();
     }
 
@@ -171,37 +206,43 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.fill = GridBagConstraints.HORIZONTAL;
         cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
         add(attributeNameCB, cc);
+    }
 
+    private void registerListeners() {
+        speciesNomenclatureCB.addActionListener(actionListener);
+        attributeNameCB.addActionListener(actionListener);
+        databaseList.getSelectionModel().addListSelectionListener(selectionListener);
+        transcriptionFactorCB.addActionListener(actionListener);
+        transcriptionFactorCB.addItemListener(itemListener);
+        speciesNomenclatureCB.addItemListener(refreshListener);
+    }
 
-        speciesNomenclatureCB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                refresh();
-            }
-        });
-        attributeNameCB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fireParametersChanged();
-            }
-        });
-        databaseList.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                fireParametersChanged();
-            }
-        });
-        transcriptionFactorCB.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                fireParametersChanged();
-            }
-        });
+    private void unregisterListeners() {
+        speciesNomenclatureCB.removeActionListener(actionListener);
+        attributeNameCB.removeActionListener(actionListener);
+        databaseList.getSelectionModel().removeListSelectionListener(selectionListener);
+        transcriptionFactorCB.removeActionListener(actionListener);
+        transcriptionFactorCB.removeItemListener(itemListener);
+        speciesNomenclatureCB.removeItemListener(refreshListener);
     }
 
     @Override
     public void refresh() {
-        transcriptionFactorCB.setModel(new GeneIdentifierComboBoxModel(nomenclature2factors.get(getSpeciesNomenclature())));
+        unregisterListeners();
+
+        final GeneIdentifier curID = getTranscriptionFactor();
+
+        final List<GeneIdentifier> IDs = nomenclature2factors.containsKey(getSpeciesNomenclature())
+                ? nomenclature2factors.get(getSpeciesNomenclature())
+                : Collections.<GeneIdentifier>emptyList();
+        transcriptionFactorCB.setModel(new GeneIdentifierComboBoxModel(IDs));
+        transcriptionFactorCB.setEnabled(transcriptionFactorCB.getModel().getSize() != 0);
+
+        if (IDs.contains(curID)) setTranscriptionFactor(curID);
+        else if (!IDs.isEmpty()) setTranscriptionFactor(IDs.get(0));
+
+        registerListeners();
+        fireParametersChanged();
     }
 
     public void addParameterChangeListener(final ParameterChangeListener listener) {

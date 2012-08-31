@@ -39,15 +39,16 @@ public final class MetatargetomeParameterFrame extends JFrame {
                     add(submitButton);
                 }
             }, BorderLayout.SOUTH);
-            parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-            parameterForm.setTranscriptionFactor(factor);
-            parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
 
             parameterForm.addParameterChangeListener(new ParameterChangeListener() {
                 public void parametersChanged() {
                     submitAction.refresh();
                 }
             });
+
+            parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+            if (factor != null) parameterForm.setTranscriptionFactor(factor);
+            parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
         }
     }
 

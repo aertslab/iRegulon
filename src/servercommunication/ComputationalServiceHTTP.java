@@ -22,7 +22,7 @@ import view.IRegulonResourceBundle;
 
 
 public class ComputationalServiceHTTP extends IRegulonResourceBundle implements ComputationalService {
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private final CyLogHandler logger = ConsoleLogger.getLogger();
     private final Service service = new HTTPService();

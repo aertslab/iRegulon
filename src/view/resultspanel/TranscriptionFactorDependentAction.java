@@ -2,9 +2,13 @@ package view.resultspanel;
 
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
+import cytoscape.Cytoscape;
 import cytoscape.view.CyNetworkView;
+import cytoscape.visual.VisualMappingManager;
+import cytoscape.visual.VisualStyle;
 import domainmodel.*;
 import view.CytoscapeNetworkUtilities;
+import view.parametersform.IRegulonVisualStyle;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.guiwidgets.TranscriptionFactorListener;
 
@@ -87,5 +91,4 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
             return Collections.emptyList();
         }
     }
-
 }

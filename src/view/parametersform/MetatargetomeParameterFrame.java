@@ -29,7 +29,13 @@ public final class MetatargetomeParameterFrame extends JFrame {
             super(new BorderLayout());
 
             final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
-            final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null);
+            final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null) {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    super.actionPerformed(actionEvent);
+                    dispose();
+                }
+            };
             add(parameterForm, BorderLayout.CENTER);
             add(new JPanel(new FlowLayout()) {
                 {

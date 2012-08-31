@@ -4,6 +4,7 @@ package view.actions;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
+import cytoscape.layout.CyLayouts;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
@@ -139,8 +140,18 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
             return;
         }
 
-        final CyNetwork network =  Cytoscape.getCurrentNetwork();
-		final CyNetworkView view = Cytoscape.getCurrentNetworkView();
+        final CyNetwork network;
+        final CyNetworkView view;
+        boolean createNewNetwork = Cytoscape.getCurrentNetworkView() != null
+                && Cytoscape.getCurrentNetworkView().getNetwork() != null
+                && !Cytoscape.getCurrentNetworkView().getNetwork().equals(Cytoscape.getNullNetwork());
+        if (createNewNetwork) {
+            network = Cytoscape.getCurrentNetwork();
+		    view = Cytoscape.getCurrentNetworkView();
+        } else {
+            network = Cytoscape.createNetwork(createTitle(getParameters()));
+             view = Cytoscape.createNetworkView(network, createTitle(getParameters()));
+         }
 
         final CyNode sourceNode = createSourceNode(network, view, parameters.getTranscriptionFactor(), NO_MOTIF);
         for (CandidateTargetGene targetGene : targetome) {
@@ -150,11 +161,20 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
         Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);
 
+        if (createNewNetwork) {
+            view.applyLayout(CyLayouts.getDefaultLayout());
+            applyVisualStyle();
+        }
+
         view.redrawGraph(true, true);
 
         if (getView() != null) getView().refresh();
 
         activeSidePanel();
+    }
+
+    private String createTitle(final MetatargetomeParameters parameters) {
+        return "Metatargetome for " + parameters.getTranscriptionFactor().getGeneName();
     }
 
     @Override

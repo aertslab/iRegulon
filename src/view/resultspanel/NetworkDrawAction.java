@@ -8,11 +8,14 @@ import cytoscape.data.CyAttributes;
 import cytoscape.data.Semantics;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.cytopanels.CytoPanel;
+import cytoscape.visual.VisualMappingManager;
+import cytoscape.visual.VisualStyle;
 import domainmodel.AbstractMotif;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
 import view.ResourceAction;
+import view.parametersform.IRegulonVisualStyle;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -193,7 +196,7 @@ public abstract class NetworkDrawAction extends ResourceAction {
     }
 
     protected void activeSidePanel() {
-        final CytoPanel cytoPanel = Cytoscape.getDesktop().getCytoPanel (SwingConstants.WEST);
+        final CytoPanel cytoPanel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.WEST);
         if (cytoPanel.indexOfComponent(PLUGIN_VISUAL_NAME) < 0) {
             cytoPanel.setSelectedIndex(0);
         } else {
@@ -216,5 +219,11 @@ public abstract class NetworkDrawAction extends ResourceAction {
             }
         }
         return result;
+    }
+
+    protected void applyVisualStyle() {
+        final VisualStyle visualStyle = IRegulonVisualStyle.getVisualStyle();
+        final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
+        if (visualStyle != null) manager.setVisualStyle(visualStyle);
     }
 }

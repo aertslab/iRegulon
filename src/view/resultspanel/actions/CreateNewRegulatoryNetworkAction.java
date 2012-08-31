@@ -56,10 +56,4 @@ public class CreateNewRegulatoryNetworkAction extends TranscriptionFactorDepende
     private String createTitle(AbstractMotif motif, TranscriptionFactor factor) {
         return factor.getName() + " with motif " + motif.getName();
     }
-
-    private void applyVisualStyle() {
-        final VisualStyle visualStyle = IRegulonVisualStyle.getVisualStyle();
-        final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-        if (visualStyle != null) manager.setVisualStyle(visualStyle);
-    }
 }

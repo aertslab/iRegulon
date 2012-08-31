@@ -170,8 +170,9 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
         Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);
 
+        view.applyLayout(CyLayouts.getDefaultLayout());
+
         if (!useCurrentNetwork) {
-            view.applyLayout(CyLayouts.getDefaultLayout());
             applyVisualStyle();
         }
 

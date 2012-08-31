@@ -4,9 +4,12 @@ package view.parametersform;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
+import view.actions.QueryMetatargetomeAction;
 import view.resultspanel.Refreshable;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -27,6 +30,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
     private JComboBox speciesNomenclatureCB;
     private JList databaseList;
     private JComboBox attributeNameCB;
+    private JTextField occurenceCountLimitTF;
 
     private final List<ParameterChangeListener> listeners = new ArrayList<ParameterChangeListener>();
 
@@ -34,6 +38,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
     private final ItemListener refreshListener;
     private final ItemListener itemListener;
     private final ListSelectionListener selectionListener;
+    private final DocumentListener documentListener;
 
 
     public MetatargetomeParameterForm(Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors) {
@@ -63,6 +68,22 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
             @Override
             public void itemStateChanged(ItemEvent e) {
                 refresh();
+            }
+        };
+        documentListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                fireParametersChanged();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                fireParametersChanged();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                fireParametersChanged();
             }
         };
         registerListeners();
@@ -123,6 +144,19 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
 
     public void setAttributeName(final String attributeName) {
         attributeNameCB.setSelectedItem(attributeName);
+    }
+
+    public void setOccurenceCountThreshold(final int limit) {
+        occurenceCountLimitTF.setText(Integer.toString(limit));
+    }
+
+    @Override
+    public int getOccurenceCountThreshold() {
+        try {
+            return Integer.parseInt(occurenceCountLimitTF.getText());
+        } catch (NumberFormatException e) {
+            return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
+        }
     }
 
     private void initPanel() {
@@ -187,8 +221,8 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
         add(new JScrollPane(databaseList), cc);
 
-        final JLabel attributeNameLB = new JLabel("Attribute name:");
-        attributeNameCB = new JComboBox(AttributeComboBox.getPossibleGeneIDAttributesWithDefault().toArray());
+        final JLabel occurenceCountLimitLB = new JLabel("Occurence count threshold:");
+        occurenceCountLimitTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_THRESHOLD));
 
         cc.gridx = 0; cc.gridy = 4;
         cc.gridwidth = 1; cc.gridheight = 1;
@@ -196,9 +230,27 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.fill = GridBagConstraints.NONE;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
-        add(attributeNameLB, cc);
+        add(occurenceCountLimitLB, cc);
 
         cc.gridx++; cc.gridy = 4;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
+        add(occurenceCountLimitTF, cc);
+
+        final JLabel attributeNameLB = new JLabel("Attribute name:");
+        attributeNameCB = new JComboBox(AttributeComboBox.getPossibleGeneIDAttributesWithDefault().toArray());
+
+        cc.gridx = 0; cc.gridy = 5;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
+        add(attributeNameLB, cc);
+
+        cc.gridx++; cc.gridy = 5;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
@@ -212,6 +264,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         databaseList.getSelectionModel().addListSelectionListener(selectionListener);
         transcriptionFactorCB.addActionListener(actionListener);
         transcriptionFactorCB.addItemListener(itemListener);
+        occurenceCountLimitTF.getDocument().addDocumentListener(documentListener);
         speciesNomenclatureCB.addItemListener(refreshListener);
     }
 
@@ -221,6 +274,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         databaseList.getSelectionModel().removeListSelectionListener(selectionListener);
         transcriptionFactorCB.removeActionListener(actionListener);
         transcriptionFactorCB.removeItemListener(itemListener);
+        occurenceCountLimitTF.getDocument().removeDocumentListener(documentListener);
         speciesNomenclatureCB.removeItemListener(refreshListener);
     }
 

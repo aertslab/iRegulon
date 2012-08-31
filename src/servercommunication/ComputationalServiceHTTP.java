@@ -89,7 +89,8 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     }
 
     @Override
-    public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases) throws ServerCommunicationException {
+    public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases, final int occurenceCountThreshold)
+            throws ServerCommunicationException {
         if (factor == null || databases == null) {
             throw new IllegalArgumentException();
         }
@@ -132,6 +133,9 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                         }
                         try {
                             int occurenceCount = Integer.parseInt(columns[1]);
+
+                            if (occurenceCount < occurenceCountThreshold) return;
+
                             result.add(new CandidateTargetGene(
                                 new GeneIdentifier(columns[0], factor.getSpeciesNomenclature()),
                                 occurenceCount));

@@ -26,6 +26,11 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
     private static final CyLogHandler logger = ConsoleLogger.getLogger();
 
+    public static final int DEFAULT_THRESHOLD;
+    static {
+        DEFAULT_THRESHOLD = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("occurence_count_threshold"));
+    }
+
     private static Map<SpeciesNomenclature,Set<GeneIdentifier>> SPECIES_NOMENCLATURE2FACTORS;
     static {
         try {
@@ -134,7 +139,8 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
         try {
             targetome = service.queryPredictedTargetome(
                     getParameters().getTranscriptionFactor(),
-                    getParameters().getDatabases());
+                    getParameters().getDatabases(),
+                    getParameters().getOccurenceCountThreshold());
         } catch (ServerCommunicationException e) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;

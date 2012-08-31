@@ -364,6 +364,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
                 public String getAttributeName() {
                     return attributeName;
                 }
+
+                @Override
+                public int getOccurenceCountThreshold() {
+                    return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
+                }
             });
         }
     }
@@ -395,6 +400,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
                 @Override
                 public String getAttributeName() {
                     return attributeName;
+                }
+
+                @Override
+                public int getOccurenceCountThreshold() {
+                    return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
                 }
             });
         }

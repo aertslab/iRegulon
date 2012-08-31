@@ -1,5 +1,6 @@
 package view.resultspanel;
 
+import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
@@ -16,6 +17,8 @@ import java.util.*;
 
 
 public abstract class TranscriptionFactorDependentAction extends NetworkDrawAction {
+    private static final String RANK_ATTRIBUTE_NAME = "Rank";
+
     private SelectedMotif selectedMotif;
 	private TranscriptionFactorComboBox selectedTranscriptionFactor;
 
@@ -76,7 +79,8 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
                     : findCyNodes(geneID, name2nodes);
 
                 for (final CyNode targetNode : targetNodes) {
-                    createEdge(sourceNode, targetNode, factor, motif, geneID);
+                    final CyEdge edge = createEdge(sourceNode, targetNode, factor, motif, geneID);
+                    setEdgeAttribute(edge, RANK_ATTRIBUTE_NAME, targetGene.getRank());
                 }
 		    }
         }

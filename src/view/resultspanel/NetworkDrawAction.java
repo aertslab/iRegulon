@@ -116,7 +116,8 @@ public abstract class NetworkDrawAction extends ResourceAction {
     }
 
     protected CyEdge addEdge(CyNode node1, CyNode node2, CyNetwork network, CyNetworkView view, String motif){
-		final CyEdge edge = Cytoscape.getCyEdge(node1, node2, Semantics.INTERACTION, "regulates " + motif, true);
+		final String interaction = (motif == null) ? "regulates" : "regulates via " + motif;
+        final CyEdge edge = Cytoscape.getCyEdge(node1, node2, Semantics.INTERACTION, interaction, true);
 		network.addEdge(edge);
         view.addEdgeView(edge.getRootGraphIndex());
 		//view.updateView();

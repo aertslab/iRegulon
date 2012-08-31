@@ -164,7 +164,7 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
         final CyNode sourceNode = createSourceNode(network, view, parameters.getTranscriptionFactor(), NO_MOTIF);
         for (CandidateTargetGene targetGene : targetome) {
             final CyNode targetNode = createTargetNode(network, view, targetGene, NO_MOTIF);
-            final CyEdge edge = addEdge(sourceNode, targetNode, network, view, "");
+            final CyEdge edge = addEdge(sourceNode, targetNode, network, view, null);
             setEdgeAttribute(edge, STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
         }
 

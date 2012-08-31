@@ -28,7 +28,7 @@ class CreateMetatargetomeTask extends MetatargetomeTask {
 
         final CyNode sourceNode =  CytoscapeNetworkUtilities.createSourceNode(getNetwork(), getView(),
                 getAttributeName(), getTranscriptionFactor(), NO_MOTIF);
-        for (int idx = 0; idx <= getTargetome().size(); idx++) {
+        for (int idx = 0; idx < getTargetome().size(); idx++) {
             if (isInterrupted()) return;
             if (getMonitor() != null) getMonitor().setPercentCompleted((100 * idx)/getTargetome().size());
             final CandidateTargetGene targetGene = getTargetome().get(idx);

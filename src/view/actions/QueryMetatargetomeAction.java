@@ -24,7 +24,7 @@ import java.util.*;
 
 public class QueryMetatargetomeAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_query_metatargetome";
-    private static final int MAX_NODE_COUNT = 100;
+    private static final int MAX_NODE_COUNT = 50;
 
     private static final CyLogHandler logger = ConsoleLogger.getLogger();
 

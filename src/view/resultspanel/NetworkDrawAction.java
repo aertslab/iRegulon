@@ -95,6 +95,12 @@ public abstract class NetworkDrawAction extends ResourceAction {
 		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
 	}
 
+    protected void setEdgeAttribute(CyEdge edge, String attributeName, int attributeValue){
+		final CyAttributes attributes = Cytoscape.getEdgeAttributes();
+		attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
+		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+	}
+
     protected void setNodeAttribute(CyNode node, String attributeName, String attributeValue) {
         final CyAttributes attributes = Cytoscape.getNodeAttributes();
         attributes.setAttribute(node.getIdentifier(), attributeName, attributeValue);

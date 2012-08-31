@@ -1,6 +1,7 @@
 package view.actions;
 
 
+import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
@@ -23,6 +24,7 @@ import java.util.*;
 
 public class QueryMetatargetomeAction extends NetworkDrawAction implements Refreshable {
     private static final String NAME = "action_query_metatargetome";
+    private static final String STRENGTH_ATTRIBUTE_NAME = "Strength";
 
     private static final CyLogHandler logger = ConsoleLogger.getLogger();
 
@@ -162,7 +164,8 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
         final CyNode sourceNode = createSourceNode(network, view, parameters.getTranscriptionFactor(), NO_MOTIF);
         for (CandidateTargetGene targetGene : targetome) {
             final CyNode targetNode = createTargetNode(network, view, targetGene, NO_MOTIF);
-            addEdge(sourceNode, targetNode, network, view, "");
+            final CyEdge edge = addEdge(sourceNode, targetNode, network, view, "");
+            setEdgeAttribute(edge, STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
         }
 
         Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);

@@ -18,7 +18,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
 	private State state = State.ERROR;
 	private boolean interrupted = false;
 	private Protocol service;
-	private String errorMessage = "No error has occured";
+	private String errorMessage = "No error has occurred";
 
 	private InputParameters input;
 
@@ -106,7 +106,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
 				taskMonitor.setStatus("Creating view");
 			}
 			if (this.service.getState(jobID).equals(State.ERROR)){
-				taskMonitor.setStatus("Error: getting error message.");
+				taskMonitor.setStatus("Error: getting message");
 				this.errorMessage = this.service.getErrorMessage(jobID);
 			}
 		}

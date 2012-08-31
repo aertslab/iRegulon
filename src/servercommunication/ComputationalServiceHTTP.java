@@ -155,14 +155,14 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                 }
             });
 
-            //Collections.sort(result, new Comparator<CandidateTargetGene>() {
-            //   @Override
-            //    public int compare(CandidateTargetGene o1, CandidateTargetGene o2) {
-            //        int r = new Integer(o2.getRank()).compareTo(o1.getRank());
-            //        if (r != 0) return r;
-            //        return o1.getGeneName().compareToIgnoreCase(o2.getGeneName());
-            //    }
-            //});
+            Collections.sort(result, new Comparator<CandidateTargetGene>() {
+               @Override
+                public int compare(CandidateTargetGene o1, CandidateTargetGene o2) {
+                    int r = new Integer(o2.getRank()).compareTo(o1.getRank());
+                    if (r != 0) return r;
+                    return o1.getGeneName().compareToIgnoreCase(o2.getGeneName());
+                }
+            });
 
             return result;
 		} catch (IOException e) {

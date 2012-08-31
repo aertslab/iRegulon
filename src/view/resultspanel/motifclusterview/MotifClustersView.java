@@ -217,7 +217,7 @@ public class MotifClustersView extends JPanel implements MotifView {
             transcriptionFactorCB.setSelectedItem(getSelectedTranscriptionFactor());
         }
         if (popupListener == null) {
-            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, getResults().isRegionBased(), this, results.getParameters().getAttributeName());
+            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, false, this, results.getParameters().getAttributeName());
             table.addMouseListener(popupListener);
         }
         detailPanel.registerSelectionComponents(transcriptionFactorCB);

@@ -142,10 +142,10 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
         final CyNetwork network;
         final CyNetworkView view;
-        boolean createNewNetwork = Cytoscape.getCurrentNetworkView() != null
+        boolean useCurrentNetwork = Cytoscape.getCurrentNetworkView() != null
                 && Cytoscape.getCurrentNetworkView().getNetwork() != null
                 && !Cytoscape.getCurrentNetworkView().getNetwork().equals(Cytoscape.getNullNetwork());
-        if (createNewNetwork) {
+        if (useCurrentNetwork) {
             network = Cytoscape.getCurrentNetwork();
 		    view = Cytoscape.getCurrentNetworkView();
         } else {
@@ -161,7 +161,7 @@ public class QueryMetatargetomeAction extends NetworkDrawAction implements Refre
 
         Cytoscape.getEdgeAttributes().setUserVisible(FEATURE_ID_ATTRIBUTE_NAME, false);
 
-        if (createNewNetwork) {
+        if (!useCurrentNetwork) {
             view.applyLayout(CyLayouts.getDefaultLayout());
             applyVisualStyle();
         }

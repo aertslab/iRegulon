@@ -22,7 +22,7 @@ public class OpenParametersFormAction extends ResourceAction {
 		frame.setAlwaysOnTop(true);
 
 		final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);
-		frame.add(input.createClassicalInputView());
+		frame.add(input.createForm());
 		
 		frame.pack();
         frame.setLocationRelativeTo(Cytoscape.getDesktop());

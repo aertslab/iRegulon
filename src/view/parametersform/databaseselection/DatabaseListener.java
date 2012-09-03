@@ -21,8 +21,9 @@ import cytoscape.Cytoscape;
 import domainmodel.RankingsDatabase;
 import domainmodel.Delineation;
 import domainmodel.SpeciesNomenclature;
+import view.parametersform.PredictedRegulatorsForm;
 
-public class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener{
+final public class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener {
 
 	private final JTextField txtName;
 	private final JTextField txtEscore;
@@ -134,11 +135,11 @@ public class DatabaseListener extends IRegulonResourceBundle implements ActionLi
 	private void refreshName(){
 		this.txtName.setBackground(Color.WHITE);
 		if (this.txtName.getText().isEmpty() || 
-				this.txtName.getText().toLowerCase().equalsIgnoreCase(this.getBundle().getString("plugin_name") + " name")){
+				this.txtName.getText().toLowerCase().equalsIgnoreCase(PredictedRegulatorsForm.deriveDefaultJobName())) {
 			this.canSubmit = false;
 			this.txtName.setBackground(Color.RED);
 		}
-		if (this.txtName.getText().toLowerCase().equalsIgnoreCase(this.getBundle().getString("plugin_name") + " name")){
+		if (this.txtName.getText().toLowerCase().equalsIgnoreCase(PredictedRegulatorsForm.deriveDefaultJobName())) {
 			if (!(Cytoscape.getCurrentNetwork().getTitle() == null || Cytoscape.getCurrentNetwork().getTitle().equals("0"))){
 				this.txtName.setText(Cytoscape.getCurrentNetwork().getTitle());
 				this.txtName.setBackground(Color.WHITE);

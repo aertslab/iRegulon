@@ -31,14 +31,21 @@ import domainmodel.RankingsDatabase;
 import domainmodel.Delineation;
 import domainmodel.InputParameters;
 import domainmodel.SpeciesNomenclature;
+import view.resultspanel.Refreshable;
 
 
-public class PredictedRegulatorsForm extends IRegulonResourceBundle implements PredictedRegulatorsParameters {
+public class PredictedRegulatorsForm extends IRegulonResourceBundle
+        implements PredictedRegulatorsParameters, Refreshable {
+	private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_escore"));
+	private static final float DEFAULT_ROC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
+	private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
+	private static final float DEFAULT_MIN_ORTHOLOGOUS_IDENTITY = Float.parseFloat(BUNDLE.getString("standard_minOrthologous"));
+	private static final float DEFAULT_MAX_MOTIF_SIMILARITY_FDR = Float.parseFloat(BUNDLE.getString("standard_maxMotifSimilarityFDR"));
+
 	private JTextField jtfEscore;
 	private JComboBox jcbSpecieAndNomenclature;
 	private JTextField jtfROC;
 	private JTextField jtfVisualisation;
-	private IRegulonType iRegulonType = IRegulonType.PREDICTED_REGULATORS;
 	private JTextField jobNameTF;
 	private JTextField jtfMinOrthologous;
 	private JTextField jtfMaxMotifSimilarityFDR;
@@ -53,52 +60,18 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 	private JRadioButton rbtnConversion;
 	private DatabaseListener dbListener;
 
-	private String standardJobName;
-	private float standardEscore;
-	private float standardROC;
-	private int standardVisualisation;
-	private float standardminOrthologous;
-	private float standardMaxMotifSimilarityFDR;
 	private final JFrame frame;
 	
-	public PredictedRegulatorsForm(){
-		this.standardJobName = Cytoscape.getCurrentNetwork().getTitle();
-		if (this.standardJobName == null || this.standardJobName.equals("0")){
-			this.standardJobName = this.getBundle().getString("plugin_name") + " name";
-		}
-		this.standardEscore = Float.parseFloat(this.getBundle().getString("standard_escore"));
-		this.standardROC =Float.parseFloat(this.getBundle().getString("standard_ROC"));
-		this.standardVisualisation = Integer.parseInt(this.getBundle().getString("standard_visualisation"));
-		this.standardminOrthologous = Float.parseFloat(this.getBundle().getString("standard_minOrthologous"));
-		this.standardMaxMotifSimilarityFDR = Float.parseFloat(this.getBundle().getString("standard_maxMotifSimilarityFDR"));
-		this.frame = null;
-		this.dbListener = null;
+	public PredictedRegulatorsForm() {
+		this(null);
 	}
 	
-	public PredictedRegulatorsForm(JFrame frame){
-		this.standardJobName = Cytoscape.getCurrentNetwork().getTitle();
-		if (this.standardJobName == null || this.standardJobName.equals("0")){
-			this.standardJobName = this.getBundle().getString("plugin_name") + " name";
-		}
-		this.standardEscore = Float.parseFloat(this.getBundle().getString("standard_escore"));
-		this.standardROC =Float.parseFloat(this.getBundle().getString("standard_ROC"));
-		this.standardVisualisation = Integer.parseInt(this.getBundle().getString("standard_visualisation"));
-		this.standardminOrthologous = Float.parseFloat(this.getBundle().getString("standard_minOrthologous"));
-		this.standardMaxMotifSimilarityFDR = Float.parseFloat(this.getBundle().getString("standard_maxMotifSimilarityFDR"));
+	public PredictedRegulatorsForm(final JFrame frame) {
 		this.frame = frame;
 		this.dbListener = null;
 	}
-
-    public String getJobName() {
-        return jobNameTF.getText();
-    }
-
-    public void setJobName(final String name) {
-        jobNameTF.setText(name == null ? this.standardJobName : name);
-    }
-
 	
-	public JPanel createClassicalInputView() {
+	public JPanel createForm() {
 		final JPanel panel = new JPanel(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
         int yPos = 0;
@@ -115,7 +88,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         cc.anchor = GridBagConstraints.LINE_START;
         panel.add(jtl, cc);
         
-        this.jobNameTF = new JTextField(this.standardJobName);
+        this.jobNameTF = new JTextField(deriveDefaultJobName());
         this.jobNameTF.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -138,8 +111,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 
         yPos += 1;
 		
-        
-		
         // Species and nomenclature
         jtl = new JLabel("Species and gene nomenclature:");
         jtl.setToolTipText("Choose the species and the nomenclature of the genes.");
@@ -160,14 +131,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         yPos += 1;
 		
 		//Choose the database system
-        JPanel databasePanel = createDatabaseSubPanel();
         int lineY;
 		
 		cc.gridx = 0;
 		cc.gridy = yPos;
 		cc.gridwidth = 5;
 		cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(databasePanel, cc);
+		panel.add(createDatabaseSubPanel(), cc);
 		yPos+=1;
 		
 		GridBagLayout layoutRegion = new GridBagLayout();
@@ -178,7 +148,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		borderRegion.setTitlePosition(TitledBorder.CENTER);
 		panelRegion.setBorder(borderRegion);
 		lineY = 0;
-		
+
 		JLabel overlapJtl = new JLabel("Overlap fraction:");
 		overlapJtl.setToolTipText("<html>Percentage of the putative regulatory region associated with a gene<br/>that must overlap with the predefined regions. Must be between 0 and 1.</html>");
 		cRegion.gridx = 0;
@@ -197,27 +167,27 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		cRegion.fill=GridBagConstraints.HORIZONTAL;
 		panelRegion.add(this.txtOverlap, cRegion);
 		lineY += 1;
-		
+
 		this.rbtnDelineation = new JRadioButton();
 		this.rbtnDelineation.setEnabled(true);
 		this.rbtnDelineation.setSelected(true);
-		
+
 		this.rbtnConversion = new JRadioButton();
 		this.rbtnConversion.setEnabled(true);
-		
+
         ButtonGroup group = new ButtonGroup();
         group.add(this.rbtnDelineation);
         group.add(this.rbtnConversion);
-        
+
         this.jcbDelation = new JComboBox();
-		
+
         cRegion.gridx = 0;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 1;
         cRegion.weightx=0;
         cRegion.fill=GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.rbtnDelineation, cRegion);
-        
+
         cRegion.gridx = 1;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 4;
@@ -225,14 +195,14 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         cRegion.fill=GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.jcbDelation, cRegion);
 		lineY+=1;
-        
+
         cRegion.gridx = 0;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 1;
         cRegion.weightx=0;
         cRegion.fill=GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.rbtnConversion, cRegion);
-        
+
         JLabel labelUp = new JLabel("Upstream region:");
         labelUp.setToolTipText("Choose the amount of bp upstream of the TSS of a gene to use in the mapping to predefined regions.");
         cRegion.gridx = 1;
@@ -241,7 +211,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         cRegion.weightx=0;
         cRegion.fill=GridBagConstraints.HORIZONTAL;
         panelRegion.add(labelUp, cRegion);
-        
+
         this.txtUpStream = new JTextField();
         this.txtUpStream.setText(this.getBundle().getString("standard_upstream"));
         cRegion.gridx = 3;
@@ -251,7 +221,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         cRegion.fill=GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.txtUpStream, cRegion);
 		lineY+=1;
-        
+
         JLabel labelDown = new JLabel("Downstream region:");
         labelDown.setToolTipText("Choose the amount of bp downstream of the TSS of a gene to use in the mapping to predefined regions.");
         cRegion.gridx = 1;
@@ -260,7 +230,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         cRegion.weightx=0;
         cRegion.fill=GridBagConstraints.HORIZONTAL;
         panelRegion.add(labelDown, cRegion);
-        
+
         this.txtDownStream = new JTextField();
         this.txtDownStream.setText(this.getBundle().getString("standard_downstream"));
         cRegion.gridx = 3;
@@ -308,7 +278,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         jtl.setToolTipText("<html>Choose the minimal score threshold to consider a motif as being relevant.</html>");
         panelMotif.add(jtl, cMotif);
         
-        this.jtfEscore = new JTextField("" + this.standardEscore);
+        this.jtfEscore = new JTextField(Float.toString(DEFAULT_NES_THRESHOLD));
         this.jtfEscore.setVisible(true);
         cMotif.gridx = 1;
         cMotif.gridy = lineY;
@@ -340,7 +310,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         jtl.setVisible(true);
         panelMotif.add(jtl, cMotif);
         
-        this.jtfROC = new JTextField("" + this.standardROC);
+        this.jtfROC = new JTextField(Float.toString(DEFAULT_ROC_THRESHOLD));
         this.jtfROC.setEditable(true);
         
         cMotif.gridx = 1;
@@ -372,7 +342,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         jtl.setVisible(true);
         panelMotif.add(jtl, cMotif);
         
-        this.jtfVisualisation = new JTextField("" + this.standardVisualisation);
+        this.jtfVisualisation = new JTextField(Integer.toString(DEFAULT_RANK_THRESHOLD));
         this.jtfVisualisation.setEditable(true);
         
         cMotif.gridx = 1;
@@ -398,74 +368,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		 * OO	OO
 		 * OOOOOOO
 		 */
-		GridBagLayout layoutMotif2TF = new GridBagLayout();
-		GridBagConstraints cMotif2TF = new GridBagConstraints();
-		JPanel panelMotif2TF = new JPanel(layoutMotif2TF);
-		TitledBorder borderMotif2TF = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "TF prediction");
-		borderMotif2TF.setTitleJustification(TitledBorder.LEFT);
-		borderMotif2TF.setTitlePosition(TitledBorder.CENTER);
-		panelMotif2TF.setBorder(borderMotif2TF);
-		lineY = 0;
-		
-		jtl = new JLabel("Minimum orthologous identity:");
-		jtl.setToolTipText("<html>Choose the minimal orthologous identity.<br/>" +
-                "How closer to 0, how more orthologous the transcription factor will be to the gene for which an enriched motif was found.<br/>" +
-                "(Value must be between 0 and 1).</html>");
-		cMotif2TF.gridx = 0;
-		cMotif2TF.gridy = lineY;
-		cMotif2TF.gridwidth = 1;
-		cMotif2TF.weightx=0;
-		cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
-        jtl.setVisible(true);
-        panelMotif2TF.add(jtl, cMotif2TF);
-        
-        this.jtfMinOrthologous = new JTextField("" + this.standardminOrthologous);
-        this.jtfMinOrthologous.setEditable(true);
-        this.jtfMinOrthologous.setVisible(true);
-        cMotif2TF.gridx = 1;
-        cMotif2TF.gridy = lineY;
-        cMotif2TF.gridwidth = 1;
-        cMotif2TF.weightx=0.5;
-        cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
-        panelMotif2TF.add(this.jtfMinOrthologous, cMotif2TF);
-        lineY += 1;
-		
-		//max motif similarity FDR
-		/* SSSSSSS
-		 * SS
-		 * SSSSSSS
-		 * 		SS
-		 * SSSSSSS
-		 */
-		jtl = new JLabel("Maximum motif similarity FDR.");
-		jtl.setToolTipText("<html>Choose the maximum motif similarity FDR. <br/>" +
-                "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +
-                "(Value must be between 0 and 1).</html>");
-		cMotif2TF.gridx = 0;
-		cMotif2TF.gridy = lineY;
-		cMotif2TF.gridwidth = 1;
-		cMotif2TF.weightx=0;
-		cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
-        jtl.setVisible(true);
-        panelMotif2TF.add(jtl, cMotif2TF);
-        
-        this.jtfMaxMotifSimilarityFDR = new JTextField("" + this.standardMaxMotifSimilarityFDR);
-        this.jtfMaxMotifSimilarityFDR.setEditable(true);
-        this.jtfMaxMotifSimilarityFDR.setVisible(true);
-        
-        cMotif2TF.gridx = 1;
-        cMotif2TF.gridy = lineY;
-        cMotif2TF.gridwidth = 1;
-        cMotif2TF.weightx=0.5;
-        cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
-        panelMotif2TF.add(this.jtfMaxMotifSimilarityFDR, cMotif2TF);
-        lineY += 1;
-		
 		cc.gridx = 0;
 		cc.gridy = yPos;
 		cc.gridwidth = 5;
 		cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelMotif2TF, cc);
+		panel.add(createMotif2TFSubPanel(), cc);
 		yPos+=1;
         
 		GridBagLayout layoutNode = new GridBagLayout();
@@ -530,14 +437,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		panel.add(panelNode, cc);
 		yPos+=1;
 
-		//Button
-		/* BBBBBB
-		 * BB  BB
-		 * BBBBBB
-		 * BB  BB
-		 * BBBBBB
-		 */
-        final JPanel mainPanel = new JPanel(new BorderLayout());
+		final JPanel mainPanel = new JPanel(new BorderLayout());
         final JButton cancelButton = new JButton("Cancel");
                 cancelButton.addActionListener(new ActionListener() {
                     @Override
@@ -656,139 +556,184 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         return databasePanel;
     }
 
-    /*
-      * Generating all needed input variabels
-      */
-	
-	/**
-	 * 
-	 * @return the e score as a float
-	 */
+    private JPanel createMotif2TFSubPanel() {
+        GridBagLayout layoutMotif2TF = new GridBagLayout();
+		GridBagConstraints cMotif2TF = new GridBagConstraints();
+		JPanel panelMotif2TF = new JPanel(layoutMotif2TF);
+		TitledBorder borderMotif2TF = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "TF prediction");
+		borderMotif2TF.setTitleJustification(TitledBorder.LEFT);
+		borderMotif2TF.setTitlePosition(TitledBorder.CENTER);
+		panelMotif2TF.setBorder(borderMotif2TF);
+		int lineY = 0;
+
+		JLabel jtl = new JLabel("Minimum orthologous identity:");
+		jtl.setToolTipText("<html>Choose the minimal orthologous identity.<br/>" +
+                "How closer to 0, how more orthologous the transcription factor will be to the gene for which an enriched motif was found.<br/>" +
+                "(Value must be between 0 and 1).</html>");
+		cMotif2TF.gridx = 0;
+		cMotif2TF.gridy = lineY;
+		cMotif2TF.gridwidth = 1;
+		cMotif2TF.weightx=0;
+		cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        jtl.setVisible(true);
+        panelMotif2TF.add(jtl, cMotif2TF);
+
+        this.jtfMinOrthologous = new JTextField(Float.toString(DEFAULT_MIN_ORTHOLOGOUS_IDENTITY));
+        this.jtfMinOrthologous.setEditable(true);
+        this.jtfMinOrthologous.setVisible(true);
+        cMotif2TF.gridx = 1;
+        cMotif2TF.gridy = lineY;
+        cMotif2TF.gridwidth = 1;
+        cMotif2TF.weightx=0.5;
+        cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        panelMotif2TF.add(this.jtfMinOrthologous, cMotif2TF);
+        lineY += 1;
+
+		//max motif similarity FDR
+		/* SSSSSSS
+		 * SS
+		 * SSSSSSS
+		 * 		SS
+		 * SSSSSSS
+		 */
+		jtl = new JLabel("Maximum motif similarity FDR:");
+		jtl.setToolTipText("<html>Choose the maximum motif similarity FDR. <br/>" +
+                "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +
+                "(Value must be between 0 and 1).</html>");
+		cMotif2TF.gridx = 0;
+		cMotif2TF.gridy = lineY;
+		cMotif2TF.gridwidth = 1;
+		cMotif2TF.weightx=0;
+		cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        jtl.setVisible(true);
+        panelMotif2TF.add(jtl, cMotif2TF);
+
+        this.jtfMaxMotifSimilarityFDR = new JTextField(Float.toString(DEFAULT_MAX_MOTIF_SIMILARITY_FDR));
+        this.jtfMaxMotifSimilarityFDR.setEditable(true);
+        this.jtfMaxMotifSimilarityFDR.setVisible(true);
+
+        cMotif2TF.gridx = 1;
+        cMotif2TF.gridy = lineY;
+        cMotif2TF.gridwidth = 1;
+        cMotif2TF.weightx=0.5;
+        cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        panelMotif2TF.add(this.jtfMaxMotifSimilarityFDR, cMotif2TF);
+
+        return panelMotif2TF;
+    }
+
+    public String getJobName() {
+        return jobNameTF.getText();
+    }
+
+    public void setJobName(final String name) {
+        jobNameTF.setText(name == null ? deriveDefaultJobName() : name);
+    }
+
+    public static String deriveDefaultJobName() {
+        final String name = Cytoscape.getCurrentNetwork().getTitle();
+		if (name == null || name.equals("0")) {
+			return BUNDLE.getString("plugin_name") + " name";
+		} else {
+            return name;
+        }
+    }
+
 	public float getNESThreshold(){
-		return Float.parseFloat(((String) this.jtfEscore.getText()));
+		return Float.parseFloat((this.jtfEscore.getText()));
 	}
 	
-	/**
-	 * 
-	 * @return the ROC threshold for AUC
-	 */
 	public float getAUCThreshold(){
-		return Float.parseFloat((String) this.jtfROC.getText());
+		return Float.parseFloat(this.jtfROC.getText());
 	}
-	
-	/**
-	 * 
-	 * @return the Threshold for visualisation.
-	 */
+
 	public int getRankThreshold(){
-		return Integer.parseInt((String) this.jtfVisualisation.getText());
+		return Integer.parseInt(this.jtfVisualisation.getText());
 	}
 	
-	/**
-	 * 
-	 * @return the species and the nomenclature of this network
-	 */
 	public SpeciesNomenclature getSpeciesNomenclature(){
 		return (SpeciesNomenclature) this.jcbSpecieAndNomenclature.getSelectedItem();
 	}
-	
-	/**
-	 * @return the type of the iRegulon that must be executed
-	 */
-	public IRegulonType getiRegulonType(){
-		return this.iRegulonType;
-	}
-	
-	/**
-	 * 
-	 * @return the name of the run
-	 */
-	private String getName(){
-		return (String) this.jobNameTF.getText();
-	}
-	
-	public InputParameters deriveParameters() {
-		return new InputParameters(CytoscapeNetworkUtilities.getGenes(this.getAttributeName(),
-                this.getSpeciesNomenclature()),
-				this.getNESThreshold(), 
-				this.getAUCThreshold(), 
-				this.getRankThreshold(), 
-				this.getSpeciesNomenclature(), 
-				this.iRegulonType, 
-				this.getName(), 
-				this.getMinOrthologous(), 
-				this.getMaxMotifSimilarityFDR(), 
-				this.isRegionBased(), 
-				this.getDatabase(), 
-				this.getOverlap(), 
-				this.getDelineation(), 
-				this.getUpStream(), 
-				this.getDownStream(),
-				this.getAttributeName());
+
+	public float getMinOrthologousIdentity() {
+		return Float.parseFloat(this.jtfMinOrthologous.getText());
 	}
 
-	@Override
-	public float getMinOrthologous() {
-		return Float.parseFloat((String) this.jtfMinOrthologous.getText());
-	}
-
-	@Override
 	public float getMaxMotifSimilarityFDR() {
-		return Float.parseFloat((String) this.jtfMaxMotifSimilarityFDR.getText());
+		return Float.parseFloat(this.jtfMaxMotifSimilarityFDR.getText());
 	}
 
-	@Override
 	public String getAttributeName() {
 		return (String) this.jcbGeneName.getSelectedItem();
 	}
 	
-	public boolean isRegionBased(){
-		return (boolean) this.jcbBased.isRegionBased();
+	public boolean isRegionBasedDatabase(){
+		return this.jcbBased.isRegionBased();
 	}
 	
-	public RankingsDatabase getDatabase(){
-		if (this.isRegionBased()){
+	public RankingsDatabase getRankingsDatabase(){
+		if (this.isRegionBasedDatabase()){
 			return (RankingsDatabase) this.jcbdatabase.getSelectedItem();
 		}else{
 			return (RankingsDatabase) this.jcbdatabase.getSelectedItem();
 		}
 	}
 	
-	public Float getOverlap(){
-		if (this.isRegionBased()){
-			return Float.parseFloat((String) this.txtOverlap.getText());
+	public Float getOverlapFraction(){
+		if (this.isRegionBasedDatabase()){
+			return Float.parseFloat(this.txtOverlap.getText());
 		}else{
 			return -1f;
 		}
 	}
 	
 	public Delineation getDelineation(){
-		if (this.isRegionBased() && this.rbtnDelineation.isSelected()){
+		if (this.isRegionBasedDatabase() && this.rbtnDelineation.isSelected()){
 			return (Delineation) this.jcbDelation.getSelectedItem();
 		}else{
 			return new Delineation(null, null);
 		}
 	}
 	
-	public int getUpStream(){
-		if (this.isRegionBased() && this.rbtnConversion.isSelected()){
-			return Integer.parseInt((String) this.txtUpStream.getText());
+	public int getUpstreamRegionInBp(){
+		if (this.isRegionBasedDatabase() && this.rbtnConversion.isSelected()){
+			return Integer.parseInt(this.txtUpStream.getText());
 		}else{
 			return -1;
 		}
 	}
 	
-	public int getDownStream(){
-		if (this.isRegionBased() && this.rbtnConversion.isSelected()){
-			return Integer.parseInt((String) this.txtDownStream.getText());
+	public int getDownstreamInBp(){
+		if (this.isRegionBasedDatabase() && this.rbtnConversion.isSelected()){
+			return Integer.parseInt(this.txtDownStream.getText());
 		}else{
 			return -1;
 		}
 	}
-	
-	public DatabaseListener getListenerForClassicInput(){
-		return this.dbListener;
+
+    @Override
+    public void refresh() {
+        dbListener.refresh();
+    }
+
+	public InputParameters deriveParameters() {
+		return new InputParameters(CytoscapeNetworkUtilities.getGenes(
+                getAttributeName(),
+                getSpeciesNomenclature()),
+				getNESThreshold(),
+				getAUCThreshold(),
+				getRankThreshold(),
+				getSpeciesNomenclature(),
+				IRegulonType.PREDICTED_REGULATORS,
+				getJobName(),
+				getMinOrthologousIdentity(),
+				getMaxMotifSimilarityFDR(),
+				isRegionBasedDatabase(),
+				getRankingsDatabase(),
+				getOverlapFraction(),
+				getDelineation(),
+				getUpstreamRegionInBp(),
+				getDownstreamInBp(),
+				getAttributeName());
 	}
-	
-	
 }

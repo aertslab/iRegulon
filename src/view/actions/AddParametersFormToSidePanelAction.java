@@ -61,7 +61,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
         final MetatargetomeForm metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
-		tabbedPane.addTab("Predict regulators", null, predictedRegulatorsForm.createClassicalInputView(), null);
+		tabbedPane.addTab("Predict regulators", null, predictedRegulatorsForm.createForm(), null);
         tabbedPane.addTab("Query metatargetome", null, metatargetomeForm, null);
 
         cc.gridx = 0; cc.gridy = 1;
@@ -80,7 +80,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
 		cytoPanel.addCytoPanelListener(new CytoPanelListener() {
             @Override
             public void onStateChange(CytoPanelState newState) {
-                predictedRegulatorsForm.getListenerForClassicInput().refresh();
+                predictedRegulatorsForm.refresh();
                 metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
             }
 
@@ -102,7 +102,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                predictedRegulatorsForm.getListenerForClassicInput().refresh();
+                predictedRegulatorsForm.refresh();
                 metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
             }
         });

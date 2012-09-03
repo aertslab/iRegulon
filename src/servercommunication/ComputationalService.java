@@ -9,7 +9,7 @@ import domainmodel.*;
 
 
 public interface ComputationalService {
-	public List<Motif> findPredictedRegulators(InputParameters input);
+	public List<Motif> findPredictedRegulators(InputParameters input) throws ServerCommunicationException;
 
     public Set<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException;
 

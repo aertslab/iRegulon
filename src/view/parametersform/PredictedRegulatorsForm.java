@@ -96,35 +96,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 	}
 
 	
-	public JPanel createClassicalInputView(){
+	public JPanel createClassicalInputView() {
 		final JPanel panel = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
         final Font font = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
         int yPos = 0;
 
         JLabel jtl;
-		if (this.frame != null){
-			jtl = new JLabel(getBundle().getString("plugin_visual_name"));
-			jtl.setFont(new Font("Serif", 0, 50));
-        
-			c.gridx = 0; c.gridy = yPos;
-			c.gridwidth = 4;
-			c.fill=GridBagConstraints.HORIZONTAL;
-
-			jtl.setVisible(true);
-			panel.add(jtl, c);
-			yPos += 2;
-		}
-        
-        jtl = new JLabel("Prediction of transcription factors");
-        jtl.setFont(new Font("Serif", 0, 30));
-        
-        c.gridx = 0; c.gridy = yPos;
-		c.gridwidth = 4;
-		c.fill=GridBagConstraints.HORIZONTAL;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        yPos += 1;
 
         //Name of the analysis
         /*
@@ -138,7 +116,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         jtl.setFont(font);
         jtl.setToolTipText("Choose a name for your analysis.");
         c.gridx = 0;
-		c.gridy = yPos;
+        c.fill=GridBagConstraints.HORIZONTAL;
+        c.gridy = yPos;
 		c.gridwidth = 2;
         
         jtl.setVisible(true);
@@ -816,120 +795,15 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         yPos += 2;
         
         f = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
-        /*
-        //Change the kind of iRegulon action
-        jtl = new JLabel("Choose the type of the " + this.getBundle().getString("plugin_name") + " action: ");
-        jtl.setFont(f);
-        jtl.setToolTipText("<html> Choose the type for your analysis. </html>");
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-        
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        yPos+=1;
-        
-        //Create the radio buttons.
-        String predictedRegulatorsString = "Predict regulators";
-        JRadioButton predictedRegulators = new JRadioButton(predictedRegulatorsString);
-        predictedRegulators.setActionCommand(predictedRegulatorsString);
-        predictedRegulators.setSelected(true);
-
-        String databaseForRegulatorsString = "Database for regulators";
-        JRadioButton databaseForRegulators = new JRadioButton(databaseForRegulatorsString);
-        databaseForRegulators.setActionCommand(databaseForRegulatorsString);
-        databaseForRegulators.setEnabled(false);
-
-        String databaseForTargetomeString = "Database for Targetome";
-        JRadioButton databaseForTargetome = new JRadioButton(databaseForTargetomeString);
-        databaseForTargetome.setActionCommand(databaseForTargetomeString);
-        databaseForTargetome.setEnabled(false);
-        
-        String databaseNetworkAnnotationsString = "Database for network annotations";
-        JRadioButton databaseNetworkAnnotations = new JRadioButton(databaseNetworkAnnotationsString);
-        databaseNetworkAnnotations.setActionCommand(databaseNetworkAnnotationsString);
-        databaseNetworkAnnotations.setEnabled(false);
-        
-        //Group the radio buttons.
-        ButtonGroup group = new ButtonGroup();
-        group.add(predictedRegulators);
-        group.add(databaseForRegulators);
-        group.add(databaseForTargetome);
-        group.add(databaseNetworkAnnotations);
-
-        this.detailpanel = createClassicalInputView();
-        //Register a listener for the radio buttons.
-        predictedRegulators.addActionListener(new SubmitAnalysisAction(this) {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				iRegulonType = IRegulonType.PREDICTED_REGULATORS;
-				detailpanel = createClassicalInputView();
-			}
-		});
-        databaseForRegulators.addActionListener(new SubmitAnalysisAction(this) {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				iRegulonType = IRegulonType.DATABASE_FOR_REGULATORS;
-				detailpanel = new JPanel();
-			}
-		});
-        databaseForTargetome.addActionListener(new SubmitAnalysisAction(this) {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				iRegulonType = IRegulonType.DATABASE_FOR_TARGETOME;
-				detailpanel = new JPanel();
-			}
-		});
-        databaseNetworkAnnotations.addActionListener(new SubmitAnalysisAction(this) {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				iRegulonType = IRegulonType.DATABASE_NETWORK_ANNOTATIONS;
-				detailpanel = new JPanel();
-			}
-		});
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-        panel.add(predictedRegulators, c);
-        yPos+=1;
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-        panel.add(databaseForRegulators, c);
-        yPos+=1;
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-        panel.add(databaseForTargetome, c);
-        yPos+=1;
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-        panel.add(databaseNetworkAnnotations, c);
-        yPos+=1;
-        */
         c.gridx = 0;
 		c.gridy = yPos;
 		c.gridwidth = 3;
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
-		JComponent classical = createClassicalInputView();
-		tabbedPane.addTab("Classical", null, createClassicalInputView(),
-				"Do a classical " + this.getBundle().getString("plugin_name") + " analysis.");
-		
-
+		tabbedPane.addTab("Predict regulators", null, createClassicalInputView(), null);
         
         jtl.setVisible(true);
         panel.add(tabbedPane, c);
-        
-        
 		
 		return panel;
 	}

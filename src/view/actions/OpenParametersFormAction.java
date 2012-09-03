@@ -18,7 +18,7 @@ public class OpenParametersFormAction extends ResourceAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        final JFrame frame = new JFrame(getBundle().getString("plugin_name"));
+        final JFrame frame = new JFrame("Predict regulators");
 		frame.setAlwaysOnTop(true);
 
 		final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);

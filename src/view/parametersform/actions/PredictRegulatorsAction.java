@@ -51,7 +51,7 @@ public class PredictRegulatorsAction extends ResourceAction {
         try {
             motifList = service.findPredictedRegulators(input);
         } catch (ServerCommunicationException e) {
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (!motifList.isEmpty()) {
@@ -62,6 +62,17 @@ public class PredictRegulatorsAction extends ResourceAction {
         } else {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                     "Not a single motif is enriched for your input gene signature.");
+        }
+    }
+
+    private String deriveMessage(ServerCommunicationException e) {
+        if (e.getMessage().contains("The following genes were lost:")) {
+
+
+
+            return e.getMessage();
+        } else {
+            return e.getMessage();
         }
     }
 }

@@ -2,12 +2,11 @@ package view.actions;
 
 import cytoscape.Cytoscape;
 import view.ResourceAction;
-import view.parametersform.InputView;
+import view.parametersform.PredictedRegulatorsForm;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 public class OpenParametersFormAction extends ResourceAction {
@@ -22,7 +21,7 @@ public class OpenParametersFormAction extends ResourceAction {
         final JFrame frame = new JFrame(getBundle().getString("plugin_name"));
 		frame.setAlwaysOnTop(true);
 
-		final InputView input = new InputView(frame);
+		final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);
 		frame.add(input.createClassicalInputView());
 		
 		frame.pack();

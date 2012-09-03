@@ -35,7 +35,7 @@ import domainmodel.Delineation;
 import domainmodel.InputParameters;
 import domainmodel.SpeciesNomenclature;
 
-public class InputView extends IRegulonResourceBundle implements Parameters {
+public class PredictedRegulatorsForm extends IRegulonResourceBundle implements PredictedRegulatorsParameters {
 	private static final int FONT_SIZE_IN_POINTS = 12;
 
 	private JTextField jtfEscore;
@@ -67,7 +67,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 	private float standardMaxMotifSimilarityFDR;
 	private final JFrame frame;
 	
-	public InputView(){
+	public PredictedRegulatorsForm(){
 		this.standardJobName = Cytoscape.getCurrentNetwork().getTitle();
 		if (this.standardJobName == null || this.standardJobName.equals("0")){
 			this.standardJobName = this.getBundle().getString("plugin_name") + " name";
@@ -81,7 +81,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 		this.dbListener = null;
 	}
 	
-	public InputView(JFrame frame){
+	public PredictedRegulatorsForm(JFrame frame){
 		this.standardJobName = Cytoscape.getCurrentNetwork().getTitle();
 		if (this.standardJobName == null || this.standardJobName.equals("0")){
 			this.standardJobName = this.getBundle().getString("plugin_name") + " name";

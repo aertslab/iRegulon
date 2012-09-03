@@ -7,7 +7,7 @@ import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
 import view.ResourceAction;
 import view.parametersform.IRegulonType;
-import view.parametersform.Parameters;
+import view.parametersform.PredictedRegulatorsParameters;
 import view.resultspanel.ResultsView;
 
 import java.awt.event.ActionEvent;
@@ -27,14 +27,14 @@ public class PredictRegulatorsAction extends ResourceAction {
     private static final String NAME = "action_submit_analysis";
 
     private final ComputationalService service = new ComputationalServiceHTTP();
-	private final Parameters parameters;
+	private final PredictedRegulatorsParameters parameters;
 	
-	public PredictRegulatorsAction(final Parameters parameters) {
+	public PredictRegulatorsAction(final PredictedRegulatorsParameters parameters) {
 		super(NAME);
 		this.parameters = parameters;
 	}
 
-    public Parameters getParameters() {
+    public PredictedRegulatorsParameters getParameters() {
         return parameters;
     }
 

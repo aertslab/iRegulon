@@ -2,7 +2,7 @@ package view.parametersform;
 
 import domainmodel.InputParameters;
 
-public interface Parameters {
+public interface PredictedRegulatorsParameters {
 	
 	public int getRankThreshold();
 	

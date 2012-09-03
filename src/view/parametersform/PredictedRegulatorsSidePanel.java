@@ -11,10 +11,10 @@ import cytoscape.view.cytopanels.CytoPanelListener;
 import cytoscape.view.cytopanels.CytoPanelState;
 import view.IRegulonResourceBundle;
 
-public class InputViewSidePanel extends IRegulonResourceBundle {
+public class PredictedRegulatorsSidePanel extends IRegulonResourceBundle {
 	
 	
-	public InputViewSidePanel(){
+	public PredictedRegulatorsSidePanel(){
 		
 	}
 	
@@ -28,7 +28,7 @@ public class InputViewSidePanel extends IRegulonResourceBundle {
 		//addCytoPanelListener(CytoPanelListener);
 
 		
-		final InputView input = new InputView();
+		final PredictedRegulatorsForm input = new PredictedRegulatorsForm();
 		JPanel panel = input.CreateGeneralInputView();
 		//JPanel panel = new JPanel(layout);
 		//JPanel panel = new JPanel();

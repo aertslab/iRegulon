@@ -1,7 +1,7 @@
 package view.actions;
 
 import view.ResourceAction;
-import view.parametersform.InputViewSidePanel;
+import view.parametersform.PredictedRegulatorsSidePanel;
 
 import java.awt.event.ActionEvent;
 
@@ -14,7 +14,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final InputViewSidePanel inputView = new InputViewSidePanel();
+		final PredictedRegulatorsSidePanel inputView = new PredictedRegulatorsSidePanel();
 		inputView.addSidePanel();
 	}
 }

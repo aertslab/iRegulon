@@ -769,46 +769,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		return panel;
 	}
 	
-	
-	
-	/**
-	 * 
-	 * @return the panel with all possible input parameters
-	 */
-	public JPanel CreateGeneralInputView(){
-		GridBagLayout layout = new GridBagLayout();
-		GridBagConstraints c = new GridBagConstraints();
-		JPanel panel = new JPanel(layout);
-		int yPos = 0;
-		
-		JLabel jtl = new JLabel(getBundle().getString("plugin_visual_name"));
-        Font f = new Font("Serif", 0, 45); 
-        jtl.setFont(f);
-        
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		c.fill=GridBagConstraints.HORIZONTAL;
-
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        yPos += 2;
-        
-        f = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		
-		JTabbedPane tabbedPane = new JTabbedPane();
-		tabbedPane.addTab("Predict regulators", null, createClassicalInputView(), null);
-        
-        jtl.setVisible(true);
-        panel.add(tabbedPane, c);
-		
-		return panel;
-	}
-	
-	
 	/**
 	 * 
 	 * @return the total input in a input class

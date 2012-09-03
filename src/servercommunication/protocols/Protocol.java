@@ -11,11 +11,11 @@ import servercommunication.ServerCommunicationException;
 public interface Protocol {
 	public int sentJob(InputParameters input) throws ServerCommunicationException;
 	
-	public State getState(int jobID);
+	public State getState(int jobID) throws ServerCommunicationException;
 	
-	public int getJobsBeforeThis(int jobID);
+	public int getJobsBeforeThis(int jobID) throws ServerCommunicationException;
 	
-	public Collection<Motif> getMotifs(int jobID);
+	public Collection<Motif> getMotifs(int jobID) throws ServerCommunicationException;
 	
-	public String getErrorMessage(int jobID);
+	public String getErrorMessage(int jobID) throws ServerCommunicationException;
 }

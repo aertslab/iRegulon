@@ -4,6 +4,7 @@ import servercommunication.ServerCommunicationException;
 import view.IRegulonResourceBundle;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -20,11 +21,18 @@ import domainmodel.Motif;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TranscriptionFactor;
 
-public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
-	public HTTPProtocol(){
-		
+public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
+	public HTTPProtocol() {
 	}
+
+    private URLConnection createConnection(String bundleKey) throws IOException {
+        final URL url = new URL(getBundle().getString(bundleKey));
+		final URLConnection connection = url.openConnection();
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
+        return connection;
+    }
 	
 	/**
 	 * Sent a request for a job in iRegulon
@@ -82,18 +90,21 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 		    		data = data + ";" + geneIDArray[index].getGeneName();
 		    	}
 		    }
-		    //System.out.println(data);
-			// Send data
-		    URL url = new URL(this.getBundle().getString("URL_submit"));
-		    URLConnection conn = url.openConnection();
-		    conn.setDoInput(true);
-		    conn.setDoOutput(true);
-		    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-		    
+
+            final URLConnection connection;
+		    try {
+		        connection = createConnection("URL_submit");
+            } catch (IOException e) {
+                throw new ServerCommunicationException("Server is not available.");
+            }
+
+            // Send data
+            OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
 		    wr.write(data);
 		    wr.flush();
+
 		    // Get the response
-		    BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		    BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		    
 		    String line;
 		    int jobID = 0;
@@ -120,7 +131,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 	 * @param jobID the id of the job
 	 * @return the state of the job @see State
 	 */
-	public State getState(int jobID){
+	public State getState(int jobID) throws ServerCommunicationException {
 		try {
 			//creating the data
 			
@@ -156,12 +167,11 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 		    }
 		    wr.close();
 		    rd.close();
-		    //System.out.println(state.toString());
+
 		    return state;
-		} catch (Exception e) {
-			System.err.println(e.toString());
+		} catch (IOException e) {
+			throw new ServerCommunicationException(e.getMessage());
 		}
-		return State.ERROR;
 	}
 	
 	/**
@@ -169,7 +179,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 	 * @param jobID the id of the job
 	 * @return the amount of jobs before this job
 	 */
-	public int getJobsBeforeThis(int jobID){
+	public int getJobsBeforeThis(int jobID) throws ServerCommunicationException {
 		try {
 			//creating the data
 			
@@ -198,10 +208,9 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 		    wr.close();
 		    rd.close();
 		    return jobsBefore;
-		} catch (Exception e) {
-			System.out.println(e.toString());
+		} catch (IOException e) {
+			throw new ServerCommunicationException(e.getMessage());
 		}
-		return -1;
 	}
 	
 	/**
@@ -209,7 +218,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 	 * @param jobID the id of the job
 	 * @return a collection of Motifs
 	 */
-	public Collection<Motif> getMotifs(int jobID){
+	public Collection<Motif> getMotifs(int jobID) throws ServerCommunicationException {
 		Collection<Motif> motifs = new ArrayList<Motif>();
 		try {
 			//creating the data
@@ -351,17 +360,15 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 		    wr.close();
 		    rd.close();
 		   
-		} catch (Exception e) {
-			System.out.println(e.toString());
+		} catch (IOException e) {
+			throw new ServerCommunicationException(e.getMessage());
 		}
 		return motifs;
 	}
 
 	@Override
-	public String getErrorMessage(int jobID) {
+	public String getErrorMessage(int jobID) throws ServerCommunicationException {
 		try {
-			//creating the data
-			
 			// Send data
 			URL url = new URL(this.getBundle().getString("URL_error"));
 		    URLConnection conn = url.openConnection();
@@ -383,12 +390,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 		    wr.close();
 		    rd.close();
 		    return error;
-		} catch (Exception e) {
-			System.out.println(e.toString());
+		} catch (IOException e) {
+			throw new ServerCommunicationException(e.getMessage());
 		}
-		return "Error: could not get the error message";
 	}
-	
-	
-	
 }

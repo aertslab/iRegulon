@@ -1,9 +1,13 @@
 package servercommunication;
 
+import cytoscape.logger.ConsoleLogger;
+import cytoscape.logger.CyLogHandler;
+import cytoscape.logger.LogLevel;
 import servercommunication.protocols.*;
 import view.IRegulonResourceBundle;
 
 import java.util.Collection;
+import java.util.Collections;
 
 
 import cytoscape.task.Task;
@@ -12,125 +16,131 @@ import domainmodel.InputParameters;
 import domainmodel.Motif;
 
 public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implements Task {
-	private cytoscape.task.TaskMonitor taskMonitor;
-	
-	private Collection<Motif> motifs;
-	private State state = State.ERROR;
-	private boolean interrupted = false;
-	private Protocol service;
-	private String errorMessage = "No error has occurred";
+    private static final int WAITING_TIME_IN_MS = 3000;
+    private final CyLogHandler logger = ConsoleLogger.getLogger();
 
-	private InputParameters input;
+    private cytoscape.task.TaskMonitor taskMonitor;
 
-	
-	public FindPredictedRegulatorsTask(Protocol service, InputParameters input) {
-		this.service = service;
-		this.input = input;
-	}
-	
-	public void halt() {
-		this.interrupted = true;
-	}
+    private Collection<Motif> motifs = Collections.emptyList();
+    private State state = State.ERROR;
+    private boolean interrupted = false;
+    private Protocol service;
+    private String errorMessage = "";
 
-	public String getTitle() {
-		return getBundle().getString("plugin_name") + ": Prediction of transcription factors" ;
-	}
+    private InputParameters input;
 
-	public void run() {
-		int progress = -1;
-		taskMonitor.setStatus("Starting request");
-		taskMonitor.setPercentCompleted(progress);
-		
-		int jobID;
-		try {
-			jobID = this.service.sentJob(this.input);
-		} catch (ServerCommunicationException e) {
-			System.err.println(e.getMessage());
-			e.printStackTrace();
-			jobID = -1;
-			this.interrupted = true;
-			this.errorMessage = e.getMessage();
-			this.state = State.ERROR;
-		}
-		progress = 10;
-		if (jobID == -1){
-			this.interrupted = true;
-			
-		}
-		taskMonitor.setPercentCompleted(progress);
-		int jobsBefore = this.service.getJobsBeforeThis(jobID);
-		int progressJobs = 65;
-		if (jobsBefore != 0){
-			progressJobs = 65 / jobsBefore;
-		}
-		taskMonitor.setStatus("Requesting server");
-		boolean otherMessage = true;
-		while(this.service.getState(jobID).equals(State.REQUESTED) && ! this.interrupted){
-			int jobsBeforeNow = this.service.getJobsBeforeThis(jobID);
-			if (jobsBefore > jobsBeforeNow){
-				jobsBefore = jobsBeforeNow;
-				progress += progressJobs;
-				taskMonitor.setPercentCompleted(progress);
-				otherMessage = !otherMessage;
-				if (otherMessage){
-					taskMonitor.setStatus("Requesting server");
-				}else{
-					taskMonitor.setStatus("Waiting until other jobs are finished");
-				}
-			}
-		}
-		progress = 70;
-		progress += 10;
-		taskMonitor.setPercentCompleted(progress);
-		if (! this.interrupted){
-			taskMonitor.setStatus("Running your analysis");
-		}
-		while(this.service.getState(jobID).equals(State.RUNNING)  && ! this.interrupted){
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		if (! this.interrupted){
-			progress = progress + 10;
-			taskMonitor.setPercentCompleted(progress);
-			this.state = this.service.getState(jobID);
-			if (this.service.getState(jobID).equals(State.FINISHED)){
-				taskMonitor.setStatus("Receiving analysis results");
-				Collection<Motif> motifs = this.service.getMotifs(jobID);
-				this.motifs = motifs;
-				this.state = this.service.getState(jobID);
-				progress = 100;
-				taskMonitor.setPercentCompleted(progress);
-				taskMonitor.setStatus("Creating view");
-			}
-			if (this.service.getState(jobID).equals(State.ERROR)){
-				taskMonitor.setStatus("Error: getting message");
-				this.errorMessage = this.service.getErrorMessage(jobID);
-			}
-		}
-		
-	}
 
-	@Override
-	public void setTaskMonitor(TaskMonitor monitor) throws IllegalThreadStateException {
-		taskMonitor = monitor;
-	}
-	
-	public Collection<Motif> getMotifs(){
-		return this.motifs;
-	}
-	
-	public State getFinishedState(){
-		return this.state;
-	}
-	
-	public boolean getIsInterupted(){
-		return this.interrupted;
-	}
-	
-	public String getErrorMessage(){
-		return this.errorMessage;
-	}
+    public FindPredictedRegulatorsTask(Protocol service, InputParameters input) {
+        this.service = service;
+        this.input = input;
+    }
+
+    public void halt() {
+        this.interrupted = true;
+    }
+
+    public String getTitle() {
+        return getBundle().getString("plugin_name") + ": Prediction of transcription factors";
+    }
+
+    private void interrupt(final String msg) {
+        this.interrupted = true;
+        this.errorMessage = msg;
+        this.motifs = Collections.emptyList();
+        this.state = State.ERROR;
+    }
+
+    public void run() {
+        try {
+            taskMonitor.setStatus("Starting request");
+            taskMonitor.setPercentCompleted(0);
+
+            final int jobID = service.sentJob(input);
+            if (jobID < 0) {
+                interrupt("Invalid job ID received from server.");
+                return;
+            }
+
+            if (interrupted) {
+                interrupt("Job cancelled by user");
+                return;
+            }
+
+            taskMonitor.setStatus("Requesting server");
+            taskMonitor.setPercentCompleted(10);
+
+            while (service.getState(jobID).equals(State.REQUESTED)) {
+                if (interrupted) {
+                    interrupt("Job cancelled by user");
+                    return;
+                }
+
+                final int numberOfJobsInQueue = service.getJobsBeforeThis(jobID);
+                taskMonitor.setStatus(numberOfJobsInQueue == 0
+                        ? "Requesting server"
+                        : "Waiting until other jobs are finished");
+
+                final int progressJobs = (numberOfJobsInQueue != 0) ? 70 / numberOfJobsInQueue : 70;
+                taskMonitor.setPercentCompleted(10 + progressJobs);
+
+                try {
+                    Thread.sleep(WAITING_TIME_IN_MS);
+                } catch (InterruptedException e) {
+                    logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                }
+            }
+
+            taskMonitor.setStatus("Running your analysis");
+            taskMonitor.setPercentCompleted(90);
+
+            while (this.service.getState(jobID).equals(State.RUNNING)) {
+                if (interrupted) {
+                    interrupt("Job cancelled by user");
+                    return;
+                }
+
+                try {
+                    Thread.sleep(WAITING_TIME_IN_MS);
+                } catch (InterruptedException e) {
+                    logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                }
+            }
+
+            this.state = service.getState(jobID);
+            taskMonitor.setPercentCompleted(100);
+            if (State.FINISHED.equals(this.state)) {
+                taskMonitor.setStatus("Receiving analysis results");
+                this.errorMessage = "";
+                this.motifs = service.getMotifs(jobID);
+            } else if (State.ERROR.equals(this.state)) {
+                taskMonitor.setStatus("Error");
+                this.motifs = Collections.emptyList();
+                this.errorMessage = service.getErrorMessage(jobID);
+            }
+        } catch (ServerCommunicationException e) {
+            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            interrupt(e.getMessage());
+        }
+    }
+
+    @Override
+    public void setTaskMonitor(TaskMonitor monitor) throws IllegalThreadStateException {
+        taskMonitor = monitor;
+    }
+
+    public Collection<Motif> getMotifs() {
+        return this.motifs;
+    }
+
+    public State getFinishedState() {
+        return this.state;
+    }
+
+    public boolean getIsInterupted() {
+        return this.interrupted;
+    }
+
+    public String getErrorMessage() {
+        return this.errorMessage;
+    }
 }

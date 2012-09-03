@@ -7,10 +7,9 @@ import view.parametersform.databaseselection.BasedComboBox;
 import view.parametersform.databaseselection.DBCombobox;
 import view.parametersform.databaseselection.DatabaseListener;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,13 +17,11 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
@@ -34,6 +31,7 @@ import domainmodel.RankingsDatabase;
 import domainmodel.Delineation;
 import domainmodel.InputParameters;
 import domainmodel.SpeciesNomenclature;
+
 
 public class PredictedRegulatorsForm extends IRegulonResourceBundle implements PredictedRegulatorsParameters {
 	private JTextField jtfEscore;
@@ -586,7 +584,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		c.fill=GridBagConstraints.HORIZONTAL;
 		panel.add(panelNode, c);
 		yPos+=1;
-		
+
 		//Button
 		/* BBBBBB
 		 * BB  BB
@@ -594,35 +592,38 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		 * BB  BB
 		 * BBBBBB
 		 */
-        JButton jbtn = new JButton(new PredictRegulatorsAction(this) {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                //frame.dispose();
-                if (CytoscapeNetworkUtilities.hasSelectedNodes()) {
-                    final InputParameters input = deriveParameters();
-                    if (input.parametersAreValid()){
-                        if (frame != null){
-                            frame.dispose();
-                        }
-                        super.actionPerformed(arg0);
-                    }else{
-                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), input.getErrorMessage());
-
+        final JPanel mainPanel = new JPanel(new BorderLayout());
+        final JButton cancelButton = new JButton("Cancel");
+                cancelButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        if (frame != null) frame.dispose();
                     }
-                }else{
-                    JOptionPane.showMessageDialog(Cytoscape.getDesktop(),"No nodes are selected!");
-                }
-
+                });
+        final JButton submitButton = new JButton(new PredictRegulatorsAction(PredictedRegulatorsForm.this) {
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                        if (CytoscapeNetworkUtilities.hasSelectedNodes()) {
+                            final InputParameters input = deriveParameters();
+                            if (input.parametersAreValid()) {
+                                if (frame != null) frame.dispose();
+                                super.actionPerformed(arg0);
+                            } else {
+                                JOptionPane.showMessageDialog(Cytoscape.getDesktop(), input.getErrorMessage());
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "No nodes are selected!");
+                        }
+                    }
+                });
+        mainPanel.add(panel, BorderLayout.CENTER);
+        mainPanel.add(new JPanel(new FlowLayout()) {
+            {
+                if (frame != null) add(cancelButton);
+                add(submitButton);
             }
-        });
+        }, BorderLayout.SOUTH);
 
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-		c.weightx = 0.5;
-        jbtn.setVisible(true);
-        panel.add(jbtn, c);
-        
 
         this.dbListener = new DatabaseListener(this.jtfName, 
         		this.jtfEscore, this.jtfROC, this.jtfVisualisation, 
@@ -630,7 +631,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         		this.jcbSpecieAndNomenclature, this.jcbBased, this.jcbdatabase, 
         		overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
         		this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.jcbGeneName, amountNodes, 
-        		jbtn);
+        		submitButton);
         this.jtfName.addActionListener(this.dbListener);
         this.jtfName.getDocument().addDocumentListener(this.dbListener);
         this.jtfEscore.addActionListener(this.dbListener);
@@ -658,29 +659,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		this.jcbGeneName.addActionListener(this.dbListener);
 		amountNodes.addActionListener(this.dbListener);
 		dbListener.refresh();
-        
-        if (frame != null){
-        	//Button Cancel
-        	jbtn = new JButton("Cancel");
 
-        	c.gridx = 4;
-        	c.gridy = yPos;
-        	c.gridwidth = 1;
-        	jbtn.setVisible(true);
-        	yPos += 1;
-        	//action of the button
-        	jbtn.addActionListener(new PredictRegulatorsAction(this) {
-			
-        		@Override
-        		public void actionPerformed(ActionEvent arg0) {
-        			if (frame != null){
-        				frame.dispose();
-        			}
-        		}
-        	});
-        	panel.add(jbtn, c);
-        }
-		return panel;
+		return mainPanel;
 	}
 	
 	/*

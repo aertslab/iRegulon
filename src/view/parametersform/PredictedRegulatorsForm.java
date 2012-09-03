@@ -36,8 +36,6 @@ import domainmodel.InputParameters;
 import domainmodel.SpeciesNomenclature;
 
 public class PredictedRegulatorsForm extends IRegulonResourceBundle implements PredictedRegulatorsParameters {
-	private static final int FONT_SIZE_IN_POINTS = 12;
-
 	private JTextField jtfEscore;
 	private JComboBox jcbSpecieAndNomenclature;
 	private JTextField jtfROC;
@@ -47,8 +45,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 	private JTextField jtfMinOrthologous;
 	private JTextField jtfMaxMotifSimilarityFDR;
 	private JComboBox jcbGeneName;
-	private JPanel detailpanel;
-	private BasedComboBox jcbBased;
+    private BasedComboBox jcbBased;
 	private DBCombobox jcbdatabase;
 	private JTextField txtOverlap;
 	private JComboBox jcbDelation;
@@ -98,7 +95,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 	public JPanel createClassicalInputView() {
 		final JPanel panel = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
-        final Font font = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
         int yPos = 0;
 
         JLabel jtl;
@@ -112,7 +108,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
          * nn    nnn a     a m m m 	eeee
          */
         jtl = new JLabel("Name for analysis:");
-        jtl.setFont(font);
         jtl.setToolTipText("Choose a name for your analysis.");
         c.gridx = 0;
         c.fill=GridBagConstraints.HORIZONTAL;
@@ -123,12 +118,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panel.add(jtl, c);
         
         this.jtfName = new JTextField(this.standardJobName);
-        this.jtfName.setFont(font);
         this.jtfName.setVisible(true);
         this.jtfName.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == e.BUTTON3) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     if (Cytoscape.getCurrentNetwork() != null
                             && Cytoscape.getCurrentNetwork().getTitle() != null
                             && !Cytoscape.getCurrentNetwork().getTitle().equals("")
@@ -155,7 +149,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
          * SSSSSSS
          */
         jtl = new JLabel("Species and gene nomenclature:");
-        jtl.setFont(font);
         jtl.setToolTipText("Choose the species and the nomenclature of the genes.");
         
         c.gridx = 0;
@@ -166,7 +159,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         
         this.jcbSpecieAndNomenclature = new JComboBox();
         this.jcbSpecieAndNomenclature.setModel(new javax.swing.DefaultComboBoxModel(SpeciesNomenclature.getSelectableNomenclatures().toArray()));
-        this.jcbSpecieAndNomenclature.setFont(font);
         this.jcbSpecieAndNomenclature.setVisible(true);
         c.gridx = 2;
 		c.gridy = yPos;
@@ -364,7 +356,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
          */
         
         jtl = new JLabel("Enrichment score threshold:");
-        jtl.setFont(font);
         cMotif.gridx = 0;
         cMotif.gridy = lineY;
         cMotif.gridwidth = 1;
@@ -375,7 +366,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelMotif.add(jtl, cMotif);
         
         this.jtfEscore = new JTextField("" + this.standardEscore);
-        this.jtfEscore.setFont(font);
         this.jtfEscore.setVisible(true);
         cMotif.gridx = 1;
         cMotif.gridy = lineY;
@@ -396,7 +386,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
          * RR   RR	OOOOOO	  ccc
          */
         jtl = new JLabel("ROC threshold for AUC calculation:");
-        jtl.setFont(font);
         jtl.setToolTipText("<html>The x-axis (region rank) cut-off at which to calculate the Area Under the Curve. This <br/>" +
 				"measure is used to compare and rank all motifs. </html>");
         
@@ -409,7 +398,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelMotif.add(jtl, cMotif);
         
         this.jtfROC = new JTextField("" + this.standardROC);
-        this.jtfROC.setFont(font);
         this.jtfROC.setEditable(true);
         
         cMotif.gridx = 1;
@@ -431,7 +419,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
          * 
          */
         jtl = new JLabel("Rank threshold:");
-        jtl.setFont(font);
 		jtl.setToolTipText("<html>The x-axis cut-off for calculation of the ROC.</html>");
         
 		cMotif.gridx = 0;
@@ -443,7 +430,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelMotif.add(jtl, cMotif);
         
         this.jtfVisualisation = new JTextField("" + this.standardVisualisation);
-        this.jtfVisualisation.setFont(font);
         this.jtfVisualisation.setEditable(true);
         
         cMotif.gridx = 1;
@@ -479,7 +465,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		lineY = 0;
 		
 		jtl = new JLabel("Minimum orthologous identity:");
-        jtl.setFont(font);
 		jtl.setToolTipText("<html>Choose the minimal orthologous identity.<br/>" +
                 "How closer to 0, how more orthologous the transcription factor will be to the gene for which an enriched motif was found.<br/>" +
                 "(Value must be between 0 and 1).</html>");
@@ -492,7 +477,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelMotif2TF.add(jtl, cMotif2TF);
         
         this.jtfMinOrthologous = new JTextField("" + this.standardminOrthologous);
-        this.jtfMinOrthologous.setFont(font);
         this.jtfMinOrthologous.setEditable(true);
         this.jtfMinOrthologous.setVisible(true);
         cMotif2TF.gridx = 1;
@@ -511,7 +495,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		 * SSSSSSS
 		 */
 		jtl = new JLabel("Maximum motif similarity FDR.");
-        jtl.setFont(font);
 		jtl.setToolTipText("<html>Choose the maximum motif similarity FDR. <br/>" +
                 "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +
                 "(Value must be between 0 and 1).</html>");
@@ -524,7 +507,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelMotif2TF.add(jtl, cMotif2TF);
         
         this.jtfMaxMotifSimilarityFDR = new JTextField("" + this.standardMaxMotifSimilarityFDR);
-        this.jtfMaxMotifSimilarityFDR.setFont(font);
         this.jtfMaxMotifSimilarityFDR.setEditable(true);
         this.jtfMaxMotifSimilarityFDR.setVisible(true);
         
@@ -543,66 +525,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		panel.add(panelMotif2TF, c);
 		yPos+=1;
         
-		/*
-		jtl = new JLabel("Choose the minimal orthologous.");
-        f = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>Choose the minimal orthologous. " + "<P>" +
-        		"How closer to 0, how more orthologous will be shown." + "<P>" +
-        		"Maximum 1.</html>");
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jtfMinOrthologous = new JTextField("" + this.standardminOrthologous);
-        this.jtfMinOrthologous.setFont(f);
-        this.jtfMinOrthologous.setEditable(true);
-        this.jtfMinOrthologous.setVisible(true);
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(this.jtfMinOrthologous, c);
-		yPos += 1;
-		
-		//max motif similarity FDR
-		/* SSSSSSS
-		 * SS
-		 * SSSSSSS
-		 * 		SS
-		 * SSSSSSS
-		 *//*
-		jtl = new JLabel("Choose the maximal motif similarity FDR.");
-        f = new Font("Serif", 0, FONT_SIZE_IN_POINTS);
-        jtl.setFont(f);
-		jtl.setToolTipText("<html>Choose the maximal motif similarity FDR." + "<P>" +
-        		"How closer to 0, the motif will be more similar. " + "<P>" +
-        		"Maximum 1. </html>");
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jtfMaxMotifSimilarityFDR = new JTextField("" + this.standardMaxMotifSimilarityFDR);
-        this.jtfMaxMotifSimilarityFDR.setFont(f);
-        this.jtfMaxMotifSimilarityFDR.setEditable(true);
-        this.jtfMaxMotifSimilarityFDR.setVisible(true);
-        
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(this.jtfMaxMotifSimilarityFDR, c);
-		yPos += 1;
-		
-		// Choose attribute as name
-		/* NNN   NN
-		 * NN N  NN
-		 * NN  N NN
-		 * NN   NNN
-		 * NN    NN
-		 */
 		GridBagLayout layoutNode = new GridBagLayout();
 		GridBagConstraints cNode = new GridBagConstraints();
 		JPanel panelNode = new JPanel(layoutNode);
@@ -613,7 +535,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		lineY = 0;
 		
 		jtl = new JLabel("Node attribute that corresponds to geneID:");
-        jtl.setFont(font);
         jtl.setToolTipText("<html>Choose the node attribute that represents the gene name.</html>");
         
         cNode.gridx = 0;
@@ -625,7 +546,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelNode.add(jtl, cNode);
         
         this.jcbGeneName = new AttributeComboBox();
-        this.jcbGeneName.setFont(font);
         this.jcbGeneName.setVisible(true);
         cNode.gridx = 1;
         cNode.gridy = lineY;
@@ -637,7 +557,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		
 		 
         jtl = new JLabel("Number of valid genes (nodes):");
-        jtl.setFont(font);
 		jtl.setToolTipText("<html>The number of nodes that have an ID usable for the analysis." + "<P>" +
         		"This doesn't mean that all nodes have valid names! </html>");
 		cNode.gridx = 0;
@@ -649,7 +568,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelNode.add(jtl, cNode);
         
         JTextField amountNodes = new JTextField("0");
-        amountNodes.setFont(font);
         amountNodes.setEditable(false);
         amountNodes.setVisible(true);
         
@@ -697,8 +615,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 
             }
         });
-        jbtn.setFont(font);
-        
+
         c.gridx = 2;
 		c.gridy = yPos;
 		c.gridwidth = 2;
@@ -745,8 +662,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         if (frame != null){
         	//Button Cancel
         	jbtn = new JButton("Cancel");
-        	jbtn.setFont(font);
-        
+
         	c.gridx = 4;
         	c.gridy = yPos;
         	c.gridwidth = 1;

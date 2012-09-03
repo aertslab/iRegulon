@@ -95,7 +95,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
     @Override
     public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases,
-                                                             final int occurenceCountThreshold)
+                                                             final int occurenceCountThreshold, final int maxNodeCount)
             throws ServerCommunicationException {
         if (factor == null || databases == null) {
             throw new IllegalArgumentException();
@@ -167,11 +167,24 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                 }
             });
 
-            return result;
+            if ((maxNodeCount <= 0) || (result.size() <= maxNodeCount)) {
+                return result;
+            } else {
+                final int minOccurenceCount = result.get(maxNodeCount-1).getRank();
+                return filter(result, minOccurenceCount);
+            }
 		} catch (IOException e) {
             logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
             throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
 		}
+    }
+
+    private List<CandidateTargetGene> filter(List<CandidateTargetGene> genes, int minOccurenceCount) {
+        final List<CandidateTargetGene> results = new ArrayList<CandidateTargetGene>();
+        for (CandidateTargetGene gene: genes) {
+            if (gene.getRank() >= minOccurenceCount) results.add(gene);
+        }
+        return results;
     }
 
     private URLConnection createConnection4BundleKey(String bundleKey) throws IOException {

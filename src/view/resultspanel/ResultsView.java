@@ -18,6 +18,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import javax.management.Query;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -369,6 +370,16 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
                 public int getOccurenceCountThreshold() {
                     return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
                 }
+
+                @Override
+                public int getMaxNumberOfNodes() {
+                    return QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT;
+                }
+
+                @Override
+                public boolean createNewNetwork() {
+                    return false;
+                }
             });
         }
     }
@@ -405,6 +416,16 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
                 @Override
                 public int getOccurenceCountThreshold() {
                     return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
+                }
+
+                @Override
+                public int getMaxNumberOfNodes() {
+                    return QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT;
+                }
+
+                @Override
+                public boolean createNewNetwork() {
+                    return false;
                 }
             });
         }

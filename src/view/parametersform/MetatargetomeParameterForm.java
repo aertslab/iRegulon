@@ -31,6 +31,8 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
     private JList databaseList;
     private JComboBox attributeNameCB;
     private JTextField occurenceCountLimitTF;
+    private JTextField maxNodeCountTF;
+    private JCheckBox createNewNetworkCB;
 
     private final List<ParameterChangeListener> listeners = new ArrayList<ParameterChangeListener>();
 
@@ -159,6 +161,20 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         }
     }
 
+    @Override
+    public int getMaxNumberOfNodes() {
+        try {
+            return Integer.parseInt(maxNodeCountTF.getText());
+        } catch (NumberFormatException e) {
+            return Integer.MIN_VALUE;
+        }
+    }
+
+    @Override
+    public boolean createNewNetwork() {
+        return createNewNetworkCB.isSelected();
+    }
+
     private void initPanel() {
         setLayout(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
@@ -211,14 +227,14 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.weightx = 0.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
         cc.anchor = GridBagConstraints.LINE_START;
-        cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
         add(databasesLB, cc);
 
         cc.gridx++; cc.gridy = 2;
         cc.gridwidth = 1; cc.gridheight = 2;
         cc.weightx = 1.0; cc.weighty = 1.0;
         cc.fill = GridBagConstraints.BOTH;
-        cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
+        cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
         add(new JScrollPane(databaseList), cc);
 
         final JLabel occurenceCountLimitLB = new JLabel("Occurence count threshold:");
@@ -229,20 +245,48 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.weightx = 0.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
         cc.anchor = GridBagConstraints.LINE_START;
-        cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
         add(occurenceCountLimitLB, cc);
 
         cc.gridx++; cc.gridy = 4;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
+        cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
         add(occurenceCountLimitTF, cc);
+
+        final JLabel maxNodeCountLB = new JLabel("Max. number nodes (approx.):");
+        maxNodeCountTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT));
+
+        cc.gridx = 0; cc.gridy = 5;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
+        add(maxNodeCountLB, cc);
+
+        cc.gridx++; cc.gridy = 5;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
+        add(maxNodeCountTF, cc);
+
+        createNewNetworkCB = new JCheckBox("Create new network", true);
+
+        cc.gridx = 0; cc.gridy = 6;
+        cc.gridwidth = 2; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, MARGIN_IN_PIXELS);
+        add(createNewNetworkCB, cc);
 
         final JLabel attributeNameLB = new JLabel("Attribute name:");
         attributeNameCB = new JComboBox(AttributeComboBox.getPossibleGeneIDAttributesWithDefault().toArray());
 
-        cc.gridx = 0; cc.gridy = 5;
+        cc.gridx = 0; cc.gridy = 7;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 0.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
@@ -250,7 +294,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
         add(attributeNameLB, cc);
 
-        cc.gridx++; cc.gridy = 5;
+        cc.gridx++; cc.gridy = 7;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
@@ -265,6 +309,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         transcriptionFactorCB.addActionListener(actionListener);
         transcriptionFactorCB.addItemListener(itemListener);
         occurenceCountLimitTF.getDocument().addDocumentListener(documentListener);
+        maxNodeCountTF.getDocument().addDocumentListener(documentListener);
         speciesNomenclatureCB.addItemListener(refreshListener);
     }
 
@@ -275,6 +320,7 @@ final class MetatargetomeParameterForm extends JPanel implements MetatargetomePa
         transcriptionFactorCB.removeActionListener(actionListener);
         transcriptionFactorCB.removeItemListener(itemListener);
         occurenceCountLimitTF.getDocument().removeDocumentListener(documentListener);
+        maxNodeCountTF.getDocument().removeDocumentListener(documentListener);
         speciesNomenclatureCB.removeItemListener(refreshListener);
     }
 

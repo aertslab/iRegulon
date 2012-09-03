@@ -13,7 +13,8 @@ public interface ComputationalService {
 
     public Set<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException;
 
-    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> databases, int occurenceCountThreshold) throws ServerCommunicationException;
+    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> databases, int occurenceCountThreshold, int maxNodeCount)
+            throws ServerCommunicationException;
 
     public List<EnhancerRegion> getEnhancerRegions(final AbstractMotif motif) throws ServerCommunicationException;
 

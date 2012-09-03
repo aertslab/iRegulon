@@ -72,11 +72,11 @@ public class IRegulonPlugin extends CytoscapePlugin {
         menu.setToolTipText(bundle.getString("plugin_description"));
 
         menu.add(new JMenuItem(new OpenParametersFormAction()));
-        menu.add(new JMenuItem(new AddParametersFormToSidePanelAction()));
+        menu.add(new JMenuItem(new OpenQueryMetatargetomeFormAction()));
 
         menu.addSeparator();
 
-        menu.add(new JMenuItem(new OpenQueryMetatargetomeFormAction()));
+        menu.add(new JMenuItem(new AddParametersFormToSidePanelAction()));
 
         menu.addSeparator();
 

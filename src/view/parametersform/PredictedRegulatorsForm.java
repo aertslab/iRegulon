@@ -39,7 +39,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 	private JTextField jtfROC;
 	private JTextField jtfVisualisation;
 	private IRegulonType iRegulonType = IRegulonType.PREDICTED_REGULATORS;
-	private JTextField jtfName;
+	private JTextField jobNameTF;
 	private JTextField jtfMinOrthologous;
 	private JTextField jtfMaxMotifSimilarityFDR;
 	private JComboBox jcbGeneName;
@@ -89,35 +89,34 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		this.dbListener = null;
 	}
 
+    public String getJobName() {
+        return jobNameTF.getText();
+    }
+
+    public void setJobName(final String name) {
+        jobNameTF.setText(name == null ? this.standardJobName : name);
+    }
+
 	
 	public JPanel createClassicalInputView() {
 		final JPanel panel = new JPanel(new GridBagLayout());
-        final GridBagConstraints c = new GridBagConstraints();
+        final GridBagConstraints cc = new GridBagConstraints();
         int yPos = 0;
 
         JLabel jtl;
 
-        //Name of the analysis
-        /*
-         * nnn    nn				eeee
-         * nn n   nn    a			e
-         * nn  n  nn   a a   mmmmm 	eeee
-         * nn   n nn  aaaaa  m m m 	e
-         * nn    nnn a     a m m m 	eeee
-         */
+        // Name of the analysis ...
         jtl = new JLabel("Name for analysis:");
         jtl.setToolTipText("Choose a name for your analysis.");
-        c.gridx = 0;
-        c.fill=GridBagConstraints.HORIZONTAL;
-        c.gridy = yPos;
-		c.gridwidth = 2;
+        cc.gridx = 0; cc.gridy = yPos;
+		cc.gridwidth = 2; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0;
+        cc.fill = GridBagConstraints.NONE;
+        cc.anchor = GridBagConstraints.LINE_START;
+        panel.add(jtl, cc);
         
-        jtl.setVisible(true);
-        panel.add(jtl, c);
-        
-        this.jtfName = new JTextField(this.standardJobName);
-        this.jtfName.setVisible(true);
-        this.jtfName.addMouseListener(new MouseAdapter() {
+        this.jobNameTF = new JTextField(this.standardJobName);
+        this.jobNameTF.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
@@ -125,104 +124,50 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
                             && Cytoscape.getCurrentNetwork().getTitle() != null
                             && !Cytoscape.getCurrentNetwork().getTitle().equals("")
                             && !Cytoscape.getCurrentNetwork().getTitle().equals("0")) {
-                        jtfName.setText(Cytoscape.getCurrentNetwork().getTitle());
+                        jobNameTF.setText(Cytoscape.getCurrentNetwork().getTitle());
                     }
                 }
             }
         });
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-        this.jtfName.setVisible(true);
-        panel.add(this.jtfName, c);
+        cc.gridx = 2; cc.gridy = yPos;
+		cc.gridwidth = 3; cc.gridheight = 1;
+        cc.weighty = 0.0; cc.weightx = 1.0;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        cc.anchor = GridBagConstraints.LINE_START;
+        panel.add(this.jobNameTF, cc);
+
         yPos += 1;
 		
         
 		
         // Species and nomenclature
-        /* SSSSSSS
-         * SS
-         * SSSSSSS
-         * 		SS
-         * SSSSSSS
-         */
         jtl = new JLabel("Species and gene nomenclature:");
         jtl.setToolTipText("Choose the species and the nomenclature of the genes.");
         
-        c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 2;
-        jtl.setVisible(true);
-        panel.add(jtl, c);
+        cc.gridx = 0; cc.gridy = yPos;
+		cc.gridheight = 1; cc.gridwidth = 2;
+        cc.weighty = 0.0; cc.weightx = 0.0;
+        cc.fill = GridBagConstraints.NONE;
+        panel.add(jtl, cc);
         
         this.jcbSpecieAndNomenclature = new JComboBox();
         this.jcbSpecieAndNomenclature.setModel(new javax.swing.DefaultComboBoxModel(SpeciesNomenclature.getSelectableNomenclatures().toArray()));
-        this.jcbSpecieAndNomenclature.setVisible(true);
-        c.gridx = 2;
-		c.gridy = yPos;
-		c.gridwidth = 3;
-		panel.add(this.jcbSpecieAndNomenclature, c);
-		yPos += 1;
+        cc.gridx = 2; cc.gridy = yPos;
+		cc.gridheight = 1; cc.gridwidth = 3;
+        cc.fill=GridBagConstraints.HORIZONTAL;
+		panel.add(this.jcbSpecieAndNomenclature, cc);
+
+        yPos += 1;
 		
 		//Choose the database system
-		/* DDDDD
-		 * DD	DD
-		 * DD	 D
-		 * DD	 D
-		 * DD	DD
-		 * DDDDD
-		 */
+        JPanel databasePanel = createDatabaseSubPanel();
+        int lineY;
 		
-		GridBagLayout layoutDatabase = new GridBagLayout();
-		GridBagConstraints cDatabase = new GridBagConstraints();
-		JPanel databasePanel = new JPanel(layoutDatabase);
-		TitledBorder databaseBorder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Database");
-		databaseBorder.setTitleJustification(TitledBorder.LEFT);
-		databaseBorder.setTitlePosition(TitledBorder.CENTER);
-		databasePanel.setBorder(databaseBorder);
-		int lineY = 0;
-		jtl = new JLabel("Region- or gene-based analysis?");
-        jtl.setToolTipText("Choose the type of analysis to perform.");
-        cDatabase.gridx = 0;
-        cDatabase.gridy = lineY;
-        cDatabase.gridwidth = 1;
-        cDatabase.weightx=0;
-        cDatabase.fill=GridBagConstraints.HORIZONTAL;
-        databasePanel.add(jtl, cDatabase);
-		
-		this.jcbBased = new BasedComboBox();
-		cDatabase.gridx = 1;
-		cDatabase.gridy = lineY;
-		cDatabase.gridwidth = 1;
-		cDatabase.weightx=0.5;
-		cDatabase.fill=GridBagConstraints.HORIZONTAL;
-		databasePanel.add(this.jcbBased, cDatabase);
-		lineY += 1;
-		
-		jtl = new JLabel("Database:");
-        jtl.setToolTipText("Choose the database.");
-        cDatabase.gridx = 0;
-        cDatabase.gridy = lineY;
-        cDatabase.gridwidth = 1;
-        cDatabase.weightx=0;
-        cDatabase.fill=GridBagConstraints.HORIZONTAL;
-        databasePanel.add(jtl, cDatabase);
-
-		
-		this.jcbdatabase = new DBCombobox();
-		cDatabase.gridx = 1;
-		cDatabase.gridy = lineY;
-		cDatabase.gridwidth = 1;
-		cDatabase.weightx=0.5;
-		cDatabase.fill=GridBagConstraints.HORIZONTAL;
-		databasePanel.add(this.jcbdatabase, cDatabase);
-		lineY += 1;
-		
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 5;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(databasePanel, c);
+		cc.gridx = 0;
+		cc.gridy = yPos;
+		cc.gridwidth = 5;
+		cc.fill=GridBagConstraints.HORIZONTAL;
+		panel.add(databasePanel, cc);
 		yPos+=1;
 		
 		GridBagLayout layoutRegion = new GridBagLayout();
@@ -327,11 +272,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		lineY+=1;
 		
 		
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 5;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelRegion, c);
+		cc.gridx = 0;
+		cc.gridy = yPos;
+		cc.gridwidth = 5;
+		cc.fill=GridBagConstraints.HORIZONTAL;
+		panel.add(panelRegion, cc);
 		yPos+=1;
 
 		GridBagLayout layoutMotif = new GridBagLayout();
@@ -439,11 +384,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		panelMotif.add(this.jtfVisualisation, cMotif);
 		lineY += 1;
 		
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 5;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelMotif, c);
+		cc.gridx = 0;
+		cc.gridy = yPos;
+		cc.gridwidth = 5;
+		cc.fill=GridBagConstraints.HORIZONTAL;
+		panel.add(panelMotif, cc);
 		yPos+=1;
 
 		//Minimal Orthologous id
@@ -516,11 +461,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelMotif2TF.add(this.jtfMaxMotifSimilarityFDR, cMotif2TF);
         lineY += 1;
 		
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 5;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelMotif2TF, c);
+		cc.gridx = 0;
+		cc.gridy = yPos;
+		cc.gridwidth = 5;
+		cc.fill=GridBagConstraints.HORIZONTAL;
+		panel.add(panelMotif2TF, cc);
 		yPos+=1;
         
 		GridBagLayout layoutNode = new GridBagLayout();
@@ -577,12 +522,12 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         panelNode.add(amountNodes, cNode);
         lineY += 1;
 		
-		c.gridx = 0;
-		c.gridy = yPos;
-		c.gridwidth = 5;
+		cc.gridx = 0;
+		cc.gridy = yPos;
+		cc.gridwidth = 5;
 		cNode.weightx=0.5;
-		c.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelNode, c);
+		cc.fill=GridBagConstraints.HORIZONTAL;
+		panel.add(panelNode, cc);
 		yPos+=1;
 
 		//Button
@@ -625,15 +570,15 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
         }, BorderLayout.SOUTH);
 
 
-        this.dbListener = new DatabaseListener(this.jtfName, 
+        this.dbListener = new DatabaseListener(this.jobNameTF,
         		this.jtfEscore, this.jtfROC, this.jtfVisualisation, 
         		this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR, 
         		this.jcbSpecieAndNomenclature, this.jcbBased, this.jcbdatabase, 
         		overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
         		this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.jcbGeneName, amountNodes, 
         		submitButton);
-        this.jtfName.addActionListener(this.dbListener);
-        this.jtfName.getDocument().addDocumentListener(this.dbListener);
+        this.jobNameTF.addActionListener(this.dbListener);
+        this.jobNameTF.getDocument().addDocumentListener(this.dbListener);
         this.jtfEscore.addActionListener(this.dbListener);
         this.jtfEscore.getDocument().addDocumentListener(this.dbListener);
         this.jtfROC.addActionListener(this.dbListener);
@@ -662,10 +607,58 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 
 		return mainPanel;
 	}
-	
-	/*
-	 * Generating all needed input variabels
-	 */
+
+    private JPanel createDatabaseSubPanel() {
+        JLabel jtl;GridBagLayout layoutDatabase = new GridBagLayout();
+        GridBagConstraints cDatabase = new GridBagConstraints();
+        JPanel databasePanel = new JPanel(layoutDatabase);
+        TitledBorder databaseBorder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Database");
+        databaseBorder.setTitleJustification(TitledBorder.LEFT);
+        databaseBorder.setTitlePosition(TitledBorder.CENTER);
+        databasePanel.setBorder(databaseBorder);
+        int lineY = 0;
+        jtl = new JLabel("Region- or gene-based analysis?");
+        jtl.setToolTipText("Choose the type of analysis to perform.");
+        cDatabase.gridx = 0;
+        cDatabase.gridy = lineY;
+        cDatabase.gridwidth = 1;
+        cDatabase.weightx=0;
+        cDatabase.fill=GridBagConstraints.HORIZONTAL;
+        databasePanel.add(jtl, cDatabase);
+
+        this.jcbBased = new BasedComboBox();
+        cDatabase.gridx = 1;
+        cDatabase.gridy = lineY;
+        cDatabase.gridwidth = 1;
+        cDatabase.weightx=0.5;
+        cDatabase.fill=GridBagConstraints.HORIZONTAL;
+        databasePanel.add(this.jcbBased, cDatabase);
+        lineY += 1;
+
+        jtl = new JLabel("Database:");
+        jtl.setToolTipText("Choose the database.");
+        cDatabase.gridx = 0;
+        cDatabase.gridy = lineY;
+        cDatabase.gridwidth = 1;
+        cDatabase.weightx=0;
+        cDatabase.fill=GridBagConstraints.HORIZONTAL;
+        databasePanel.add(jtl, cDatabase);
+
+
+        this.jcbdatabase = new DBCombobox();
+        cDatabase.gridx = 1;
+        cDatabase.gridy = lineY;
+        cDatabase.gridwidth = 1;
+        cDatabase.weightx=0.5;
+        cDatabase.fill=GridBagConstraints.HORIZONTAL;
+        databasePanel.add(this.jcbdatabase, cDatabase);
+        lineY += 1;
+        return databasePanel;
+    }
+
+    /*
+      * Generating all needed input variabels
+      */
 	
 	/**
 	 * 
@@ -711,7 +704,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 	 * @return the name of the run
 	 */
 	private String getName(){
-		return (String) this.jtfName.getText();
+		return (String) this.jobNameTF.getText();
 	}
 	
 	public InputParameters deriveParameters() {

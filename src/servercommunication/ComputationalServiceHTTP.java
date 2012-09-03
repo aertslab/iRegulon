@@ -7,6 +7,8 @@ import domainmodel.*;
 import servercommunication.protocols.*;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -17,11 +19,13 @@ import javax.swing.JOptionPane;
 import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
+import sun.rmi.runtime.Log;
 import view.IRegulonResourceBundle;
 
 
 public class ComputationalServiceHTTP extends IRegulonResourceBundle implements ComputationalService {
     private static final boolean DEBUG = false;
+    private static final String PARAMETER_NAME = "featureIDandTarget=";
 
     private final CyLogHandler logger = ConsoleLogger.getLogger();
     private final Protocol service = new HTTPProtocol();
@@ -53,7 +57,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         if (speciesNomenclature == null) throw new IllegalArgumentException();
         final URLConnection connection;
         try {
-            connection = createConnection("URL_metatargetomes_query_factors");
+            connection = createConnection4BundleKey("URL_metatargetomes_query_factors");
         } catch (IOException e) {
             throw new ServerCommunicationException("Server is not available.");
         }
@@ -99,7 +103,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         }
         final URLConnection connection;
         try {
-            connection = createConnection("URL_metatargetomes_query_targetome");
+            connection = createConnection4BundleKey("URL_metatargetomes_query_targetome");
         } catch (IOException e) {
             throw new ServerCommunicationException("Server is not available.");
         }
@@ -171,8 +175,12 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 		}
     }
 
-    private URLConnection createConnection(String bundleKey) throws IOException {
-        final URL url = new URL(getBundle().getString(bundleKey));
+    private URLConnection createConnection4BundleKey(String bundleKey) throws IOException {
+        return createConnection(getBundle().getString(bundleKey));
+    }
+
+    private URLConnection createConnection(String resource) throws IOException {
+        final URL url = new URL(resource);
 		final URLConnection connection = url.openConnection();
 		connection.setDoInput(true);
 		connection.setDoOutput(true);
@@ -197,5 +205,74 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
     private static interface LineProcessor {
         public void process(String line) throws ServerCommunicationException;
+    }
+
+    @Override
+    public List<EnhancerRegion> getEnhancerRegions(final AbstractMotif motif) throws ServerCommunicationException {
+        final URLConnection connection;
+        try {
+            final String uri = getBundle().getString("URL_motifBedGenerator") + "?" + generateParameters(motif);
+            connection = createConnection(uri);
+        } catch (IOException e) {
+            throw new ServerCommunicationException("Server is not available.");
+        }
+        try {
+            final List<EnhancerRegion> result = new ArrayList<EnhancerRegion>();
+            read(connection, new LineProcessor() {
+                @Override
+                public void process(final String line) throws ServerCommunicationException {
+                    if (DEBUG) logger.handleLog(LogLevel.LOG_ERROR, line);
+
+                    if (line.startsWith("#") || line.trim().equals("")) return;
+                    if (line.startsWith("browser") || line.startsWith("track")) return;
+
+                    final EnhancerRegion region = EnhancerRegion.fromText(line);
+                    if (region != null) {
+                        result.add(region);
+                    } else {
+                        throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
+                    }
+                }
+            });
+            Collections.sort(result);
+            return result;
+        } catch (IOException e) {
+            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
+        }
+    }
+
+    @Override
+    public URI getLink2GenomeBrowser4EnhancerRegions(AbstractMotif motif) {
+                final StringBuilder builder = new StringBuilder();
+        builder.append(getBundle().getString("URL_UCSC"));
+        builder.append(getBundle().getString("URL_motifBedGenerator"));
+        builder.append("?");
+        builder.append(generateParameters(motif));
+        try {
+            return new URI(builder.toString());
+        } catch (URISyntaxException e) {
+            logger.handleLog(LogLevel.LOG_ERROR, "Wrong URI = " + builder.toString());
+            return null;
+        }
+    }
+
+    private String generateParameters(final AbstractMotif motif) {
+        final StringBuilder parameters = new StringBuilder();
+        parameters.append(PARAMETER_NAME);
+        parameters.append(motif.getDatabaseID());
+        parameters.append(':');
+        if (motif.getCandidateTargetGenes().size() >= 1) {
+            parameters.append(motif.getCandidateTargetGenes().get(0).getGeneName());
+        }
+        parameters.append(':');
+        if (!motif.getTranscriptionFactors().isEmpty()) {
+            parameters.append(motif.getTranscriptionFactors().get(0));
+        }
+        for (TranscriptionFactor tf : motif.getTranscriptionFactors().subList(0, motif.getTranscriptionFactors().size())) {
+            parameters.append(",");
+            parameters.append(tf.getName());
+        }
+        return parameters.toString();
     }
 }

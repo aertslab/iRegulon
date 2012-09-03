@@ -6,7 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import view.actions.BedExportAction;
-import view.actions.BedLinkToBrowserAction;
+import view.actions.OpenLinkToGenomeBrowserAction;
 
 import view.resultspanel.actions.AddRegulatoryInteractionsAction;
 import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
@@ -43,7 +43,7 @@ public class MotifPopUpMenu extends MouseAdapter implements Refreshable {
 			final BedExportAction bedExportAction = new BedExportAction(selectedMotif);
 			menu.addAction(bedExportAction);
 			
-			final BedLinkToBrowserAction bedLinkToBrowserAction = new BedLinkToBrowserAction(selectedMotif);
+			final OpenLinkToGenomeBrowserAction bedLinkToBrowserAction = new OpenLinkToGenomeBrowserAction(selectedMotif);
 			menu.addAction(bedLinkToBrowserAction);
 		}
 	}

@@ -49,6 +49,7 @@ public class IRegulonPlugin extends CytoscapePlugin {
         addHelp();
 
         // 3. Add linkOut item ...
+        // TODO: This does not seem to work!!
         CytoscapeInit.getProperties().put(IREGULON_LINK_OUT, bundle.getString("URL_UCSC_LinkOut"));
 
         // 4. Install visual style ...

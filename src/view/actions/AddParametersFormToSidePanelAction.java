@@ -61,7 +61,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
         final MetatargetomeForm metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
-		tabbedPane.addTab("Predict regulators", null, predictedRegulatorsForm.createForm(), null);
+		tabbedPane.addTab("Predict regulators", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
         tabbedPane.addTab("Query metatargetome", null, metatargetomeForm, null);
 
         cc.gridx = 0; cc.gridy = 1;

@@ -15,6 +15,8 @@ import view.parametersform.ParameterChangeListener;
 import view.parametersform.PredictedRegulatorsForm;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
@@ -58,8 +60,9 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
+        final MetatargetomeForm metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
 		tabbedPane.addTab("Predict regulators", null, predictedRegulatorsForm.createClassicalInputView(), null);
-        tabbedPane.addTab("Query metatargetome", null, new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors), null);
+        tabbedPane.addTab("Query metatargetome", null, metatargetomeForm, null);
 
         cc.gridx = 0; cc.gridy = 1;
 		cc.gridwidth = 1; cc.gridheight = 1;
@@ -78,6 +81,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
             @Override
             public void onStateChange(CytoPanelState newState) {
                 predictedRegulatorsForm.getListenerForClassicInput().refresh();
+                metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
             }
 
             @Override
@@ -95,6 +99,13 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
                 // nothing to do
             }
         });
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                predictedRegulatorsForm.getListenerForClassicInput().refresh();
+                metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
+            }
+        });
 	}
 
     private GeneIdentifier getSelectedFactor() {
@@ -105,11 +116,14 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
         return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
     }
 
+
     private static class MetatargetomeForm extends JPanel {
+        private final MetatargetomeParameterForm parameterForm;
+
         private MetatargetomeForm(final GeneIdentifier factor, final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors) {
             super(new BorderLayout());
 
-            final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
+            parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
             final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null);
             add(parameterForm, BorderLayout.CENTER);
             add(new JPanel(new FlowLayout()) {
@@ -129,6 +143,10 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
             parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
             if (factor != null) parameterForm.setTranscriptionFactor(factor);
             parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
+        }
+
+        public MetatargetomeParameterForm getForm() {
+            return parameterForm;
         }
     }
 }

@@ -23,13 +23,13 @@ import domainmodel.Motif;
 import domainmodel.Results;
 
 
-public class SubmitAnalysisAction extends ResourceAction {
+public class PredictRegulatorsAction extends ResourceAction {
     private static final String NAME = "action_submit_analysis";
 
     private final ComputationalService service = new ComputationalServiceHTTP();
 	private final Parameters parameters;
 	
-	public SubmitAnalysisAction(final Parameters parameters) {
+	public PredictRegulatorsAction(final Parameters parameters) {
 		super(NAME);
 		this.parameters = parameters;
 	}

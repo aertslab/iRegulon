@@ -1,7 +1,7 @@
 package view.parametersform;
 
 import view.CytoscapeNetworkUtilities;
-import view.parametersform.actions.SubmitAnalysisAction;
+import view.parametersform.actions.PredictRegulatorsAction;
 import view.IRegulonResourceBundle;
 import view.parametersform.databaseselection.BasedComboBox;
 import view.parametersform.databaseselection.DBCombobox;
@@ -698,7 +698,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
 		 * BB  BB
 		 * BBBBBB
 		 */
-        JButton jbtn = new JButton(new SubmitAnalysisAction(this) {
+        JButton jbtn = new JButton(new PredictRegulatorsAction(this) {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 //frame.dispose();
@@ -776,7 +776,7 @@ public class InputView extends IRegulonResourceBundle implements Parameters {
         	jbtn.setVisible(true);
         	yPos += 1;
         	//action of the button
-        	jbtn.addActionListener(new SubmitAnalysisAction(this) {
+        	jbtn.addActionListener(new PredictRegulatorsAction(this) {
 			
         		@Override
         		public void actionPerformed(ActionEvent arg0) {

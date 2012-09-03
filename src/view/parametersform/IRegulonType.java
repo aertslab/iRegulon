@@ -1,5 +1,6 @@
 package view.parametersform;
 
+@Deprecated
 public enum IRegulonType {
 	PREDICTED_REGULATORS("Predicted regulators"),
 	DATABASE_FOR_REGULATORS("Database for regulators"),

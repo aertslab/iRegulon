@@ -1,6 +1,6 @@
 package view.parametersform;
 
 
-interface ParameterChangeListener {
+public interface ParameterChangeListener {
     void parametersChanged();
 }

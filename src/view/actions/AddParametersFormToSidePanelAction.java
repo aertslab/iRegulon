@@ -1,16 +1,25 @@
 package view.actions;
 
+import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelListener;
 import cytoscape.view.cytopanels.CytoPanelState;
+import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TargetomeDatabase;
 import view.ResourceAction;
+import view.parametersform.MetatargetomeParameterForm;
+import view.parametersform.ParameterChangeListener;
 import view.parametersform.PredictedRegulatorsForm;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class AddParametersFormToSidePanelAction extends ResourceAction {
     private static final String NAME = "action_open_parameters_side_panel";
@@ -45,8 +54,12 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
 
         final JTabbedPane tabbedPane = new JTabbedPane();
         final PredictedRegulatorsForm predictedRegulatorsForm = new PredictedRegulatorsForm();
+        final Map<SpeciesNomenclature,Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,Set<GeneIdentifier>>();
+        for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
+            speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
+        }
 		tabbedPane.addTab("Predict regulators", null, predictedRegulatorsForm.createClassicalInputView(), null);
-        tabbedPane.addTab("Query metatargetome", null, new JPanel(), null);
+        tabbedPane.addTab("Query metatargetome", null, new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors), null);
 
         cc.gridx = 0; cc.gridy = 1;
 		cc.gridwidth = 1; cc.gridheight = 1;
@@ -84,4 +97,38 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
         });
 	}
 
+    private GeneIdentifier getSelectedFactor() {
+        @SuppressWarnings("unchecked")
+        final Set<CyNode> nodes = Cytoscape.getCurrentNetwork().getSelectedNodes();
+        if (nodes == null || nodes.isEmpty()) return null;
+        final CyNode node = nodes.iterator().next();
+        return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+    }
+
+    private static class MetatargetomeForm extends JPanel {
+        private MetatargetomeForm(final GeneIdentifier factor, final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors) {
+            super(new BorderLayout());
+
+            final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
+            final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null);
+            add(parameterForm, BorderLayout.CENTER);
+            add(new JPanel(new FlowLayout()) {
+                {
+                    final JButton submitButton = new JButton(submitAction);
+                    submitButton.setIcon(null);
+                    add(submitButton);
+                }
+            }, BorderLayout.SOUTH);
+
+            parameterForm.addParameterChangeListener(new ParameterChangeListener() {
+                public void parametersChanged() {
+                    submitAction.refresh();
+                }
+            });
+
+            parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+            if (factor != null) parameterForm.setTranscriptionFactor(factor);
+            parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
+        }
+    }
 }

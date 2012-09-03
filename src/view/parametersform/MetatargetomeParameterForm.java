@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.List;
 
 
-final class MetatargetomeParameterForm extends JPanel implements MetatargetomeParameters, Refreshable {
+public final class MetatargetomeParameterForm extends JPanel implements MetatargetomeParameters, Refreshable {
     private static final int MARGIN_IN_PIXELS = 5;
 
     private final Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors;

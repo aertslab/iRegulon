@@ -119,7 +119,7 @@ public final class CytoscapeNetworkUtilities {
         if (listAttribute.indexOf(attributeValue) < 0) {
             listAttribute.add(attributeValue);
             attributes.setListAttribute(node.getIdentifier(), attributeName, listAttribute);
-            Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+            //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
         }
     }
 
@@ -136,19 +136,19 @@ public final class CytoscapeNetworkUtilities {
     public static void setEdgeAttribute(CyEdge edge, String attributeName, String attributeValue){
 		final CyAttributes attributes = Cytoscape.getEdgeAttributes();
 		attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+		//Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
 	}
 
     public static void setEdgeAttribute(CyEdge edge, String attributeName, int attributeValue){
 		final CyAttributes attributes = Cytoscape.getEdgeAttributes();
 		attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
-		Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+		//Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
 	}
 
     public static void setNodeAttribute(CyNode node, String attributeName, String attributeValue) {
         final CyAttributes attributes = Cytoscape.getNodeAttributes();
         attributes.setAttribute(node.getIdentifier(), attributeName, attributeValue);
-        Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+        //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
     }
 
     public static CyNode addNode(String nodeID, CyNetwork network, CyNetworkView view) {
@@ -178,7 +178,7 @@ public final class CytoscapeNetworkUtilities {
         if (listAttribute.indexOf(attributeValue) < 0) {
             listAttribute.add(attributeValue);
             attributes.setListAttribute(edge.getIdentifier(), attributeName, listAttribute);
-            Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+            //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
         }
     }
 

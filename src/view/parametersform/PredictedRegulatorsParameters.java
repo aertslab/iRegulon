@@ -10,9 +10,7 @@ public interface PredictedRegulatorsParameters {
 	
 	public float getNESThreshold();
 	
-	public InputParameters getInput();
-	
-	public void generateInput();
+	public InputParameters deriveParameters();
 	
 	public float getMinOrthologous();
 	

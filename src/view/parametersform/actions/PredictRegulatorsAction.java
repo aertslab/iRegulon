@@ -40,8 +40,7 @@ public class PredictRegulatorsAction extends ResourceAction {
 
     @Override
 	public void actionPerformed(ActionEvent event) {
-        this.parameters.generateInput();
-        final InputParameters input = this.parameters.getInput();
+        final InputParameters input = this.parameters.deriveParameters();
         if (!input.getIRegulonType().equals(IRegulonType.PREDICTED_REGULATORS)) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "This option is not yet implemented.");
             return;

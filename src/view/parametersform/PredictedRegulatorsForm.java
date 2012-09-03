@@ -42,7 +42,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 	private JComboBox jcbSpecieAndNomenclature;
 	private JTextField jtfROC;
 	private JTextField jtfVisualisation;
-	private InputParameters input = null;
 	private IRegulonType iRegulonType = IRegulonType.PREDICTED_REGULATORS;
 	private JTextField jtfName;
 	private JTextField jtfMinOrthologous;
@@ -681,9 +680,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 //frame.dispose();
-                if (CytoscapeNetworkUtilities.hasSelectedNodes()){
-                    generateInput();
-                    InputParameters input = getInput();
+                if (CytoscapeNetworkUtilities.hasSelectedNodes()) {
+                    final InputParameters input = deriveParameters();
                     if (input.parametersAreValid()){
                         if (frame != null){
                             frame.dispose();
@@ -769,16 +767,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		return panel;
 	}
 	
-	/**
-	 * 
-	 * @return the total input in a input class
-	 */
-	public InputParameters getInput(){
-		return this.input;
-	}
-	
-	
-	
 	/*
 	 * Generating all needed input variabels
 	 */
@@ -830,14 +818,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle implements P
 		return (String) this.jtfName.getText();
 	}
 	
-	
-	/**
-	 * @post a new input class is created
-	 * 			getInput() == new input()
-	 * 			
-	 */
-	public void generateInput(){
-		this.input = new InputParameters(CytoscapeNetworkUtilities.getGenes(this.getAttributeName(),
+	public InputParameters deriveParameters() {
+		return new InputParameters(CytoscapeNetworkUtilities.getGenes(this.getAttributeName(),
                 this.getSpeciesNomenclature()),
 				this.getNESThreshold(), 
 				this.getAUCThreshold(), 

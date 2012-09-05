@@ -4,9 +4,7 @@ import cytoscape.Cytoscape;
 import view.ResourceAction;
 import view.parametersform.PredictedRegulatorsForm;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 
 import javax.swing.JFrame;
 
@@ -33,10 +31,15 @@ public class OpenParametersFormAction extends ResourceAction {
 
 		frame.setVisible(true);
 
-        frame.addFocusListener(new FocusAdapter() {
+        frame.addWindowFocusListener(new WindowFocusListener() {
             @Override
-            public void focusGained(FocusEvent e) {
+            public void windowGainedFocus(WindowEvent e) {
                 input.refresh();
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                //Nop
             }
         });
 	}

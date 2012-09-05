@@ -30,6 +30,7 @@ public final class CytoscapeNetworkUtilities {
     public static final String ID_ATTRIBUTE_NAME = "ID";
     public static final String STRENGTH_ATTRIBUTE_NAME = "Strength";
     public static final String RANK_ATTRIBUTE_NAME = "Rank";
+    private static final String HIDDEN_LABEL_ATTRIBUTE_NAME = "hiddenLabel";
 
     public static final String REGULATORY_FUNCTION_REGULATOR = "Regulator";
     public static final String REGULATORY_FUNCTION_TARGET_GENE = "Regulated";
@@ -280,6 +281,38 @@ public final class CytoscapeNetworkUtilities {
         final VisualStyle visualStyle = IRegulonVisualStyle.getVisualStyle();
         final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
         if (visualStyle != null) manager.setVisualStyle(visualStyle);
+    }
+
+    public static List<String> getPossibleGeneIDAttributes() {
+        final List<String> results = new ArrayList<String>();
+
+        final List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
+        final CyAttributes nodeAttributes = Cytoscape.getNodeAttributes();
+        final float minFraction = Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null"));
+		for (String attributeName : nodeAttributes.getAttributeNames()){
+			if (Cytoscape.getNodeAttributes().getType(attributeName) == CyAttributes.TYPE_STRING
+					&& !attributeName.equals(ID_ATTRIBUTE_NAME)
+                    && !attributeName.equals(HIDDEN_LABEL_ATTRIBUTE_NAME)){
+
+                int nullCount = 0;
+				for (CyNode node : nodes) {
+					if (nodeAttributes.getStringAttribute(node.getIdentifier(), attributeName) == null) {
+						nullCount++;
+					}
+				}
+				if (nullCount < (nodes.size() * minFraction)) {
+					results.add(attributeName);
+				}
+			}
+		}
+
+        return results;
+    }
+
+    public static List<String> getPossibleGeneIDAttributesWithDefault() {
+        final List<String> names = getPossibleGeneIDAttributes();
+        if (names.isEmpty()) return Collections.singletonList(ID_ATTRIBUTE_NAME);
+        else return names;
     }
 }
 

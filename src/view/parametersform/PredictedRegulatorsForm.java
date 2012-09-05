@@ -739,7 +739,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
                 : Cytoscape.getCurrentNetwork().getTitle());
         final String selectedAttributeName = getAttributeName();
         attributeNameCB.removeAllItems();
-        final java.util.List<String> attributeNames = AttributeComboBox.getPossibleGeneIDAttributesWithDefault();
+        final java.util.List<String> attributeNames = CytoscapeNetworkUtilities.getPossibleGeneIDAttributesWithDefault();
         for (String name: attributeNames) attributeNameCB.addItem(name);
 		if (attributeNames.contains(selectedAttributeName)) attributeNameCB.setSelectedItem(selectedAttributeName);
         numberOfNodesTF.setText(Integer.toString(getNumberOfSelectedNodes()));

@@ -144,6 +144,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
                 refresh();
             }
         };
+        //TODO: Also refresh when change of view for name of job ...
         Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_CREATED, viewCreatedListener);
         Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_DESTROYED, viewDestroyedListener);
         Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUSED, viewFocusedListener);

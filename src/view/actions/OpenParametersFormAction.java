@@ -5,6 +5,8 @@ import view.ResourceAction;
 import view.parametersform.PredictedRegulatorsForm;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.JFrame;
 
@@ -23,11 +25,19 @@ public class OpenParametersFormAction extends ResourceAction {
 
 		final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);
 		frame.add(input.createForm());
+        input.refresh();
 		
 		frame.pack();
         frame.setLocationRelativeTo(Cytoscape.getDesktop());
         frame.setAlwaysOnTop(true);
 
 		frame.setVisible(true);
+
+        frame.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                input.refresh();
+            }
+        });
 	}
 }

@@ -4,6 +4,7 @@ package view.parametersform;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
+import view.CytoscapeNetworkUtilities;
 import view.actions.QueryMetatargetomeAction;
 import view.resultspanel.Refreshable;
 
@@ -141,7 +142,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     @Override
     public String getAttributeName() {
         final String attributeName = (String) attributeNameCB.getSelectedItem();
-        return attributeName == null ? AttributeComboBox.ID_ATTRIBUTE_NAME : attributeName;
+        return attributeName == null ? CytoscapeNetworkUtilities.ID_ATTRIBUTE_NAME : attributeName;
     }
 
     public void setAttributeName(final String attributeName) {
@@ -284,7 +285,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         add(createNewNetworkCB, cc);
 
         final JLabel attributeNameLB = new JLabel("Attribute name:");
-        attributeNameCB = new JComboBox(AttributeComboBox.getPossibleGeneIDAttributesWithDefault().toArray());
+        attributeNameCB = new JComboBox(CytoscapeNetworkUtilities.getPossibleGeneIDAttributesWithDefault().toArray());
 
         cc.gridx = 0; cc.gridy = 7;
         cc.gridwidth = 1; cc.gridheight = 1;

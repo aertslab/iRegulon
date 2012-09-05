@@ -33,7 +33,7 @@
     <!-- =================================================================== -->
     <path id="project.class.path">
         <pathelement path="${lib.folder}/xstream-1.4.3-bin.jar"/>
-        <pathelement path="${lib.folder}/cytoscape-2.8.2-bin.jar"/>
+        <pathelement path="${lib.folder}/cytoscape-2.8.3-bin.jar"/>
     </path>
 
     <target name="compile" depends="clean">

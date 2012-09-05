@@ -159,7 +159,6 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		}
 		if (this.txtName.getText().toLowerCase().equalsIgnoreCase(PredictedRegulatorsForm.deriveDefaultJobName())) {
 			if (!(Cytoscape.getCurrentNetwork().getTitle() == null || Cytoscape.getCurrentNetwork().getTitle().equals("0"))){
-				this.txtName.setText(Cytoscape.getCurrentNetwork().getTitle());
 				this.txtName.setBackground(Color.WHITE);
 				this.canSubmit = true;
 			}
@@ -397,9 +396,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 				this.txtAmountNodes.setBackground(Color.RED);
 				this.canSubmit = false;
 			}
-			this.txtAmountNodes.setText("" + amountNodes);
 		}else{
-			this.txtAmountNodes.setText("0");
 			this.txtAmountNodes.setBackground(Color.RED);
 			this.canSubmit = false;
 		}

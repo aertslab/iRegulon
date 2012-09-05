@@ -9,8 +9,6 @@ import view.parametersform.databaseselection.DBCombobox;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -41,14 +39,16 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 	private static final float DEFAULT_MIN_ORTHOLOGOUS_IDENTITY = Float.parseFloat(BUNDLE.getString("standard_minOrthologous"));
 	private static final float DEFAULT_MAX_MOTIF_SIMILARITY_FDR = Float.parseFloat(BUNDLE.getString("standard_maxMotifSimilarityFDR"));
 
+    private JTextField jobNameTF;
+	private JComboBox attributeNameCB;
+    private JTextField numberOfNodesTF;
+
 	private JTextField jtfEscore;
 	private JComboBox jcbSpecieAndNomenclature;
 	private JTextField jtfROC;
 	private JTextField jtfVisualisation;
-	private JTextField jobNameTF;
 	private JTextField jtfMinOrthologous;
 	private JTextField jtfMaxMotifSimilarityFDR;
-	private JComboBox jcbGeneName;
     private BasedComboBox jcbBased;
 	private DBCombobox jcbdatabase;
 	private JTextField txtOverlap;
@@ -88,19 +88,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panel.add(jtl, cc);
         
         this.jobNameTF = new JTextField(deriveDefaultJobName());
-        this.jobNameTF.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    if (Cytoscape.getCurrentNetwork() != null
-                            && Cytoscape.getCurrentNetwork().getTitle() != null
-                            && !Cytoscape.getCurrentNetwork().getTitle().equals("")
-                            && !Cytoscape.getCurrentNetwork().getTitle().equals("0")) {
-                        jobNameTF.setText(Cytoscape.getCurrentNetwork().getTitle());
-                    }
-                }
-            }
-        });
         cc.gridx = 2; cc.gridy = yPos;
 		cc.gridwidth = 3; cc.gridheight = 1;
         cc.weighty = 0.0; cc.weightx = 1.0;
@@ -394,14 +381,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         jtl.setVisible(true);
         panelNode.add(jtl, cNode);
         
-        this.jcbGeneName = new AttributeComboBox();
-        this.jcbGeneName.setVisible(true);
+        this.attributeNameCB = new JComboBox();
         cNode.gridx = 1;
         cNode.gridy = lineY;
         cNode.gridwidth = 1;
         cNode.weightx=0.5;
         cNode.fill=GridBagConstraints.HORIZONTAL;
-        panelNode.add(this.jcbGeneName, cNode);
+        panelNode.add(this.attributeNameCB, cNode);
         lineY += 1;
 		
 		 
@@ -416,16 +402,15 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         jtl.setVisible(true);
         panelNode.add(jtl, cNode);
         
-        JTextField amountNodes = new JTextField("0");
-        amountNodes.setEditable(false);
-        amountNodes.setVisible(true);
+        numberOfNodesTF = new JTextField("0");
+        numberOfNodesTF.setEditable(false);
         
         cNode.gridx = 1;
         cNode.gridy = lineY;
         cNode.gridwidth = 1;
         cNode.weightx=0.5;
         cNode.fill=GridBagConstraints.HORIZONTAL;
-        panelNode.add(amountNodes, cNode);
+        panelNode.add(numberOfNodesTF, cNode);
         lineY += 1;
 		
 		cc.gridx = 0;
@@ -474,8 +459,14 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         		this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR, 
         		this.jcbSpecieAndNomenclature, this.jcbBased, this.jcbdatabase, 
         		overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
-        		this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.jcbGeneName, amountNodes, 
+        		this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.attributeNameCB, numberOfNodesTF,
         		submitButton);
+        registerListeners();
+
+		return mainPanel;
+	}
+
+    private void registerListeners() {
         this.jobNameTF.addActionListener(this.dbListener);
         this.jobNameTF.getDocument().addDocumentListener(this.dbListener);
         this.jtfEscore.addActionListener(this.dbListener);
@@ -488,24 +479,50 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.jtfMinOrthologous.getDocument().addDocumentListener(this.dbListener);
         this.jtfMaxMotifSimilarityFDR.addActionListener(this.dbListener);
         this.jtfMaxMotifSimilarityFDR.getDocument().addDocumentListener(this.dbListener);
-		this.jcbSpecieAndNomenclature.addActionListener(this.dbListener);
-		this.jcbBased.addActionListener(this.dbListener);
-		this.jcbdatabase.addActionListener(this.dbListener);
-		this.txtOverlap.addActionListener(this.dbListener);
-		this.txtOverlap.getDocument().addDocumentListener(this.dbListener);
-		rbtnDelineation.addActionListener(this.dbListener);
-		this.jcbDelation.addActionListener(this.dbListener);
-		rbtnConversion.addActionListener(this.dbListener);
-		this.txtUpStream.addActionListener(this.dbListener);
-		this.txtUpStream.getDocument().addDocumentListener(this.dbListener);
-		this.txtDownStream.addActionListener(this.dbListener);
-		this.txtDownStream.getDocument().addDocumentListener(this.dbListener);
-		this.jcbGeneName.addActionListener(this.dbListener);
-		amountNodes.addActionListener(this.dbListener);
-		dbListener.refresh();
+        this.jcbSpecieAndNomenclature.addActionListener(this.dbListener);
+        this.jcbBased.addActionListener(this.dbListener);
+        this.jcbdatabase.addActionListener(this.dbListener);
+        this.txtOverlap.addActionListener(this.dbListener);
+        this.txtOverlap.getDocument().addDocumentListener(this.dbListener);
+        rbtnDelineation.addActionListener(this.dbListener);
+        this.jcbDelation.addActionListener(this.dbListener);
+        rbtnConversion.addActionListener(this.dbListener);
+        this.txtUpStream.addActionListener(this.dbListener);
+        this.txtUpStream.getDocument().addDocumentListener(this.dbListener);
+        this.txtDownStream.addActionListener(this.dbListener);
+        this.txtDownStream.getDocument().addDocumentListener(this.dbListener);
+        this.attributeNameCB.addActionListener(this.dbListener);
+        numberOfNodesTF.addActionListener(this.dbListener);
+    }
 
-		return mainPanel;
-	}
+    private void unregisterListeners() {
+        this.jobNameTF.removeActionListener(this.dbListener);
+        this.jobNameTF.getDocument().removeDocumentListener(this.dbListener);
+        this.jtfEscore.removeActionListener(this.dbListener);
+        this.jtfEscore.getDocument().removeDocumentListener(this.dbListener);
+        this.jtfROC.removeActionListener(this.dbListener);
+        this.jtfROC.getDocument().removeDocumentListener(this.dbListener);
+        this.jtfVisualisation.removeActionListener(this.dbListener);
+        this.jtfVisualisation.getDocument().removeDocumentListener(this.dbListener);
+        this.jtfMinOrthologous.removeActionListener(this.dbListener);
+        this.jtfMinOrthologous.getDocument().removeDocumentListener(this.dbListener);
+        this.jtfMaxMotifSimilarityFDR.removeActionListener(this.dbListener);
+        this.jtfMaxMotifSimilarityFDR.getDocument().removeDocumentListener(this.dbListener);
+        this.jcbSpecieAndNomenclature.removeActionListener(this.dbListener);
+        this.jcbBased.removeActionListener(this.dbListener);
+        this.jcbdatabase.removeActionListener(this.dbListener);
+        this.txtOverlap.removeActionListener(this.dbListener);
+        this.txtOverlap.getDocument().removeDocumentListener(this.dbListener);
+        rbtnDelineation.removeActionListener(this.dbListener);
+        this.jcbDelation.removeActionListener(this.dbListener);
+        rbtnConversion.removeActionListener(this.dbListener);
+        this.txtUpStream.removeActionListener(this.dbListener);
+        this.txtUpStream.getDocument().removeDocumentListener(this.dbListener);
+        this.txtDownStream.removeActionListener(this.dbListener);
+        this.txtDownStream.getDocument().removeDocumentListener(this.dbListener);
+        this.attributeNameCB.removeActionListener(this.dbListener);
+        numberOfNodesTF.removeActionListener(this.dbListener);
+    }
 
     private JPanel createDatabaseSubPanel() {
         JLabel jtl;GridBagLayout layoutDatabase = new GridBagLayout();
@@ -663,7 +680,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 	}
 
 	public String getAttributeName() {
-		return (String) this.jcbGeneName.getSelectedItem();
+		return (String) this.attributeNameCB.getSelectedItem();
 	}
 	
 	public boolean isRegionBasedDatabase(){
@@ -710,9 +727,24 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 		}
 	}
 
+    private int getNumberOfSelectedNodes() {
+        return CytoscapeNetworkUtilities.getGenes(getAttributeName(), getSpeciesNomenclature()).size();
+    }
+
     @Override
     public void refresh() {
-        dbListener.refresh();
+        unregisterListeners();
+        setJobName(Cytoscape.getNullNetwork().equals(Cytoscape.getCurrentNetwork())
+                ? deriveDefaultJobName()
+                : Cytoscape.getCurrentNetwork().getTitle());
+        final String selectedAttributeName = getAttributeName();
+        attributeNameCB.removeAllItems();
+        final java.util.List<String> attributeNames = AttributeComboBox.getPossibleGeneIDAttributesWithDefault();
+        for (String name: attributeNames) attributeNameCB.addItem(name);
+		if (attributeNames.contains(selectedAttributeName)) attributeNameCB.setSelectedItem(selectedAttributeName);
+        numberOfNodesTF.setText(Integer.toString(getNumberOfSelectedNodes()));
+        registerListeners();
+        if (dbListener != null) dbListener.refresh();
     }
 
 	public InputParameters deriveParameters() {

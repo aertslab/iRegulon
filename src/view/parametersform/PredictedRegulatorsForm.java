@@ -5,7 +5,6 @@ import view.parametersform.actions.PredictRegulatorsAction;
 import view.IRegulonResourceBundle;
 import view.parametersform.databaseselection.BasedComboBox;
 import view.parametersform.databaseselection.DBCombobox;
-import view.parametersform.databaseselection.DatabaseListener;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

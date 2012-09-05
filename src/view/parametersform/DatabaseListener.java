@@ -1,4 +1,4 @@
-package view.parametersform.databaseselection;
+package view.parametersform;
 
 import view.IRegulonResourceBundle;
 import view.CytoscapeNetworkUtilities;
@@ -22,8 +22,10 @@ import domainmodel.RankingsDatabase;
 import domainmodel.Delineation;
 import domainmodel.SpeciesNomenclature;
 import view.parametersform.PredictedRegulatorsForm;
+import view.parametersform.databaseselection.BasedComboBox;
+import view.parametersform.databaseselection.DBCombobox;
 
-final public class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener {
+final class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener {
 
 	private final JTextField txtName;
 	private final JTextField txtEscore;
@@ -103,6 +105,22 @@ final public class DatabaseListener extends IRegulonResourceBundle implements Ac
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		this.refresh();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		this.refresh();
+
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		this.refresh();
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
 		this.refresh();
 	}
 
@@ -393,22 +411,6 @@ final public class DatabaseListener extends IRegulonResourceBundle implements Ac
 		}else{
 			this.btnSubmit.setEnabled(false);
 		}
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		this.refresh();
-		
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		this.refresh();
-	}
-
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		this.refresh();
 	}
 	
 }

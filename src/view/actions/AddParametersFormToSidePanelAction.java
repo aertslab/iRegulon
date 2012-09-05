@@ -2,6 +2,7 @@ package view.actions;
 
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
+import cytoscape.view.CyNetworkView;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelListener;
@@ -9,33 +10,53 @@ import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
+import giny.view.GraphViewChangeEvent;
+import giny.view.GraphViewChangeListener;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterForm;
 import view.parametersform.ParameterChangeListener;
 import view.parametersform.PredictedRegulatorsForm;
+import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class AddParametersFormToSidePanelAction extends ResourceAction {
+public class AddParametersFormToSidePanelAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_open_parameters_side_panel";
 
     private static final String PLUGIN_NAME = getBundle().getString("plugin_visual_name");
+
+    private PredictedRegulatorsForm predictedRegulatorsForm;
+    private MetatargetomeForm metatargetomeForm;
 
     public AddParametersFormToSidePanelAction() {
         super(NAME);
     }
 
+    public boolean alreadyAdded() {
+        return predictedRegulatorsForm != null && metatargetomeForm != null;
+    }
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		addSidePanel();
+        if (!alreadyAdded()) addSidePanel();
 	}
+
+    @Override
+    public void refresh() {
+        if (alreadyAdded()) {
+            predictedRegulatorsForm.refresh();
+            metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
+        }
+    }
 
     private void addSidePanel() {
 		final CytoscapeDesktop desktop = Cytoscape.getDesktop();
@@ -55,12 +76,12 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
 
 
         final JTabbedPane tabbedPane = new JTabbedPane();
-        final PredictedRegulatorsForm predictedRegulatorsForm = new PredictedRegulatorsForm();
+        predictedRegulatorsForm = new PredictedRegulatorsForm();
         final Map<SpeciesNomenclature,Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
-        final MetatargetomeForm metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
+        metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
 		tabbedPane.addTab("Predict regulators", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
         tabbedPane.addTab("Query metatargetome", null, metatargetomeForm, null);
 
@@ -80,8 +101,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
 		cytoPanel.addCytoPanelListener(new CytoPanelListener() {
             @Override
             public void onStateChange(CytoPanelState newState) {
-                predictedRegulatorsForm.refresh();
-                metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
+                refresh();
             }
 
             @Override
@@ -102,11 +122,52 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
         tabbedPane.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                predictedRegulatorsForm.refresh();
-                metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
+                refresh();
             }
         });
+
+        final PropertyChangeListener viewCreatedListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                installSelectionListener((CyNetworkView) evt.getNewValue());
+            }
+        };
+        final PropertyChangeListener viewDestroyedListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                uninstallSelectionListener((CyNetworkView) evt.getNewValue());
+            }
+        };
+        final PropertyChangeListener viewFocusedListener = new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                refresh();
+            }
+        };
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_CREATED, viewCreatedListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_DESTROYED, viewDestroyedListener);
+        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUSED, viewFocusedListener);
+        installSelectionListener(Cytoscape.getCurrentNetworkView());
+
+        refresh();
 	}
+
+    private final GraphViewChangeListener selectionListener = new GraphViewChangeListener() {
+        @Override
+        public void graphViewChanged(GraphViewChangeEvent graphViewChangeEvent) {
+            if (graphViewChangeEvent.isNodesSelectedType()) {
+                refresh();
+            }
+        }
+    };
+
+    public void installSelectionListener(final CyNetworkView view) {
+        view.addGraphViewChangeListener(selectionListener);
+    }
+
+    public void uninstallSelectionListener(final CyNetworkView view) {
+        view.removeGraphViewChangeListener(selectionListener);
+    }
 
     private GeneIdentifier getSelectedFactor() {
         @SuppressWarnings("unchecked")
@@ -115,7 +176,6 @@ public class AddParametersFormToSidePanelAction extends ResourceAction {
         final CyNode node = nodes.iterator().next();
         return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
     }
-
 
     private static class MetatargetomeForm extends JPanel {
         private final MetatargetomeParameterForm parameterForm;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.JComboBox;
 
-public class BasedComboBox extends JComboBox{
+public class BasedComboBox extends JComboBox {
 
 	private final String[] based = {"Gene Based", "Region Based"};
 	private ArrayList<String> newBased;

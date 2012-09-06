@@ -55,7 +55,10 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
     public void refresh() {
         if (alreadyAdded()) {
             predictedRegulatorsForm.refresh();
-            metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
+            if (getSelectedFactor() != null) {
+                metatargetomeForm.getForm().setSpeciesNomenclature(getSelectedFactor().getSpeciesNomenclature());
+                metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
+            }
         }
     }
 
@@ -174,7 +177,8 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         final java.util.List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
         if (nodes == null || nodes.isEmpty()) return null;
         final CyNode node = nodes.iterator().next();
-        return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        final SpeciesNomenclature species = metatargetomeForm.getForm().getSpeciesNomenclature();
+        return new GeneIdentifier(node.getIdentifier(), species == null ? SpeciesNomenclature.HOMO_SAPIENS_HGNC : species);
     }
 
     private static class MetatargetomeForm extends JPanel {
@@ -201,8 +205,12 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
                 }
             });
 
-            parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-            if (factor != null) parameterForm.setTranscriptionFactor(factor);
+            if (factor != null) {
+                parameterForm.setSpeciesNomenclature(factor.getSpeciesNomenclature());
+                parameterForm.setTranscriptionFactor(factor);
+            } else {
+                parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+            }
             parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
         }
 

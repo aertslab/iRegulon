@@ -108,7 +108,11 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     }
 
     public void setSpeciesNomenclature(final SpeciesNomenclature speciesNomenclature) {
+        unregisterListeners();
         speciesNomenclatureCB.setSelectedItem(speciesNomenclature == null ? SpeciesNomenclature.HOMO_SAPIENS_HGNC : speciesNomenclature);
+        refresh();
+        registerListeners();
+        fireParametersChanged();
     }
 
     public void setDatabases(List<TargetomeDatabase> databases) {
@@ -341,7 +345,6 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         else if (!IDs.isEmpty()) setTranscriptionFactor(IDs.iterator().next());
 
         registerListeners();
-        fireParametersChanged();
     }
 
     public void addParameterChangeListener(final ParameterChangeListener listener) {

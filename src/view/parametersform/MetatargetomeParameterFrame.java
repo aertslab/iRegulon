@@ -53,8 +53,12 @@ public final class MetatargetomeParameterFrame extends JDialog {
                 }
             });
 
-            parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-            if (factor != null) parameterForm.setTranscriptionFactor(factor);
+            if (factor != null) {
+                parameterForm.setSpeciesNomenclature(factor.getSpeciesNomenclature());
+                parameterForm.setTranscriptionFactor(factor);
+            } else {
+                parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+            }
             parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
         }
     }

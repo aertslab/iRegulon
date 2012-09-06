@@ -4,7 +4,9 @@ import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import domainmodel.*;
 import view.IRegulonResourceBundle;
+import view.actions.OpenQueryMetatargetomeFormAction;
 import view.actions.QueryMetatargetomeAction;
+import view.parametersform.DefaultMetatargetomeParameters;
 import view.parametersform.MetatargetomeParameters;
 import view.resultspanel.guiwidgets.SummaryLabel;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
@@ -52,6 +54,8 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 	private JPanel mainPanel = null;
     private JTabbedPane tabbedPane;
 
+    private final DefaultMetatargetomeParameters parameters;
+
     private final PropertyChangeListener refreshListener;
     private CreateNewCombinedRegulatoryNetworkAction createNewCombinedRegulatoryNetworkAction;
     private AddRegulatoryNetworkAction drawNodesAndEdgesAction;
@@ -61,6 +65,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         this.results = results;
 		this.isSaved = false;
 
+        this.parameters = new DefaultMetatargetomeParameters(QueryMetatargetomeAction.DEFAULT_PARAMETERS);
         this.selectedMotif = new SelectedMotif(results.getParameters().getAttributeName());
 
         refreshListener = new PropertyChangeListener() {
@@ -260,10 +265,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        final QueryMetatargetomeAction queryMetatargetomeAction = new QueryMetatargetomeAction(this);
-        transcriptionFactorComboBox.addActionListener(new QueryMetatargetomeActionListener(queryMetatargetomeAction, transcriptionFactorComboBox, results.getParameters().getAttributeName()));
+        final OpenQueryMetatargetomeFormAction queryMetatargetomeAction = new OpenQueryMetatargetomeFormAction(parameters, this);
+        parameters.setAttributeName(results.getParameters().getAttributeName());
+        transcriptionFactorComboBox.addActionListener(new QueryMetatargetomeActionListener(queryMetatargetomeAction, parameters, transcriptionFactorComboBox));
         final JTextComponent textComponent = (JTextComponent) transcriptionFactorComboBox.getEditor().getEditorComponent();
-        textComponent.getDocument().addDocumentListener(new QueryMetatargetomeDocumentListener(queryMetatargetomeAction, transcriptionFactorComboBox, results.getParameters().getAttributeName()));
+        textComponent.getDocument().addDocumentListener(new QueryMetatargetomeDocumentListener(queryMetatargetomeAction, parameters, transcriptionFactorComboBox));
         JButton buttonQueryMetatargetome = new JButton(queryMetatargetomeAction);
         buttonQueryMetatargetome.setText("");
         toolBar.add(buttonQueryMetatargetome, c);
@@ -337,97 +343,50 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     }
 
     private static class QueryMetatargetomeActionListener implements ActionListener {
-        private final QueryMetatargetomeAction queryMetatargetomeAction;
+        private final OpenQueryMetatargetomeFormAction queryMetatargetomeAction;
+        private final DefaultMetatargetomeParameters parameters;
         private final TranscriptionFactorComboBox transcriptionFactorComboBox;
-        private final String attributeName;
 
-        public QueryMetatargetomeActionListener(QueryMetatargetomeAction queryMetatargetomeAction, TranscriptionFactorComboBox transcriptionFactorComboBox, final String attributeName) {
+        public QueryMetatargetomeActionListener(final OpenQueryMetatargetomeFormAction queryMetatargetomeAction,
+                                                final DefaultMetatargetomeParameters parameters, TranscriptionFactorComboBox transcriptionFactorComboBox) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
+            this.parameters = parameters;
             this.transcriptionFactorComboBox = transcriptionFactorComboBox;
-            this.attributeName = attributeName;
+        }
+
+        public GeneIdentifier getTranscriptionFactor() {
+            final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
+            return (factor == null) ? null : factor;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
-                @Override
-                public GeneIdentifier getTranscriptionFactor() {
-                    final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
-                    return (factor == null) ? null : factor;
-                }
-
-                @Override
-                public List<TargetomeDatabase> getDatabases() {
-                    return TargetomeDatabase.getAllDatabases();
-                }
-
-                @Override
-                public String getAttributeName() {
-                    return attributeName;
-                }
-
-                @Override
-                public int getOccurenceCountThreshold() {
-                    return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
-                }
-
-                @Override
-                public int getMaxNumberOfNodes() {
-                    return QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT;
-                }
-
-                @Override
-                public boolean createNewNetwork() {
-                    return false;
-                }
-            });
+            parameters.setTranscriptionFactor(getTranscriptionFactor());
+            queryMetatargetomeAction.setParameters(parameters);
         }
     }
 
     private static class QueryMetatargetomeDocumentListener implements DocumentListener {
-        private final QueryMetatargetomeAction queryMetatargetomeAction;
+        private final OpenQueryMetatargetomeFormAction queryMetatargetomeAction;
+        private final DefaultMetatargetomeParameters parameters;
         private final TranscriptionFactorComboBox transcriptionFactorComboBox;
-        private final String attributeName;
 
-        public QueryMetatargetomeDocumentListener(QueryMetatargetomeAction queryMetatargetomeAction, TranscriptionFactorComboBox transcriptionFactorComboBox, final String attributeName) {
+        public QueryMetatargetomeDocumentListener(final OpenQueryMetatargetomeFormAction queryMetatargetomeAction,
+                                                   final DefaultMetatargetomeParameters parameters,
+                                                  TranscriptionFactorComboBox transcriptionFactorComboBox) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
+            this.parameters = parameters;
             this.transcriptionFactorComboBox = transcriptionFactorComboBox;
-            this.attributeName = attributeName;
+        }
+
+        public GeneIdentifier getTranscriptionFactor() {
+            final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
+            return (factor == null) ? null : factor;
         }
 
         private void refresh() {
-            queryMetatargetomeAction.setParameters(new MetatargetomeParameters() {
-                @Override
-                public GeneIdentifier getTranscriptionFactor() {
-                    final GeneIdentifier factor = transcriptionFactorComboBox.getTranscriptionFactor();
-                    return (factor == null) ? null : factor;
-                }
-
-                @Override
-                public List<TargetomeDatabase> getDatabases() {
-                    return TargetomeDatabase.getAllDatabases();
-                }
-
-                @Override
-                public String getAttributeName() {
-                    return attributeName;
-                }
-
-                @Override
-                public int getOccurenceCountThreshold() {
-                    return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
-                }
-
-                @Override
-                public int getMaxNumberOfNodes() {
-                    return QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT;
-                }
-
-                @Override
-                public boolean createNewNetwork() {
-                    return false;
-                }
-            });
+            parameters.setTranscriptionFactor(getTranscriptionFactor());
+            queryMetatargetomeAction.setParameters(parameters);
         }
 
         @Override

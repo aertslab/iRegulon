@@ -1,8 +1,12 @@
 package view;
 
+import cytoscape.CyNode;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
+import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TargetomeDatabase;
 import view.actions.*;
 import view.actions.OpenParametersFormAction;
 import view.actions.AddParametersFormToSidePanelAction;
@@ -24,13 +28,12 @@ import java.net.URL;
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
-
+import view.parametersform.MetatargetomeParameters;
 
 
 public class IRegulonPlugin extends CytoscapePlugin {
     private static final String HELP_SET_NAME = "/help/jhelpset.hs";
     private static final String IREGULON_LINK_OUT = "edgelinkouturl.iRegulon";
-
 
     private final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
     private final CyLogHandler logger = ConsoleLogger.getLogger();
@@ -71,7 +74,9 @@ public class IRegulonPlugin extends CytoscapePlugin {
         menu.setToolTipText(bundle.getString("plugin_description"));
 
         menu.add(new JMenuItem(new OpenParametersFormAction()));
-        menu.add(new JMenuItem(new OpenQueryMetatargetomeFormAction()));
+        final JMenuItem menuItem = new JMenuItem(new OpenQueryMetatargetomeFormAction(QueryMetatargetomeAction.DEFAULT_PARAMETERS, null));
+        menuItem.setIcon(null);
+        menu.add(menuItem);
 
         menu.addSeparator();
 

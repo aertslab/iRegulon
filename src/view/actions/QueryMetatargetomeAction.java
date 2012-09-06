@@ -2,6 +2,7 @@ package view.actions;
 
 
 import cytoscape.CyNetwork;
+import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
@@ -13,6 +14,7 @@ import domainmodel.*;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
+import view.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 import view.parametersform.DefaultMetatargetomeParameters;
 import view.parametersform.MetatargetomeParameters;
@@ -35,6 +37,44 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         DEFAULT_THRESHOLD = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("occurence_count_threshold"));
         DEFAULT_MAX_NODE_COUNT = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("max_node_number"));
     }
+    public static final MetatargetomeParameters DEFAULT_PARAMETERS = new MetatargetomeParameters() {
+        @Override
+        public String getAttributeName() {
+            return null;
+        }
+
+        @Override
+        public GeneIdentifier getTranscriptionFactor() {
+            return getSelectedFactor();
+        }
+
+        @Override
+        public List<TargetomeDatabase> getDatabases() {
+            return TargetomeDatabase.getAllDatabases();
+        }
+
+        @Override
+        public int getOccurenceCountThreshold() {
+            return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
+        }
+
+        @Override
+        public int getMaxNumberOfNodes() {
+            return QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT;
+        }
+
+        @Override
+        public boolean createNewNetwork() {
+            return true;
+        }
+
+        private GeneIdentifier getSelectedFactor() {
+            final List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
+            if (nodes == null || nodes.isEmpty()) return null;
+            final CyNode node = nodes.iterator().next();
+            return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        }
+    };
 
     private static Map<SpeciesNomenclature,Set<GeneIdentifier>> SPECIES_NOMENCLATURE2FACTORS;
     static {

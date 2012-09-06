@@ -6,6 +6,7 @@ import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 import view.actions.QueryMetatargetomeAction;
+import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,20 +17,22 @@ import java.util.*;
 public final class MetatargetomeParameterFrame extends JDialog {
     private static final String TITLE = "Query metatargetome for a factor";
 
-    public MetatargetomeParameterFrame(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors) {
+    public MetatargetomeParameterFrame(final MetatargetomeParameters parameters,
+                                       final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors,
+                                       final Refreshable view) {
         super(Cytoscape.getDesktop(), TITLE, true);
-        setContentPane(new ContentPane(factor, speciesNomenclature2factors));
+        setContentPane(new ContentPane(parameters, speciesNomenclature2factors, view));
         pack();
         setLocationRelativeTo(Cytoscape.getDesktop());
         setAlwaysOnTop(true);
     }
 
     private class ContentPane extends JPanel {
-        private ContentPane(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors) {
+        private ContentPane(final MetatargetomeParameters parameters, final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors, final Refreshable view) {
             super(new BorderLayout());
 
-            final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
-            final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null) {
+            final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(parameters, speciesNomenclature2factors);
+            final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, view) {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     super.actionPerformed(actionEvent);
@@ -52,14 +55,6 @@ public final class MetatargetomeParameterFrame extends JDialog {
                     submitAction.refresh();
                 }
             });
-
-            if (factor != null) {
-                parameterForm.setSpeciesNomenclature(factor.getSpeciesNomenclature());
-                parameterForm.setTranscriptionFactor(factor);
-            } else {
-                parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-            }
-            parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
         }
     }
 

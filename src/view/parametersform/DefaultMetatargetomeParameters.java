@@ -8,12 +8,12 @@ import java.util.List;
 
 
 public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
-    private final String attributeName;
-    private final GeneIdentifier transcriptionFactor;
-    private final List<TargetomeDatabase> databases;
-    private final int occurenceCountThreshold;
-    private final int maxNumberOfNodes;
-    private final boolean createNewNetwork;
+    private String attributeName;
+    private GeneIdentifier transcriptionFactor;
+    private List<TargetomeDatabase> databases;
+    private int occurenceCountThreshold;
+    private int maxNumberOfNodes;
+    private boolean createNewNetwork;
 
     public DefaultMetatargetomeParameters(final MetatargetomeParameters parameters) {
         this.attributeName = parameters.getAttributeName();
@@ -22,6 +22,9 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
         this.occurenceCountThreshold = parameters.getOccurenceCountThreshold();
         this.maxNumberOfNodes = parameters.getMaxNumberOfNodes();
         this.createNewNetwork = parameters.createNewNetwork();
+    }
+
+    public DefaultMetatargetomeParameters() {
     }
 
     @Override
@@ -52,5 +55,29 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
     @Override
     public boolean createNewNetwork() {
         return createNewNetwork;
+    }
+
+    public void setAttributeName(String attributeName) {
+        this.attributeName = attributeName;
+    }
+
+    public void setTranscriptionFactor(GeneIdentifier transcriptionFactor) {
+        this.transcriptionFactor = transcriptionFactor;
+    }
+
+    public void setDatabases(List<TargetomeDatabase> databases) {
+        this.databases = databases;
+    }
+
+    public void setOccurenceCountThreshold(int occurenceCountThreshold) {
+        this.occurenceCountThreshold = occurenceCountThreshold;
+    }
+
+    public void setMaxNumberOfNodes(int maxNumberOfNodes) {
+        this.maxNumberOfNodes = maxNumberOfNodes;
+    }
+
+    public void setCreateNewNetwork(boolean createNewNetwork) {
+        this.createNewNetwork = createNewNetwork;
     }
 }

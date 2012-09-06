@@ -44,7 +44,8 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     private final DocumentListener documentListener;
 
 
-    public MetatargetomeParameterForm(Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors) {
+    public MetatargetomeParameterForm(final MetatargetomeParameters parameters,
+                                      final Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors) {
         super();
         this.nomenclature2factors = nomenclature2factors;
         initPanel();
@@ -91,7 +92,20 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         };
         registerListeners();
 
+        if (parameters != null) initParameters(parameters);
+
         refresh();
+    }
+
+    private void initParameters(final MetatargetomeParameters parameters) {
+        setMaxNumberOfNodes(parameters.getMaxNumberOfNodes());
+        setOccurenceCountThreshold(parameters.getOccurenceCountThreshold());
+        final GeneIdentifier factor = parameters.getTranscriptionFactor();
+        setSpeciesNomenclature(factor == null ? null : parameters.getTranscriptionFactor().getSpeciesNomenclature());
+        setTranscriptionFactor(factor);
+        setDatabases(parameters.getDatabases());
+        setAttributeName(parameters.getAttributeName());
+        setCreateNewNetwork(parameters.createNewNetwork());
     }
 
     @Override
@@ -175,9 +189,17 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         }
     }
 
+    public void setMaxNumberOfNodes(int nodes) {
+        maxNodeCountTF.setText(Integer.toString(nodes));
+    }
+
     @Override
     public boolean createNewNetwork() {
         return createNewNetworkCB.isSelected();
+    }
+
+    public void setCreateNewNetwork(boolean isSelected) {
+        createNewNetworkCB.setSelected(isSelected);
     }
 
     private void initPanel() {
@@ -289,7 +311,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         add(createNewNetworkCB, cc);
 
         final JLabel attributeNameLB = new JLabel("Attribute name:");
-        attributeNameCB = new JComboBox(CytoscapeNetworkUtilities.getPossibleGeneIDAttributesWithDefault().toArray());
+        attributeNameCB = new JComboBox();
 
         cc.gridx = 0; cc.gridy = 7;
         cc.gridwidth = 1; cc.gridheight = 1;
@@ -343,6 +365,8 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
 
         if (IDs.contains(curID)) setTranscriptionFactor(curID);
         else if (!IDs.isEmpty()) setTranscriptionFactor(IDs.iterator().next());
+
+        attributeNameCB.setModel(new DefaultComboBoxModel(CytoscapeNetworkUtilities.getPossibleGeneIDAttributesWithDefault().toArray()));
 
         registerListeners();
     }

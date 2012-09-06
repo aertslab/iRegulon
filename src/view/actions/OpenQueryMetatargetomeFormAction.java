@@ -8,6 +8,8 @@ import domainmodel.SpeciesNomenclature;
 import view.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterFrame;
+import view.parametersform.MetatargetomeParameters;
+import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -17,11 +19,25 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class OpenQueryMetatargetomeFormAction extends ResourceAction {
+public class OpenQueryMetatargetomeFormAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_open_query_metatargetome_frame";
 
-    public OpenQueryMetatargetomeFormAction() {
+    private MetatargetomeParameters parameters;
+    private final Refreshable view;
+
+    public OpenQueryMetatargetomeFormAction(final MetatargetomeParameters parameters, final Refreshable view) {
         super(NAME);
+        this.parameters = parameters;
+        this.view = view;
+    }
+
+    public MetatargetomeParameters getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(MetatargetomeParameters parameters) {
+        this.parameters = parameters;
+        refresh();
     }
 
     @Override
@@ -31,14 +47,22 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
 
-        final JDialog frame = new MetatargetomeParameterFrame(getSelectedFactor(), speciesNomenclature2factors);
+        final JDialog frame = new MetatargetomeParameterFrame(getParameters(), speciesNomenclature2factors, view);
         frame.setVisible(true);
     }
 
-    private GeneIdentifier getSelectedFactor() {
-        final java.util.List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
-        if (nodes == null || nodes.isEmpty()) return null;
-        final CyNode node = nodes.iterator().next();
-        return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+    @Override
+    public void refresh() {
+        setEnabled(checkEnabled());
+    }
+
+    private boolean checkEnabled() {
+        if (getParameters() == null) return false;
+        if (getParameters().getDatabases().isEmpty()) return false;
+        final GeneIdentifier factor = getParameters().getTranscriptionFactor();
+        if (factor == null) return false;
+        if (getParameters().getOccurenceCountThreshold() < 0) return false;
+        if (getParameters().getMaxNumberOfNodes() < 0) return false;
+        return QueryMetatargetomeAction.getAvailableFactors(factor.getSpeciesNomenclature()).contains(factor);
     }
 }

@@ -55,6 +55,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
     public void refresh() {
         if (alreadyAdded()) {
             predictedRegulatorsForm.refresh();
+            metatargetomeForm.getForm().refresh();
             if (getSelectedFactor() != null) {
                 metatargetomeForm.getForm().setSpeciesNomenclature(getSelectedFactor().getSpeciesNomenclature());
                 metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
@@ -174,6 +175,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
     }
 
     private GeneIdentifier getSelectedFactor() {
+        if (!alreadyAdded()) return null;
         final java.util.List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
         if (nodes == null || nodes.isEmpty()) return null;
         final CyNode node = nodes.iterator().next();
@@ -187,7 +189,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         private MetatargetomeForm(final GeneIdentifier factor, final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors) {
             super(new BorderLayout());
 
-            parameterForm = new MetatargetomeParameterForm(speciesNomenclature2factors);
+            parameterForm = new MetatargetomeParameterForm(QueryMetatargetomeAction.DEFAULT_PARAMETERS, speciesNomenclature2factors);
             final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null);
             add(parameterForm, BorderLayout.CENTER);
             add(new JPanel(new FlowLayout()) {

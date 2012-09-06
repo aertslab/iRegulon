@@ -14,6 +14,7 @@ import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
 import view.ResourceAction;
+import view.parametersform.DefaultMetatargetomeParameters;
 import view.parametersform.MetatargetomeParameters;
 import view.resultspanel.Refreshable;
 
@@ -96,14 +97,16 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
             return;
         }
 
+        final MetatargetomeParameters parameters = new DefaultMetatargetomeParameters(getParameters());
+
         final ComputationalService service = new ComputationalServiceHTTP();
         final List<CandidateTargetGene> targetome;
         try {
             targetome = service.queryPredictedTargetome(
-                    getParameters().getTranscriptionFactor(),
-                    getParameters().getDatabases(),
-                    getParameters().getOccurenceCountThreshold(),
-                    getParameters().getMaxNumberOfNodes());
+                    parameters.getTranscriptionFactor(),
+                    parameters.getDatabases(),
+                    parameters.getOccurenceCountThreshold(),
+                    parameters.getMaxNumberOfNodes());
         } catch (ServerCommunicationException e) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -119,14 +122,14 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
             final CyNetwork network = Cytoscape.getCurrentNetwork();
 		    view = Cytoscape.getCurrentNetworkView();
             task = new AddMetatargetomeTask(network, view,
-                    getResultsPanel(), getParameters().getAttributeName(),
-                    getParameters().getTranscriptionFactor(), targetome);
+                    getResultsPanel(), parameters.getAttributeName(),
+                    parameters.getTranscriptionFactor(), targetome);
         } else {
-            final CyNetwork network = Cytoscape.createNetwork(createTitle(getParameters()));
-            view = Cytoscape.createNetworkView(network, createTitle(getParameters()));
+            final CyNetwork network = Cytoscape.createNetwork(createTitle(parameters));
+            view = Cytoscape.createNetworkView(network, createTitle(parameters));
             task = new CreateMetatargetomeTask(network, view,
-                    getResultsPanel(), getParameters().getAttributeName(),
-                    getParameters().getTranscriptionFactor(), targetome);
+                    getResultsPanel(), parameters.getAttributeName(),
+                    parameters.getTranscriptionFactor(), targetome);
         }
 
         if (targetome.size() < NODE_COUNT_LIMIT_FOR_TASK) {

@@ -1,9 +1,7 @@
 package view.resultspanel.guiwidgets;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -71,7 +69,14 @@ public final class TranscriptionFactorComboBox extends JComboBox {
         @Override
         public void newMotifSelected(AbstractMotif currentSelection) {
             if (currentSelection != null) {
-                final List<TranscriptionFactor> tfs = new ArrayList<TranscriptionFactor>(currentSelection.getTranscriptionFactors());
+                final Set<GeneIdentifier> ids = new HashSet<GeneIdentifier>();
+                final List<TranscriptionFactor> tfs = new ArrayList<TranscriptionFactor>();
+                for (final TranscriptionFactor factor : currentSelection.getTranscriptionFactors()) {
+                    if (!ids.contains(factor.getGeneID())) {
+                        ids.add(factor.getGeneID());
+                        tfs.add(factor);
+                    }
+                }
                 Collections.sort(tfs);
                 reset(tfs);
             } else {

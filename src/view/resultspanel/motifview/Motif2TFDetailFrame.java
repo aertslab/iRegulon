@@ -87,7 +87,7 @@ public class Motif2TFDetailFrame {
 		int yDatabase = ypos;
 		
 		JLabel minEscoreLabel = new JLabel();
-		minEscoreLabel.setText("Minimal E-score: ");
+		minEscoreLabel.setText("Minimum NEScore: ");
 		c.gridx = 0;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -102,7 +102,7 @@ public class Motif2TFDetailFrame {
 		ypos+=1;
 		
 		JLabel visualisationLabel = new JLabel();
-		visualisationLabel.setText("Threshold for visualisation: ");
+		visualisationLabel.setText("Rank threshold for visualisation: ");
 		c.gridx = 0;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -117,7 +117,7 @@ public class Motif2TFDetailFrame {
 		ypos+=1;
 		
 		JLabel aucLabel = new JLabel();
-		aucLabel.setText("ROC threshold for AUC: ");
+		aucLabel.setText("ROC threshold for AUC calculation: ");
 		c.gridx = 0;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -132,7 +132,7 @@ public class Motif2TFDetailFrame {
 		ypos+=1;
 		
 		JLabel orthologousLabel = new JLabel();
-		orthologousLabel.setText("minimal ortholgous: ");
+		orthologousLabel.setText("Minimum orthologous identity (fraction): ");
 		c.gridx = 0;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -147,7 +147,7 @@ public class Motif2TFDetailFrame {
 		ypos+=1;
 		
 		JLabel similarityLabel = new JLabel();
-		similarityLabel.setText("maximal motif similarity: ");
+		similarityLabel.setText("Maximum motif similarity (FDR): ");
 		c.gridx = 0;
 		c.gridy = ypos;
 		c.gridwidth = 1;
@@ -178,7 +178,7 @@ public class Motif2TFDetailFrame {
 		
 		if (this.tfMotif.getInput().isRegionBased()){
 			JLabel overlapLabel = new JLabel();
-			overlapLabel.setText("Overlap: ");
+			overlapLabel.setText("Overlap fraction: ");
 			c.gridx = 2;
 			c.gridy = yDatabase;
 			c.gridwidth = 1;
@@ -208,7 +208,7 @@ public class Motif2TFDetailFrame {
 				yDatabase+=1;
 			}else{
 				JLabel upstreamLabel = new JLabel();
-				upstreamLabel.setText("Amount of bases upstream: ");
+				upstreamLabel.setText("Amount of bases upstream (bp): ");
 				c.gridx = 2;
 				c.gridy = yDatabase;
 				c.gridwidth = 1;
@@ -250,7 +250,6 @@ public class Motif2TFDetailFrame {
 		 * 
 		 */
 		JLabel motifTitleLabel = new JLabel();
-		//Font f = new Font("Serif", 0, 30);
 		motifTitleLabel.setFont(f);
 		motifTitleLabel.setText("Motif");
 		c.gridx = 0;

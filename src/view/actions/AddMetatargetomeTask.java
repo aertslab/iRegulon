@@ -51,7 +51,7 @@ final class AddMetatargetomeTask extends MetatargetomeTask {
                 for (final CyNode targetNode : targetNodes) {
                     CytoscapeNetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, NO_MOTIF);
 
-                    final CyEdge edge =  CytoscapeNetworkUtilities.addEdge(sourceNode, targetNode, getNetwork(), getView(), null);
+                    final CyEdge edge = CytoscapeNetworkUtilities.createEdge(getNetwork(), getView(), sourceNode, targetNode, getTranscriptionFactor(), null, targetGene.getGeneID(), CytoscapeNetworkUtilities.REGULATORY_FUNCTION_METATARGETOME);
                     CytoscapeNetworkUtilities.setEdgeAttribute(edge, CytoscapeNetworkUtilities.STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
                 }
                 count++;
@@ -61,7 +61,6 @@ final class AddMetatargetomeTask extends MetatargetomeTask {
 
         Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
         getView().applyLayout(CyLayouts.getDefaultLayout());
-        CytoscapeNetworkUtilities.applyVisualStyle();
         getView().redrawGraph(true, true);
         if (getResultsPanel() != null) getResultsPanel().refresh();
         CytoscapeNetworkUtilities.activeSidePanel();

@@ -33,8 +33,8 @@ class CreateMetatargetomeTask extends MetatargetomeTask {
             if (getMonitor() != null) getMonitor().setPercentCompleted((100 * idx)/getTargetome().size());
             final CandidateTargetGene targetGene = getTargetome().get(idx);
 
-            final CyNode targetNode =  CytoscapeNetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF);
-            final CyEdge edge =  CytoscapeNetworkUtilities.addEdge(sourceNode, targetNode, getNetwork(), getView(), null);
+            final CyNode targetNode = CytoscapeNetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF);
+            final CyEdge edge = CytoscapeNetworkUtilities.createEdge(getNetwork(), getView(), sourceNode, targetNode, getTranscriptionFactor(), null, getTargetome().get(idx).getGeneID(), CytoscapeNetworkUtilities.REGULATORY_FUNCTION_METATARGETOME);
             CytoscapeNetworkUtilities.setEdgeAttribute(edge, CytoscapeNetworkUtilities.STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
         }
 

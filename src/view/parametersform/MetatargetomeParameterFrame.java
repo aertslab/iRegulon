@@ -41,6 +41,7 @@ public final class MetatargetomeParameterFrame extends JFrame {
                 {
                     add(new JButton(new CancelAction()));
                     final JButton submitButton = new JButton(submitAction);
+                    submitButton.setText("Submit");
                     submitButton.setIcon(null);
                     add(submitButton);
                 }

@@ -153,7 +153,7 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
             
             DiscreteMapping edgeColorMapping = new DiscreteMapping(Color.BLUE, 
             														ObjectMapping.EDGE_MAPPING);
-            edgeColorMapping.setControllingAttributeName("Motif", network, false);
+            edgeColorMapping.setControllingAttributeName("Motifs", network, false);
             CyAttributes cyEdgeAttrs = Cytoscape.getEdgeAttributes();
             int edgesAmount = network.getEdgeCount();
             int[] indices = network.getEdgeIndicesArray();
@@ -162,7 +162,7 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
     			CyEdge edge = (CyEdge) network.getEdge(indices[index]);
     			//System.out.println(edge.getIdentifier());
     			List<Object> edgeAtr = new ArrayList<Object>();
-    			edgeAtr.add(cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Motif"));
+    			edgeAtr.add(cyEdgeAttrs.getStringAttribute(edge.getIdentifier(), "Motifs"));
     			boolean isIn = false;
     			for (Object edgeMotif : edgeAtr){
     				String motifString = "";

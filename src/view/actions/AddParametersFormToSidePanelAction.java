@@ -82,7 +82,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
         metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
-		tabbedPane.addTab("Predict regulators", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
+		tabbedPane.addTab("Predict regulators and targets", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
         tabbedPane.addTab("Query metatargetome", null, metatargetomeForm, null);
 
         cc.gridx = 0; cc.gridy = 1;
@@ -155,7 +155,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
     private final GraphViewChangeListener selectionListener = new GraphViewChangeListener() {
         @Override
         public void graphViewChanged(GraphViewChangeEvent graphViewChangeEvent) {
-            if (graphViewChangeEvent.isNodesSelectedType()) {
+            if (graphViewChangeEvent.isNodesSelectedType() || graphViewChangeEvent.isNodesUnselectedType()) {
                 refresh();
             }
         }
@@ -189,6 +189,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
             add(new JPanel(new FlowLayout()) {
                 {
                     final JButton submitButton = new JButton(submitAction);
+                    submitButton.setText("Submit");
                     submitButton.setIcon(null);
                     add(submitButton);
                 }

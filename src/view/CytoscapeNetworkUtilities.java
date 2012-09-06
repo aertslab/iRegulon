@@ -9,6 +9,7 @@ import cytoscape.data.CyAttributes;
 import cytoscape.*;
 
 import cytoscape.data.Semantics;
+import cytoscape.util.CytoscapeToolBar;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.VisualMappingManager;
@@ -35,6 +36,7 @@ public final class CytoscapeNetworkUtilities {
     public static final String REGULATORY_FUNCTION_REGULATOR = "Regulator";
     public static final String REGULATORY_FUNCTION_TARGET_GENE = "Regulated";
     public static final String REGULATORY_FUNCTION_PREDICTED = "Predicted";
+    public static final String REGULATORY_FUNCTION_METATARGETOME = "Metatargetome";
 
 	private CytoscapeNetworkUtilities() {
 	}
@@ -202,16 +204,22 @@ public final class CytoscapeNetworkUtilities {
         }
 	}
 
-    public static CyEdge createEdge(final CyNode sourceNode, final CyNode targetNode, final TranscriptionFactor factor, final AbstractMotif motif, final GeneIdentifier targetGene) {
-        final CyEdge edge = addEdge(sourceNode, targetNode, motif.getName());
-		setEdgeAttribute(edge, REGULATOR_GENE_ATTRIBUTE_NAME, factor.getGeneID().getGeneName());
+    public static CyEdge createEdge(CyNetwork network, CyNetworkView view, final CyNode sourceNode, final CyNode targetNode, final GeneIdentifier factor, final AbstractMotif motif, final GeneIdentifier targetGene, final String regulatoryFunction) {
+        final CyEdge edge = addEdge(sourceNode, targetNode, network, view, motif == null ? null : motif.getName());
+		setEdgeAttribute(edge, REGULATOR_GENE_ATTRIBUTE_NAME, factor.getGeneName());
 		setEdgeAttribute(edge, TARGET_GENE_ATTRIBUTE_NAME, targetGene.getGeneName());
-	    setEdgeAttribute(edge, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_PREDICTED);
-        for (AbstractMotif curMotif : motif.getMotifs()) {
-		    addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+	    setEdgeAttribute(edge, REGULATORY_FUNCTION_ATTRIBUTE_NAME, regulatoryFunction);
+        if (motif != null) {
+            for (AbstractMotif curMotif : motif.getMotifs()) {
+		        addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+            }
+            setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, Integer.toString(motif.getDatabaseID()));
         }
-		setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, "" + motif.getDatabaseID());
         return edge;
+    }
+
+    public static CyEdge createEdge(final CyNode sourceNode, final CyNode targetNode, final TranscriptionFactor factor, final AbstractMotif motif, final GeneIdentifier targetGene) {
+        return createEdge(Cytoscape.getCurrentNetwork(), Cytoscape.getCurrentNetworkView(), sourceNode, targetNode, factor.getGeneID(), motif, targetGene, REGULATORY_FUNCTION_PREDICTED);
     }
 
     public static CyNode createSourceNode(final CyNetwork network, final CyNetworkView view, final String attributeName, final GeneIdentifier factorID, final AbstractMotif motif) {
@@ -305,7 +313,7 @@ public final class CytoscapeNetworkUtilities {
 				}
 			}
 		}
-
+        Collections.sort(results);
         return results;
     }
 

@@ -445,6 +445,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
                         }
                     }
                 });
+        submitButton.setText("Submit");
         mainPanel.add(panel, BorderLayout.CENTER);
         mainPanel.add(new JPanel(new FlowLayout()) {
             {

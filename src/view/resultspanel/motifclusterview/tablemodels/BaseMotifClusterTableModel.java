@@ -10,9 +10,9 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 public final class BaseMotifClusterTableModel extends AbstractTableModel implements MotifTableModel {
-    private static final String[] COLUMN_NAMES = {"ClusterCode", "TF", "NES"};
-    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1);
-    private static final List<String> COLUMN_TOOLTIPS = Arrays.asList("", "", "");
+    private static final String[] COLUMN_NAMES = {"ClusterCode", "TF", "NES", "#Targets", "#Motifs"};
+    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1, 1, 1);
+    private static final List<String> COLUMN_TOOLTIPS = Arrays.asList("", "", "", "", "");
 
     private final List<MotifCluster> clusters;
 
@@ -41,6 +41,10 @@ public final class BaseMotifClusterTableModel extends AbstractTableModel impleme
                 return cluster.getBestTranscriptionFactor().getName();
             case 2:
                 return cluster.getNEScore();
+            case 3:
+                return cluster.getCandidateTargetGenes().size();
+            case 4:
+                return cluster.getMotifs().size();
             default:
                 throw new IndexOutOfBoundsException();
         }
@@ -54,6 +58,8 @@ public final class BaseMotifClusterTableModel extends AbstractTableModel impleme
                 return String.class;
             case 2:
                 return Float.class;
+            case 3: case 4:
+                return Integer.class;
             default:
                 throw new IndexOutOfBoundsException();
         }

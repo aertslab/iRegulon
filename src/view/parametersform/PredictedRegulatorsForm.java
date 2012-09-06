@@ -10,16 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 import cytoscape.Cytoscape;
@@ -59,13 +50,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 	private JRadioButton rbtnConversion;
 	private DatabaseListener dbListener;
 
-	private final JFrame frame;
+	private final JDialog frame;
 	
 	public PredictedRegulatorsForm() {
 		this(null);
 	}
 	
-	public PredictedRegulatorsForm(final JFrame frame) {
+	public PredictedRegulatorsForm(final JDialog frame) {
 		this.frame = frame;
 		this.dbListener = null;
 	}

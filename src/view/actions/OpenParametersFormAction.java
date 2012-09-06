@@ -6,7 +6,7 @@ import view.parametersform.PredictedRegulatorsForm;
 
 import java.awt.event.*;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 
 public class OpenParametersFormAction extends ResourceAction {
@@ -18,7 +18,7 @@ public class OpenParametersFormAction extends ResourceAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        final JFrame frame = new JFrame("Predict regulators");
+        final JDialog frame = new JDialog(Cytoscape.getDesktop(), "Predict regulators and targets", true);
 		frame.setAlwaysOnTop(true);
 
 		final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);

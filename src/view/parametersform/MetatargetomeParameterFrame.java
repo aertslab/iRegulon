@@ -13,11 +13,11 @@ import java.awt.event.ActionEvent;
 import java.util.*;
 
 
-public final class MetatargetomeParameterFrame extends JFrame {
+public final class MetatargetomeParameterFrame extends JDialog {
     private static final String TITLE = "Query metatargetome for a factor";
 
     public MetatargetomeParameterFrame(final GeneIdentifier factor, final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors) {
-        super(TITLE);
+        super(Cytoscape.getDesktop(), TITLE, true);
         setContentPane(new ContentPane(factor, speciesNomenclature2factors));
         pack();
         setLocationRelativeTo(Cytoscape.getDesktop());

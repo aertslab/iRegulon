@@ -31,7 +31,7 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
 
-        final JFrame frame = new MetatargetomeParameterFrame(getSelectedFactor(), speciesNomenclature2factors);
+        final JDialog frame = new MetatargetomeParameterFrame(getSelectedFactor(), speciesNomenclature2factors);
         frame.setVisible(true);
     }
 

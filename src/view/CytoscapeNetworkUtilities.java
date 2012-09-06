@@ -213,7 +213,7 @@ public final class CytoscapeNetworkUtilities {
             for (AbstractMotif curMotif : motif.getMotifs()) {
 		        addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
             }
-            setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, Integer.toString(motif.getDatabaseID()));
+            setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, motif.getDatabaseID());
         }
         return edge;
     }

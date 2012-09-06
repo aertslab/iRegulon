@@ -12,6 +12,7 @@ import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 import giny.view.GraphViewChangeEvent;
 import giny.view.GraphViewChangeListener;
+import view.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterForm;
 import view.parametersform.ParameterChangeListener;
@@ -170,8 +171,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
     }
 
     private GeneIdentifier getSelectedFactor() {
-        @SuppressWarnings("unchecked")
-        final Set<CyNode> nodes = Cytoscape.getCurrentNetwork().getSelectedNodes();
+        final java.util.List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
         if (nodes == null || nodes.isEmpty()) return null;
         final CyNode node = nodes.iterator().next();
         return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);

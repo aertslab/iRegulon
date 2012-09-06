@@ -5,6 +5,7 @@ import cytoscape.Cytoscape;
 
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
+import view.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterFrame;
 
@@ -35,8 +36,7 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction {
     }
 
     private GeneIdentifier getSelectedFactor() {
-        @SuppressWarnings("unchecked")
-        final Set<CyNode> nodes = Cytoscape.getCurrentNetwork().getSelectedNodes();
+        final java.util.List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
         if (nodes == null || nodes.isEmpty()) return null;
         final CyNode node = nodes.iterator().next();
         return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);

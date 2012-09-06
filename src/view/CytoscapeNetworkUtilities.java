@@ -304,7 +304,7 @@ public final class CytoscapeNetworkUtilities {
 
 
 
-        final List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
+        final List<CyNode> nodes = getSelectedNodes();
         final CyAttributes nodeAttributes = Cytoscape.getNodeAttributes();
         final float minFraction = Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null"));
 		for (String attributeName : nodeAttributes.getAttributeNames()){

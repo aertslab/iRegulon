@@ -9,13 +9,11 @@ import cytoscape.data.CyAttributes;
 import cytoscape.*;
 
 import cytoscape.data.Semantics;
-import cytoscape.util.CytoscapeToolBar;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
 import domainmodel.*;
-import view.parametersform.IRegulonVisualStyle;
 
 import javax.swing.*;
 

@@ -2,7 +2,6 @@ package view.resultspanel.actions;
 
 import domainmodel.AbstractMotif;
 import view.CytoscapeNetworkUtilities;
-import view.parametersform.IRegulonVisualStyle;
 import view.resultspanel.Refreshable;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;
@@ -14,8 +13,6 @@ import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;
 import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
-import cytoscape.visual.VisualMappingManager;
-import cytoscape.visual.VisualStyle;
 
 import domainmodel.TranscriptionFactor;
 

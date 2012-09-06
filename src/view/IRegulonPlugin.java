@@ -4,7 +4,6 @@ import cytoscape.logger.ConsoleLogger;
 import cytoscape.logger.CyLogHandler;
 import cytoscape.logger.LogLevel;
 import view.actions.*;
-import view.parametersform.IRegulonVisualStyle;
 import view.actions.OpenParametersFormAction;
 import view.actions.AddParametersFormToSidePanelAction;
 
@@ -52,7 +51,7 @@ public class IRegulonPlugin extends CytoscapePlugin {
         CytoscapeInit.getProperties().put(IREGULON_LINK_OUT, bundle.getString("URL_UCSC_LinkOut"));
 
         // 4. Install visual style ...
-		final IRegulonVisualStyle style = new IRegulonVisualStyle();
+        IRegulonVisualStyle.installVisualStyle();
 	}
 	
 	private void addHelp() {

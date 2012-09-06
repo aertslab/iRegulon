@@ -3,26 +3,13 @@ package view.resultspanel;
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-import cytoscape.data.CyAttributes;
-import cytoscape.data.Semantics;
 import cytoscape.view.CyNetworkView;
-import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.visual.VisualMappingManager;
-import cytoscape.visual.VisualStyle;
 import domainmodel.AbstractMotif;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
 import view.CytoscapeNetworkUtilities;
 import view.ResourceAction;
-import view.parametersform.IRegulonVisualStyle;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 public abstract class NetworkDrawAction extends ResourceAction {

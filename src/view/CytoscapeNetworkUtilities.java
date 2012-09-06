@@ -38,6 +38,16 @@ public final class CytoscapeNetworkUtilities {
     public static final String REGULATORY_FUNCTION_PREDICTED = "Predicted";
     public static final String REGULATORY_FUNCTION_METATARGETOME = "Metatargetome";
 
+    private static final Set<String> EXCLUDED_ATTRIBUTE_NAMES = new HashSet<String>();
+    static {
+        EXCLUDED_ATTRIBUTE_NAMES.add(HIDDEN_LABEL_ATTRIBUTE_NAME);
+        EXCLUDED_ATTRIBUTE_NAMES.add(FEATURE_ID_ATTRIBUTE_NAME);
+        EXCLUDED_ATTRIBUTE_NAMES.add(ID_ATTRIBUTE_NAME);
+        EXCLUDED_ATTRIBUTE_NAMES.add(REGULATORY_FUNCTION_ATTRIBUTE_NAME);
+        EXCLUDED_ATTRIBUTE_NAMES.add(STRENGTH_ATTRIBUTE_NAME);
+        EXCLUDED_ATTRIBUTE_NAMES.add(RANK_ATTRIBUTE_NAME);
+    }
+
 	private CytoscapeNetworkUtilities() {
 	}
 	
@@ -294,14 +304,14 @@ public final class CytoscapeNetworkUtilities {
     public static List<String> getPossibleGeneIDAttributes() {
         final List<String> results = new ArrayList<String>();
 
+
+
         final List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
         final CyAttributes nodeAttributes = Cytoscape.getNodeAttributes();
         final float minFraction = Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null"));
 		for (String attributeName : nodeAttributes.getAttributeNames()){
 			if (Cytoscape.getNodeAttributes().getType(attributeName) == CyAttributes.TYPE_STRING
-					&& !attributeName.equals(ID_ATTRIBUTE_NAME)
-                    && !attributeName.equals(HIDDEN_LABEL_ATTRIBUTE_NAME)){
-
+					&& !EXCLUDED_ATTRIBUTE_NAMES.contains(attributeName) ) {
                 int nullCount = 0;
 				for (CyNode node : nodes) {
 					if (nodeAttributes.getStringAttribute(node.getIdentifier(), attributeName) == null) {

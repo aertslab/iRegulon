@@ -4,84 +4,96 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 
-public class LinkLabel extends JLabel {
-    private String text;
+public final class LinkLabel extends JLabel {
+    private final MouseListener mouseListener;
+
+    private String originalText;
     private URI uri;
 
-    public LinkLabel(String text, URI uri){
+    public LinkLabel() {
         super();
-        setup(text,uri);
-    }
-
-    public LinkLabel(String text, String uri){
-        super();
-        URI oURI;
-        try {
-            oURI = new URI(uri);
-        } catch (URISyntaxException e) {
-            // converts to runtime exception for ease of use
-            // if you cannot be sure at compile time that your
-            // uri is valid, construct your uri manually and
-            // use the other constructor.
-            throw new RuntimeException(e);
-        }
-        setup(text,oURI);
-    }
-
-    public void setup(String t, URI u){
-        text = t;
-        uri = u;
-        setText(text);
-        setToolTipText(uri.toString());
-        addMouseListener(new MouseAdapter() {
+        mouseListener = new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     open(uri);
                 }
                 public void mouseEntered(MouseEvent e) {
-                    setText(text,false);
+                    setText(originalText,false);
                 }
                 public void mouseExited(MouseEvent e) {
-                    setText(text,true);
+                    setText(originalText,true);
                 }
-        });
+        };
     }
 
-    @Override
-    public void setText(String text){
-        setText(text,true);
+    private void registerListener() {
+        addMouseListener(mouseListener);
     }
 
-    public void setText(String text, boolean ul){
-        String link = ul ? "<u>"+text+"</u>" : text;
-        super.setText("<html><span style=\"color: #000099;\">"+
-                link+"</span></html>");
-        this.text = text;
+    private void unregisterListener() {
+        removeMouseListener(mouseListener);
     }
 
-    public String getRawText(){
-        return text;
+    public String getOriginalText() {
+        return originalText;
     }
 
-    private static void open(URI uri) {
+    private void setOriginalText(final String text) {
+        this.originalText = text;
+    }
+
+    public URI getUri() {
+        return uri;
+    }
+
+    private void setUri(URI uri) {
+        this.uri = uri;
+    }
+
+    public void disableLink(final String text) {
+        unregisterListener();
+        setOriginalText(text);
+        setUri(null);
+        setText(text);
+        setToolTipText("");
+    }
+
+    public void enableLink(final String text, final URI link){
+        setOriginalText(text);
+        setUri(link);
+        setText(text, true);
+        setToolTipText(link.toString());
+        registerListener();
+    }
+
+    private void setText(String text, boolean ul) {
+        if (text == null) {
+            super.setText("");
+        } else {
+            final String link = ul ? "<u>"+text+"</u>" : text;
+            super.setText("<html><span style=\"color: #000099;\">"+link+"</span></html>");
+        }
+    }
+
+    private static void open(final URI uri) {
         if (Desktop.isDesktopSupported()) {
-                Desktop desktop = Desktop.getDesktop();
-                try {
-                        desktop.browse(uri);
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null,
-                            "Failed to launch the link, " +
-                            "your computer is likely misconfigured.",
-                            "Cannot Launch Link",JOptionPane.WARNING_MESSAGE);
-                }
+            final Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.browse(uri);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null,
+                        "Failed to launch the link, " +
+                                "your computer is likely misconfigured.",
+                        "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
+            }
         } else {
             JOptionPane.showMessageDialog(null,
                     "Java is not able to launch links on your computer.",
-                    "Cannot Launch Link",JOptionPane.WARNING_MESSAGE);
+                    "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
         }
     }
 }

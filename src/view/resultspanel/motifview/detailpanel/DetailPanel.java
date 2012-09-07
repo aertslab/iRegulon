@@ -3,6 +3,7 @@ package view.resultspanel.motifview.detailpanel;
 
 import domainmodel.AbstractMotif;
 import view.resultspanel.*;
+import view.resultspanel.guiwidgets.LinkLabel;
 import view.resultspanel.guiwidgets.LogoThumbnail;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifview.tablemodels.CandidateTargetGeneTableModel;
@@ -13,6 +14,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseListener;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 
 import javax.swing.JLabel;
@@ -34,7 +37,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     private static final String TRANSFAC_URL = BUNDLE.getString("transfac_pro_url");
 
 	private JTable targetGeneTable;
-	private JLabel jlbMotif;
+	private LinkLabel jlbMotif;
 	private JLabel jlbDescription;
 	private LogoThumbnail jlbLogo;
 	private JTable transcriptionFactorTable;
@@ -60,13 +63,13 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
-		this.jlbMotif = new JLabel();
+		this.jlbMotif = new LinkLabel();
 		this.jlbMotif.setEnabled(true);
 		this.jlbMotif.setText("");
 		Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 1);
 		this.jlbMotif.setMaximumSize(maximumSize);
 		this.jlbMotif.setMinimumSize(maximumSize);
-		
+
 		c.gridx = 0;
 		c.gridy = 0;
 		c.weightx=0.3;
@@ -215,6 +218,15 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     public void refresh() {
          refresh(getSelectedMotif());
     }
+
+    private URI composeURI(final AbstractMotif motif) {
+        try {
+            final String ID = motif.getName().split("-")[1];
+            return new URI(TRANSFAC_URL + ID);
+        } catch (URISyntaxException e) {
+            return null;
+        }
+    }
 	
 	private void refresh(AbstractMotif motif) {
 		this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motif));
@@ -223,14 +235,16 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		
 		if (motif == null) {
 			motif = null;
-			this.jlbMotif.setText("");
-			this.jlbMotif.setToolTipText("");
+			this.jlbMotif.disableLink("");
 			this.jlbDescription.setText("");
 			this.jlbDescription.setToolTipText("");
 			this.jlbLogo.setMotif(null);
 		} else {
-			this.jlbMotif.setText(motif.getName());
-			this.jlbMotif.setToolTipText("Motif name: " + motif.getName());
+            if (motif.getName().startsWith(TRANSFAC_PREFIX)) {
+			    this.jlbMotif.enableLink(motif.getName(), composeURI(motif));
+            } else {
+                this.jlbMotif.disableLink(motif.getName());
+            }
 			this.jlbDescription.setText(motif.getDescription());
 			this.jlbDescription.setToolTipText("Description: " + motif.getDescription());
 

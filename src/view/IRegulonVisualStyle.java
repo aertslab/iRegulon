@@ -62,6 +62,7 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
         // Edge target arrow shape =
         final DiscreteMapping edgeArrowShapeMapper = new DiscreteMapping(ArrowShape.class, CytoscapeNetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
         edgeArrowShapeMapper.putMapValue(CytoscapeNetworkUtilities.REGULATORY_FUNCTION_PREDICTED, ArrowShape.ARROW);
+        edgeArrowShapeMapper.putMapValue(CytoscapeNetworkUtilities.REGULATORY_FUNCTION_METATARGETOME, ArrowShape.ARROW);
 
         final Calculator edgeArrowCalculator = new BasicCalculator("iRegulon Visual Style Edge Arrow Shape Calculator",
                 edgeArrowShapeMapper, VisualPropertyType.EDGE_TGTARROW_SHAPE);

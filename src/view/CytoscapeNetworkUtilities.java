@@ -35,6 +35,7 @@ public final class CytoscapeNetworkUtilities {
     public static final String STRENGTH_ATTRIBUTE_NAME = "Strength";
     public static final String RANK_ATTRIBUTE_NAME = "Rank";
     private static final String HIDDEN_LABEL_ATTRIBUTE_NAME = "hiddenLabel";
+    public static final String MOTIF_ID_ATTRIBUTE_NAME = "MotifID";
 
     public static final String REGULATORY_FUNCTION_REGULATOR = "Regulator";
     public static final String REGULATORY_FUNCTION_TARGET_GENE = "Regulated";
@@ -249,9 +250,10 @@ public final class CytoscapeNetworkUtilities {
             for (AbstractMotif curMotif : motif.getMotifs()) {
 		        addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
             }
+            setEdgeAttribute(edge, MOTIF_ID_ATTRIBUTE_NAME, getListOfStringsAttributeForEdge(edge, MOTIF_ATTRIBUTE_NAME, Cytoscape.getEdgeAttributes()).hashCode());
             setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, motif.getDatabaseID());
         } else {
-            addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, "?metatargetome for " + factor.getGeneName() + "?");
+            setEdgeAttribute(edge, MOTIF_ID_ATTRIBUTE_NAME, factor.hashCode());
         }
         return edge;
     }

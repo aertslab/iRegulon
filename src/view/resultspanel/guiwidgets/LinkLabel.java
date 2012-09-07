@@ -50,8 +50,8 @@ public class LinkLabel extends JLabel {
      * Creates a new LinkLabel with the given text.
      */
 
-    public LinkLabel(String text) {
-        super(text);
+    public LinkLabel() {
+        super();
 
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -64,7 +64,7 @@ public class LinkLabel extends JLabel {
      */
 
     public void setText(String text) {
-        super.setText("<html><font color=\"#0000CF\"><u>" + text + "</u></font></html>"); //$NON-NLS-1$ //$NON-NLS-2$
+        super.setText("<html><font color=\"#0000CF\"><u>" + text + "</u></font></html>");
         this.text = text;
     }
 
@@ -122,6 +122,4 @@ public class LinkLabel extends JLabel {
             }
         }
     }
-
-
 }

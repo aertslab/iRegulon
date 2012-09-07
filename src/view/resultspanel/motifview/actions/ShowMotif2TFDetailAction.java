@@ -25,7 +25,7 @@ public class ShowMotif2TFDetailAction extends ResourceAction implements ListSele
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final JFrame frame = new Motif2TFDetailFrame(tfMotif);
+		final JDialog frame = new Motif2TFDetailFrame(tfMotif);
         frame.setLocationRelativeTo(Cytoscape.getDesktop());
         frame.setAlwaysOnTop(true);
         frame.setVisible(true);

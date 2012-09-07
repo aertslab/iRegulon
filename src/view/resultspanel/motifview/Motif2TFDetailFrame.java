@@ -1,5 +1,6 @@
 package view.resultspanel.motifview;
 
+import cytoscape.Cytoscape;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.guiwidgets.LogoUtilities;
@@ -12,13 +13,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 
-public final class Motif2TFDetailFrame extends JFrame {
+public final class Motif2TFDetailFrame extends JDialog {
 	private final TFandMotifSelected information;
 
     private static final String[] PREFIXES = new String[] {"A", "B", "C", "D"};
 
 	public Motif2TFDetailFrame(final TFandMotifSelected information) {
-        super();
+        super(Cytoscape.getDesktop(), true);
 
 		this.information = information;
 

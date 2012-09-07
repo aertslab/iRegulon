@@ -9,6 +9,9 @@ import cytoscape.data.CyAttributes;
 import cytoscape.*;
 
 import cytoscape.data.Semantics;
+import cytoscape.logger.ConsoleLogger;
+import cytoscape.logger.CyLogHandler;
+import cytoscape.logger.LogLevel;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.VisualMappingManager;
@@ -19,6 +22,8 @@ import javax.swing.*;
 
 
 public final class CytoscapeNetworkUtilities {
+    private static final CyLogHandler LOGGER = ConsoleLogger.getLogger();
+
     public static final String PLUGIN_VISUAL_NAME = ResourceBundle.getBundle("iRegulon").getString("plugin_visual_name");
 
     public static final String FEATURE_ID_ATTRIBUTE_NAME = "featureID";
@@ -129,7 +134,12 @@ public final class CytoscapeNetworkUtilities {
         final List<String> listAttribute = getListOfStringsAttributeForNode(node, attributeName, attributes);
         if (listAttribute.indexOf(attributeValue) < 0) {
             listAttribute.add(attributeValue);
-            attributes.setListAttribute(node.getIdentifier(), attributeName, listAttribute);
+            try {
+                attributes.setListAttribute(node.getIdentifier(), attributeName, listAttribute);
+            } catch (IllegalArgumentException e) {
+                LOGGER.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                attributes.setAttribute(node.getIdentifier(), attributeName, attributeValue);
+            }
             //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
         }
     }
@@ -137,11 +147,15 @@ public final class CytoscapeNetworkUtilities {
     private static List<String> getListOfStringsAttributeForNode(CyNode node, String attributeName, CyAttributes attributes) {
         if (attributes.getType(attributeName) == CyAttributes.TYPE_UNDEFINED)
             return new ArrayList<String>();
-        if (attributes.getType(attributeName) != CyAttributes.TYPE_SIMPLE_LIST)
-            throw new IllegalArgumentException();
-        @SuppressWarnings("unchecked")
-        final List<String> result = attributes.getListAttribute(node.getIdentifier(), attributeName);
-        return result == null ? new ArrayList<String>() : result;
+        else if (attributes.getType(attributeName) == CyAttributes.TYPE_STRING) {
+            final List<String> result = new ArrayList<String>();
+            result.add(attributes.getStringAttribute(node.getIdentifier(), attributeName));
+            return result;
+        } else if (attributes.getType(attributeName) == CyAttributes.TYPE_SIMPLE_LIST) {
+            @SuppressWarnings("unchecked")
+            final List<String> result = attributes.getListAttribute(node.getIdentifier(), attributeName);
+            return result == null ? new ArrayList<String>() : result;
+        } else throw new IllegalArgumentException();
     }
 
     public static void setEdgeAttribute(CyEdge edge, String attributeName, String attributeValue){
@@ -152,8 +166,13 @@ public final class CytoscapeNetworkUtilities {
 
     public static void setEdgeAttribute(CyEdge edge, String attributeName, int attributeValue){
 		final CyAttributes attributes = Cytoscape.getEdgeAttributes();
-		attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
-		//Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+        try {
+            attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
+        } catch (IllegalArgumentException e) {
+            LOGGER.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            attributes.setAttribute(edge.getIdentifier(), attributeName, Integer.toString(attributeValue));
+        }
+        //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
 	}
 
     public static void setNodeAttribute(CyNode node, String attributeName, String attributeValue) {
@@ -188,7 +207,12 @@ public final class CytoscapeNetworkUtilities {
         final List<String> listAttribute = getListOfStringsAttributeForEdge(edge, attributeName, attributes);
         if (listAttribute.indexOf(attributeValue) < 0) {
             listAttribute.add(attributeValue);
-            attributes.setListAttribute(edge.getIdentifier(), attributeName, listAttribute);
+            try {
+                attributes.setListAttribute(edge.getIdentifier(), attributeName, listAttribute);
+            } catch (IllegalArgumentException e) {
+                LOGGER.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
+            }
             //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
         }
     }
@@ -196,11 +220,15 @@ public final class CytoscapeNetworkUtilities {
     private static List<String> getListOfStringsAttributeForEdge(CyEdge edge, String attributeName, CyAttributes attributes) {
         if (attributes.getType(attributeName) == CyAttributes.TYPE_UNDEFINED)
             return new ArrayList<String>();
-        if (attributes.getType(attributeName) != CyAttributes.TYPE_SIMPLE_LIST)
-            throw new IllegalArgumentException();
-        @SuppressWarnings("unchecked")
-        final List<String> result = attributes.getListAttribute(edge.getIdentifier(), attributeName);
-        return result == null ? new ArrayList<String>() : result;
+        else if (attributes.getType(attributeName) == CyAttributes.TYPE_STRING) {
+            final List<String> result = new ArrayList<String>();
+            result.add(attributes.getStringAttribute(edge.getIdentifier(), attributeName));
+            return result;
+        } else if (attributes.getType(attributeName) == CyAttributes.TYPE_SIMPLE_LIST) {
+            @SuppressWarnings("unchecked")
+            final List<String> result = attributes.getListAttribute(edge.getIdentifier(), attributeName);
+            return result == null ? new ArrayList<String>() : result;
+        } else throw new IllegalArgumentException();
     }
 
     public static String getNodeStringAttribute(CyNode edge, String attributeName) {

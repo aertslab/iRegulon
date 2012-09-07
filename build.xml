@@ -188,7 +188,21 @@
     <!-- =================================================================== -->
     <!-- All                                                                 -->
     <!-- =================================================================== -->
-    <target name="all" depends="binary_distribution,binary_distribution_no_transfac,source_distribution,source_distribution_no_transfac"/>
+    <target name="all">
+        <antcall target="clean"/>
+        <antcall target="binary_distribution"/>
+        <copy file="${build.folder}/${plugin.bin.filename}" tofile="${basedir}/${plugin.bin.filename}" overwrite="true"/>
+        <antcall target="clean"/>
+        <antcall target="binary_distribution_no_transfac"/>
+        <copy file="${build.folder}/${plugin.bin.notransfac.filename}" tofile="${basedir}/${plugin.bin.notransfac.filename}" overwrite="true"/>
+        <antcall target="clean"/>
+        <antcall target="source_distribution"/>
+        <copy file="${build.folder}/${plugin.src.filename}" tofile="${basedir}/${plugin.src.filename}" overwrite="true"/>
+        <antcall target="clean"/>
+        <antcall target="source_distribution_no_transfac"/>
+        <copy file="${build.folder}/${plugin.src.notransfac.filename}" tofile="${basedir}/${plugin.src.notransfac.filename}" overwrite="true"/>
+        <antcall target="clean"/>
+    </target>
 
     <!-- =================================================================== -->
     <!-- Generate plugin installation XML from template                      -->

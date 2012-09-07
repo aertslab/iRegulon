@@ -58,17 +58,20 @@ public final class Motif2TFDetailFrame extends JFrame {
         cc.weightx = 1.0; cc.weighty = 1.0;
         cc.gridx = 0; cc.gridy = 0;
 
+        String prevComponent = "Enriched motif";
         content.add(createEnrichedMotifPanel(cc.gridy, getInformation().getMotif()), cc);
         cc.gridy++;
         if (isMotifSimilarityUsed(getInformation().getTranscriptionFactor())) {
             content.add(createSimilarMotifPanel(cc.gridy, getInformation().getTranscriptionFactor()), cc);
+            prevComponent = "Similar motif";
             cc.gridy++;
         }
         if (isOrthologousGeneUsed(getInformation().getTranscriptionFactor())) {
             content.add(createOrthologousGenePanel(cc.gridy, getInformation().getTranscriptionFactor()), cc);
+            prevComponent = "Orthologous gene";
             cc.gridy++;
         }
-        content.add(createTranscriptionFactorPanel(cc.gridy, getInformation().getMotif(), getInformation().getTranscriptionFactor()), cc);
+        content.add(createTranscriptionFactorPanel(cc.gridy, prevComponent, getInformation().getMotif(), getInformation().getTranscriptionFactor()), cc);
 
         return new JScrollPane(content, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
@@ -100,7 +103,7 @@ public final class Motif2TFDetailFrame extends JFrame {
         final GridBagConstraints cc = new GridBagConstraints();
         panel.setBorder(BorderFactory.createEtchedBorder());
 
-        addTitle(idx, "Similar motif", cc, panel);
+        addTitle(idx, "Similar to motif", cc, panel);
         addLabel("Name", factor.getSimilarMotifName(), cc, panel);
         addLabel("Description",factor.getSimilarMotifDescription(), cc, panel);
         addLabel("Similarity (FDR)", factor.getMaxMotifSimilarityFDR(), cc, panel);
@@ -114,7 +117,7 @@ public final class Motif2TFDetailFrame extends JFrame {
         final GridBagConstraints cc = new GridBagConstraints();
         panel.setBorder(BorderFactory.createEtchedBorder());
 
-        addTitle(idx, "Orthologous Gene", cc, panel);
+        addTitle(idx, "Annotated for gene", cc, panel);
         addLabel("Name", factor.getOrthologousGeneName(), cc, panel);
         addLabel("Species",factor.getOrthologousSpecies(), cc, panel);
         addLabel("Identity (fraction)", factor.getMinOrthologousIdentity(), cc, panel);
@@ -123,12 +126,14 @@ public final class Motif2TFDetailFrame extends JFrame {
         return panel;
     }
 
-    private JPanel createTranscriptionFactorPanel(final int idx, final AbstractMotif motif, final TranscriptionFactor factor) {
+    private JPanel createTranscriptionFactorPanel(final int idx, final String prevComponent, final AbstractMotif motif, final TranscriptionFactor factor) {
         final JPanel panel = new JPanel(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
         panel.setBorder(BorderFactory.createEtchedBorder());
 
-        addTitle(idx, "Transcription factor", cc, panel);
+        if (prevComponent.equals("Enriched motif") || prevComponent.equals("Similar motif"))
+            addTitle(idx, "Annotated for transcription factor", cc, panel);
+        else addTitle(idx, "Orthologous to transcription factor", cc, panel);
         addLabel("Name", factor.getName(), cc, panel);
         addLabel("Species and nomenclature", factor.getSpeciesNomeclature().toString(), cc, panel);
 
@@ -143,16 +148,16 @@ public final class Motif2TFDetailFrame extends JFrame {
 
         cc.gridy++;
 
-        cc.anchor = GridBagConstraints.CENTER;
-        cc.fill = GridBagConstraints.BOTH;
-        cc.weightx = 1.0; cc.weighty = 1.0;
-        cc.gridwidth = 2; cc.gridheight = 1;
-        cc.gridx = 0;
-
-        final JScrollPane pane = new JScrollPane(new JTable(new CandidateTargetGeneTableModel(motif)));
-        final ImageIcon icon = LogoUtilities.createImageIcon(motif.getName());
-        pane.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-		panel.add(pane, cc);
+//        cc.anchor = GridBagConstraints.CENTER;
+//        cc.fill = GridBagConstraints.BOTH;
+//        cc.weightx = 1.0; cc.weighty = 1.0;
+//        cc.gridwidth = 2; cc.gridheight = 1;
+//        cc.gridx = 0;
+//
+//        final JScrollPane pane = new JScrollPane(new JTable(new CandidateTargetGeneTableModel(motif)));
+//        final ImageIcon icon = LogoUtilities.createImageIcon(motif.getName());
+//        pane.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
+//		panel.add(pane, cc);
 
         return panel;
     }

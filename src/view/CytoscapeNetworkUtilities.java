@@ -302,9 +302,7 @@ public final class CytoscapeNetworkUtilities {
     public static List<String> getPossibleGeneIDAttributes() {
         final List<String> results = new ArrayList<String>();
 
-
-
-        final List<CyNode> nodes = getSelectedNodes();
+        final List<CyNode> nodes = getAllNodes();
         final CyAttributes nodeAttributes = Cytoscape.getNodeAttributes();
         final float minFraction = Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null"));
 		for (String attributeName : nodeAttributes.getAttributeNames()){

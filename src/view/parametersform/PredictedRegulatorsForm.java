@@ -29,6 +29,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 	private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
 	private static final float DEFAULT_MIN_ORTHOLOGOUS_IDENTITY = Float.parseFloat(BUNDLE.getString("standard_minOrthologous"));
 	private static final float DEFAULT_MAX_MOTIF_SIMILARITY_FDR = Float.parseFloat(BUNDLE.getString("standard_maxMotifSimilarityFDR"));
+    private static final int MAX_NAME_LENGTH = 50;
 
     private JTextField jobNameTF;
 	private JComboBox attributeNameCB;
@@ -635,14 +636,22 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     public void setJobName(final String name) {
-        jobNameTF.setText(name == null ? deriveDefaultJobName() : name);
+        if (name == null) {
+            jobNameTF.setText(deriveDefaultJobName());
+        }  else if (name.length() > MAX_NAME_LENGTH) {
+            jobNameTF.setText(name.substring(0, MAX_NAME_LENGTH - 3) + "...");
+        } else {
+           jobNameTF.setText(name);
+        }
     }
 
     public static String deriveDefaultJobName() {
         final String name = Cytoscape.getCurrentNetwork().getTitle();
 		if (name == null || name.equals("0")) {
 			return BUNDLE.getString("plugin_name") + " name";
-		} else {
+		} else if (name.length() > MAX_NAME_LENGTH) {
+            return name.substring(0, MAX_NAME_LENGTH - 3) + "...";
+        } else {
             return name;
         }
     }

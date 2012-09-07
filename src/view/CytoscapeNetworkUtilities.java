@@ -222,6 +222,8 @@ public final class CytoscapeNetworkUtilities {
 		        addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
             }
             setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, motif.getDatabaseID());
+        } else {
+            addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, "?metatargetome for " + factor.getGeneName() + "?");
         }
         return edge;
     }

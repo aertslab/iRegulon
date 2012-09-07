@@ -1,125 +1,87 @@
 package view.resultspanel.guiwidgets;
 
-/**
- * The utillib library.
- * More information is available at http://www.jinchess.com/.
- * Copyright (C) 2002 Alexander Maryanovsky.
- * All rights reserved.
- *
- * The utillib library is free software; you can redistribute
- * it and/or modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * The utillib library is distributed in the hope that it will
- * be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
- * General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with utillib library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
-
-import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JLabel;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-
-/**
- * An extension of JLabel which looks like a link and responds appropriately
- * when clicked. Note that this class will only work with Swing 1.1.1 and later.
- * Note that because of the way this class is implemented, getText() will not
- * return correct values, user <code>getNormalText</code> instead.
- */
 
 public class LinkLabel extends JLabel {
-
-
-    /**
-     * The normal text set by the user.
-     */
-
     private String text;
+    private URI uri;
 
-
-    /**
-     * Creates a new LinkLabel with the given text.
-     */
-
-    public LinkLabel() {
+    public LinkLabel(String text, URI uri){
         super();
-
-        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        enableEvents(MouseEvent.MOUSE_EVENT_MASK);
+        setup(text,uri);
     }
 
+    public LinkLabel(String text, String uri){
+        super();
+        URI oURI;
+        try {
+            oURI = new URI(uri);
+        } catch (URISyntaxException e) {
+            // converts to runtime exception for ease of use
+            // if you cannot be sure at compile time that your
+            // uri is valid, construct your uri manually and
+            // use the other constructor.
+            throw new RuntimeException(e);
+        }
+        setup(text,oURI);
+    }
 
-    /**
-     * Sets the text of the label.
-     */
+    public void setup(String t, URI u){
+        text = t;
+        uri = u;
+        setText(text);
+        setToolTipText(uri.toString());
+        addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    open(uri);
+                }
+                public void mouseEntered(MouseEvent e) {
+                    setText(text,false);
+                }
+                public void mouseExited(MouseEvent e) {
+                    setText(text,true);
+                }
+        });
+    }
 
-    public void setText(String text) {
-        super.setText("<html><font color=\"#0000CF\"><u>" + text + "</u></font></html>");
+    @Override
+    public void setText(String text){
+        setText(text,true);
+    }
+
+    public void setText(String text, boolean ul){
+        String link = ul ? "<u>"+text+"</u>" : text;
+        super.setText("<html><span style=\"color: #000099;\">"+
+                link+"</span></html>");
         this.text = text;
     }
 
-
-    /**
-     * Returns the text set by the user.
-     */
-
-    public String getNormalText() {
+    public String getRawText(){
         return text;
     }
 
-
-    /**
-     * Processes mouse events and responds to clicks.
-     */
-
-    protected void processMouseEvent(MouseEvent evt) {
-        super.processMouseEvent(evt);
-        if (evt.getID() == MouseEvent.MOUSE_CLICKED)
-            fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getNormalText()));
-    }
-
-
-    /**
-     * Adds an ActionListener to the list of listeners receiving notifications
-     * when the label is clicked.
-     */
-
-    public void addActionListener(ActionListener listener) {
-        listenerList.add(ActionListener.class, listener);
-    }
-
-
-    /**
-     * Removes the given ActionListener from the list of listeners receiving
-     * notifications when the label is clicked.
-     */
-
-    public void removeActionListener(ActionListener listener) {
-        listenerList.remove(ActionListener.class, listener);
-    }
-
-
-    /**
-     * Fires an ActionEvent to all interested listeners.
-     */
-
-    protected void fireActionPerformed(ActionEvent evt) {
-        Object[] listeners = listenerList.getListenerList();
-        for (int i = 0; i < listeners.length; i += 2) {
-            if (listeners[i] == ActionListener.class) {
-                ActionListener listener = (ActionListener) listeners[i + 1];
-                listener.actionPerformed(evt);
-            }
+    private static void open(URI uri) {
+        if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                try {
+                        desktop.browse(uri);
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null,
+                            "Failed to launch the link, " +
+                            "your computer is likely misconfigured.",
+                            "Cannot Launch Link",JOptionPane.WARNING_MESSAGE);
+                }
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Java is not able to launch links on your computer.",
+                    "Cannot Launch Link",JOptionPane.WARNING_MESSAGE);
         }
     }
 }

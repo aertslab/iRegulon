@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseListener;
+import java.util.ResourceBundle;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +29,10 @@ import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
 public class DetailPanel extends JPanel implements DetailPanelIF {
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("iRegulon");
+    private static final String TRANSFAC_PREFIX = "transfac_pro-";
+    private static final String TRANSFAC_URL = BUNDLE.getString("transfac_pro_url");
+
 	private JTable targetGeneTable;
 	private JLabel jlbMotif;
 	private JLabel jlbDescription;

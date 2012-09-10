@@ -1,6 +1,6 @@
 package view.resultspanel;
 
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 
 import java.util.Collections;
 import java.util.HashSet;

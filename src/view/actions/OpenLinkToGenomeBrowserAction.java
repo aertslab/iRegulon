@@ -3,10 +3,8 @@ package view.actions;
 import java.awt.event.ActionEvent;
 
 import cytoscape.Cytoscape;
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
 import domainmodel.AbstractMotif;
+import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import view.ResourceAction;
@@ -19,7 +17,6 @@ import javax.swing.*;
 public class OpenLinkToGenomeBrowserAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_link_to_UCSC";
 
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
     private final ComputationalService service = new ComputationalServiceHTTP();
 	private final SelectedMotif selectedMotif;
 
@@ -59,7 +56,7 @@ public class OpenLinkToGenomeBrowserAction extends ResourceAction implements Ref
         try {
             desktop.browse(service.getLink2GenomeBrowser4EnhancerRegions(getSelectedMotif().getMotif()));
         } catch (Exception e ) {
-            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e);
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                     "An error has occurred while opening the UCSC browser.",
                     "Error", JOptionPane.ERROR_MESSAGE);

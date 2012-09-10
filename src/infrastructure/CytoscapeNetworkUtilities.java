@@ -1,4 +1,4 @@
-package view;
+package infrastructure;
 
 
 import java.util.*;
@@ -9,21 +9,17 @@ import cytoscape.data.CyAttributes;
 import cytoscape.*;
 
 import cytoscape.data.Semantics;
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.visual.VisualMappingManager;
 import cytoscape.visual.VisualStyle;
 import domainmodel.*;
+import view.IRegulonVisualStyle;
 
 import javax.swing.*;
 
 
 public final class CytoscapeNetworkUtilities {
-    private static final CyLogHandler LOGGER = ConsoleLogger.getLogger();
-
     public static final String PLUGIN_VISUAL_NAME = ResourceBundle.getBundle("iRegulon").getString("plugin_visual_name");
 
     public static final String FEATURE_ID_ATTRIBUTE_NAME = "featureID";
@@ -138,7 +134,7 @@ public final class CytoscapeNetworkUtilities {
             try {
                 attributes.setListAttribute(node.getIdentifier(), attributeName, listAttribute);
             } catch (IllegalArgumentException e) {
-                LOGGER.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                Logger.getInstance().error(e);
                 attributes.setAttribute(node.getIdentifier(), attributeName, attributeValue);
             }
             //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
@@ -170,7 +166,7 @@ public final class CytoscapeNetworkUtilities {
         try {
             attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
         } catch (IllegalArgumentException e) {
-            LOGGER.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e);
             attributes.setAttribute(edge.getIdentifier(), attributeName, Integer.toString(attributeValue));
         }
         //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
@@ -211,7 +207,7 @@ public final class CytoscapeNetworkUtilities {
             try {
                 attributes.setListAttribute(edge.getIdentifier(), attributeName, listAttribute);
             } catch (IllegalArgumentException e) {
-                LOGGER.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                Logger.getInstance().error(e);
                 attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
             }
             //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);

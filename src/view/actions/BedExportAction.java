@@ -2,11 +2,9 @@ package view.actions;
 
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
 import domainmodel.AbstractMotif;
 import domainmodel.EnhancerRegion;
+import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
@@ -26,7 +24,6 @@ import java.io.IOException;
 public class BedExportAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_save_bed";
 
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
     private final ComputationalService service = new ComputationalServiceHTTP();
 	private final SelectedMotif selectedMotif;
 
@@ -95,14 +92,14 @@ public class BedExportAction extends ResourceAction implements Refreshable {
                 }
                 output.flush();
             } catch (ServerCommunicationException e) {
-                logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                Logger.getInstance().error(e.getMessage());
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                         "An error has occurred while communicating with server.",
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e.getMessage());
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                     "An error has occurred while creating and saving the BED file.",
                     "Error",

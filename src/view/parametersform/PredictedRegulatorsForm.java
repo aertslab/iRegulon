@@ -1,6 +1,6 @@
 package view.parametersform;
 
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.parametersform.actions.PredictRegulatorsAction;
 import view.IRegulonResourceBundle;
 import view.parametersform.databaseselection.BasedComboBox;

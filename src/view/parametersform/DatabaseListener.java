@@ -1,7 +1,7 @@
 package view.parametersform;
 
+import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
-import view.CytoscapeNetworkUtilities;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -21,7 +21,6 @@ import cytoscape.Cytoscape;
 import domainmodel.RankingsDatabase;
 import domainmodel.Delineation;
 import domainmodel.SpeciesNomenclature;
-import view.parametersform.PredictedRegulatorsForm;
 import view.parametersform.databaseselection.BasedComboBox;
 import view.parametersform.databaseselection.DBCombobox;
 

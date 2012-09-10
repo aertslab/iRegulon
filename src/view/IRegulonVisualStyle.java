@@ -5,6 +5,7 @@ import cytoscape.Cytoscape;
 import cytoscape.visual.*;
 import cytoscape.visual.calculators.*;
 import cytoscape.visual.mappings.*;
+import infrastructure.CytoscapeNetworkUtilities;
 
 
 public class IRegulonVisualStyle extends IRegulonResourceBundle {

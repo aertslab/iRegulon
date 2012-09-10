@@ -4,7 +4,7 @@ package view.parametersform;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.actions.QueryMetatargetomeAction;
 import view.resultspanel.Refreshable;
 

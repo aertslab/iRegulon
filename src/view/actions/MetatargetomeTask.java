@@ -7,7 +7,7 @@ import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
 import view.resultspanel.Refreshable;
 

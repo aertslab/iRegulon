@@ -2,7 +2,7 @@ package view.resultspanel.actions;
 
 import giny.view.NodeView;
 
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.resultspanel.*;
 
 import java.awt.event.ActionEvent;

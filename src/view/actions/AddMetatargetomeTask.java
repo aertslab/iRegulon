@@ -9,7 +9,7 @@ import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.resultspanel.Refreshable;
 
 import java.util.Collections;

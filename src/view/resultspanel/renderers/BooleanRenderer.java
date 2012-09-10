@@ -1,8 +1,6 @@
 package view.resultspanel.renderers;
 
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
+import infrastructure.Logger;
 
 import java.awt.Component;
 import java.util.ResourceBundle;
@@ -15,7 +13,6 @@ import javax.swing.table.TableCellRenderer;
 
 public class BooleanRenderer extends JLabel implements TableCellRenderer, CanvasUpdater {
     private static final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
-    private static final CyLogHandler logger = ConsoleLogger.getLogger();
 
 	private static final ImageIcon TRUE_ICON;
 	private static final ImageIcon FALSE_ICON;
@@ -26,7 +23,7 @@ public class BooleanRenderer extends JLabel implements TableCellRenderer, Canvas
 	    if (imageURL != null) {
 	    	return new ImageIcon(imageURL);
 	    } else {
-	        logger.handleLog(LogLevel.LOG_ERROR, "Missing resource. Couldn't find file: \"" + resource + "\".");
+	        Logger.getInstance().error("Missing resource. Couldn't find file: \"" + resource + "\".");
             return null;
 	    }
     }

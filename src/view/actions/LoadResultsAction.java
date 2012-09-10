@@ -1,12 +1,10 @@
 package view.actions;
 
 import cytoscape.Cytoscape;
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.Results;
+import infrastructure.Logger;
 import persistence.LoadException;
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
@@ -18,8 +16,6 @@ import java.awt.event.ActionEvent;
 
 public class LoadResultsAction extends ResourceAction {
     private static final String NAME = "action_load_results";
-
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
 
     public LoadResultsAction() {
         super(NAME);
@@ -37,7 +33,7 @@ public class LoadResultsAction extends ResourceAction {
                 panel.setState(CytoPanelState.DOCK);
                 output.addToPanel(panel);
             } catch (LoadException exception) {
-                logger.handleLog(LogLevel.LOG_ERROR, exception.getMessage());
+                Logger.getInstance().error(exception);
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(), exception.getMessage());
             }
         }

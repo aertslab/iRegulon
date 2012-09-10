@@ -1,8 +1,6 @@
 package view.resultspanel.guiwidgets;
 
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
+import infrastructure.Logger;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -12,7 +10,6 @@ import javax.swing.ImageIcon;
 
 public final class LogoUtilities {
     private static final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
-    private static final CyLogHandler logger = ConsoleLogger.getLogger();
 
     private static final String LOGO_FOLDERNAME = bundle.getString("logo_folder");
     private static final String LOGO_EXTENSION = bundle.getString("logo_extension");
@@ -33,7 +30,7 @@ public final class LogoUtilities {
 	    if (imageUrl != null) {
 	        return new ImageIcon(imageUrl);
 	    } else {
-            logger.handleLog(LogLevel.LOG_ERROR, "Couldn't find file: " + LOGO_NOT_AVAILABLE);
+            Logger.getInstance().error("Couldn't find file: " + LOGO_NOT_AVAILABLE);
             return null;
         }
     }
@@ -43,7 +40,7 @@ public final class LogoUtilities {
 	    if (imageUrl != null) {
 	        return new ImageIcon(imageUrl);
 	    } else {
-	        logger.handleLog(LogLevel.LOG_ERROR, "Couldn't find file: " + getImagePath(motifName));
+	        Logger.getInstance().error("Couldn't find file: " + getImagePath(motifName));
 	        return notAvailableImage();
 	    }
 	}

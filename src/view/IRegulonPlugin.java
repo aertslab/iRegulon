@@ -1,12 +1,6 @@
 package view;
 
-import cytoscape.CyNode;
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
-import domainmodel.GeneIdentifier;
-import domainmodel.SpeciesNomenclature;
-import domainmodel.TargetomeDatabase;
+import infrastructure.Logger;
 import view.actions.*;
 import view.actions.OpenParametersFormAction;
 import view.actions.AddParametersFormToSidePanelAction;
@@ -15,20 +9,16 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
-
 import java.util.*;
-
 
 import cytoscape.view.CyHelpBroker;
 import javax.help.HelpSet;
 
 import java.net.URL;
 
-
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
-import view.parametersform.MetatargetomeParameters;
 
 
 public class IRegulonPlugin extends CytoscapePlugin {
@@ -36,8 +26,6 @@ public class IRegulonPlugin extends CytoscapePlugin {
     private static final String IREGULON_LINK_OUT = "edgelinkouturl.iRegulon";
 
     private final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
-
 
     /*
     * Start the plugin.
@@ -63,9 +51,9 @@ public class IRegulonPlugin extends CytoscapePlugin {
             final URL helpSetURL = HelpSet.findHelpSet(classLoader, HELP_SET_NAME);
 			final HelpSet newHelpSet = new HelpSet(classLoader, helpSetURL);
 			if (!CyHelpBroker.addHelpSet(newHelpSet))
-				logger.handleLog(LogLevel.LOG_ERROR, "iRegulon: Failed to add help set.");
+				Logger.getInstance().error("iRegulon: Failed to add help set.");
 		} catch (final Exception e) {
-			logger.handleLog(LogLevel.LOG_ERROR, "iRegulon: Could not find help set: \"" + HELP_SET_NAME + "\".");
+			Logger.getInstance().error("iRegulon: Could not find help set: \"" + HELP_SET_NAME + "\".");
 		}
 	}
 

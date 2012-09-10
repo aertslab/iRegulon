@@ -1,8 +1,6 @@
 package servercommunication;
 
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
+import infrastructure.Logger;
 import servercommunication.protocols.*;
 import view.IRegulonResourceBundle;
 
@@ -17,7 +15,6 @@ import domainmodel.Motif;
 
 public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implements Task {
     private static final int WAITING_TIME_IN_MS = 3000;
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
 
     private cytoscape.task.TaskMonitor taskMonitor;
 
@@ -86,7 +83,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                 try {
                     Thread.sleep(WAITING_TIME_IN_MS);
                 } catch (InterruptedException e) {
-                    logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                    Logger.getInstance().error(e);
                 }
             }
 
@@ -102,7 +99,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                 try {
                     Thread.sleep(WAITING_TIME_IN_MS);
                 } catch (InterruptedException e) {
-                    logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+                    Logger.getInstance().error(e);
                 }
             }
 
@@ -118,7 +115,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                 this.errorMessage = service.getErrorMessage(jobID);
             }
         } catch (ServerCommunicationException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e);
             interrupt(e.getMessage());
         }
     }

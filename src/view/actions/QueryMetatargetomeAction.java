@@ -4,17 +4,15 @@ package view.actions;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
+import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
-import view.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 import view.parametersform.DefaultMetatargetomeParameters;
 import view.parametersform.MetatargetomeParameters;
@@ -28,8 +26,6 @@ import java.util.*;
 public class QueryMetatargetomeAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_query_metatargetome";
     private static final int NODE_COUNT_LIMIT_FOR_TASK = 50;
-
-    private static final CyLogHandler logger = ConsoleLogger.getLogger();
 
     public static final int DEFAULT_THRESHOLD;
     public static final int DEFAULT_MAX_NODE_COUNT;
@@ -81,7 +77,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         try {
             SPECIES_NOMENCLATURE2FACTORS = queryForFactors();
         } catch (ServerCommunicationException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e);
             SPECIES_NOMENCLATURE2FACTORS = Collections.emptyMap();
         }
     }

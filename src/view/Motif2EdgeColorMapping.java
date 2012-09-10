@@ -5,6 +5,7 @@ import cytoscape.visual.converter.ValueToStringConverterManager;
 import cytoscape.visual.mappings.AbstractMapping;
 import cytoscape.visual.mappings.MappingUtil;
 import cytoscape.visual.parsers.ValueParser;
+import infrastructure.CytoscapeNetworkUtilities;
 
 import javax.swing.event.ChangeListener;
 import java.awt.*;

@@ -1,7 +1,7 @@
 package view.resultspanel.actions;
 
 import domainmodel.AbstractMotif;
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.resultspanel.Refreshable;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;

@@ -8,7 +8,7 @@ import domainmodel.AbstractMotif;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 
 

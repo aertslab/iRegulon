@@ -1,8 +1,6 @@
 package domainmodel;
 
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
+import infrastructure.Logger;
 import view.IRegulonResourceBundle;
 
 import java.util.*;
@@ -25,9 +23,6 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature (4, "Drosophila melanogaster, CG-numbers", "Dmelanogaster_CG_database");
 	//public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn", "Dmelanogaster_FBgn_database");
 	public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature();
-
-	
-	private final CyLogHandler logger = ConsoleLogger.getLogger();
 
     public static SpeciesNomenclature getNomenclature(final int code) {
 		return CODE2NOMENCLATURE.get(code);
@@ -73,7 +68,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
                 }
             }
         } catch (MissingResourceException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, "Missing resource for AUC threshold.");
+            Logger.getInstance().error("Missing resource for AUC threshold.");
         }
         final LinkedHashMap<String, Integer> dbName2RankThreshold = new LinkedHashMap<String, Integer>();
         try {
@@ -86,7 +81,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
                 }
             }
         } catch (MissingResourceException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, "Missing resource for rank threshold.");
+            Logger.getInstance().error("Missing resource for rank threshold.");
         }
 
         this.regionDatabases = loadDatabasesFromBundle(databaseName, REGION_DATABASE_SUFFIX, dbName2AUCThreshold, dbName2RankThreshold);
@@ -129,11 +124,11 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
                             getAUCThreshold(databaseSplit[1], dbName2AUCThreshold),
                             getRankThreshold(databaseSplit[1], dbName2RankThreshold)));
                 } else {
-                    logger.handleLog(LogLevel.LOG_ERROR, "Invalid resource \"databases\" for database: \"" + databaseName + "\".");
+                    Logger.getInstance().error("Invalid resource \"databases\" for database: \"" + databaseName + "\".");
                 }
             }
         } catch (MissingResourceException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, "Missing resource \"databases\" for database: \"" + databaseName + "\".");
+            Logger.getInstance().error("Missing resource \"databases\" for database: \"" + databaseName + "\".");
         }
         return Collections.unmodifiableList(databases);
     }
@@ -151,11 +146,11 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
                 if (databaseSplit.length == 2) {
                     delineations.add(new Delineation(databaseSplit[1], databaseSplit[0]));
                 } else {
-                    logger.handleLog(LogLevel.LOG_ERROR, "Invalid resource \"region delineation\" for database: \"" + databaseName + "\".");
+                    Logger.getInstance().error("Invalid resource \"region delineation\" for database: \"" + databaseName + "\".");
                 }
             }
         } catch (MissingResourceException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, "Missing resource \"region delineation\" for database: \"" + databaseName + "\".");
+            Logger.getInstance().error("Missing resource \"region delineation\" for database: \"" + databaseName + "\".");
         }
         return Collections.unmodifiableList(delineations);
     }

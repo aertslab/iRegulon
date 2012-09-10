@@ -12,7 +12,7 @@ import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 import giny.view.GraphViewChangeEvent;
 import giny.view.GraphViewChangeListener;
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterForm;
 import view.parametersform.ParameterChangeListener;

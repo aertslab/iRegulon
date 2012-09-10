@@ -1,11 +1,7 @@
 package view.actions;
 
-import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
-import view.CytoscapeNetworkUtilities;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterFrame;
 import view.parametersform.MetatargetomeParameters;
@@ -14,7 +10,6 @@ import view.resultspanel.Refreshable;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 

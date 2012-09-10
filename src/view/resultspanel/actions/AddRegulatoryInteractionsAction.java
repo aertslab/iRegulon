@@ -5,7 +5,7 @@ import cytoscape.CyNetwork;
 import cytoscape.view.CyNetworkView;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
-import view.CytoscapeNetworkUtilities;
+import infrastructure.CytoscapeNetworkUtilities;
 import view.resultspanel.Refreshable;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.TranscriptionFactorDependentAction;

@@ -1,9 +1,7 @@
 package servercommunication;
 
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
 import domainmodel.*;
+import infrastructure.Logger;
 import servercommunication.protocols.*;
 
 import java.io.*;
@@ -13,13 +11,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
 
-import javax.swing.JOptionPane;
-
 
 import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
-import sun.rmi.runtime.Log;
 import view.IRegulonResourceBundle;
 
 
@@ -27,7 +22,6 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     private static final boolean DEBUG = false;
     private static final String PARAMETER_NAME = "featureIDandTarget=";
 
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
     private final Protocol service = new HTTPProtocol();
 
     @Override
@@ -73,7 +67,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
-                    if (DEBUG) logger.handleLog(LogLevel.LOG_ERROR, line);
+                    if (DEBUG) Logger.getInstance().warning(line);
 
                     if (line.startsWith("#") || line.trim().equals("")) return;
 
@@ -88,7 +82,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
             return result;
 		} catch (IOException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e);
             throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
 		}
     }
@@ -131,7 +125,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
-                    if (DEBUG) logger.handleLog(LogLevel.LOG_ERROR, line);
+                    if (DEBUG) Logger.getInstance().warning(line);
 
                     if (line.startsWith("#") || line.trim().equals("")) return;
 
@@ -174,7 +168,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                 return filter(result, minOccurenceCount);
             }
 		} catch (IOException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e);
             throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
 		}
     }
@@ -233,7 +227,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
-                    if (DEBUG) logger.handleLog(LogLevel.LOG_ERROR, line);
+                    if (DEBUG) Logger.getInstance().warning(line);
 
                     if (line.startsWith("#") || line.trim().equals("")) return;
                     if (line.startsWith("browser") || line.startsWith("track")) return;
@@ -249,7 +243,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             Collections.sort(result);
             return result;
         } catch (IOException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+            Logger.getInstance().error(e);
             throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
         }
     }
@@ -264,7 +258,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         try {
             return new URI(builder.toString());
         } catch (URISyntaxException e) {
-            logger.handleLog(LogLevel.LOG_ERROR, "Wrong URI = " + builder.toString());
+            Logger.getInstance().error("Wrong URI = " + builder.toString());
             return null;
         }
     }

@@ -15,7 +15,7 @@ import java.util.*;
 
 
 public final class MetatargetomeParameterFrame extends JDialog {
-    private static final String TITLE = "Query metatargetome for a factor";
+    private static final String TITLE = "Query cisTargetDB for a factor";
 
     public MetatargetomeParameterFrame(final MetatargetomeParameters parameters,
                                        final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors,

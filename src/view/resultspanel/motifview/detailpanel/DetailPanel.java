@@ -94,7 +94,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		this.add(this.jlbDescription, c);
 
 		this.targetGeneTable = new JTable(new CandidateTargetGeneTableModel(null));
-        this.targetGeneTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.targetGeneTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		this.hlcrtg=new NetworkMembershipHighlightRenderer("Target Name");
 		this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 		

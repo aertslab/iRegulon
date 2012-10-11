@@ -89,7 +89,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
         final CandidateTargetGeneTableModelIF tgModel = new ExtendedCandidateTargetGeneTableModel();
         targetGeneTable = new JTable(tgModel);
-        targetGeneTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        targetGeneTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         targetGeneHighlighter = new NetworkMembershipHighlightRenderer("Target Name");
         installRenderersOnTargetGeneTable();
         targetGeneTable.setAutoCreateRowSorter(true);

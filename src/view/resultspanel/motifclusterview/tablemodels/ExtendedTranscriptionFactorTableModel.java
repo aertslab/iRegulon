@@ -52,7 +52,9 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
 
     public boolean isAssociatedWith(final TranscriptionFactor tf) {
         for (final Motif motif: getSelectedMotifs()) {
-            if (tf.isAssociatedWith(motif)) return true;
+            for (TranscriptionFactor associatedFactor : motif.getTranscriptionFactors()) {
+                if (associatedFactor.getGeneID().equals(tf.getGeneID())) return true;
+            }
         }
         return false;
     }

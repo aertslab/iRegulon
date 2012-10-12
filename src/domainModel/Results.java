@@ -181,8 +181,13 @@ public class Results {
         Collections.sort(tfAttributes);
 
         final List<TranscriptionFactor> result = new ArrayList<TranscriptionFactor>();
+        final Set<String> IDs = new HashSet<String>();
         for (TranscriptionFactorAttributes attributes: tfAttributes) {
-            result.add(attributes.createTranscriptionFactor());
+            final TranscriptionFactor factor = attributes.createTranscriptionFactor();
+            if (!IDs.contains(factor.getName())) {
+                result.add(factor);
+                IDs.add(factor.getName());
+            }
         }
 
         return result;

@@ -518,51 +518,92 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     private JPanel createDatabaseSubPanel() {
-        JLabel jtl;GridBagLayout layoutDatabase = new GridBagLayout();
-        GridBagConstraints cDatabase = new GridBagConstraints();
-        JPanel databasePanel = new JPanel(layoutDatabase);
-        TitledBorder databaseBorder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Database");
-        databaseBorder.setTitleJustification(TitledBorder.LEFT);
-        databaseBorder.setTitlePosition(TitledBorder.CENTER);
-        databasePanel.setBorder(databaseBorder);
-        int lineY = 0;
-        jtl = new JLabel("Region- or gene-based analysis?");
-        jtl.setToolTipText("Choose the type of analysis to perform.");
-        cDatabase.gridx = 0;
-        cDatabase.gridy = lineY;
-        cDatabase.gridwidth = 1;
-        cDatabase.weightx=0;
-        cDatabase.fill=GridBagConstraints.HORIZONTAL;
-        databasePanel.add(jtl, cDatabase);
+        final GridBagConstraints cc = new GridBagConstraints();
+        final JPanel panel = new JPanel(new GridBagLayout());
+        final TitledBorder border = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Database");
+        border.setTitleJustification(TitledBorder.LEFT);
+        border.setTitlePosition(TitledBorder.CENTER);
+        panel.setBorder(border);
+
+        int yPos = 0;
+
+        final JLabel motifsLB = new JLabel("Motif collection:");
+        motifsLB.setToolTipText("Choose the motif collection used in the enrichment analysis.");
+        cc.gridx = 0; cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.fill = GridBagConstraints.NONE;
+        panel.add(motifsLB, cc);
+
+        final JComboBox motifsCB = new JComboBox();
+        motifsCB.setEnabled(false);
+        cc.gridx = 1; cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.CENTER;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(motifsCB, cc);
+
+        yPos += 1;
+
+        final JLabel typeLB = new JLabel("Type of search space:");
+        typeLB.setToolTipText("Choose the type of search space to use in the analysis.");
+        cc.gridx = 0; cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.fill = GridBagConstraints.NONE;
+        panel.add(typeLB, cc);
 
         this.jcbBased = new BasedComboBox();
-        cDatabase.gridx = 1;
-        cDatabase.gridy = lineY;
-        cDatabase.gridwidth = 1;
-        cDatabase.weightx=0.5;
-        cDatabase.fill=GridBagConstraints.HORIZONTAL;
-        databasePanel.add(this.jcbBased, cDatabase);
-        lineY += 1;
+        cc.gridx = 1; cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.CENTER;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(this.jcbBased, cc);
 
-        jtl = new JLabel("Database:");
-        jtl.setToolTipText("Choose the database.");
-        cDatabase.gridx = 0;
-        cDatabase.gridy = lineY;
-        cDatabase.gridwidth = 1;
-        cDatabase.weightx=0;
-        cDatabase.fill=GridBagConstraints.HORIZONTAL;
-        databasePanel.add(jtl, cDatabase);
+        yPos += 1;
 
+        final JLabel regRegionLB = new JLabel("Putative regulatory region:");
+        regRegionLB.setToolTipText("Choose the putative regulatory region for genes used in the enrichment analysis.");
+        cc.gridx = 0; cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.fill = GridBagConstraints.NONE;
+        panel.add(regRegionLB, cc);
+
+        final JComboBox regRegionCB = new JComboBox();
+        regRegionCB.setEnabled(false);
+        cc.gridx = 1; cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.CENTER;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(regRegionCB, cc);
+
+        yPos += 1;
+
+        final JLabel dbLB = new JLabel("Database:");
+        dbLB.setToolTipText("Choose the database.");
+        cc.gridx = 0; cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.fill = GridBagConstraints.NONE;
+        panel.add(dbLB, cc);
 
         this.jcbdatabase = new DBCombobox();
-        cDatabase.gridx = 1;
-        cDatabase.gridy = lineY;
-        cDatabase.gridwidth = 1;
-        cDatabase.weightx=0.5;
-        cDatabase.fill=GridBagConstraints.HORIZONTAL;
-        databasePanel.add(this.jcbdatabase, cDatabase);
-        lineY += 1;
-        return databasePanel;
+        cc.gridx = 1;cc.gridy = yPos;
+        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.CENTER;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(this.jcbdatabase, cc);
+
+        return panel;
     }
 
     private JPanel createMotif2TFSubPanel() {

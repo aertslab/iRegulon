@@ -162,13 +162,24 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	public int getCode(){
 		return this.code;
 	}
+
+    @Deprecated
+    public List<RankingsDatabase> getGeneDatabases() {
+        return this.geneDatabases;
+    }
+
+    @Deprecated
+    public List<RankingsDatabase> getRegionDatabases() {
+        return this.regionDatabases;
+    }
 	
-	public List<RankingsDatabase> getGeneDatabases(){
-		return this.geneDatabases;
+	public List<RankingsDatabase> getGeneDatabases(final MotifCollection motifs,
+                                                   final GenePutativeRegulatoryRegion searchSpace) {
+		return this.geneDatabases; //TODO:
 	}
 	
-	public List<RankingsDatabase> getRegionDatabases(){
-		return this.regionDatabases;
+	public List<RankingsDatabase> getRegionDatabases(final MotifCollection motifs) {
+		return this.regionDatabases; //TODO:
 	}
 	
 	public List<Delineation> getRegionDelineations(){

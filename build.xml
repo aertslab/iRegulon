@@ -9,7 +9,7 @@
     <property name="web.folder" value="web/"/>
 
     <property name="plugin.name" value="iRegulon"/>
-    <property name="plugin.version" value="0.95"/>
+    <property name="plugin.version" value="0.96"/>
     <property name="plugin.bin.filename" value="iRegulon-${plugin.version}-bin.jar"/>
     <property name="plugin.bin.notransfac.filename" value="iRegulon-${plugin.version}-bin-no-transfac.jar"/>
     <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src.zip"/>

@@ -10,6 +10,17 @@
     </regulatory-region-delineations>
 
     <databases>
+        <database id="hg19_tss_up_500bp_7sp">
+            <name>500bp upstream (7 species)</name>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>7</number-of-species>
+            <motif-collection refid="v3"/>
+        </database>
         <database id="hg19_tss_up_500bp_10sp">
             <name>500bp upstream (10 species)</name>
             <type>genes</type>
@@ -21,14 +32,15 @@
             <number-of-species>10</number-of-species>
             <motif-collection refid="v3"/>
         </database>
-        <database id="hg19_tss_up_500bp_7sp">
-            <name>500bp upstream (7 species)</name>
+
+        <database id="hg19_tss_centered_5kb_7sp">
+            <name>10kb centered around TSS (7 species)</name>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
-            <delineation refid="up500bp"/>
+            <delineation refid="centered10kb"/>
             <number-of-species>7</number-of-species>
             <motif-collection refid="v3"/>
         </database>
@@ -43,14 +55,26 @@
             <number-of-species>10</number-of-species>
             <motif-collection refid="v3"/>
         </database>
-        <database id="hg19_tss_centered_5kb_7sp">
-            <name>10kb centered around TSS (7 species)</name>
+        <database id="hg19_tss_centered_5kb_10sp_legacy">
+            <name>10kb centered around TSS (10 species, legacy)</name>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
             <delineation refid="centered10kb"/>
+            <number-of-species>10</number-of-species>
+            <motif-collection refid="v3"/>
+        </database>
+
+        <database id="hg19_tss_centered_10kb_7sp">
+            <name>20kb centered around TSS (7 species)</name>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered20kb"/>
             <number-of-species>7</number-of-species>
             <motif-collection refid="v3"/>
         </database>
@@ -65,28 +89,7 @@
             <number-of-species>10</number-of-species>
             <motif-collection refid="v3"/>
         </database>
-        <database id="hg19_tss_centered_10kb_7sp">
-            <name>20kb centered around TSS (7 species)</name>
-            <type>genes</type>
 
-            <species>hg19</species>
-            <nomenclature refid="1">HGNC</nomenclature>
-
-            <delineation refid="centered20kb"/>
-            <number-of-species>7</number-of-species>
-            <motif-collection refid="v3"/>
-        </database>
-        <database id="hg19_tss_centered_5kb_10sp_legacy">
-            <name>10kb centered around TSS (10 species, legacy)</name>
-            <type>genes</type>
-
-            <species>hg19</species>
-            <nomenclature refid="1">HGNC</nomenclature>
-
-            <delineation refid="centered10kb"/>
-            <number-of-species>10</number-of-species>
-            <motif-collection refid="v3"/>
-        </database>
         <database id="hg19_regions_all_10sp">
             <name>All regulatory features (10 species)</name>
             <type>regions</type>
@@ -125,6 +128,7 @@
                 <mapping id="hg19_hgnc_tss_centered_10kb">20kb centered around TSS</mapping>
             </mappings>
         </database>
+
         <database id="hg19_tss_up500bp_down100bp_10sp_lncrnas">
             <name>lncRNAs (10 species, UCSC + ENSEMBL IDs)</name>
             <type>regions</type>
@@ -139,14 +143,15 @@
                 <mapping id="hg19_tss_up500bp_down100bp_10sp_lncrnas">TSS 500bp up + 100bp down</mapping>
             </mappings>
         </database>
-        <database id="mm9_tss_centered_10kb_7sp">
-            <name>20kb centered around TSS (7 species)</name>
+
+        <database id="mm9_tss_up_500bp_7sp">
+            <name>500bp upstream (7 species)</name>
             <type>genes</type>
 
             <species>mm9</species>
             <nomenclature refid="2">MGI</nomenclature>
 
-            <delineation refid="centered20kb"/>
+            <delineation refid="up500bp"/>
             <number-of-species>7</number-of-species>
             <motif-collection refid="v3"/>
         </database>
@@ -161,14 +166,15 @@
             <number-of-species>10</number-of-species>
             <motif-collection refid="v3"/>
         </database>
-        <database id="mm9_tss_up_500bp_7sp">
-            <name>500bp upstream (7 species)</name>
+
+        <database id="mm9_tss_centered_5kb_7sp">
+            <name>10kb centered around TSS (7 species)</name>
             <type>genes</type>
 
             <species>mm9</species>
             <nomenclature refid="2">MGI</nomenclature>
 
-            <delineation refid="up500bp"/>
+            <delineation refid="centered10kb"/>
             <number-of-species>7</number-of-species>
             <motif-collection refid="v3"/>
         </database>
@@ -183,14 +189,15 @@
             <number-of-species>10</number-of-species>
             <motif-collection refid="v3"/>
         </database>
-        <database id="mm9_tss_centered_5kb_7sp">
-            <name>10kb centered around TSS (7 species)</name>
+
+        <database id="mm9_tss_centered_10kb_7sp">
+            <name>20kb centered around TSS (7 species)</name>
             <type>genes</type>
 
             <species>mm9</species>
             <nomenclature refid="2">MGI</nomenclature>
 
-            <delineation refid="centered10kb"/>
+            <delineation refid="centered20kb"/>
             <number-of-species>7</number-of-species>
             <motif-collection refid="v3"/>
         </database>
@@ -216,6 +223,7 @@
             <number-of-species>10</number-of-species>
             <motif-collection refid="v3"/>
         </database>
+
         <database id="dm3_regions_pwm_11sp">
             <name>136K regions (11 species)</name>
             <type>regions</type>

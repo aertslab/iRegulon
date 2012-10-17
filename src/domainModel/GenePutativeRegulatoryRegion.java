@@ -6,13 +6,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class GenePutativeRegulatoryRegion {
-    private static Map<String, GenePutativeRegulatoryRegion> CODE2COLLECTION = new HashMap<String, GenePutativeRegulatoryRegion>();
+    private static Map<String, GenePutativeRegulatoryRegion> CODE2COLLECTION = new LinkedHashMap<String, GenePutativeRegulatoryRegion>();
     public static GenePutativeRegulatoryRegion UNKNOWN = new GenePutativeRegulatoryRegion("?", "");
 
     private static final String GROUP_TAGNAME = "regulatory-region-delineations";

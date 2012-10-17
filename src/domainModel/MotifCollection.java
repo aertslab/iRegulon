@@ -11,7 +11,7 @@ import org.w3c.dom.Node;
 
 
 public final class MotifCollection implements Comparable<MotifCollection> {
-    private static Map<String, MotifCollection> CODE2COLLECTION = new HashMap<String, MotifCollection>();
+    private static Map<String, MotifCollection> CODE2COLLECTION = new LinkedHashMap<String, MotifCollection>();
     public static MotifCollection UNKNOWN = new MotifCollection("?", "?");
 
     private static final String GROUP_TAGNAME = "motif-collections";

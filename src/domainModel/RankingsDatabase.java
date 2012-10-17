@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class RankingsDatabase extends IRegulonResourceBundle {
+    private static final String DATABASES_TAG_NAME = "databases";
     private static final String DATABASE_TAG_NAME = "database";
     private static final String TYPE_TAG_NAME = "type";
     private static final String NAME_TAG_NAME = "name";
@@ -33,13 +34,25 @@ public class RankingsDatabase extends IRegulonResourceBundle {
 
     public static List<RankingsDatabase> loadFromConfiguration() {
         final Document document = Configuration.getDocument();
-        final NodeList nList = document.getElementsByTagName(DATABASE_TAG_NAME);
         final List<RankingsDatabase> result = new ArrayList<RankingsDatabase>();
-        for (int i = 0; i < nList.getLength(); i++) {
-            final Node nNode = nList.item(i);
-            result.add(createDatabase(nNode));
+        for (Element child : findElements(document.getElementsByTagName(DATABASES_TAG_NAME), DATABASE_TAG_NAME)) {
+            result.add(createDatabase(child));
         }
         return result;
+    }
+
+    private static List<Element> findElements(final NodeList nodeList, final String tagName) {
+        final List<Element> elements = new ArrayList<Element>();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            final NodeList nodes = nodeList.item(i).getChildNodes();
+            for (int j = 0; j < nodes.getLength(); j++) {
+                final Node node = nodes.item(j);
+                if (node instanceof Element && ((Element) node).getTagName().equals(tagName)) {
+                    elements.add((Element) node);
+                }
+            }
+        }
+        return elements;
     }
 
     private static RankingsDatabase createDatabase(Node nNode) {

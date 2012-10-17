@@ -5,26 +5,40 @@ import java.util.*;
 
 import infrastructure.Configuration;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 
 
-public final class MotifCollection {
+public final class MotifCollection implements Comparable<MotifCollection> {
     private static Map<String, MotifCollection> CODE2COLLECTION = new HashMap<String, MotifCollection>();
-    private static MotifCollection UNKNOWN = new MotifCollection("?", "?");
+    public static MotifCollection UNKNOWN = new MotifCollection("?", "?");
 
+    private static final String GROUP_TAGNAME = "motif-collections";
     private static final String TAGNAME = "motif-collection";
     private static final String ATTRIBUTENAME = "id";
 
     static {
         final Document document = Configuration.getDocument();
-        final NodeList nList = document.getElementsByTagName(TAGNAME);
-        for (int i = 0; i < nList.getLength(); i++) {
-            final Node nNode = nList.item(i);
-            final String description = nNode.getNodeValue();
-            final String code = nNode.getAttributes().getNamedItem(ATTRIBUTENAME).getNodeValue();
+        for (Element child : findElements(document.getElementsByTagName(GROUP_TAGNAME), TAGNAME)) {
+            final String description = child.getTextContent().trim();
+            final String code = child.getAttribute(ATTRIBUTENAME);
             CODE2COLLECTION.put(code, new MotifCollection(code, description));
         }
+    }
+
+    private static List<Element> findElements(final NodeList nodeList, final String tagName) {
+        final List<Element> elements = new ArrayList<Element>();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            final NodeList nodes = nodeList.item(i).getChildNodes();
+            for (int j = 0; j < nodes.getLength(); j++) {
+                final Node node = nodes.item(j);
+                if (node instanceof Element && ((Element) node).getTagName().equals(tagName)) {
+                    elements.add((Element) node);
+                }
+            }
+        }
+        return elements;
     }
 
     public static MotifCollection forCode(final String code) {
@@ -74,5 +88,10 @@ public final class MotifCollection {
     @Override
     public String toString() {
         return description;
+    }
+
+    @Override
+    public int compareTo(MotifCollection o) {
+        return description.compareTo(o.description);
     }
 }

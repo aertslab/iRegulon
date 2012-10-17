@@ -59,13 +59,13 @@
     <!-- =================================================================== -->
     <target name="copy_resources" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg" />
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml" />
         </copy>
     </target>
 
     <target name="copy_resources_no_transfac" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg" excludes="**/transfac_pro-*.png" />
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml" excludes="**/transfac_pro-*.png" />
         </copy>
     </target>
 

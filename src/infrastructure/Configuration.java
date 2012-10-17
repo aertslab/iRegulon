@@ -13,20 +13,11 @@ import java.net.URISyntaxException;
 public final class Configuration {
     private static final String CONFIGURATION_XML_FILENAME = "configuration.xml";
 
-    private static File getFile() {
-		final java.net.URL url = Configuration.class.getResource(CONFIGURATION_XML_FILENAME);
-        try {
-            return new File(url.toURI());
-        } catch (URISyntaxException e) {
-            return null;
-        }
-    }
-
     public static Document getDocument() {
         try {
             final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            final Document doc = dBuilder.parse(getFile());
+            final Document doc = dBuilder.parse(Configuration.class.getResourceAsStream(CONFIGURATION_XML_FILENAME));
             doc.getDocumentElement().normalize();
             return doc;
         } catch (ParserConfigurationException e) {

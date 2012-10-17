@@ -1,24 +1,22 @@
 package view.parametersform;
 
+import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.parametersform.actions.PredictRegulatorsAction;
 import view.IRegulonResourceBundle;
-import view.parametersform.databaseselection.BasedComboBox;
+import view.parametersform.databaseselection.MotifCollectionComboBox;
+import view.parametersform.databaseselection.PutativeRegulatoryRegionComboBox;
+import view.parametersform.databaseselection.SearchSpaceTypeComboBox;
 import view.parametersform.databaseselection.DBCombobox;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 import cytoscape.Cytoscape;
 
-import domainmodel.RankingsDatabase;
-import domainmodel.Delineation;
-import domainmodel.InputParameters;
-import domainmodel.SpeciesNomenclature;
 import view.resultspanel.Refreshable;
 
 
@@ -41,8 +39,10 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 	private JTextField jtfVisualisation;
 	private JTextField jtfMinOrthologous;
 	private JTextField jtfMaxMotifSimilarityFDR;
-    private BasedComboBox jcbBased;
-	private DBCombobox jcbdatabase;
+    private MotifCollectionComboBox motifCollectionCB;
+    private PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB;
+    private SearchSpaceTypeComboBox searchSpaceTypeCB;
+	private DBCombobox databaseCB;
 	private JTextField txtOverlap;
 	private JComboBox jcbDelation;
 	private JTextField txtUpStream;
@@ -52,7 +52,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 	private DatabaseListener dbListener;
 
 	private final JDialog frame;
-	
+
 	public PredictedRegulatorsForm() {
 		this(null);
 	}
@@ -101,6 +101,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         
         this.jcbSpecieAndNomenclature = new JComboBox();
         this.jcbSpecieAndNomenclature.setModel(new javax.swing.DefaultComboBoxModel(SpeciesNomenclature.getSelectableNomenclatures().toArray()));
+        this.jcbSpecieAndNomenclature.setSelectedItem(SpeciesNomenclature.getSelectableNomenclatures().iterator().next());
         cc.gridx = 2; cc.gridy = yPos;
 		cc.gridheight = 1; cc.gridwidth = 3;
         cc.fill=GridBagConstraints.HORIZONTAL;
@@ -450,7 +451,9 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.dbListener = new DatabaseListener(this.jobNameTF,
         		this.jtfEscore, this.jtfROC, this.jtfVisualisation, 
         		this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR, 
-        		this.jcbSpecieAndNomenclature, this.jcbBased, this.jcbdatabase, 
+        		this.jcbSpecieAndNomenclature,
+                this.motifCollectionCB, this.genePutativeRegulatoryRegionCB,
+                this.searchSpaceTypeCB, this.databaseCB,
         		overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
         		this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.attributeNameCB, numberOfNodesTF,
         		submitButton);
@@ -473,8 +476,10 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.jtfMaxMotifSimilarityFDR.addActionListener(this.dbListener);
         this.jtfMaxMotifSimilarityFDR.getDocument().addDocumentListener(this.dbListener);
         this.jcbSpecieAndNomenclature.addActionListener(this.dbListener);
-        this.jcbBased.addActionListener(this.dbListener);
-        this.jcbdatabase.addActionListener(this.dbListener);
+        this.genePutativeRegulatoryRegionCB.addActionListener(this.dbListener);
+        this.motifCollectionCB.addActionListener(this.dbListener);
+        this.searchSpaceTypeCB.addActionListener(this.dbListener);
+        this.databaseCB.addActionListener(this.dbListener);
         this.txtOverlap.addActionListener(this.dbListener);
         this.txtOverlap.getDocument().addDocumentListener(this.dbListener);
         rbtnDelineation.addActionListener(this.dbListener);
@@ -502,8 +507,10 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.jtfMaxMotifSimilarityFDR.removeActionListener(this.dbListener);
         this.jtfMaxMotifSimilarityFDR.getDocument().removeDocumentListener(this.dbListener);
         this.jcbSpecieAndNomenclature.removeActionListener(this.dbListener);
-        this.jcbBased.removeActionListener(this.dbListener);
-        this.jcbdatabase.removeActionListener(this.dbListener);
+        this.genePutativeRegulatoryRegionCB.removeActionListener(this.dbListener);
+        this.motifCollectionCB.removeActionListener(this.dbListener);
+        this.searchSpaceTypeCB.removeActionListener(this.dbListener);
+        this.databaseCB.removeActionListener(this.dbListener);
         this.txtOverlap.removeActionListener(this.dbListener);
         this.txtOverlap.getDocument().removeDocumentListener(this.dbListener);
         rbtnDelineation.removeActionListener(this.dbListener);
@@ -536,14 +543,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.fill = GridBagConstraints.NONE;
         panel.add(motifsLB, cc);
 
-        final JComboBox motifsCB = new JComboBox();
-        motifsCB.setEnabled(false);
+        this.motifCollectionCB = new MotifCollectionComboBox();
         cc.gridx = 1; cc.gridy = yPos;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(motifsCB, cc);
+        panel.add(motifCollectionCB, cc);
 
         yPos += 1;
 
@@ -556,13 +562,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.fill = GridBagConstraints.NONE;
         panel.add(typeLB, cc);
 
-        this.jcbBased = new BasedComboBox();
+        this.searchSpaceTypeCB = new SearchSpaceTypeComboBox();
         cc.gridx = 1; cc.gridy = yPos;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(this.jcbBased, cc);
+        panel.add(this.searchSpaceTypeCB, cc);
 
         yPos += 1;
 
@@ -575,14 +581,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.fill = GridBagConstraints.NONE;
         panel.add(regRegionLB, cc);
 
-        final JComboBox regRegionCB = new JComboBox();
-        regRegionCB.setEnabled(false);
+        genePutativeRegulatoryRegionCB = new PutativeRegulatoryRegionComboBox();
         cc.gridx = 1; cc.gridy = yPos;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(regRegionCB, cc);
+        panel.add(genePutativeRegulatoryRegionCB, cc);
 
         yPos += 1;
 
@@ -595,13 +600,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.fill = GridBagConstraints.NONE;
         panel.add(dbLB, cc);
 
-        this.jcbdatabase = new DBCombobox();
+        this.databaseCB = new DBCombobox();
         cc.gridx = 1;cc.gridy = yPos;
         cc.gridwidth = 1; cc.gridheight = 1;
         cc.weightx = 1.0; cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(this.jcbdatabase, cc);
+        panel.add(this.databaseCB, cc);
 
         return panel;
     }
@@ -726,14 +731,14 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 	}
 	
 	public boolean isRegionBasedDatabase(){
-		return this.jcbBased.isRegionBased();
+		return this.searchSpaceTypeCB.isRegionBased();
 	}
 	
 	public RankingsDatabase getRankingsDatabase(){
 		if (this.isRegionBasedDatabase()){
-			return (RankingsDatabase) this.jcbdatabase.getSelectedItem();
+			return (RankingsDatabase) this.databaseCB.getSelectedItem();
 		}else{
-			return (RankingsDatabase) this.jcbdatabase.getSelectedItem();
+			return (RankingsDatabase) this.databaseCB.getSelectedItem();
 		}
 	}
 	

@@ -1,11 +1,13 @@
 package view.parametersform;
 
+import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,10 +20,9 @@ import javax.swing.event.DocumentListener;
 import cytoscape.Cytoscape;
 
 
-import domainmodel.RankingsDatabase;
-import domainmodel.Delineation;
-import domainmodel.SpeciesNomenclature;
-import view.parametersform.databaseselection.BasedComboBox;
+import view.parametersform.databaseselection.MotifCollectionComboBox;
+import view.parametersform.databaseselection.PutativeRegulatoryRegionComboBox;
+import view.parametersform.databaseselection.SearchSpaceTypeComboBox;
 import view.parametersform.databaseselection.DBCombobox;
 
 final class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener {
@@ -33,9 +34,11 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private final JTextField txtMinOrthologous;
 	private final JTextField txtMaxSimilarity;
 	
-	private final JComboBox jcbSpecies;
-	private final BasedComboBox jcbBased;
-	private final DBCombobox jcbDatabase;
+	private final JComboBox speciesNomenclatureCB;
+    private final MotifCollectionComboBox motifCollectionCB;
+    private final PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB;
+	private final SearchSpaceTypeComboBox searchSpaceTypeCB;
+	private final DBCombobox databaseCB;
 	private final JLabel labelOverlap;
 	private final JTextField txtOverlap;
 	private final JRadioButton rbtnDelineation;
@@ -60,8 +63,10 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 								JTextField txtVisualisation, 
 								JTextField txtMinOrthologous, 
 								JTextField txtMaxSimilarity, 
-								JComboBox jcbSpecies, 
-								BasedComboBox jcbBased, 
+								JComboBox speciesNomenclatureCB,
+                                MotifCollectionComboBox motifCollectionCB,
+                                PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB,
+								SearchSpaceTypeComboBox jcbBased,
 								DBCombobox jcbDatabase,
 								JLabel labelOverlap,
 								JTextField txtOverlap, 
@@ -81,9 +86,9 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		this.txtVisualisation = txtVisualisation;
 		this.txtMinOrthologous = txtMinOrthologous;
 		this.txtMaxSimilarity = txtMaxSimilarity;
-		this.jcbSpecies = jcbSpecies;
-		this.jcbBased = jcbBased;
-		this.jcbDatabase = jcbDatabase;
+		this.speciesNomenclatureCB = speciesNomenclatureCB;
+		this.searchSpaceTypeCB = jcbBased;
+		this.databaseCB = jcbDatabase;
 		this.labelOverlap = labelOverlap;
 		this.txtOverlap = txtOverlap;
 		this.rbtnDelineation = rbtnDelineation;
@@ -99,6 +104,8 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		this.canSubmit = true;
 		this.isBussy = false;
 		this.changedDatabase = false;
+        this.motifCollectionCB = motifCollectionCB;
+        this.genePutativeRegulatoryRegionCB = genePutativeRegulatoryRegionCB;
 		
 	}
 	
@@ -129,8 +136,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 			this.canSubmit = true;
 			this.changedDatabase = false;
 			this.refreshName();
-			this.refreshBased();
-			this.refreshDatabase();
+			this.refreshRankingDatabases();
 			this.refreshOverlap();
 			this.refreshRbtns();
 			this.refreshDelineation();
@@ -180,7 +186,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private void refreshAUC(){
 		this.txtAUCvalue.setBackground(Color.WHITE);
 		if (this.changedDatabase){
-			RankingsDatabase dat = (RankingsDatabase) this.jcbDatabase.getSelectedItem();
+			RankingsDatabase dat = (RankingsDatabase) this.databaseCB.getSelectedItem();
 			this.txtAUCvalue.setText("" + dat.getAUCvalue());
 		}
 		try{
@@ -198,7 +204,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private void refreshVisualisation(){
 		this.txtVisualisation.setBackground(Color.WHITE);
 		if (this.changedDatabase){
-			RankingsDatabase dat = (RankingsDatabase) this.jcbDatabase.getSelectedItem();
+			RankingsDatabase dat = (RankingsDatabase) this.databaseCB.getSelectedItem();
 			this.txtVisualisation.setText("" + dat.getVisualisationValue());
 		}
 		
@@ -240,52 +246,53 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 			this.txtMaxSimilarity.setBackground(Color.RED);
 		}
 	}
-	
-	private void refreshBased(){
-		String based = (String) this.jcbBased.getSelectedItem();
-		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-		if (! species.getGeneDatabases().isEmpty() && ! species.getRegionDatabases().isEmpty()){
-			this.jcbBased.setGeneAndRegion();
-		}else{
-			if (! species.getGeneDatabases().isEmpty()){
-				this.jcbBased.setOnlyGene();
-			}
-			if (! species.getRegionDatabases().isEmpty()){
-				this.jcbBased.setOnlyRegion();
-			}
-		}
-		if (this.jcbBased.canBeSelected(based)){
-			this.jcbBased.setSelectedItem(based);
-		}	
-	}
-	
-	private void refreshDatabase(){
-		RankingsDatabase database = (RankingsDatabase) this.jcbDatabase.getSelectedItem();
-		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-		if (this.jcbBased.isGeneBased()){
-			this.jcbDatabase.updateDatabases(species.getGeneDatabases());
-		}else{
-			if(this.jcbBased.isRegionBased()){
-				this.jcbDatabase.updateDatabases(species.getRegionDatabases());
-			}
-		}
-		if (this.jcbDatabase.canBeSelected(database)){
-			this.jcbDatabase.setSelectedItem(database);
-		}else{
-			this.changedDatabase = true;
-		}
-		if (this.jcbDatabase.canBeSelected(database)){
-			this.jcbDatabase.setSelectedItem(database);
-		}	
-	}
+
+    private void refreshRankingDatabases() {
+        final SpeciesNomenclature speciesNomenclature = (SpeciesNomenclature) this.speciesNomenclatureCB.getSelectedItem();
+
+        MotifCollection curMotifCollection = (MotifCollection) this.motifCollectionCB.getSelectedItem();
+        final List<MotifCollection> motifCollections = speciesNomenclature.getMotifCollections();
+        this.motifCollectionCB.setMotifCollections(motifCollections);
+        if (!motifCollections.contains(curMotifCollection)) {
+            curMotifCollection = motifCollections.get(0);
+        }
+        this.motifCollectionCB.setSelectedItem(curMotifCollection);
+
+        RankingsDatabase.Type curSearchSpaceType = (RankingsDatabase.Type) this.searchSpaceTypeCB.getSelectedItem();
+        final List<RankingsDatabase.Type> searchSpaceTypes = speciesNomenclature.getSearchSpaceTypes();
+        this.searchSpaceTypeCB.setTypes(searchSpaceTypes);
+        if (!searchSpaceTypes.contains(curSearchSpaceType)) {
+            curSearchSpaceType = searchSpaceTypes.get(0);
+        }
+        this.searchSpaceTypeCB.setSelectedItem(curSearchSpaceType);
+
+        GenePutativeRegulatoryRegion curRegion = (GenePutativeRegulatoryRegion) this.genePutativeRegulatoryRegionCB.getSelectedItem();
+        final List<GenePutativeRegulatoryRegion> regions = speciesNomenclature.getPutativeRegulatoryRegions(curMotifCollection, curSearchSpaceType);
+        this.genePutativeRegulatoryRegionCB.setRegions(regions);
+        if (!regions.contains(curRegion)) {
+            curRegion = regions.get(0);
+        }
+        this.genePutativeRegulatoryRegionCB.setSelectedItem(curRegion);
+
+        final RankingsDatabase curDatabase = (RankingsDatabase) databaseCB.getSelectedItem();
+        final List<RankingsDatabase> databases = speciesNomenclature.getDatabases(curMotifCollection, curSearchSpaceType, curRegion);
+        this.databaseCB.updateDatabases(databases);
+        if (databases.contains(curDatabase)) {
+            this.databaseCB.setSelectedItem(curDatabase);
+            this.changedDatabase = false;
+        } else {
+            this.databaseCB.setSelectedItem(databases.get(0));
+            this.changedDatabase = true;
+        }
+    }
 	
 	private void refreshOverlap(){
 		this.txtOverlap.setBackground(Color.WHITE);
-		if (this.jcbBased.isGeneBased()){
+		if (this.searchSpaceTypeCB.isGeneBased()){
 			this.labelOverlap.setEnabled(false);
 			this.txtOverlap.setEnabled(false);
 		}
-		if (this.jcbBased.isRegionBased()){
+		if (this.searchSpaceTypeCB.isRegionBased()){
 			this.labelOverlap.setEnabled(true);
 			this.txtOverlap.setEnabled(true);
 			try{
@@ -302,13 +309,13 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	}
 	
 	private void refreshRbtns(){
-		if (this.jcbBased.isRegionBased()){
+		if (this.searchSpaceTypeCB.isRegionBased()){
 			boolean conversion = this.rbtnConversion.isSelected();
 			boolean delineation = this.rbtnDelineation.isSelected();
 			this.rbtnConversion.setEnabled(true);
 			this.rbtnDelineation.setEnabled(true);
-			SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-			if (species.getRegionDelineations().isEmpty()){
+			final RankingsDatabase database = (RankingsDatabase) this.databaseCB.getSelectedItem();
+            if (database.getGene2regionDelineations().isEmpty()){
 				this.rbtnDelineation.setEnabled(false);
 				this.rbtnConversion.setSelected(true);
 				delineation = false;
@@ -342,16 +349,15 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	}
 	
 	private void refreshDelineation(){
-		Delineation delineation = (Delineation) this.jcbDelineation.getSelectedItem();
-		SpeciesNomenclature species = (SpeciesNomenclature) this.jcbSpecies.getSelectedItem();
-		this.jcbDelineation.removeAllItems();
-		for(Delineation key : species.getRegionDelineations()){
+		final Delineation curDelineation = (Delineation) this.jcbDelineation.getSelectedItem();
+		final RankingsDatabase database = (RankingsDatabase) this.databaseCB.getSelectedItem();
+        this.jcbDelineation.removeAllItems();
+		for (Delineation key : database.getGene2regionDelineations()){
 			this.jcbDelineation.addItem(key);
 		}
-		if (species.getRegionDelineations().contains(delineation)){
-			this.jcbDelineation.setSelectedItem(delineation);
+		if (database.getGene2regionDelineations().contains(curDelineation)){
+			this.jcbDelineation.setSelectedItem(curDelineation);
 		}
-		
 	}
 	
 	private void refreshUp(){
@@ -390,7 +396,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		this.txtAmountNodes.setBackground(Color.WHITE);
 		if (this.jcbGeneNameAttr.getSelectedItem() != null){
 			int amountNodes = CytoscapeNetworkUtilities.getGenes((String) this.jcbGeneNameAttr.getSelectedItem(),
-                    (SpeciesNomenclature) this.jcbSpecies.getSelectedItem()).size();
+                    (SpeciesNomenclature) this.speciesNomenclatureCB.getSelectedItem()).size();
 			if (amountNodes == 0){
 				this.txtAmountNodes.setBackground(Color.RED);
 				this.canSubmit = false;

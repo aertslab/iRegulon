@@ -27,6 +27,12 @@ public class PersistenceUtilities {
 		xstream.alias("iRegulonType", IRegulonType.class);
         xstream.omitField(CandidateTargetGene.class, "numberOfMotifs");
         xstream.omitField(TranscriptionFactor.class, "motifs");
+        xstream.omitField(RankingsDatabase.class, "type");
+        xstream.omitField(RankingsDatabase.class, "speciesNomenclature");
+        xstream.omitField(RankingsDatabase.class, "motifCollection");
+        xstream.omitField(RankingsDatabase.class, "speciesCount");
+        xstream.omitField(RankingsDatabase.class, "putativeRegulatoryRegion");
+        xstream.omitField(RankingsDatabase.class, "gene2regionDelineations");
 
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.registerConverter(new SpeciesNomenclatureConverter());
@@ -52,6 +58,13 @@ public class PersistenceUtilities {
         xstream.aliasField("parameters", Results.class, "inputParameters");
         xstream.aliasField("enrichedMotifID", Motif.class, "name");
         xstream.aliasField("minOrthologous", TranscriptionFactor.class, "minOrthologousIdentity");
+
+        xstream.omitField(RankingsDatabase.class, "type");
+        xstream.omitField(RankingsDatabase.class, "speciesNomenclature");
+        xstream.omitField(RankingsDatabase.class, "motifCollection");
+        xstream.omitField(RankingsDatabase.class, "speciesCount");
+        xstream.omitField(RankingsDatabase.class, "putativeRegulatoryRegion");
+        xstream.omitField(RankingsDatabase.class, "gene2regionDelineations");
 
         try {
             return (Results) xstream.fromXML(xml);

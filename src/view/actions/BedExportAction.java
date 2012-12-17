@@ -14,6 +14,8 @@ import view.resultspanel.Refreshable;
 import view.resultspanel.SelectedMotif;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,6 +28,8 @@ public class BedExportAction extends ResourceAction implements Refreshable {
 
     private final ComputationalService service = new ComputationalServiceHTTP();
 	private final SelectedMotif selectedMotif;
+
+    private static final String BED_FILE_EXTENSION = "bed";
 
 	public BedExportAction(final SelectedMotif selectedMotif) {
         super(NAME);
@@ -58,26 +62,31 @@ public class BedExportAction extends ResourceAction implements Refreshable {
 
     private String getFilenameSuggestion() {
         final AbstractMotif motif = getSelectedMotif().getMotif();
-        return motif != null ? motif.getName() + "." + BedFilenameFilter.BED_FILE_EXTENSION : "";
+        return motif != null ? motif.getName() + "." + BED_FILE_EXTENSION : "";
     }
 
     @Override
 	public void actionPerformed(ActionEvent event) {
         final JFileChooser fc = new JFileChooser(new File(getPathSuggestion()));
-        final BedFilenameFilter filenameFilter = new BedFilenameFilter();
-        fc.addChoosableFileFilter(filenameFilter);
+        // Display "All Files" filter at the bottom of the list.
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("UCSC BED files (*.bed)", "bed"));
+        fc.setAcceptAllFileFilterUsed(true);
+
         fc.setSelectedFile(new File(getFilenameSuggestion()));
         fc.showSaveDialog(Cytoscape.getDesktop());
-        final File selectedFile = filenameFilter.accept(fc.getSelectedFile())
+        FileFilter ff = fc.getFileFilter();
+
+        final File selectedFile = ff.accept(fc.getSelectedFile())
                 ? fc.getSelectedFile()
-                : new File(fc.getSelectedFile().getAbsoluteFile() + "." + BedFilenameFilter.BED_FILE_EXTENSION);
+                : new File(fc.getSelectedFile().getAbsoluteFile() + "." + BED_FILE_EXTENSION);
 
         BufferedWriter output = null;
         try {
             if (!selectedFile.createNewFile()) {
                 // File already exists ...
                 int n = JOptionPane.showConfirmDialog(Cytoscape.getDesktop(),
-                        "Do you want to overwrite this file?",
+                        "Do you want to overwrite the file '" + selectedFile.getName() + "'?",
                         "Overwrite?",
                         JOptionPane.YES_NO_OPTION);
                 if (n == JOptionPane.NO_OPTION) {
@@ -101,7 +110,7 @@ public class BedExportAction extends ResourceAction implements Refreshable {
         } catch (IOException e) {
             Logger.getInstance().error(e.getMessage());
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                    "An error has occurred while creating and saving the BED file.",
+                    "An error has occurred while creating and saving the BED file '" + selectedFile.getName() + ".",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         } finally {

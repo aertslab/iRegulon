@@ -35,6 +35,10 @@
              <name>Bram Van de Sande</name>
              <institution>Laboratory of Computational Biology, KULeuven, Belgium</institution>
            </author>
+           <author>
+             <name>Gert Hulselmans</name>
+             <institution>Laboratory of Computational Biology, KULeuven, Belgium</institution>
+           </author>
          </authorlist>
         </plugin>
   </pluginlist>

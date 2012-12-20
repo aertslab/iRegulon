@@ -3,7 +3,7 @@
 
 # The plugin name that will be displayed to users, white space within name is not allowed
 pluginName=@pluginName@
-# Plugin version number, this must be two numbers separated by a decimlal.  Ex. 0.2, 14.03
+# Plugin version number, this must be two numbers separated by a decimal.  Ex. 0.2, 14.03
 pluginVersion=@pluginVersion@
 # Description used to give users information about the plugin such as what it does.
 # Html tags are encouraged for formatting purposes.
@@ -12,7 +12,7 @@ pluginDescription=@pluginName@ predicts causal transcription factors for sets of
 projectURL=@webserverUrl@
 # List of authors.  Note each author and institution pair are separated by a : (colon)
 # each additional author institution pair must be separated from other pairs bye a ; (semicolon)
-pluginAuthorsInstitutions=Koen Herten and Bram Van De Sande:LCB
+pluginAuthorsInstitutions=Koen Herten:KULeuven;Bram Van De Sande:KULeuven;Gert Hulselmans:KULeuven
 # Compatible Cytoscape version. If there are more than one version, seperate by ",".
 cytoscapeVersion=2.8
 # Category, use one of the categories listed on the http://cytoscape.org/plugins2.php site

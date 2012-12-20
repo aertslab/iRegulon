@@ -5,6 +5,7 @@ import view.actions.*;
 import view.actions.OpenParametersFormAction;
 import view.actions.AddParametersFormToSidePanelAction;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
@@ -101,7 +102,9 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane pane = new JOptionPane(
+            JTextPane aboutText = new JTextPane();
+            aboutText.setContentType("text/html");
+            aboutText.setText(
                 "<html>" +
                 "<h1>" + bundle.getString("plugin_name") + "</h1>" +
                 "<p><b>Version:</b> " + bundle.getString("version") + "<br/>" +
@@ -136,12 +139,20 @@ public class IRegulonPlugin extends CytoscapePlugin {
                 "<h3>Intellectual Property Rights</h3>" +
                 "<p>By using the iRegulon software, you do not acquire any intellectual property right to the iRegulon software or any part thereof, nor do you acquire any license or other rights under any patents, patent applications, trade secrets or other proprietary rights of KU Leuven, except as expressly granted herein.</p>" +
                 "<h3>Publication</h3>" +
-                "<p>The Academic User shall acknowledge KULeuven as the provider of software and shall include a reference to Rekin's Janky, Annelien Verfaillie, Bram Van de Sande, Valerie Christiaens, Laura Standaerdt, Gert Hulselmans, Koen Herten, Zeynep Kalender, Jean-Christophe Marine, and Stein Aerts. iRegulon: Sequence-based Discovery of Human Regulons. Manuscript in preparation; in any manuscript describing data obtained using Licensed Software.</p>" +
-                "</html>",
-                JOptionPane.INFORMATION_MESSAGE);
+                "<p>The Academic User shall acknowledge KU Leuven as the provider of software and shall include a reference to Rekin's Janky, Annelien Verfaillie, Bram Van de Sande, Valerie Christiaens, Laura Standaerdt, Gert Hulselmans, Koen Herten, Zeynep Kalender, Jean-Christophe Marine, and Stein Aerts. iRegulon: Sequence-based Discovery of Human Regulons. Manuscript in preparation; in any manuscript describing data obtained using Licensed Software.<br/><br/></p>" +
+                "</html>");
+            aboutText.setEditable(false);
+            aboutText.setBackground(null);
+            aboutText.setBorder(null);
+            aboutText.setCaretPosition(0);
+            aboutText.setPreferredSize(new Dimension(550,1600));
+
+            JScrollPane scrollPane = new JScrollPane(aboutText);
+            scrollPane.setPreferredSize(new Dimension(700, 700));
+
+            JOptionPane pane = new JOptionPane(scrollPane, JOptionPane.INFORMATION_MESSAGE);
 
             JDialog dialog = pane.createDialog(null, "About...");
-            dialog.setSize(1400, 900);
             dialog.setVisible(true);
         }
     }

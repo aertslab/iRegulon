@@ -51,7 +51,7 @@ proprietary rights of KU Leuven, except as expressly granted herein.
 
 Publication
 -----------
-The Academic User shall acknowledge KULeuven as the provider of software and shall include a reference to Rekin’s Janky,
+The Academic User shall acknowledge KU Leuven as the provider of software and shall include a reference to Rekin’s Janky,
 Annelien Verfaillie, Bram Van de Sande, Valerie Christiaens, Laura Standaerdt, Gert Hulselmans, Koen Herten,
 Zeynep Kalender, Jean-Christophe Marine, and Stein Aerts. iRegulon: Sequence-based Discovery of Human Regulons.
 Manuscript in preparation; in any manuscript describing data obtained using Licensed Software.

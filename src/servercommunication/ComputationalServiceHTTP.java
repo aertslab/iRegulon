@@ -250,8 +250,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
     @Override
     public URI getLink2GenomeBrowser4EnhancerRegions(AbstractMotif motif) {
-                final StringBuilder builder = new StringBuilder();
-        builder.append(getBundle().getString("URL_UCSC"));
+        final StringBuilder builder = new StringBuilder();
+        builder.append(getBundle().getString("URL_UCSC_Regions_part1"));
+        builder.append(motif.getCandidateTargetGenes().get(0).getSpeciesNomenclature().getAssembly());
+        builder.append(getBundle().getString("URL_UCSC_Regions_part2"));
         builder.append(getBundle().getString("URL_motifBedGenerator"));
         builder.append("?");
         builder.append(generateParameters(motif));

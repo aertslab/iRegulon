@@ -21,11 +21,11 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         }
     }
 
-	public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols");
-	public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI symbols");
-	public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase names");
-	public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature (4, "Drosophila melanogaster, CG-numbers");
-	//public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn");
+	public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols", "hg19");
+	public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI symbols", "mm9");
+	public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase names", "dm3");
+	public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature (4, "Drosophila melanogaster, CG-numbers", "dm3");
+	//public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn", "dm3");
 	public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature();
 
     public static SpeciesNomenclature getNomenclature(final int code) {
@@ -44,15 +44,17 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	
 	private final int code;
 	private final String name;
+    private final String assembly;
     private final List<RankingsDatabase> databases;
 
     private SpeciesNomenclature() {
-        this(-1, "?");
+        this(-1, "?", "?");
     }
 	
-	private SpeciesNomenclature(final int code, final String name) {
+	private SpeciesNomenclature(final int code, final String name, final String assembly) {
 		this.code = code;
 		this.name = name;
+        this.assembly = assembly;
         this.databases = (this.code > 0) ? CODE2DATABASES.get(code): Collections.<RankingsDatabase>emptyList();
         CODE2NOMENCLATURE.put(code, this);
 	}
@@ -64,6 +66,10 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	public int getCode(){
 		return this.code;
 	}
+
+    public String getAssembly(){
+        return this.assembly;
+    }
 
     public List<RankingsDatabase> getDatabases() {
         return databases;

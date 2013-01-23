@@ -22,6 +22,7 @@ import javax.swing.*;
 public final class CytoscapeNetworkUtilities {
     public static final String PLUGIN_VISUAL_NAME = ResourceBundle.getBundle("iRegulon").getString("plugin_visual_name");
 
+    public static final String ASSEMBLY_ATTRIBUTE_NAME = "Assembly";
     public static final String FEATURE_ID_ATTRIBUTE_NAME = "featureID";
     public static final String MOTIF_ATTRIBUTE_NAME = "Motif";
     public static final String REGULATORY_FUNCTION_ATTRIBUTE_NAME = "Regulatory function";
@@ -239,6 +240,7 @@ public final class CytoscapeNetworkUtilities {
 
     public static CyEdge createEdge(CyNetwork network, CyNetworkView view, final CyNode sourceNode, final CyNode targetNode, final GeneIdentifier factor, final AbstractMotif motif, final GeneIdentifier targetGene, final String regulatoryFunction) {
         final CyEdge edge = addEdge(sourceNode, targetNode, network, view, motif == null ? null : motif.getName());
+        setEdgeAttribute(edge, ASSEMBLY_ATTRIBUTE_NAME, targetGene.getSpeciesNomenclature().getAssembly());
 		setEdgeAttribute(edge, REGULATOR_GENE_ATTRIBUTE_NAME, factor.getGeneName());
 		setEdgeAttribute(edge, TARGET_GENE_ATTRIBUTE_NAME, targetGene.getGeneName());
 	    setEdgeAttribute(edge, REGULATORY_FUNCTION_ATTRIBUTE_NAME, regulatoryFunction);

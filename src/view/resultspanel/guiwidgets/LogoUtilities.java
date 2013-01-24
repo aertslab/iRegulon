@@ -14,10 +14,8 @@ public final class LogoUtilities {
     private static final String LOGO_FOLDERNAME = bundle.getString("logo_folder");
     private static final String LOGO_EXTENSION = bundle.getString("logo_extension");
     private static final String LOGO_NOT_AVAILABLE = bundle.getString("logo_not_available");
+    private static final String LOGO_NOT_AVAILABLE_THUMB = bundle.getString("logo_not_available_thumb");
 
-	private static final double IMAGE_HEIGHT = 50.0;
-	private static final double IMAGE_WIDTH = 100.0;
-	
 	private LogoUtilities() {
 	}
 	
@@ -25,12 +23,33 @@ public final class LogoUtilities {
 	    return LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
 	}
 
+    public static java.net.URL getImageFileURL(final String motifName) {
+        java.net.URL imageUrl = LogoUtilities.class.getResource(getImagePath(motifName));
+        if (imageUrl != null) {
+            return imageUrl;
+        } else {
+            Logger.getInstance().error("Couldn't find file: " + getImagePath(motifName));
+            imageUrl = LogoUtilities.class.getResource(LOGO_NOT_AVAILABLE);
+            return imageUrl;
+        }
+    }
+
     private static ImageIcon notAvailableImage() {
         final java.net.URL imageUrl = LogoUtilities.class.getResource(LOGO_NOT_AVAILABLE);
 	    if (imageUrl != null) {
 	        return new ImageIcon(imageUrl);
 	    } else {
             Logger.getInstance().error("Couldn't find file: " + LOGO_NOT_AVAILABLE);
+            return null;
+        }
+    }
+
+    private static ImageIcon notAvailableThumbImage() {
+        final java.net.URL imageUrl = LogoUtilities.class.getResource(LOGO_NOT_AVAILABLE_THUMB);
+        if (imageUrl != null) {
+            return new ImageIcon(imageUrl);
+        } else {
+            Logger.getInstance().error("Couldn't find file: " + LOGO_NOT_AVAILABLE_THUMB);
             return null;
         }
     }
@@ -49,22 +68,22 @@ public final class LogoUtilities {
         final ImageIcon fullIcon = createImageIcon(motifName);
         int w = fullIcon.getIconWidth();
         int h = fullIcon.getIconHeight();
-        double scale = 1.0;
-        if (w >= IMAGE_WIDTH) {
-            scale = w / IMAGE_WIDTH;
-            w = (int) Math.floor(w / scale);
+
+        if (h == 256) {
+            // We got the notAvailable PNG image, use the thumbnail version (48x48 pixels).
+            return notAvailableThumbImage();
+        } else {
+            // When we have a real logo, the height is 188 pixels.
+            // The thumbnail will have a height of 47 pixels.
+            double scale = 4.0;
             h = (int) Math.floor(h / scale);
-        }
-        if (h >= IMAGE_HEIGHT) {
-            scale = h / IMAGE_HEIGHT;
             w = (int) Math.floor(w / scale);
-            h = (int) Math.floor(h / scale);
+            int type = BufferedImage.TYPE_INT_RGB;
+            BufferedImage dst = new BufferedImage(w, h, type);
+            Graphics2D g2 = dst.createGraphics();
+            g2.drawImage(fullIcon.getImage(), 0, 0, w, h, null, null);
+            g2.dispose();
+            return new ImageIcon(dst);
         }
-        int type = BufferedImage.TYPE_INT_RGB;
-        BufferedImage dst = new BufferedImage(w, h, type);
-        Graphics2D g2 = dst.createGraphics();
-        g2.drawImage(fullIcon.getImage(), 0, 0, w, h, null, null);
-        g2.dispose();
-        return new ImageIcon(dst);
     }
 }

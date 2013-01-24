@@ -1,5 +1,7 @@
 package view.resultspanel.guiwidgets;
 
+import view.actions.SaveLoadDialogs;
+
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -14,16 +16,20 @@ import javax.swing.JLabel;
 class LogoThumbnailMouseListener extends MouseAdapter {
     private static final int WAITING_TIME_IN_MS = 700;
 
+    private String MotifName;
+    private java.net.URL fullSizedLogoFileURL;
     private ImageIcon fullSizedLogo;
 	private FullSizedLogoPopup popup;
 
     private final JLabel logoThumbnail;
 	private Timer timer;
-	
-	public LogoThumbnailMouseListener(final ImageIcon fullSizedLogo, final JLabel logoThumbnail){
-		this.fullSizedLogo = fullSizedLogo;
-		this.logoThumbnail = logoThumbnail;
-	}
+
+    public LogoThumbnailMouseListener(final String MotifName, final JLabel logoThumbnail){
+        this.MotifName = MotifName;
+        this.fullSizedLogoFileURL = LogoUtilities.getImageFileURL(MotifName);
+        this.fullSizedLogo = LogoUtilities.createImageIcon(MotifName);
+        this.logoThumbnail = logoThumbnail;
+    }
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
@@ -49,6 +55,18 @@ class LogoThumbnailMouseListener extends MouseAdapter {
             }
         }
 	}
+
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+        // Save the current motif logo to a file when a right click on the logo is detected.
+        if(e.getButton() == MouseEvent.BUTTON3)
+        {
+            if (fullSizedLogoFileURL != null) {
+                SaveLoadDialogs.saveLogo(fullSizedLogoFileURL, MotifName);
+            }
+        }
+    }
 
 	private static class FullSizedLogoPopup extends JFrame {
 		private final ImageIcon fullSizedLogo;

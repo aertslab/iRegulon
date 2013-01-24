@@ -4,6 +4,7 @@ import cytoscape.Cytoscape;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.guiwidgets.CopyToClipboardMouseListener;
+import view.resultspanel.guiwidgets.LogoMouseListener;
 import view.resultspanel.guiwidgets.LogoUtilities;
 import view.resultspanel.motifview.tablemodels.CandidateTargetGeneTableModel;
 import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
@@ -210,7 +211,8 @@ public final class Motif2TFDetailFrame extends JDialog {
 
         final ImageIcon imageIcon = LogoUtilities.createImageIcon(motifName);
         final JLabel logoLabel = new JLabel(imageIcon);
-        logoLabel.addMouseListener(new CopyToClipboardMouseListener(imageIcon));
+        //logoLabel.addMouseListener(new CopyToClipboardMouseListener(imageIcon));
+        logoLabel.addMouseListener(new LogoMouseListener(motifName));
         container.add(logoLabel, cc);
 
         cc.gridy++;

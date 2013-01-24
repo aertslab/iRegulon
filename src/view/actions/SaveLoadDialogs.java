@@ -1,10 +1,6 @@
 package view.actions;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -209,7 +205,105 @@ public class SaveLoadDialogs {
 		}
 		return null;
 	}
-	
+
+    /**
+     * Gives the user a panel for choosing where to save the logo.
+     * @param fullSizedLogoFileURL
+     * @param MotifName
+     */
+    public static boolean saveLogo(java.net.URL fullSizedLogoFileURL, String MotifName){
+        if (fullSizedLogoFileURL == null) {
+            return false;
+        }
+
+        JFrame frame = new JFrame();
+
+        // Create a file chooser.
+        File locFile = CytoscapeInit.getMRUD();
+        String location = "";
+        if (locFile == null){
+            location = "user.home";
+        }else{
+            location = locFile.getPath();
+        }
+        JFileChooser fc = new JFileChooser(new File(location));
+
+        // Display "All Files" filter at the bottom of the list.
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("PNG files (*.png)", "png"));
+        fc.setAcceptAllFileFilterUsed(true);
+
+        fc.setSelectedFile(new File(MotifName + ".png"));
+        int result = fc.showSaveDialog(frame);
+        boolean write = false;
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selFile = fc.getSelectedFile();
+            FileFilter ff = fc.getFileFilter();
+            selFile = new File(selFile.getAbsolutePath());
+            if (!ff.accept(selFile)) {
+                selFile = new File(selFile + ".png");
+            }
+            boolean success;
+            try {
+                success = selFile.createNewFile();
+                if (success) {
+                    // File did not exist and was created.
+                    write = true;
+                } else {
+                    // File already exists.
+                    write = false;
+                    int n = JOptionPane.showConfirmDialog(frame,
+                            "Do you want to overwrite the file '" + selFile.getName() + "'?",
+                            "Overwrite?",
+                            JOptionPane.YES_NO_OPTION);
+                    if (n == 0){
+                        write = true;
+                    }
+
+                }
+                if (write){
+                    byte[] buffer = new byte[8 * 1024];
+                    String LogoFilename = selFile.getAbsolutePath();
+                    try {
+                        InputStream input = fullSizedLogoFileURL.openStream();
+                        OutputStream output = new FileOutputStream(LogoFilename);
+                        try {
+                            output.write(input.read());
+                            int bytesRead;
+                            while ((bytesRead = input.read(buffer)) != -1) {
+                                output.write(buffer, 0, bytesRead);
+                            }
+                        } finally {
+                            input.close();
+                            output.close();
+                        }
+                    } catch (IOException e) {
+                        write = false;
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+                                "<html> " +
+                                        "<body>" +
+                                        "An error has occured while trying to save the logo file '" + selFile.getName() + "'." +
+                                        "</body>" +
+                                        "</html>");
+                    }
+                }
+            } catch (IOException e1) {
+                write = false;
+                e1.printStackTrace();
+                JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+                        "<html> " +
+                                "<body>" +
+                                "An error has occured while creating the file '" + selFile.getName() + "'." +
+                                "</body>" +
+                                "</html>");
+            }
+        }
+
+        return write;
+    }
+
 	public String getSaveName(){
 		return this.saveName;
 	}

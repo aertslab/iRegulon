@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 
 public class LogoThumbnail extends JLabel {
     public static final int THUMBNAIL_HEIGHT = 50;
-	public static final int THUMBNAIL_WIDTH  = 100;
+	public static final int THUMBNAIL_WIDTH  = 200;
 
     private Motif motif;
 	private LogoThumbnailMouseListener curMouseListener;
@@ -37,11 +37,14 @@ public class LogoThumbnail extends JLabel {
     }
 
     private void refresh() {
+        // Center thumbnail.
+        setHorizontalAlignment(JLabel.CENTER);
+
         if (curMouseListener != null) removeMouseListener(curMouseListener);
 
         if (hasMotif()) {
             setIcon(LogoUtilities.createResizedImageIcon(getMotif().getName()));
-            curMouseListener = new LogoThumbnailMouseListener(LogoUtilities.createImageIcon(getMotif().getName()), this);
+            curMouseListener = new LogoThumbnailMouseListener(getMotif().getName(), this);
         } else {
             setIcon(null);
             curMouseListener = null;

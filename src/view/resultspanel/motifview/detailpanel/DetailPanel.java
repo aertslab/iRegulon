@@ -67,6 +67,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		this.jlbMotif.setEnabled(true);
 		this.jlbMotif.setText("");
 		Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 1);
+		this.jlbMotif.setHorizontalAlignment(JLabel.CENTER);
 		this.jlbMotif.setMaximumSize(maximumSize);
 		this.jlbMotif.setMinimumSize(maximumSize);
 
@@ -82,6 +83,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		this.jlbDescription = new JLabel();
 		this.jlbDescription.setEnabled(true);
 		this.jlbDescription.setText("");
+		this.jlbDescription.setHorizontalAlignment(JLabel.CENTER);
 		this.jlbDescription.setMaximumSize(maximumSize);
 		this.jlbDescription.setMinimumSize(maximumSize);
 		

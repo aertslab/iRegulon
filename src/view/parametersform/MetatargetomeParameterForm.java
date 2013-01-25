@@ -9,6 +9,7 @@ import view.actions.QueryMetatargetomeAction;
 import view.resultspanel.Refreshable;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -225,7 +226,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         cc.insets = new Insets(MARGIN_IN_PIXELS, 0, 0, MARGIN_IN_PIXELS);
         add(transcriptionFactorCB, cc);
 
-        final JLabel speciesNomenclatureLB = new JLabel("Species and nomemclature:");
+        final JLabel speciesNomenclatureLB = new JLabel("Species and Gene nomenclature:");
         speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(nomenclature2factors.keySet()));
         speciesNomenclatureLB.setLabelFor(speciesNomenclatureCB);
 
@@ -244,89 +245,115 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
         add(speciesNomenclatureCB, cc);
 
+        cc.gridx = 0; cc.gridy = 2;
+        cc.gridwidth = 2;
+        cc.fill=GridBagConstraints.HORIZONTAL;
+        final GridBagConstraints DBcc = new GridBagConstraints();
+        final JPanel DBpanel = new JPanel(new GridBagLayout());
+        final TitledBorder DBborder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Database");
+        DBborder.setTitleJustification(TitledBorder.LEFT);
+        DBborder.setTitlePosition(TitledBorder.CENTER);
+        DBpanel.setBorder(DBborder);
+
         final JLabel databasesLB = new JLabel("Databases:");
         databaseList = new JList(new TargetomeDatabaseListModel(TargetomeDatabase.getAllDatabases()));
         databasesLB.setLabelFor(databaseList);
         databaseList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        cc.gridx = 0; cc.gridy = 2;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.NONE;
-        cc.anchor = GridBagConstraints.LINE_START;
-        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
-        add(databasesLB, cc);
+        DBcc.gridx = 0; DBcc.gridy = 0;
+        DBcc.gridwidth = 1; DBcc.gridheight = 1;
+        DBcc.weightx = 0.0; DBcc.weighty = 0.0;
+        DBcc.fill = GridBagConstraints.NONE;
+        DBcc.anchor = GridBagConstraints.LINE_START;
+        DBcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
+        DBpanel.add(databasesLB, DBcc);
 
-        cc.gridx++; cc.gridy = 2;
-        cc.gridwidth = 1; cc.gridheight = 2;
-        cc.weightx = 1.0; cc.weighty = 1.0;
-        cc.fill = GridBagConstraints.BOTH;
-        cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
-        add(new JScrollPane(databaseList), cc);
+        DBcc.gridx++; DBcc.gridy = 0;
+        DBcc.gridwidth = 1; DBcc.gridheight = 1;
+        DBcc.weightx = 1.0; DBcc.weighty = 1.0;
+        DBcc.fill = GridBagConstraints.BOTH;
+        DBcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
+        JScrollPane DBscroll = new JScrollPane(databaseList);
+        DBscroll.setPreferredSize(new Dimension(DBscroll.getWidth() , 70));
+        DBpanel.add(DBscroll, DBcc);
 
         final JLabel occurenceCountLimitLB = new JLabel("Occurence count threshold:");
         occurenceCountLimitTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_THRESHOLD));
 
-        cc.gridx = 0; cc.gridy = 4;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.NONE;
-        cc.anchor = GridBagConstraints.LINE_START;
-        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
-        add(occurenceCountLimitLB, cc);
+        DBcc.gridx = 0; DBcc.gridy = 1;
+        DBcc.gridwidth = 1; DBcc.gridheight = 1;
+        DBcc.weightx = 0.0; DBcc.weighty = 0.0;
+        DBcc.fill = GridBagConstraints.NONE;
+        DBcc.anchor = GridBagConstraints.LINE_START;
+        DBcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
+        DBpanel.add(occurenceCountLimitLB, DBcc);
 
-        cc.gridx++; cc.gridy = 4;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-        cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
-        add(occurenceCountLimitTF, cc);
+        DBcc.gridx++; DBcc.gridy = 1;
+        DBcc.gridwidth = 1; DBcc.gridheight = 1;
+        DBcc.weightx = 1.0; DBcc.weighty = 0.0;
+        DBcc.fill = GridBagConstraints.HORIZONTAL;
+        DBcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
+        DBpanel.add(occurenceCountLimitTF, DBcc);
 
-        final JLabel maxNodeCountLB = new JLabel("Max. number nodes (approx.):");
+        add(DBpanel, cc);
+
+        cc.gridx = 0; cc.gridy = 3;
+        cc.gridwidth = 2;
+        cc.fill=GridBagConstraints.HORIZONTAL;
+        final GridBagConstraints NWcc = new GridBagConstraints();
+        final JPanel NWpanel = new JPanel(new GridBagLayout());
+        final TitledBorder NWborder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Network");
+        NWborder.setTitleJustification(TitledBorder.LEFT);
+        NWborder.setTitlePosition(TitledBorder.CENTER);
+        NWpanel.setBorder(NWborder);
+
+        final JLabel maxNodeCountLB = new JLabel("Number nodes (approx.):");
         maxNodeCountTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT));
 
-        cc.gridx = 0; cc.gridy = 5;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.NONE;
-        cc.anchor = GridBagConstraints.LINE_START;
-        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
-        add(maxNodeCountLB, cc);
+        NWcc.gridx = 0; NWcc.gridy = 0;
+        NWcc.gridwidth = 1; NWcc.gridheight = 1;
+        NWcc.weightx = 0.0; NWcc.weighty = 0.0;
+        NWcc.fill = GridBagConstraints.NONE;
+        NWcc.anchor = GridBagConstraints.LINE_START;
+        NWcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
+        NWpanel.add(maxNodeCountLB, NWcc);
 
-        cc.gridx++; cc.gridy = 5;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-        cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
-        add(maxNodeCountTF, cc);
+        NWcc.gridx++; NWcc.gridy = 0;
+        NWcc.gridwidth = 1; NWcc.gridheight = 1;
+        NWcc.weightx = 1.0; NWcc.weighty = 0.0;
+        NWcc.fill = GridBagConstraints.HORIZONTAL;
+        NWcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
+        NWpanel.add(maxNodeCountTF, NWcc);
 
         createNewNetworkCB = new JCheckBox("Create new network", true);
 
-        cc.gridx = 0; cc.gridy = 6;
-        cc.gridwidth = 2; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.NONE;
-        cc.anchor = GridBagConstraints.LINE_START;
-        cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, MARGIN_IN_PIXELS);
-        add(createNewNetworkCB, cc);
+        NWcc.gridx = 0; NWcc.gridy = 1;
+        NWcc.gridwidth = 2; NWcc.gridheight = 1;
+        NWcc.weightx = 0.0; NWcc.weighty = 0.0;
+        NWcc.fill = GridBagConstraints.NONE;
+        NWcc.anchor = GridBagConstraints.LINE_START;
+        NWcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, MARGIN_IN_PIXELS);
+        NWpanel.add(createNewNetworkCB, NWcc);
 
         final JLabel attributeNameLB = new JLabel("Attribute name:");
         attributeNameCB = new JComboBox();
 
-        cc.gridx = 0; cc.gridy = 7;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.NONE;
-        cc.anchor = GridBagConstraints.LINE_START;
-        cc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
-        add(attributeNameLB, cc);
+        NWcc.gridx = 0; NWcc.gridy = 2;
+        NWcc.gridwidth = 1; NWcc.gridheight = 1;
+        NWcc.weightx = 0.0; NWcc.weighty = 0.0;
+        NWcc.fill = GridBagConstraints.NONE;
+        NWcc.anchor = GridBagConstraints.LINE_START;
+        NWcc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
+        NWpanel.add(attributeNameLB, NWcc);
 
-        cc.gridx++; cc.gridy = 7;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-        cc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
-        add(attributeNameCB, cc);
+        NWcc.gridx++; NWcc.gridy = 2;
+        NWcc.gridwidth = 1; NWcc.gridheight = 1;
+        NWcc.weightx = 1.0; NWcc.weighty = 0.0;
+        NWcc.fill = GridBagConstraints.HORIZONTAL;
+        NWcc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
+        NWpanel.add(attributeNameCB, NWcc);
+
+        add(NWpanel, cc);
     }
 
     private void registerListeners() {

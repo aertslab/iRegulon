@@ -4,7 +4,7 @@ import domainmodel.Motif;
 
 import java.awt.*;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
 
 public class LogoThumbnail extends JLabel {
@@ -44,6 +44,10 @@ public class LogoThumbnail extends JLabel {
 
         if (hasMotif()) {
             setIcon(LogoUtilities.createResizedImageIcon(getMotif().getName()));
+            ImageIcon fullSizedLogo = LogoUtilities.createImageIcon(getMotif().getName());
+            // Left click + Ctrl-C will copy the logo to the clipboard.
+            this.addMouseListener(new CopyToClipboardMouseListener(fullSizedLogo));
+            // Right click will save the logo to a PNG file.
             curMouseListener = new LogoThumbnailMouseListener(getMotif().getName(), this);
         } else {
             setIcon(null);

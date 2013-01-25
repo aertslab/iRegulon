@@ -211,7 +211,9 @@ public final class Motif2TFDetailFrame extends JDialog {
 
         final ImageIcon imageIcon = LogoUtilities.createImageIcon(motifName);
         final JLabel logoLabel = new JLabel(imageIcon);
-        //logoLabel.addMouseListener(new CopyToClipboardMouseListener(imageIcon));
+        // Left click + Ctrl-C will copy the logo to the clipboard.
+        logoLabel.addMouseListener(new CopyToClipboardMouseListener(imageIcon));
+        // Right click will save the logo to a PNG file.
         logoLabel.addMouseListener(new LogoMouseListener(motifName));
         container.add(logoLabel, cc);
 

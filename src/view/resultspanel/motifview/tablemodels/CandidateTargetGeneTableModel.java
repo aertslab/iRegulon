@@ -13,8 +13,8 @@ import java.util.List;
 
 public final class CandidateTargetGeneTableModel extends AbstractTableModel implements CandidateTargetGeneTableModelIF {
     private static final String[] COLUMN_NAMES = {"Rank", "Target Name"};
-    private static final String[] COLUMN_TOOLTIPS = {"The rank of the target.",
-            "The name of the predicted target."};
+    private static final String[] COLUMN_TOOLTIPS = {"Rank of the target.",
+            "Name of the predicted target."};
         private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 2);
 
     private final AbstractMotif motif;

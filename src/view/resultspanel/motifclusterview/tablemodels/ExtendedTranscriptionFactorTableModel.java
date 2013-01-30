@@ -20,11 +20,11 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
             "Motif Similarity (FDR)" };
     private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 2, 3, 3, 3);
 	private static final String[] COLUMN_TOOLTIPS = {
-            "Is the currently selected motif annotated for this factor.",
-            "The gene ID of the predicted transcription factor",
+            "Is the currently selected motif annotated for this factor?",
+            "Gene ID of the predicted transcription factor.",
             "Number of enriched motifs annotated with this factor.",
-			"The orthologous identity as fraction",
-			"The motif similarity FDR"};
+			"Orthologous identity as fraction.",
+			"Motif similarity (false discovery rate)."};
 
     private final AbstractMotif motif;
     private List<Motif> selectedMotifs = Collections.emptyList();

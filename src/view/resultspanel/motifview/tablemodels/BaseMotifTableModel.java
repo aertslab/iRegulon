@@ -12,15 +12,18 @@ import view.resultspanel.MotifTableModel;
 
 public class BaseMotifTableModel extends AbstractTableModel implements MotifTableModel {
     private static final String[] COLUMN_NAMES = {"Rank", "Enriched Motif ID",
-            "NES", "AUC", "ClusterCode", "#Targets", "#TF"};
+            "NES", "AUC", "ClusterCode", "#Targets", "#TFs"};
     private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 2, 2, 3, 2, 2);
     private static final List<String> COLUMN_TOOLTIPS = Arrays.asList(
-            "<html> The rank of the motif. <br/> The motif is ranked using the NEScore </html>",
-            "<html>The ID of the motif</html>", "<html>The Normalized Enrichment Score. <br/>How higher the score how better. </html>",
-            "<html>The Area Under the Curve. <br/> This value repressents the area under the ROC curve. </html>",
-            "<html>This Code represents the cluster. <br/> Clusters are numbered as cluster 1 is the cluster with the highest scored motif, <br/> cluster 2 is the secund found cluster. </html>",
-            "<html>The amount of unique targets <br/> (it is possible that multiple targets appear multiple times in the list, <br/> those are only counted once). </html>",
-            "<html>The amount of unique transcription factors for this motif.</html>");
+            "<html>Rank of the motif.<br/>The motif is ranked using the NEScore.</html>",
+            "<html>ID of the motif.</html>",
+            "<html>Normalized Enrichment Score of the motif.<br/>The higher the score, the better.</html>",
+            "<html>Area Under the Curve.<br/>AUC is used for the calculation of the enrichment score and represents the area under the ROC curve.</html>",
+            "<html>The enriched motifs are clustered by similarity and similar motifs that belong to<br/>" +
+                  "the same cluster will have the same cluster code and the same background color.<br/>" +
+                  "The cluster code is given by order of maximal NES per motif cluster.</html>",
+            "<html>Number of unique target genes selected for the given motif.</html>",
+            "<html>Number of transcription factors that can be associated by the motif2TF algorithm to the given motif.</html>");
 
     private final List<Motif> motifs;
 

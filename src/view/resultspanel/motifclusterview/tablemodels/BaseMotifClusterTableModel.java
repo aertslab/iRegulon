@@ -12,7 +12,12 @@ import javax.swing.table.AbstractTableModel;
 public final class BaseMotifClusterTableModel extends AbstractTableModel implements MotifTableModel {
     private static final String[] COLUMN_NAMES = {"ClusterCode", "TF", "NES", "#Targets", "#Motifs"};
     private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1, 1, 1);
-    private static final List<String> COLUMN_TOOLTIPS = Arrays.asList("", "", "", "", "");
+    private static final List<String> COLUMN_TOOLTIPS = Arrays.asList(
+            "Each clustercode contains enriched motifs that are clustered by similarity.",
+            "ID of the transcription factor.",
+            "The highest enrichment score for a motif that is part of the current clustercode.",
+            "Number of unique target genes detected by the enriched motifs associated to the given transcription factor (UNION).",
+            "Number of motifs that can be associated by the motif2TF algorithm to the given transcription factor.");
 
     private final List<MotifCluster> clusters;
 

@@ -12,9 +12,10 @@ import java.util.List;
 
 public final class ExtendedCandidateTargetGeneTableModel extends AbstractTableModel implements CandidateTargetGeneTableModelIF {
     private static final String[] COLUMN_NAMES = {"Rank", "#Motifs", "Target Name"};
-    private static final String[] COLUMN_TOOLTIPS = {"The rank of the target.",
-            "The number of motifs this gene is associated with.",
-            "The name of the predicted target."};
+    private static final String[] COLUMN_TOOLTIPS = {
+            "Maximum rank of the target.",
+            "Number of motifs this gene is associated with.",
+            "Name of the predicted target."};
         private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 3, 2);
 
     private final AbstractMotif motif;

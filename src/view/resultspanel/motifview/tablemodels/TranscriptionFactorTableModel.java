@@ -15,11 +15,12 @@ public class TranscriptionFactorTableModel extends AbstractTableModel implements
             "Motif Similarity (FDR)" };
     private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(2, 3, 3);
 	private static final String[] COLUMN_TOOLTIPS = {
-            "The gene ID of the predicted transcritpion factor",
-			"The orthologous identity as fraction",
-			"The motif similarity FDR"};
+            "Gene ID of the predicted transcription factor.",
+            "Orthologous identity as fraction.",
+            "Motif similarity (false discovery rate)."};
 
-    private final AbstractMotif motif;
+
+private final AbstractMotif motif;
 
 	public TranscriptionFactorTableModel(final AbstractMotif motif) {
 		this.motif = motif;

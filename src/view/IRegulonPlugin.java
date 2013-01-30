@@ -64,7 +64,6 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         menu.add(new JMenuItem(new OpenParametersFormAction()));
         final JMenuItem menuItem = new JMenuItem(new OpenQueryMetatargetomeFormAction(QueryMetatargetomeAction.DEFAULT_PARAMETERS, null));
-        menuItem.setIcon(null);
         menu.add(menuItem);
 
         menu.addSeparator();

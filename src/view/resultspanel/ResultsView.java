@@ -4,10 +4,10 @@ import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import domainmodel.*;
 import view.IRegulonResourceBundle;
+import view.actions.LoadResultsAction;
 import view.actions.OpenQueryMetatargetomeFormAction;
 import view.actions.QueryMetatargetomeAction;
 import view.parametersform.DefaultMetatargetomeParameters;
-import view.parametersform.MetatargetomeParameters;
 import view.resultspanel.guiwidgets.SummaryLabel;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifview.EnrichedMotifsView;
@@ -18,9 +18,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
-
-import javax.management.Query;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -235,7 +232,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         c.anchor = GridBagConstraints.LINE_START;
         toolBar.add(new SummaryLabel(getResults()), c);
 
-        c.gridx = 7; c.gridy = 0;
+        c.gridx = 8; c.gridy = 0;
         c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
@@ -277,35 +274,45 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         c.gridx = 3; c.gridy = 1;
         c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.LINE_END;
-		final JLabel labelTF = new JLabel("Transcription Factor");
-		toolBar.add(labelTF, c);
+        c.anchor = GridBagConstraints.WEST;
+        createNewCombinedRegulatoryNetworkAction = new CreateNewCombinedRegulatoryNetworkAction(results.getParameters().getAttributeName(), this);
+        JButton drawMergedButton = new JButton(createNewCombinedRegulatoryNetworkAction);
+        drawMergedButton.setText("");
+        toolBar.add(drawMergedButton, c);
 
         c.gridx = 4; c.gridy = 1;
+        c.weightx = 0.0; c.weighty = 0.0;
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.LINE_END;
+		final JLabel labelTF = new JLabel("TF");
+        labelTF.setToolTipText("Transcription factor");
+		toolBar.add(labelTF, c);
+
+        c.gridx = 5; c.gridy = 1;
 		c.weightx = 1.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
 		transcriptionFactorComboBox.setEditable(true);
+        transcriptionFactorComboBox.setToolTipText("List of predicted transcription factors.");
         toolBar.add(transcriptionFactorComboBox, c);
 
-        c.gridx = 5; c.gridy = 1;
-		c.weightx = 0.0; c.weighty = 0.0;
+        c.gridx = 6; c.gridy = 1;
+        c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        createNewCombinedRegulatoryNetworkAction = new CreateNewCombinedRegulatoryNetworkAction(results.getParameters().getAttributeName(), this);
-		JButton drawMergedButton = new JButton(createNewCombinedRegulatoryNetworkAction);
-        drawMergedButton.setText("");
-        toolBar.add(drawMergedButton, c);
+        final JButton buttonLoad = new JButton(new LoadResultsAction());
+        buttonLoad.setText("");
+        toolBar.add(buttonLoad, c);
 
-        c.gridx = 6; c.gridy = 1;
-		c.weightx = 0.0; c.weighty = 0.0;
+        c.gridx = 7; c.gridy = 1;
+        c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
         final JButton buttonSave = new JButton(new SaveResultsAction(this));
         buttonSave.setText("");
         toolBar.add(buttonSave, c);
 
-        c.gridx = 7; c.gridy = 1;
+        c.gridx = 8; c.gridy = 1;
 		c.weightx = 0.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
@@ -325,13 +332,15 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 		c.weightx = 1.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
+        filterAttributeCB.setToolTipText("Select feature to filter on.");
 		toolBar.add(filterAttributeCB, c);
 
 		c.gridx = 4; c.gridy = 2;
-		c.gridwidth = 4;
+		c.gridwidth = 5;
 		c.weightx = 1.0; c.weighty = 0.0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.CENTER;
+        filterValueTF.setToolTipText("Filter the main view table on motif, transcription factor or target gene.");
 		toolBar.add(filterValueTF, c);
 
         return toolBar;

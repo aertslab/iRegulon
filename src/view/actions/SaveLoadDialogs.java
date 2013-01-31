@@ -50,7 +50,7 @@ public class SaveLoadDialogs {
         if (extension == PersistenceUtilities.NATIVE_FILE_EXTENSION) {
             fc.addChoosableFileFilter(new FileNameExtensionFilter("iRegulon files (*.irf)", "irf"));
         } else {
-            fc.addChoosableFileFilter(new FileNameExtensionFilter("iRegulon tab-delimited files (*.txt)", "txt"));
+            fc.addChoosableFileFilter(new FileNameExtensionFilter("iRegulon tab-delimited files (*.tsv)", "tsv"));
         }
         fc.setAcceptAllFileFilterUsed(true);
 

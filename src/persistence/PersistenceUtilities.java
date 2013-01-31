@@ -12,7 +12,7 @@ import domainmodel.*;
 
 public class PersistenceUtilities {
     public static final String NATIVE_FILE_EXTENSION = ".irf";
-    public static final String TSV_FILE_EXTENSION = ".txt";
+    public static final String TSV_FILE_EXTENSION = ".tsv";
 
 	private PersistenceUtilities() {
 	}

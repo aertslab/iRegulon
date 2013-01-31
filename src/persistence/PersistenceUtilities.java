@@ -75,22 +75,46 @@ public class PersistenceUtilities {
 	
 	public static String convertResultsToTSV(final Results results) {
         final Collection<Motif> motifs = results.getMotifs();
-		//Header
-		String tabfile = "Rank" + "\t"
-						+ "Motif id" + "\t"
-						+ "AUC" + "\t"
-						+ "NES" + "\t"
-						+ "ClusterCode" + "\t"
-						+ "Transcription factor" + "\t"
-						+ "Target genes" + "\n";
+
+        if (!results.hasParameters()) return "";
+
+        // iRegulon parameters.
+        String tabfile = "Name\t" + results.getName() + "\n"
+                            + "Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n"
+                            + "Mimumum NEScore\t" + results.getEScore() + "\n"
+                            + "Rank threshold for visualisation\t" + results.getThresholdForVisualisation() + "\n"
+                            + "ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
+                            + "Minimum orthologous identity (%)\t" + results.getMinOrthologous() + "\n"
+                            + "Maximum motif similarity (FDR)\t" + results.getMaxMotifSimilarityFDR() + "\n"
+                            + "Database\t" + results.getDatabaseName() + "\n";
+
+        if (results.isRegionBased()) {
+            tabfile += "Overlap fraction\t" + results.getOverlap() + "\n";
+            if (results.isDelineationBased()) {
+                tabfile += "Putative regulatory region\t" + results.getDelineationName() + "\n";
+            } else {
+                tabfile += "Putative regulatory region\t[TSS-" + results.getUpstream() + "kb,TSS+" + results.getDownstream() + "kb]\n";
+            }
+        }
+
+		// Column headers.
+		tabfile += "\nRank\t"
+					+ "Motif id\t"
+					+ "AUC\t"
+					+ "NES\t"
+					+ "ClusterCode\t"
+					+ "Transcription factor\t"
+					+ "Target genes\n";
+
+        // Print the info for one motif on one line.
 		for (Motif motif : motifs){
-			//Motif specifications
+			// Motif info.
 			tabfile += motif.getRank() + "\t"
 					+ motif.getName() + "\t"
 					+ motif.getAUCValue() + "\t"
 					+ motif.getNEScore() + "\t"
 					+ motif.getClusterCode() + "\t";
-			// a komma seperated list of TFs
+			// A comma separated list of transcription factors.
 			Iterator<TranscriptionFactor> tfIterator = motif.getTranscriptionFactors().iterator();
 			while (tfIterator.hasNext()){
 				tabfile += tfIterator.next().getName();
@@ -99,7 +123,7 @@ public class PersistenceUtilities {
 				}
 			}
 			tabfile += "\t";
-			// a komma seperated list of TGs
+			// A comma separated list of target genes.
 			Iterator<CandidateTargetGene> tgIterator = motif.getCandidateTargetGenes().iterator();
 			while (tgIterator.hasNext()){
 				tabfile += tgIterator.next().getGeneName();
@@ -107,7 +131,7 @@ public class PersistenceUtilities {
 					tabfile += ",";
 				}
 			}
-			// end of the line (of the motif)
+			// End of the motif line.
 			tabfile += "\n";
 		}
 		return tabfile;

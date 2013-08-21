@@ -22,13 +22,16 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     private static final String MOTIF_COLLECTION_TAG_NAME = "motif-collection";
     private static final String DELINEATION_TAG_NAME = "delineation";
     private static final String NUMBER_OF_SPECIES_TAG_NAME = "number-of-species";
+    private static final String DEFAULT_NES_THRESHOLD_TAG_NAME = "default-nes-threshold";
     private static final String DEFAULT_AUC_THRESHOLD_TAG_NAME = "default-auc-threshold";
     private static final String DEFAULT_RANK_THRESHOLD_TAG_NAME = "default-rank-threshold";
     private static final String MAPPINGS_TAG_NAME = "mappings";
 
     private static final String ID_ATTRIBUTE_NAME = "id";
     private static final String REF_ID_ATTRIBUTE_NAME = "refid";
+    private static final String DEFAULT_ATTRIBUTE_NAME = "default";
 
+    private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_escore"));
     private static final float DEFAULT_AUC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
     private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
 
@@ -70,18 +73,26 @@ public class RankingsDatabase extends IRegulonResourceBundle {
 
         final int speciesCount = Integer.parseInt(readValue(childNodes, NUMBER_OF_SPECIES_TAG_NAME));
 
-        String value = readValue(childNodes, DEFAULT_AUC_THRESHOLD_TAG_NAME);
+        String value = readValue(childNodes, DEFAULT_NES_THRESHOLD_TAG_NAME);
+        final float nesThreshold = value != null
+                ? Float.parseFloat(value)
+                : DEFAULT_NES_THRESHOLD;
+
+        value = readValue(childNodes, DEFAULT_AUC_THRESHOLD_TAG_NAME);
         final float aucThreshold = value != null
                 ? Float.parseFloat(value)
                 : DEFAULT_AUC_THRESHOLD;
+
         value = readValue(childNodes, DEFAULT_RANK_THRESHOLD_TAG_NAME);
         final int rankThreshold = value != null
                 ? Integer.parseInt(value)
                 : DEFAULT_RANK_THRESHOLD;
 
+        Delineation delineationDefault = new Delineation("", "");
+
         if (Type.GENE.equals(type)) {
             final GenePutativeRegulatoryRegion regulatoryRegion = GenePutativeRegulatoryRegion.forCode(readAttribute(childNodes, DELINEATION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
-            return new RankingsDatabase(code, name, type, nomenclatureCode, collection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), aucThreshold, rankThreshold);
+            return new RankingsDatabase(code, name, type, nomenclatureCode, collection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else if (Type.REGION.equals(type)) {
             final List<Delineation> delineations = new ArrayList<Delineation>();
             final NodeList mappings = findElement(childNodes, MAPPINGS_TAG_NAME);
@@ -89,10 +100,14 @@ public class RankingsDatabase extends IRegulonResourceBundle {
                 final Node mapping = mappings.item(i);
                 if (mapping instanceof Element) {
                     final Element child = (Element) mapping;
-                    delineations.add(new Delineation(child.getAttribute(ID_ATTRIBUTE_NAME), child.getTextContent().trim()));
+                    final Delineation delineationCurrent = new Delineation(child.getAttribute(ID_ATTRIBUTE_NAME), child.getTextContent().trim());
+                    delineations.add(delineationCurrent);
+                    if (child.hasAttribute(DEFAULT_ATTRIBUTE_NAME) && child.getAttribute(DEFAULT_ATTRIBUTE_NAME).toLowerCase().equals("true")) {
+                        delineationDefault = delineationCurrent;
+                    }
                 }
             }
-            return new RankingsDatabase(code, name, type, nomenclatureCode, collection, speciesCount, GenePutativeRegulatoryRegion.UNKNOWN, delineations, aucThreshold, rankThreshold);
+            return new RankingsDatabase(code, name, type, nomenclatureCode, collection, speciesCount, GenePutativeRegulatoryRegion.UNKNOWN, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else {
           throw new IllegalStateException();
         }
@@ -140,10 +155,12 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     private final int speciesCount;
     private final GenePutativeRegulatoryRegion putativeRegulatoryRegion;
     private final List<Delineation> gene2regionDelineations;
+    private final Delineation delineationDefault;
+    private final float NESvalue;
 	private final float AUCvalue;
 	private final int visualisationValue;
 
-    public RankingsDatabase(String code, String name, Type type, int speciesNomenclature, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, float AUCvalue, int visualisationValue) {
+    public RankingsDatabase(String code, String name, Type type, int speciesNomenclature, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
         this.code = code;
         this.name = name;
         this.type = type;
@@ -152,14 +169,16 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         this.speciesCount = speciesCount;
         this.putativeRegulatoryRegion = putativeRegulatoryRegion;
         this.gene2regionDelineations = gene2regionDelineations;
+        this.delineationDefault = delineationDefault;
+        this.NESvalue = NESvalue;
         this.AUCvalue = AUCvalue;
         this.visualisationValue = visualisationValue;
     }
 
-    public RankingsDatabase(String code, String name, float AUCvalue, int visualisationValue) {
-		this(code, name, Type.GENE, -1, MotifCollection.UNKNOWN, 0, GenePutativeRegulatoryRegion.UNKNOWN, Collections.<Delineation>emptyList(), AUCvalue, visualisationValue);
+    public RankingsDatabase(String code, String name, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
+		this(code, name, Type.GENE, -1, MotifCollection.UNKNOWN, 0, GenePutativeRegulatoryRegion.UNKNOWN, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
 	}
-	
+
 	public String getCode(){
 		return this.code;
 	}
@@ -190,6 +209,14 @@ public class RankingsDatabase extends IRegulonResourceBundle {
 
     public List<Delineation> getGene2regionDelineations() {
         return gene2regionDelineations;
+    }
+
+    public Delineation getDelineationDefault(){
+        return this.delineationDefault;
+    }
+
+    public float getNESvalue(){
+        return this.NESvalue;
     }
 
     public float getAUCvalue(){

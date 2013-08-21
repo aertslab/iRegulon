@@ -172,6 +172,10 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	
 	private void refreshEscore(){
 		this.txtEscore.setBackground(Color.WHITE);
+        if (this.changedDatabase){
+            RankingsDatabase dat = (RankingsDatabase) this.databaseCB.getSelectedItem();
+            this.txtEscore.setText("" + dat.getNESvalue());
+        }
 		try{
 			if (this.txtEscore.getText().isEmpty() || 1.5 > Float.parseFloat(this.txtEscore.getText())){
 				this.canSubmit = false;
@@ -355,7 +359,11 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		for (Delineation key : database.getGene2regionDelineations()){
 			this.jcbDelineation.addItem(key);
 		}
-		if (database.getGene2regionDelineations().contains(curDelineation)){
+        if (this.changedDatabase){
+            if (database.getGene2regionDelineations().contains(database.getDelineationDefault())){
+                this.jcbDelineation.setSelectedItem(database.getDelineationDefault());
+            }
+        }else if (database.getGene2regionDelineations().contains(curDelineation)){
 			this.jcbDelineation.setSelectedItem(curDelineation);
 		}
 	}

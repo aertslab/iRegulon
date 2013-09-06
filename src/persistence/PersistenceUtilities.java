@@ -86,7 +86,7 @@ public class PersistenceUtilities {
                 + "; Minimum NEScore\t" + results.getEScore() + "\n"
                 + "; Rank threshold for visualization\t" + results.getThresholdForVisualisation() + "\n"
                 + "; ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
-                + "; Minimum % identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
+                + "; Minimum identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
                 + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n"
                 + "; Database\t" + results.getDatabaseName() + "\n");
 

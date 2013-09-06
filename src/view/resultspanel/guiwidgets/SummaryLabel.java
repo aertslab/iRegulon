@@ -38,11 +38,11 @@ public class SummaryLabel extends JLabel {
         builder.append(results.getROCthresholdAUC());
         builder.append("<br/>");
 
-        builder.append("<b>Minimum orthologous identity (%):</b> ");
+        builder.append("<b>Minimum identity between orthologous genes:</b> ");
         builder.append(results.getMinOrthologous());
         builder.append("<br/>");
 
-        builder.append("<b>Maximum motif similarity (FDR):</b> ");
+        builder.append("<b>Maximum false discovery rate (FDR) on motif similarity:</b> ");
         builder.append(results.getMaxMotifSimilarityFDR());
         builder.append("<br/>");
 

@@ -621,8 +621,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 		panelMotif2TF.setBorder(borderMotif2TF);
 		int lineY = 0;
 
-		JLabel jtl = new JLabel("Minimum orthologous identity:");
-		jtl.setToolTipText("<html>Choose the minimal orthologous identity.<br/>" +
+		JLabel jtl = new JLabel("Minimum identity between orthologous genes:");
+		jtl.setToolTipText("<html>Choose the minimum identity between orthologous genes.<br/>" +
                 "How closer to 0, how more orthologous the transcription factor will be to the gene for which an enriched motif was found.<br/>" +
                 "(Value must be between 0 and 1).</html>");
 		cMotif2TF.gridx = 0;
@@ -651,8 +651,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 		 * 		SS
 		 * SSSSSSS
 		 */
-		jtl = new JLabel("Maximum motif similarity FDR:");
-		jtl.setToolTipText("<html>Choose the maximum motif similarity FDR. <br/>" +
+		jtl = new JLabel("Maximum false discovery rate (FDR) on motif similarity:");
+		jtl.setToolTipText("<html>Choose the Maximum false discovery rate (FDR) on motif similarity.<br/>" +
                 "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +
                 "(Value must be between 0 and 1).</html>");
 		cMotif2TF.gridx = 0;

@@ -16,8 +16,8 @@ public class TranscriptionFactorTableModel extends AbstractTableModel implements
     private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(2, 3, 3);
 	private static final String[] COLUMN_TOOLTIPS = {
             "Gene ID of the predicted transcription factor.",
-            "Orthologous identity as fraction.",
-            "Motif similarity (false discovery rate)."};
+            "Minimum identity between orthologous genes.",
+            "Maximum false discovery rate (FDR) on motif similarity."};
 
 
 private final AbstractMotif motif;

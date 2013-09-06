@@ -23,8 +23,8 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
             "Is the currently selected motif annotated for this factor?",
             "Gene ID of the predicted transcription factor.",
             "Number of enriched motifs annotated with this factor.",
-			"Orthologous identity as fraction.",
-			"Motif similarity (false discovery rate)."};
+			"Minimum identity between orthologous genes.",
+			"Maximum false discovery rate (FDR) on motif similarity."};
 
     private final AbstractMotif motif;
     private List<Motif> selectedMotifs = Collections.emptyList();

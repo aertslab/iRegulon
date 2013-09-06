@@ -72,68 +72,74 @@ public class PersistenceUtilities {
             throw new LoadException("The IRF file has an invalid format.", e);
         }
 	}
-	
-	public static String convertResultsToTSV(final Results results) {
+
+    public static String convertResultsToTSV(final Results results) {
         final Collection<Motif> motifs = results.getMotifs();
 
         if (!results.hasParameters()) return "";
 
-        // iRegulon parameters.
-        String tabfile = "Name\t" + results.getName() + "\n"
-                            + "Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n"
-                            + "Mimumum NEScore\t" + results.getEScore() + "\n"
-                            + "Rank threshold for visualisation\t" + results.getThresholdForVisualisation() + "\n"
-                            + "ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
-                            + "Minimum orthologous identity (%)\t" + results.getMinOrthologous() + "\n"
-                            + "Maximum motif similarity (FDR)\t" + results.getMaxMotifSimilarityFDR() + "\n"
-                            + "Database\t" + results.getDatabaseName() + "\n";
+        StringBuilder results_tsv_builder = new StringBuilder();
+        
+        /* iRegulon parameters. */
+        results_tsv_builder.append("; Name\t" + results.getName() + "\n"
+                + "; Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n"
+                + "; Minimum NEScore\t" + results.getEScore() + "\n"
+                + "; Rank threshold for visualization\t" + results.getThresholdForVisualisation() + "\n"
+                + "; ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
+                + "; Minimum % identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
+                + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n"
+                + "; Database\t" + results.getDatabaseName() + "\n");
 
         if (results.isRegionBased()) {
-            tabfile += "Overlap fraction\t" + results.getOverlap() + "\n";
+            results_tsv_builder.append("; Overlap fraction\t" + results.getOverlap() + "\n");
             if (results.isDelineationBased()) {
-                tabfile += "Putative regulatory region\t" + results.getDelineationName() + "\n";
+                results_tsv_builder.append("; Putative regulatory region\t" + results.getDelineationName() + "\n");
             } else {
-                tabfile += "Putative regulatory region\t[TSS-" + results.getUpstream() + "kb,TSS+" + results.getDownstream() + "kb]\n";
+                results_tsv_builder.append("; Putative regulatory region\t[TSS-" + results.getUpstream() + "kb,TSS+" + results.getDownstream() + "kb]\n");
             }
         }
 
-		// Column headers.
-		tabfile += "\nRank\t"
-					+ "Motif id\t"
-					+ "AUC\t"
-					+ "NES\t"
-					+ "ClusterCode\t"
-					+ "Transcription factor\t"
-					+ "Target genes\n";
+		/* Column headers. */
+        results_tsv_builder.append("# Rank\t"
+                + "Motif id\t"
+                + "AUC\t"
+                + "NES\t"
+                + "ClusterCode\t"
+                + "Transcription factor\t"
+                + "Target genes\n");
 
-        // Print the info for one motif on one line.
-		for (Motif motif : motifs){
-			// Motif info.
-			tabfile += motif.getRank() + "\t"
-					+ motif.getName() + "\t"
-					+ motif.getAUCValue() + "\t"
-					+ motif.getNEScore() + "\t"
-					+ motif.getClusterCode() + "\t";
-			// A comma separated list of transcription factors.
-			Iterator<TranscriptionFactor> tfIterator = motif.getTranscriptionFactors().iterator();
-			while (tfIterator.hasNext()){
-				tabfile += tfIterator.next().getName();
-				if (tfIterator.hasNext()){
-					tabfile += ",";
-				}
-			}
-			tabfile += "\t";
-			// A comma separated list of target genes.
-			Iterator<CandidateTargetGene> tgIterator = motif.getCandidateTargetGenes().iterator();
-			while (tgIterator.hasNext()){
-				tabfile += tgIterator.next().getGeneName();
-				if (tgIterator.hasNext()){
-					tabfile += ",";
-				}
-			}
-			// End of the motif line.
-			tabfile += "\n";
-		}
-		return tabfile;
-	}
+        /* Print the info for one motif on one line. */
+        for (Motif motif : motifs) {
+            /* Motif info. */
+            results_tsv_builder.append(motif.getRank() + "\t"
+                    + motif.getName() + "\t"
+                    + motif.getAUCValue() + "\t"
+                    + motif.getNEScore() + "\t"
+                    + motif.getClusterCode() + "\t");
+            
+			/* A comma-separated list of transcription factors. */
+            Iterator<TranscriptionFactor> tfIterator = motif.getTranscriptionFactors().iterator();
+            while (tfIterator.hasNext()) {
+                results_tsv_builder.append(tfIterator.next().getName());
+                if (tfIterator.hasNext()) {
+                    results_tsv_builder.append(",");
+                }
+            }
+            results_tsv_builder.append("\t");
+            
+			/* A comma-separated list of target genes. */
+            Iterator<CandidateTargetGene> tgIterator = motif.getCandidateTargetGenes().iterator();
+            while (tgIterator.hasNext()) {
+                results_tsv_builder.append(tgIterator.next().getGeneName());
+                if (tgIterator.hasNext()) {
+                    results_tsv_builder.append(",");
+                }
+            }
+            
+			/* End of the motif line. */
+            results_tsv_builder.append("\n");
+        }
+
+        return results_tsv_builder.toString();
+    }
 }

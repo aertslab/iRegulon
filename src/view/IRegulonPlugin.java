@@ -3,11 +3,8 @@ package view;
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
-import cytoscape.view.CyHelpBroker;
-import infrastructure.Logger;
 import view.actions.*;
 
-import javax.help.HelpSet;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -17,12 +14,10 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.util.ResourceBundle;
 
 
 public class IRegulonPlugin extends CytoscapePlugin {
-    private static final String HELP_SET_NAME = "/help/jhelpset.hs";
     private static final String IREGULON_LINK_OUT = "edgelinkouturl.iRegulon";
 
     private final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
@@ -30,32 +25,17 @@ public class IRegulonPlugin extends CytoscapePlugin {
     /*
     * Start the plugin.
     */
-	public IRegulonPlugin() {
-        // 1. Add menu item ...
+    public IRegulonPlugin() {
+        /* 1. Add menu item ... */
         final JMenu menu = Cytoscape.getDesktop().getCyMenus().getOperationsMenu();
         menu.add(createMenu());
 
-        // 2. Hook plugin help into the Cytoscape main help system ...
-        addHelp();
-
-        // 3. Add linkOut item ...
+        /* 2. Add linkOut item ... */
         CytoscapeInit.getProperties().put(IREGULON_LINK_OUT, bundle.getString("URL_UCSC_LinkOut"));
 
-        // 4. Install visual style ...
+        /* 3. Install visual style ... */
         IRegulonVisualStyle.installVisualStyle();
-	}
-	
-	private void addHelp() {
-		try {
-            final ClassLoader classLoader = getClass().getClassLoader();
-            final URL helpSetURL = HelpSet.findHelpSet(classLoader, HELP_SET_NAME);
-			final HelpSet newHelpSet = new HelpSet(classLoader, helpSetURL);
-			if (!CyHelpBroker.addHelpSet(newHelpSet))
-				Logger.getInstance().error("iRegulon: Failed to add help set.");
-		} catch (final Exception e) {
-			Logger.getInstance().error("iRegulon: Could not find help set: \"" + HELP_SET_NAME + "\".");
-		}
-	}
+    }
 
     private JMenu createMenu() {
         final JMenu menu = new JMenu(bundle.getString("plugin_name"));
@@ -75,19 +55,26 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         menu.addSeparator();
 
-        final JMenuItem helpItem = menu.add(new HelpAction());
-        CyHelpBroker.getHelpBroker().enableHelpOnButton(helpItem, "Topic", null);
+        menu.add(new JMenuItem(new HelpAction()));
 
         menu.add(new JMenuItem(new AboutAction()));
 
         return menu;
     }
 
-    private static final class HelpAction extends ResourceAction {
+    private final class HelpAction extends ResourceAction {
         private static final String NAME = "action_help";
 
         public HelpAction() {
             super(NAME);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            try {
+                Desktop.getDesktop().browse(URI.create(bundle.getString("help_page")));
+            } catch (IOException e1) {
+                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
     }
 

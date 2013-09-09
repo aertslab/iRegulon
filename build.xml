@@ -45,16 +45,6 @@
     </target>
 
     <!-- =================================================================== -->
-    <!-- Copy the help-related files                                         -->
-    <!-- =================================================================== -->
-    <target name="copy_help">
-        <mkdir dir="${build.folder}/help"/>
-        <copy todir="${build.folder}/help">
-            <fileset dir="${basedir}/help" />
-        </copy>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- Copy the resources                                                  -->
     <!-- =================================================================== -->
     <target name="copy_resources" depends="compile">
@@ -111,7 +101,7 @@
     <!-- =================================================================== -->
     <!-- Create the plugin jar file                                          -->
     <!-- =================================================================== -->
-    <target name="binary_distribution_without_deps" depends="copy_resources,copy_help,generate_cytoscape_props_file,generate_java_props_file">
+    <target name="binary_distribution_without_deps" depends="copy_resources,generate_cytoscape_props_file,generate_java_props_file">
         <jar destfile="${build.folder}/${plugin.src.filename}">
             <manifest>
                 <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
@@ -120,7 +110,7 @@
         </jar>
     </target>
 
-    <target name="binary_distribution" depends="copy_resources,copy_help,generate_cytoscape_props_file,generate_java_props_file">
+    <target name="binary_distribution" depends="copy_resources,generate_cytoscape_props_file,generate_java_props_file">
         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
         <jarjar jarfile="${build.folder}/${plugin.bin.filename}">
             <manifest>
@@ -132,7 +122,7 @@
         </jarjar>
     </target>
 
-    <target name="binary_distribution_no_transfac" depends="copy_resources_no_transfac,copy_help,generate_cytoscape_props_file,generate_java_props_file">
+    <target name="binary_distribution_no_transfac" depends="copy_resources_no_transfac,generate_cytoscape_props_file,generate_java_props_file">
         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
         <jarjar jarfile="${build.folder}/${plugin.bin.notransfac.filename}">
             <manifest>
@@ -147,7 +137,7 @@
     <!-- =================================================================== -->
     <!-- Create the source distribution                                      -->
     <!-- =================================================================== -->
-    <target name="source_distribution" depends="copy_resources,copy_help">
+    <target name="source_distribution" depends="copy_resources">
         <zip destfile="${build.folder}/${plugin.src.filename}">
             <fileset dir="${basedir}"
                      includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg" />
@@ -166,7 +156,7 @@
         </zip>
     </target>
 
-    <target name="source_distribution_no_transfac" depends="copy_resources,copy_help">
+    <target name="source_distribution_no_transfac" depends="copy_resources">
         <zip destfile="${build.folder}/${plugin.src.notransfac.filename}">
             <fileset dir="${basedir}"
                      includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg"  excludes="**/transfac_pro-*.png" />

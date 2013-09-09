@@ -1,2 +1,9 @@
+# Generic files to ignore.
+*~
+._*
+*.DS_Store
+# Ignore IntelliJ IDEA related files and directories.
 bin/
+out/
+.idea
 *.iml

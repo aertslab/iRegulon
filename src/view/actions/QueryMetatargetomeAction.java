@@ -7,7 +7,10 @@ import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 import cytoscape.view.CyNetworkView;
-import domainmodel.*;
+import domainmodel.CandidateTargetGene;
+import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TargetomeDatabase;
 import infrastructure.CytoscapeNetworkUtilities;
 import infrastructure.Logger;
 import servercommunication.ComputationalService;
@@ -29,10 +32,12 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
 
     public static final int DEFAULT_THRESHOLD;
     public static final int DEFAULT_MAX_NODE_COUNT;
+
     static {
-        DEFAULT_THRESHOLD = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("occurence_count_threshold"));
+        DEFAULT_THRESHOLD = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("occurrence_count_threshold"));
         DEFAULT_MAX_NODE_COUNT = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("max_node_number"));
     }
+
     public static final MetatargetomeParameters DEFAULT_PARAMETERS = new MetatargetomeParameters() {
         @Override
         public String getAttributeName() {
@@ -50,7 +55,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
 
         @Override
-        public int getOccurenceCountThreshold() {
+        public int getOccurrenceCountThreshold() {
             return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
         }
 
@@ -72,7 +77,8 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
     };
 
-    private static Map<SpeciesNomenclature,Set<GeneIdentifier>> SPECIES_NOMENCLATURE2FACTORS;
+    private static Map<SpeciesNomenclature, Set<GeneIdentifier>> SPECIES_NOMENCLATURE2FACTORS;
+
     static {
         try {
             SPECIES_NOMENCLATURE2FACTORS = queryForFactors();
@@ -82,9 +88,9 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
     }
 
-    private static Map<SpeciesNomenclature,Set<GeneIdentifier>> queryForFactors() throws ServerCommunicationException {
+    private static Map<SpeciesNomenclature, Set<GeneIdentifier>> queryForFactors() throws ServerCommunicationException {
         final ComputationalService service = new ComputationalServiceHTTP();
-        final Map<SpeciesNomenclature,Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,Set<GeneIdentifier>>();
+        final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, service.queryTranscriptionFactorsWithPredictedTargetome(speciesNomenclature));
         }
@@ -141,7 +147,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
             targetome = service.queryPredictedTargetome(
                     parameters.getTranscriptionFactor(),
                     parameters.getDatabases(),
-                    parameters.getOccurenceCountThreshold(),
+                    parameters.getOccurrenceCountThreshold(),
                     parameters.getMaxNumberOfNodes());
         } catch (ServerCommunicationException e) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -156,7 +162,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
                 && !Cytoscape.getCurrentNetworkView().getNetwork().equals(Cytoscape.getNullNetwork());
         if (useCurrentNetwork) {
             final CyNetwork network = Cytoscape.getCurrentNetwork();
-		    view = Cytoscape.getCurrentNetworkView();
+            view = Cytoscape.getCurrentNetworkView();
             task = new AddMetatargetomeTask(network, view,
                     getResultsPanel(), parameters.getAttributeName(),
                     parameters.getTranscriptionFactor(), targetome);
@@ -172,11 +178,11 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
             task.run();
         } else {
             final JTaskConfig taskConfig = new JTaskConfig();
-		    taskConfig.setOwner(Cytoscape.getDesktop());
-		    taskConfig.displayCloseButton(true);
-		    taskConfig.displayCancelButton(true);
-		    taskConfig.displayStatus(true);
-		    taskConfig.setAutoDispose(true);
+            taskConfig.setOwner(Cytoscape.getDesktop());
+            taskConfig.displayCloseButton(true);
+            taskConfig.displayCancelButton(true);
+            taskConfig.displayStatus(true);
+            taskConfig.setAutoDispose(true);
             TaskManager.executeTask(task, taskConfig);
         }
     }
@@ -195,7 +201,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         if (getParameters().getDatabases().isEmpty()) return false;
         final GeneIdentifier factor = getParameters().getTranscriptionFactor();
         if (factor == null) return false;
-        if (getParameters().getOccurenceCountThreshold() < 0) return false;
+        if (getParameters().getOccurrenceCountThreshold() < 0) return false;
         if (getParameters().getMaxNumberOfNodes() < 0) return false;
         if (!SPECIES_NOMENCLATURE2FACTORS.containsKey(factor.getSpeciesNomenclature())) return false;
         return SPECIES_NOMENCLATURE2FACTORS.get(factor.getSpeciesNomenclature()).contains(factor);

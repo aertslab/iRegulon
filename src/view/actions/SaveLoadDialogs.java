@@ -1,5 +1,12 @@
 package view.actions;
 
+import cytoscape.Cytoscape;
+import cytoscape.CytoscapeInit;
+import persistence.PersistenceUtilities;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.*;
 import java.nio.CharBuffer;
 import java.nio.MappedByteBuffer;
@@ -7,43 +14,33 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-
-import cytoscape.Cytoscape;
-import cytoscape.CytoscapeInit;
-import persistence.PersistenceUtilities;
-
 public class SaveLoadDialogs {
-	
-	private String saveName;
-	
-	public SaveLoadDialogs(){
-		this.saveName = null;
-	}
 
-	/**
-	 * Gives the user a panel for choosing where to save their results
-	 * and saves the results in the chosen file.
-	 * @param xml
-	 * @param name of the job
-	 */
-	public static boolean showDialog(String xml, String name, String extension){
-		JFrame frame = new JFrame();
+    private String saveName;
 
-		// Create a file chooser.
-		File locFile = CytoscapeInit.getMRUD();
-		String location = "";
-		if (locFile == null){
-			location = "user.home";
-		}else{
-			location = locFile.getPath();
-		}
-		JFileChooser fc = new JFileChooser(new File(location));
+    public SaveLoadDialogs() {
+        this.saveName = null;
+    }
+
+    /**
+     * Gives the user a panel for choosing where to save their results
+     * and saves the results in the chosen file.
+     *
+     * @param xml
+     * @param name of the job
+     */
+    public static boolean showDialog(String xml, String name, String extension) {
+        JFrame frame = new JFrame();
+
+        // Create a file chooser.
+        File locFile = CytoscapeInit.getMRUD();
+        String location = "";
+        if (locFile == null) {
+            location = "user.home";
+        } else {
+            location = locFile.getPath();
+        }
+        JFileChooser fc = new JFileChooser(new File(location));
 
         // Display "All Files" filter at the bottom of the list.
         fc.setAcceptAllFileFilterUsed(false);
@@ -54,7 +51,7 @@ public class SaveLoadDialogs {
         }
         fc.setAcceptAllFileFilterUsed(true);
 
-		fc.setSelectedFile(new File(name + extension));
+        fc.setSelectedFile(new File(name + extension));
         int result = fc.showSaveDialog(frame);
         boolean write = false;
 
@@ -62,9 +59,9 @@ public class SaveLoadDialogs {
             File selFile = fc.getSelectedFile();
             FileFilter ff = fc.getFileFilter();
             if (!ff.accept(selFile)) {
-                if (extension == PersistenceUtilities.NATIVE_FILE_EXTENSION || extension == PersistenceUtilities.TSV_FILE_EXTENSION){
+                if (extension == PersistenceUtilities.NATIVE_FILE_EXTENSION || extension == PersistenceUtilities.TSV_FILE_EXTENSION) {
                     selFile = new File(selFile.getAbsolutePath() + extension);
-                }else{
+                } else {
                     selFile = new File(selFile.getAbsolutePath());
                 }
             }
@@ -82,12 +79,12 @@ public class SaveLoadDialogs {
                             "Do you want to overwrite the file '" + selFile.getName() + "'?",
                             "Overwrite?",
                             JOptionPane.YES_NO_OPTION);
-                    if (n == 0){
+                    if (n == 0) {
                         write = true;
                     }
 
                 }
-                if (write){
+                if (write) {
                     try {
                         output = new BufferedWriter(new FileWriter(selFile));
                         output.write(xml);
@@ -98,7 +95,7 @@ public class SaveLoadDialogs {
                         JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                                 "<html> " +
                                 "<body>" +
-                                "An error has occured while trying to save the file '" + selFile.getName() + "'." +
+                                "An error has occurred while trying to save the file '" + selFile.getName() + "'." +
                                 "</body>" +
                                 "</html>");
                     }
@@ -109,33 +106,34 @@ public class SaveLoadDialogs {
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                         "<html> " +
                         "<body>" +
-                        "An error has occured while creating the file '" + selFile.getName() + "'." +
+                        "An error has occurred while creating the file '" + selFile.getName() + "'." +
                         "</body>" +
                         "</html>");
             }
         }
 
         return write;
-	}
-	
-	
-	/**
-	 * Gives the user a pane for choosing the file they want to open.
-	 * The file is returned as a string
-	 * @return String xml
-	 */
-	public String openDialogue(){
-		JFrame frame = new JFrame();
+    }
 
-		// Create a file chooser.
-		File locFile = CytoscapeInit.getMRUD();
-		String location = "";
-		if (locFile == null){
-			location = "user.home";
-		}else{
-			location = locFile.getPath();
-		}
-		JFileChooser fc = new JFileChooser(new File(location));
+
+    /**
+     * Gives the user a pane for choosing the file they want to open.
+     * The file is returned as a string
+     *
+     * @return String xml
+     */
+    public String openDialogue() {
+        JFrame frame = new JFrame();
+
+        // Create a file chooser.
+        File locFile = CytoscapeInit.getMRUD();
+        String location = "";
+        if (locFile == null) {
+            location = "user.home";
+        } else {
+            location = locFile.getPath();
+        }
+        JFileChooser fc = new JFileChooser(new File(location));
         // Display "All Files" filter at the bottom of the list.
         fc.setAcceptAllFileFilterUsed(false);
         fc.addChoosableFileFilter(new FileNameExtensionFilter("iRegulon files (*.irf)", "irf"));
@@ -143,17 +141,17 @@ public class SaveLoadDialogs {
         fc.addChoosableFileFilter(new FileNameExtensionFilter("All iRegulon files (*.ctf and *.irf)", "ctf", "irf"));
         fc.setAcceptAllFileFilterUsed(true);
 
-		fc.showOpenDialog(frame);
-		File selFile = fc.getSelectedFile();
-		if (selFile != null){
+        fc.showOpenDialog(frame);
+        File selFile = fc.getSelectedFile();
+        if (selFile != null) {
             String name = selFile.getName();
             if (!selFile.isFile()) {
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                     "<html> " +
-                     "<body>" +
-                     "File '" + name + "' does not exist." +
-                     "</body>" +
-                     "</html>");
+                        "<html> " +
+                                "<body>" +
+                                "File '" + name + "' does not exist." +
+                                "</body>" +
+                                "</html>");
                 return null;
             }
             String[] names = name.split("\\.");
@@ -184,7 +182,7 @@ public class SaveLoadDialogs {
                 FileChannel fileChannel = fis.getChannel();
 
                 // Get the file's size and then map it into memory.
-                int sz = (int)fileChannel.size();
+                int sz = (int) fileChannel.size();
                 MappedByteBuffer bb = fileChannel.map(FileChannel.MapMode.READ_ONLY, 0, sz);
 
                 // Decode the file into a char buffer.
@@ -193,25 +191,26 @@ public class SaveLoadDialogs {
                 String xml = cb.toString();
                 return xml;
 
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                    "<html> " +
-                    "<body>" +
-                    "An error has occured while opening the file '" + name + "'." +
-                    "</body>" +
-                    "</html>");
+                        "<html> " +
+                                "<body>" +
+                                "An error has occurred while opening the file '" + name + "'." +
+                                "</body>" +
+                                "</html>");
             }
-		}
-		return null;
-	}
+        }
+        return null;
+    }
 
     /**
      * Gives the user a panel for choosing where to save the logo.
+     *
      * @param fullSizedLogoFileURL
      * @param MotifName
      */
-    public static boolean saveLogo(java.net.URL fullSizedLogoFileURL, String MotifName){
+    public static boolean saveLogo(java.net.URL fullSizedLogoFileURL, String MotifName) {
         if (fullSizedLogoFileURL == null) {
             return false;
         }
@@ -221,9 +220,9 @@ public class SaveLoadDialogs {
         // Create a file chooser.
         File locFile = CytoscapeInit.getMRUD();
         String location = "";
-        if (locFile == null){
+        if (locFile == null) {
             location = "user.home";
-        }else{
+        } else {
             location = locFile.getPath();
         }
         JFileChooser fc = new JFileChooser(new File(location));
@@ -257,12 +256,12 @@ public class SaveLoadDialogs {
                             "Do you want to overwrite the file '" + selFile.getName() + "'?",
                             "Overwrite?",
                             JOptionPane.YES_NO_OPTION);
-                    if (n == 0){
+                    if (n == 0) {
                         write = true;
                     }
 
                 }
-                if (write){
+                if (write) {
                     byte[] buffer = new byte[8 * 1024];
                     String LogoFilename = selFile.getAbsolutePath();
                     try {
@@ -284,7 +283,7 @@ public class SaveLoadDialogs {
                         JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                                 "<html> " +
                                         "<body>" +
-                                        "An error has occured while trying to save the logo file '" + selFile.getName() + "'." +
+                                        "An error has occurred while trying to save the logo file '" + selFile.getName() + "'." +
                                         "</body>" +
                                         "</html>");
                     }
@@ -295,7 +294,7 @@ public class SaveLoadDialogs {
                 JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
                         "<html> " +
                                 "<body>" +
-                                "An error has occured while creating the file '" + selFile.getName() + "'." +
+                                "An error has occurred while creating the file '" + selFile.getName() + "'." +
                                 "</body>" +
                                 "</html>");
             }
@@ -304,8 +303,8 @@ public class SaveLoadDialogs {
         return write;
     }
 
-	public String getSaveName(){
-		return this.saveName;
-	}
+    public String getSaveName() {
+        return this.saveName;
+    }
 }
 

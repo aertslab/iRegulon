@@ -11,7 +11,7 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
     private String attributeName;
     private GeneIdentifier transcriptionFactor;
     private List<TargetomeDatabase> databases;
-    private int occurenceCountThreshold;
+    private int occurrenceCountThreshold;
     private int maxNumberOfNodes;
     private boolean createNewNetwork;
 
@@ -19,7 +19,7 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
         this.attributeName = parameters.getAttributeName();
         this.transcriptionFactor = parameters.getTranscriptionFactor();
         this.databases = new ArrayList<TargetomeDatabase>(parameters.getDatabases());
-        this.occurenceCountThreshold = parameters.getOccurenceCountThreshold();
+        this.occurrenceCountThreshold = parameters.getOccurrenceCountThreshold();
         this.maxNumberOfNodes = parameters.getMaxNumberOfNodes();
         this.createNewNetwork = parameters.createNewNetwork();
     }
@@ -43,8 +43,8 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
     }
 
     @Override
-    public int getOccurenceCountThreshold() {
-        return occurenceCountThreshold;
+    public int getOccurrenceCountThreshold() {
+        return occurrenceCountThreshold;
     }
 
     @Override
@@ -69,8 +69,8 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
         this.databases = databases;
     }
 
-    public void setOccurenceCountThreshold(int occurenceCountThreshold) {
-        this.occurenceCountThreshold = occurenceCountThreshold;
+    public void setOccurrenceCountThreshold(int occurrenceCountThreshold) {
+        this.occurrenceCountThreshold = occurrenceCountThreshold;
     }
 
     public void setMaxNumberOfNodes(int maxNumberOfNodes) {

@@ -13,7 +13,7 @@ public interface MetatargetomeParameters {
 
     List<TargetomeDatabase> getDatabases();
 
-    int getOccurenceCountThreshold();
+    int getOccurrenceCountThreshold();
 
     int getMaxNumberOfNodes();
 

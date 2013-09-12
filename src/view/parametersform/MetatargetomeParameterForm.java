@@ -32,7 +32,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     private JComboBox speciesNomenclatureCB;
     private JList databaseList;
     private JComboBox attributeNameCB;
-    private JTextField occurenceCountLimitTF;
+    private JTextField occurrenceCountLimitTF;
     private JTextField maxNodeCountTF;
     private JCheckBox createNewNetworkCB;
 
@@ -100,7 +100,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
 
     private void initParameters(final MetatargetomeParameters parameters) {
         setMaxNumberOfNodes(parameters.getMaxNumberOfNodes());
-        setOccurenceCountThreshold(parameters.getOccurenceCountThreshold());
+        setOccurrenceCountThreshold(parameters.getOccurrenceCountThreshold());
         final GeneIdentifier factor = parameters.getTranscriptionFactor();
         setSpeciesNomenclature(factor == null ? null : parameters.getTranscriptionFactor().getSpeciesNomenclature());
         setTranscriptionFactor(factor);
@@ -168,14 +168,14 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         attributeNameCB.setSelectedItem(attributeName);
     }
 
-    public void setOccurenceCountThreshold(final int limit) {
-        occurenceCountLimitTF.setText(Integer.toString(limit));
+    public void setOccurrenceCountThreshold(final int limit) {
+        occurrenceCountLimitTF.setText(Integer.toString(limit));
     }
 
     @Override
-    public int getOccurenceCountThreshold() {
+    public int getOccurrenceCountThreshold() {
         try {
-            return Integer.parseInt(occurenceCountLimitTF.getText());
+            return Integer.parseInt(occurrenceCountLimitTF.getText());
         } catch (NumberFormatException e) {
             return Integer.MIN_VALUE;
         }
@@ -277,8 +277,8 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         DBscroll.setPreferredSize(new Dimension(DBscroll.getWidth() , 70));
         DBpanel.add(DBscroll, DBcc);
 
-        final JLabel occurenceCountLimitLB = new JLabel("Occurence count threshold:");
-        occurenceCountLimitTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_THRESHOLD));
+        final JLabel occurrenceCountLimitLB = new JLabel("Occurrence count threshold:");
+        occurrenceCountLimitTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_THRESHOLD));
 
         DBcc.gridx = 0; DBcc.gridy = 1;
         DBcc.gridwidth = 1; DBcc.gridheight = 1;
@@ -286,14 +286,14 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         DBcc.fill = GridBagConstraints.NONE;
         DBcc.anchor = GridBagConstraints.LINE_START;
         DBcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
-        DBpanel.add(occurenceCountLimitLB, DBcc);
+        DBpanel.add(occurrenceCountLimitLB, DBcc);
 
         DBcc.gridx++; DBcc.gridy = 1;
         DBcc.gridwidth = 1; DBcc.gridheight = 1;
         DBcc.weightx = 1.0; DBcc.weighty = 0.0;
         DBcc.fill = GridBagConstraints.HORIZONTAL;
         DBcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
-        DBpanel.add(occurenceCountLimitTF, DBcc);
+        DBpanel.add(occurrenceCountLimitTF, DBcc);
 
         add(DBpanel, cc);
 
@@ -362,7 +362,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         databaseList.getSelectionModel().addListSelectionListener(selectionListener);
         transcriptionFactorCB.addActionListener(actionListener);
         transcriptionFactorCB.addItemListener(itemListener);
-        occurenceCountLimitTF.getDocument().addDocumentListener(documentListener);
+        occurrenceCountLimitTF.getDocument().addDocumentListener(documentListener);
         maxNodeCountTF.getDocument().addDocumentListener(documentListener);
         speciesNomenclatureCB.addItemListener(refreshListener);
     }
@@ -373,7 +373,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         databaseList.getSelectionModel().removeListSelectionListener(selectionListener);
         transcriptionFactorCB.removeActionListener(actionListener);
         transcriptionFactorCB.removeItemListener(itemListener);
-        occurenceCountLimitTF.getDocument().removeDocumentListener(documentListener);
+        occurrenceCountLimitTF.getDocument().removeDocumentListener(documentListener);
         maxNodeCountTF.getDocument().removeDocumentListener(documentListener);
         speciesNomenclatureCB.removeItemListener(refreshListener);
     }

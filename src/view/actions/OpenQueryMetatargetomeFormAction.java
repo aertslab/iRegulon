@@ -37,7 +37,7 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction implements 
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        final Map<SpeciesNomenclature,Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,Set<GeneIdentifier>>();
+        final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
@@ -56,7 +56,7 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction implements 
         if (getParameters().getDatabases().isEmpty()) return false;
         final GeneIdentifier factor = getParameters().getTranscriptionFactor();
         if (factor == null) return false;
-        if (getParameters().getOccurenceCountThreshold() < 0) return false;
+        if (getParameters().getOccurrenceCountThreshold() < 0) return false;
         if (getParameters().getMaxNumberOfNodes() < 0) return false;
         return QueryMetatargetomeAction.getAvailableFactors(factor.getSpeciesNomenclature()).contains(factor);
     }

@@ -89,8 +89,9 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
     @Override
     public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases,
-                                                             final int occurenceCountThreshold, final int maxNodeCount)
+                                                             final int occurrenceCountThreshold, final int maxNodeCount)
             throws ServerCommunicationException {
+
         if (factor == null || databases == null) {
             throw new IllegalArgumentException();
         }
@@ -164,8 +165,8 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             if ((maxNodeCount <= 0) || (result.size() <= maxNodeCount)) {
                 return result;
             } else {
-                final int minOccurenceCount = result.get(maxNodeCount-1).getRank();
-                return filter(result, minOccurenceCount);
+                final int minOccurrenceCount = result.get(maxNodeCount - 1).getRank();
+                return filter(result, minOccurrenceCount);
             }
 		} catch (IOException e) {
             Logger.getInstance().error(e);
@@ -173,10 +174,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 		}
     }
 
-    private List<CandidateTargetGene> filter(List<CandidateTargetGene> genes, int minOccurenceCount) {
+    private List<CandidateTargetGene> filter(List<CandidateTargetGene> genes, int minOccurrenceCount) {
         final List<CandidateTargetGene> results = new ArrayList<CandidateTargetGene>();
-        for (CandidateTargetGene gene: genes) {
-            if (gene.getRank() >= minOccurenceCount) results.add(gene);
+        for (CandidateTargetGene gene : genes) {
+            if (gene.getRank() >= minOccurrenceCount) results.add(gene);
         }
         return results;
     }

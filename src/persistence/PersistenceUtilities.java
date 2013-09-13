@@ -9,6 +9,8 @@ import com.thoughtworks.xstream.XStream;
 
 import domainmodel.*;
 
+import static view.ResourceAction.getBundle;
+
 
 public class PersistenceUtilities {
     public static final String NATIVE_FILE_EXTENSION = ".irf";
@@ -83,12 +85,15 @@ public class PersistenceUtilities {
         /* iRegulon parameters. */
         results_tsv_builder.append("; Name\t" + results.getName() + "\n"
                 + "; Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n"
+                + "; Motif collection\t" + results.getMotifCollection()  + "\n"
                 + "; Minimum NEScore\t" + results.getEScore() + "\n"
                 + "; Rank threshold for visualization\t" + results.getThresholdForVisualisation() + "\n"
                 + "; ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
                 + "; Minimum identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
                 + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n"
-                + "; Database\t" + results.getDatabaseName() + "\n");
+                + "; Database\t" + results.getDatabaseName() + "\n"
+                + "; Number of valid nodes\t" + results.getGenes().size()  + "\n"
+                + "; iRegulon version\t" + getBundle().getString("plugin_name_version_release") + "\n");
 
         if (results.isRegionBased()) {
             results_tsv_builder.append("; Overlap fraction\t" + results.getOverlap() + "\n");

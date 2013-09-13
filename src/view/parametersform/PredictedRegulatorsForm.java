@@ -1,69 +1,70 @@
 package view.parametersform;
 
-import domainmodel.*;
+import cytoscape.Cytoscape;
+import domainmodel.Delineation;
+import domainmodel.InputParameters;
+import domainmodel.RankingsDatabase;
+import domainmodel.SpeciesNomenclature;
 import infrastructure.CytoscapeNetworkUtilities;
-import view.parametersform.actions.PredictRegulatorsAction;
 import view.IRegulonResourceBundle;
+import view.parametersform.actions.PredictRegulatorsAction;
+import view.parametersform.databaseselection.DBCombobox;
 import view.parametersform.databaseselection.MotifCollectionComboBox;
 import view.parametersform.databaseselection.PutativeRegulatoryRegionComboBox;
 import view.parametersform.databaseselection.SearchSpaceTypeComboBox;
-import view.parametersform.databaseselection.DBCombobox;
+import view.resultspanel.Refreshable;
 
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-
-import cytoscape.Cytoscape;
-
-import view.resultspanel.Refreshable;
 
 
 public class PredictedRegulatorsForm extends IRegulonResourceBundle
         implements PredictedRegulatorsParameters, Refreshable {
-	private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_escore"));
-	private static final float DEFAULT_ROC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
-	private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
-	private static final float DEFAULT_MIN_ORTHOLOGOUS_IDENTITY = Float.parseFloat(BUNDLE.getString("standard_minOrthologous"));
-	private static final float DEFAULT_MAX_MOTIF_SIMILARITY_FDR = Float.parseFloat(BUNDLE.getString("standard_maxMotifSimilarityFDR"));
+    private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_escore"));
+    private static final float DEFAULT_ROC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
+    private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
+    private static final float DEFAULT_MIN_ORTHOLOGOUS_IDENTITY = Float.parseFloat(BUNDLE.getString("standard_minOrthologous"));
+    private static final float DEFAULT_MAX_MOTIF_SIMILARITY_FDR = Float.parseFloat(BUNDLE.getString("standard_maxMotifSimilarityFDR"));
     private static final int MAX_NAME_LENGTH = 50;
 
     private JTextField jobNameTF;
-	private JComboBox attributeNameCB;
+    private JComboBox attributeNameCB;
     private JTextField numberOfNodesTF;
 
-	private JTextField jtfEscore;
-	private JComboBox jcbSpecieAndNomenclature;
-	private JTextField jtfROC;
-	private JTextField jtfVisualisation;
-	private JTextField jtfMinOrthologous;
-	private JTextField jtfMaxMotifSimilarityFDR;
+    private JTextField jtfEscore;
+    private JComboBox jcbSpecieAndNomenclature;
+    private JTextField jtfROC;
+    private JTextField jtfVisualisation;
+    private JTextField jtfMinOrthologous;
+    private JTextField jtfMaxMotifSimilarityFDR;
     private MotifCollectionComboBox motifCollectionCB;
     private PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB;
     private SearchSpaceTypeComboBox searchSpaceTypeCB;
-	private DBCombobox databaseCB;
-	private JTextField txtOverlap;
-	private JComboBox jcbDelation;
-	private JTextField txtUpStream;
-	private JTextField txtDownStream;
-	private JRadioButton rbtnDelineation;
-	private JRadioButton rbtnConversion;
-	private DatabaseListener dbListener;
+    private DBCombobox databaseCB;
+    private JTextField txtOverlap;
+    private JComboBox jcbDelation;
+    private JTextField txtUpStream;
+    private JTextField txtDownStream;
+    private JRadioButton rbtnDelineation;
+    private JRadioButton rbtnConversion;
+    private DatabaseListener dbListener;
 
-	private final JDialog frame;
+    private final JDialog frame;
 
-	public PredictedRegulatorsForm() {
-		this(null);
-	}
-	
-	public PredictedRegulatorsForm(final JDialog frame) {
-		this.frame = frame;
-		this.dbListener = null;
-	}
-	
-	public JPanel createForm() {
-		final JPanel panel = new JPanel(new GridBagLayout());
+    public PredictedRegulatorsForm() {
+        this(null);
+    }
+
+    public PredictedRegulatorsForm(final JDialog frame) {
+        this.frame = frame;
+        this.dbListener = null;
+    }
+
+    public JPanel createForm() {
+        final JPanel panel = new JPanel(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
         int yPos = 0;
 
@@ -72,87 +73,98 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         // Name of the analysis ...
         jtl = new JLabel("Name for analysis:");
         jtl.setToolTipText("Choose a name for your analysis.");
-        cc.gridx = 0; cc.gridy = yPos;
-		cc.gridwidth = 2; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0;
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 2;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0;
         cc.fill = GridBagConstraints.NONE;
         cc.anchor = GridBagConstraints.LINE_START;
         panel.add(jtl, cc);
-        
+
         this.jobNameTF = new JTextField(deriveDefaultJobName());
-        cc.gridx = 2; cc.gridy = yPos;
-		cc.gridwidth = 3; cc.gridheight = 1;
-        cc.weighty = 0.0; cc.weightx = 1.0;
+        cc.gridx = 2;
+        cc.gridy = yPos;
+        cc.gridwidth = 3;
+        cc.gridheight = 1;
+        cc.weighty = 0.0;
+        cc.weightx = 1.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
         cc.anchor = GridBagConstraints.LINE_START;
         panel.add(this.jobNameTF, cc);
 
         yPos += 1;
-		
+
         // Species and nomenclature
         jtl = new JLabel("Species and gene nomenclature:");
         jtl.setToolTipText("Choose the species and the nomenclature of the genes.");
-        
-        cc.gridx = 0; cc.gridy = yPos;
-		cc.gridheight = 1; cc.gridwidth = 2;
-        cc.weighty = 0.0; cc.weightx = 0.0;
+
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridheight = 1;
+        cc.gridwidth = 2;
+        cc.weighty = 0.0;
+        cc.weightx = 0.0;
         cc.fill = GridBagConstraints.NONE;
         panel.add(jtl, cc);
-        
+
         this.jcbSpecieAndNomenclature = new JComboBox();
         this.jcbSpecieAndNomenclature.setModel(new javax.swing.DefaultComboBoxModel(SpeciesNomenclature.getSelectableNomenclatures().toArray()));
         this.jcbSpecieAndNomenclature.setSelectedItem(SpeciesNomenclature.getSelectableNomenclatures().iterator().next());
-        cc.gridx = 2; cc.gridy = yPos;
-		cc.gridheight = 1; cc.gridwidth = 3;
-        cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(this.jcbSpecieAndNomenclature, cc);
+        cc.gridx = 2;
+        cc.gridy = yPos;
+        cc.gridheight = 1;
+        cc.gridwidth = 3;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(this.jcbSpecieAndNomenclature, cc);
 
         yPos += 1;
-		
-		//Choose the database system
+
+        //Choose the database system
         int lineY;
-		
-		cc.gridx = 0;
-		cc.gridy = yPos;
-		cc.gridwidth = 5;
-		cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(createDatabaseSubPanel(), cc);
-		yPos+=1;
-		
-		GridBagLayout layoutRegion = new GridBagLayout();
-		GridBagConstraints cRegion = new GridBagConstraints();
-		JPanel panelRegion = new JPanel(layoutRegion);
-		TitledBorder borderRegion = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Region-based specific parameters");
-		borderRegion.setTitleJustification(TitledBorder.LEFT);
-		borderRegion.setTitlePosition(TitledBorder.CENTER);
-		panelRegion.setBorder(borderRegion);
-		lineY = 0;
 
-		JLabel overlapJtl = new JLabel("Overlap fraction:");
-		overlapJtl.setToolTipText("<html>Percentage of the putative regulatory region associated with a gene<br/>that must overlap with the predefined regions. Must be between 0 and 1.</html>");
-		cRegion.gridx = 0;
-		cRegion.gridy = lineY;
-		cRegion.gridwidth = 2;
-		cRegion.weightx=0;
-		cRegion.fill=GridBagConstraints.HORIZONTAL;
-		panelRegion.add(overlapJtl, cRegion);
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 5;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(createDatabaseSubPanel(), cc);
+        yPos += 1;
 
-		this.txtOverlap = new JTextField();
-		this.txtOverlap.setText(this.getBundle().getString("standard_overlap"));
-		cRegion.gridx = 2;
-		cRegion.gridy = lineY;
-		cRegion.gridwidth = 3;
-		cRegion.weightx=0.5;
-		cRegion.fill=GridBagConstraints.HORIZONTAL;
-		panelRegion.add(this.txtOverlap, cRegion);
-		lineY += 1;
+        GridBagLayout layoutRegion = new GridBagLayout();
+        GridBagConstraints cRegion = new GridBagConstraints();
+        JPanel panelRegion = new JPanel(layoutRegion);
+        TitledBorder borderRegion = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Region-based specific parameters");
+        borderRegion.setTitleJustification(TitledBorder.LEFT);
+        borderRegion.setTitlePosition(TitledBorder.CENTER);
+        panelRegion.setBorder(borderRegion);
+        lineY = 0;
 
-		this.rbtnDelineation = new JRadioButton();
-		this.rbtnDelineation.setEnabled(true);
-		this.rbtnDelineation.setSelected(true);
+        JLabel overlapJtl = new JLabel("Overlap fraction:");
+        overlapJtl.setToolTipText("<html>Percentage of the putative regulatory region associated with a gene<br/>that must overlap with the predefined regions. Must be between 0 and 1.</html>");
+        cRegion.gridx = 0;
+        cRegion.gridy = lineY;
+        cRegion.gridwidth = 2;
+        cRegion.weightx = 0;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
+        panelRegion.add(overlapJtl, cRegion);
 
-		this.rbtnConversion = new JRadioButton();
-		this.rbtnConversion.setEnabled(true);
+        this.txtOverlap = new JTextField();
+        this.txtOverlap.setText(this.getBundle().getString("standard_overlap"));
+        cRegion.gridx = 2;
+        cRegion.gridy = lineY;
+        cRegion.gridwidth = 3;
+        cRegion.weightx = 0.5;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
+        panelRegion.add(this.txtOverlap, cRegion);
+        lineY += 1;
+
+        this.rbtnDelineation = new JRadioButton();
+        this.rbtnDelineation.setEnabled(true);
+        this.rbtnDelineation.setSelected(true);
+
+        this.rbtnConversion = new JRadioButton();
+        this.rbtnConversion.setEnabled(true);
 
         ButtonGroup group = new ButtonGroup();
         group.add(this.rbtnDelineation);
@@ -163,23 +175,23 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cRegion.gridx = 0;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 1;
-        cRegion.weightx=0;
-        cRegion.fill=GridBagConstraints.HORIZONTAL;
+        cRegion.weightx = 0;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.rbtnDelineation, cRegion);
 
         cRegion.gridx = 1;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 4;
-        cRegion.weightx=0;
-        cRegion.fill=GridBagConstraints.HORIZONTAL;
+        cRegion.weightx = 0;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.jcbDelation, cRegion);
-		lineY+=1;
+        lineY += 1;
 
         cRegion.gridx = 0;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 1;
-        cRegion.weightx=0;
-        cRegion.fill=GridBagConstraints.HORIZONTAL;
+        cRegion.weightx = 0;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.rbtnConversion, cRegion);
 
         JLabel labelUp = new JLabel("Upstream region:");
@@ -187,8 +199,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cRegion.gridx = 1;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
-        cRegion.weightx=0;
-        cRegion.fill=GridBagConstraints.HORIZONTAL;
+        cRegion.weightx = 0;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
         panelRegion.add(labelUp, cRegion);
 
         this.txtUpStream = new JTextField();
@@ -196,18 +208,18 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cRegion.gridx = 3;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
-        cRegion.weightx=0.5;
-        cRegion.fill=GridBagConstraints.HORIZONTAL;
+        cRegion.weightx = 0.5;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.txtUpStream, cRegion);
-		lineY+=1;
+        lineY += 1;
 
         JLabel labelDown = new JLabel("Downstream region:");
         labelDown.setToolTipText("Choose the amount of bp downstream of the TSS of a gene to use in the mapping to predefined regions.");
         cRegion.gridx = 1;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
-        cRegion.weightx=0;
-        cRegion.fill=GridBagConstraints.HORIZONTAL;
+        cRegion.weightx = 0;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
         panelRegion.add(labelDown, cRegion);
 
         this.txtDownStream = new JTextField();
@@ -215,28 +227,28 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cRegion.gridx = 3;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
-        cRegion.weightx=0.5;
-        cRegion.fill=GridBagConstraints.HORIZONTAL;
+        cRegion.weightx = 0.5;
+        cRegion.fill = GridBagConstraints.HORIZONTAL;
         panelRegion.add(this.txtDownStream, cRegion);
-		lineY+=1;
-		
-		
-		cc.gridx = 0;
-		cc.gridy = yPos;
-		cc.gridwidth = 5;
-		cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelRegion, cc);
-		yPos+=1;
+        lineY += 1;
 
-		GridBagLayout layoutMotif = new GridBagLayout();
-		GridBagConstraints cMotif = new GridBagConstraints();
-		JPanel panelMotif = new JPanel(layoutMotif);
-		TitledBorder borderMotif = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Motif prediction");
-		borderMotif.setTitleJustification(TitledBorder.LEFT);
-		borderMotif.setTitlePosition(TitledBorder.CENTER);
-		panelMotif.setBorder(borderMotif);
-		lineY = 0;
-		// Escore
+
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 5;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(panelRegion, cc);
+        yPos += 1;
+
+        GridBagLayout layoutMotif = new GridBagLayout();
+        GridBagConstraints cMotif = new GridBagConstraints();
+        JPanel panelMotif = new JPanel(layoutMotif);
+        TitledBorder borderMotif = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Motif prediction");
+        borderMotif.setTitleJustification(TitledBorder.LEFT);
+        borderMotif.setTitlePosition(TitledBorder.CENTER);
+        panelMotif.setBorder(borderMotif);
+        lineY = 0;
+        // Escore
         /*
          * EEEEEEE
          * EE
@@ -246,28 +258,28 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
          * EE
          * EEEEEEE
          */
-        
+
         jtl = new JLabel("Enrichment score threshold:");
         cMotif.gridx = 0;
         cMotif.gridy = lineY;
         cMotif.gridwidth = 1;
-        cMotif.weightx=0;
-        cMotif.fill=GridBagConstraints.HORIZONTAL;
+        cMotif.weightx = 0;
+        cMotif.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         jtl.setToolTipText("<html>Choose the minimal score threshold to consider a motif as being relevant.</html>");
         panelMotif.add(jtl, cMotif);
-        
+
         this.jtfEscore = new JTextField(Float.toString(DEFAULT_NES_THRESHOLD));
         this.jtfEscore.setVisible(true);
         cMotif.gridx = 1;
         cMotif.gridy = lineY;
         cMotif.gridwidth = 1;
-        cMotif.weightx=0.5;
-        cMotif.fill=GridBagConstraints.HORIZONTAL;
-		this.jtfEscore.setVisible(true);
-		panelMotif.add(this.jtfEscore, cMotif);
-		lineY += 1;
-        
+        cMotif.weightx = 0.5;
+        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        this.jtfEscore.setVisible(true);
+        panelMotif.add(this.jtfEscore, cMotif);
+        lineY += 1;
+
         // ROCthresholdAUC
         /* RRRRRRR
          * RR	RR
@@ -279,27 +291,27 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
          */
         jtl = new JLabel("ROC threshold for AUC calculation:");
         jtl.setToolTipText("<html>The x-axis (region rank) cut-off at which to calculate the Area Under the Curve. This <br/>" +
-				"measure is used to compare and rank all motifs. </html>");
-        
+                "measure is used to compare and rank all motifs. </html>");
+
         cMotif.gridx = 0;
         cMotif.gridy = lineY;
         cMotif.gridwidth = 1;
-        cMotif.weightx=0;
-        cMotif.fill=GridBagConstraints.HORIZONTAL;
+        cMotif.weightx = 0;
+        cMotif.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         panelMotif.add(jtl, cMotif);
-        
+
         this.jtfROC = new JTextField(Float.toString(DEFAULT_ROC_THRESHOLD));
         this.jtfROC.setEditable(true);
-        
+
         cMotif.gridx = 1;
         cMotif.gridy = lineY;
         cMotif.gridwidth = 1;
-        cMotif.weightx=0.5;
-        cMotif.fill=GridBagConstraints.HORIZONTAL;
-		this.jtfROC.setVisible(true);
-		panelMotif.add(this.jtfROC, cMotif);
-		lineY += 1;
+        cMotif.weightx = 0.5;
+        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        this.jtfROC.setVisible(true);
+        panelMotif.add(this.jtfROC, cMotif);
+        lineY += 1;
 
         // threshold for visualisation
         /*
@@ -311,133 +323,133 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
          * 
          */
         jtl = new JLabel("Rank threshold:");
-		jtl.setToolTipText("<html>The x-axis cut-off for calculation of the ROC.</html>");
-        
-		cMotif.gridx = 0;
-		cMotif.gridy = lineY;
-		cMotif.gridwidth = 1;
-		cMotif.weightx=0;
-		cMotif.fill=GridBagConstraints.HORIZONTAL;
+        jtl.setToolTipText("<html>The x-axis cut-off for calculation of the ROC.</html>");
+
+        cMotif.gridx = 0;
+        cMotif.gridy = lineY;
+        cMotif.gridwidth = 1;
+        cMotif.weightx = 0;
+        cMotif.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         panelMotif.add(jtl, cMotif);
-        
+
         this.jtfVisualisation = new JTextField(Integer.toString(DEFAULT_RANK_THRESHOLD));
         this.jtfVisualisation.setEditable(true);
-        
+
         cMotif.gridx = 1;
         cMotif.gridy = lineY;
         cMotif.gridwidth = 1;
-        cMotif.weightx=0.5;
-        cMotif.fill=GridBagConstraints.HORIZONTAL;
-		this.jtfVisualisation.setVisible(true);
-		panelMotif.add(this.jtfVisualisation, cMotif);
-		lineY += 1;
-		
-		cc.gridx = 0;
-		cc.gridy = yPos;
-		cc.gridwidth = 5;
-		cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelMotif, cc);
-		yPos+=1;
+        cMotif.weightx = 0.5;
+        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        this.jtfVisualisation.setVisible(true);
+        panelMotif.add(this.jtfVisualisation, cMotif);
+        lineY += 1;
 
-		//Minimal Orthologous id
-		/* OOOOOOO
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 5;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(panelMotif, cc);
+        yPos += 1;
+
+        //Minimal Orthologous id
+        /* OOOOOOO
 		 * OO	OO
 		 * OO	OO
 		 * OO	OO
 		 * OOOOOOO
 		 */
-		cc.gridx = 0;
-		cc.gridy = yPos;
-		cc.gridwidth = 5;
-		cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(createMotif2TFSubPanel(), cc);
-		yPos+=1;
-        
-		GridBagLayout layoutNode = new GridBagLayout();
-		GridBagConstraints cNode = new GridBagConstraints();
-		JPanel panelNode = new JPanel(layoutNode);
-		TitledBorder borderNode = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Node information");
-		borderNode.setTitleJustification(TitledBorder.LEFT);
-		borderNode.setTitlePosition(TitledBorder.CENTER);
-		panelNode.setBorder(borderNode);
-		lineY = 0;
-		
-		jtl = new JLabel("Node attribute that corresponds to geneID:");
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 5;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(createMotif2TFSubPanel(), cc);
+        yPos += 1;
+
+        GridBagLayout layoutNode = new GridBagLayout();
+        GridBagConstraints cNode = new GridBagConstraints();
+        JPanel panelNode = new JPanel(layoutNode);
+        TitledBorder borderNode = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Node information");
+        borderNode.setTitleJustification(TitledBorder.LEFT);
+        borderNode.setTitlePosition(TitledBorder.CENTER);
+        panelNode.setBorder(borderNode);
+        lineY = 0;
+
+        jtl = new JLabel("Node attribute that corresponds to geneID:");
         jtl.setToolTipText("<html>Choose the node attribute that represents the gene name.</html>");
-        
+
         cNode.gridx = 0;
         cNode.gridy = lineY;
         cNode.gridwidth = 1;
-        cNode.weightx=0;
-        cNode.fill=GridBagConstraints.HORIZONTAL;
+        cNode.weightx = 0;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         panelNode.add(jtl, cNode);
-        
+
         this.attributeNameCB = new JComboBox();
         cNode.gridx = 1;
         cNode.gridy = lineY;
         cNode.gridwidth = 1;
-        cNode.weightx=0.5;
-        cNode.fill=GridBagConstraints.HORIZONTAL;
+        cNode.weightx = 0.5;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
         panelNode.add(this.attributeNameCB, cNode);
         lineY += 1;
-		
-		 
+
+
         jtl = new JLabel("Number of valid genes (nodes):");
-		jtl.setToolTipText("<html>The number of nodes that have an ID usable for the analysis." + "<P>" +
-        		"This doesn't mean that all nodes have valid names! </html>");
-		cNode.gridx = 0;
-		cNode.gridy = lineY;
-		cNode.gridwidth = 1;
-		cNode.weightx=0;
-		cNode.fill=GridBagConstraints.HORIZONTAL;
+        jtl.setToolTipText("<html>The number of nodes that have an ID usable for the analysis." + "<P>" +
+                "This doesn't mean that all nodes have valid names! </html>");
+        cNode.gridx = 0;
+        cNode.gridy = lineY;
+        cNode.gridwidth = 1;
+        cNode.weightx = 0;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         panelNode.add(jtl, cNode);
-        
+
         numberOfNodesTF = new JTextField("0");
         numberOfNodesTF.setEditable(false);
-        
+
         cNode.gridx = 1;
         cNode.gridy = lineY;
         cNode.gridwidth = 1;
-        cNode.weightx=0.5;
-        cNode.fill=GridBagConstraints.HORIZONTAL;
+        cNode.weightx = 0.5;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
         panelNode.add(numberOfNodesTF, cNode);
         lineY += 1;
-		
-		cc.gridx = 0;
-		cc.gridy = yPos;
-		cc.gridwidth = 5;
-		cNode.weightx=0.5;
-		cc.fill=GridBagConstraints.HORIZONTAL;
-		panel.add(panelNode, cc);
-		yPos+=1;
 
-		final JPanel mainPanel = new JPanel(new BorderLayout());
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 5;
+        cNode.weightx = 0.5;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(panelNode, cc);
+        yPos += 1;
+
+        final JPanel mainPanel = new JPanel(new BorderLayout());
         final JButton cancelButton = new JButton("Cancel");
-                cancelButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent arg0) {
-                        if (frame != null) frame.dispose();
-                    }
-                });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                if (frame != null) frame.dispose();
+            }
+        });
         final JButton submitButton = new JButton(new PredictRegulatorsAction(PredictedRegulatorsForm.this) {
-                    @Override
-                    public void actionPerformed(ActionEvent arg0) {
-                        if (CytoscapeNetworkUtilities.hasSelectedNodes()) {
-                            final InputParameters input = deriveParameters();
-                            if (input.parametersAreValid()) {
-                                if (frame != null) frame.dispose();
-                                super.actionPerformed(arg0);
-                            } else {
-                                JOptionPane.showMessageDialog(Cytoscape.getDesktop(), input.getErrorMessage());
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "No nodes are selected!");
-                        }
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                if (CytoscapeNetworkUtilities.hasSelectedNodes()) {
+                    final InputParameters input = deriveParameters();
+                    if (input.parametersAreValid()) {
+                        if (frame != null) frame.dispose();
+                        super.actionPerformed(arg0);
+                    } else {
+                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), input.getErrorMessage());
                     }
-                });
+                } else {
+                    JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "No nodes are selected!");
+                }
+            }
+        });
         submitButton.setText("Submit");
         mainPanel.add(panel, BorderLayout.CENTER);
         mainPanel.add(new JPanel(new FlowLayout()) {
@@ -449,18 +461,18 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
 
         this.dbListener = new DatabaseListener(this.jobNameTF,
-        		this.jtfEscore, this.jtfROC, this.jtfVisualisation, 
-        		this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR, 
-        		this.jcbSpecieAndNomenclature,
+                this.jtfEscore, this.jtfROC, this.jtfVisualisation,
+                this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR,
+                this.jcbSpecieAndNomenclature,
                 this.motifCollectionCB, this.genePutativeRegulatoryRegionCB,
                 this.searchSpaceTypeCB, this.databaseCB,
-        		overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion, 
-        		this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.attributeNameCB, numberOfNodesTF,
-        		submitButton);
+                overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion,
+                this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.attributeNameCB, numberOfNodesTF,
+                submitButton);
         registerListeners();
 
-		return mainPanel;
-	}
+        return mainPanel;
+    }
 
     private void registerListeners() {
         this.jobNameTF.addActionListener(this.dbListener);
@@ -536,17 +548,23 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         final JLabel motifsLB = new JLabel("Motif collection:");
         motifsLB.setToolTipText("Choose the motif collection used in the enrichment analysis.");
-        cc.gridx = 0; cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
         panel.add(motifsLB, cc);
 
         this.motifCollectionCB = new MotifCollectionComboBox();
-        cc.gridx = 1; cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.gridx = 1;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(motifCollectionCB, cc);
@@ -555,17 +573,23 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         final JLabel typeLB = new JLabel("Type of search space:");
         typeLB.setToolTipText("Choose the type of search space to use in the analysis.");
-        cc.gridx = 0; cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
         panel.add(typeLB, cc);
 
         this.searchSpaceTypeCB = new SearchSpaceTypeComboBox();
-        cc.gridx = 1; cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.gridx = 1;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(this.searchSpaceTypeCB, cc);
@@ -574,17 +598,23 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         final JLabel regRegionLB = new JLabel("Putative regulatory region:");
         regRegionLB.setToolTipText("Choose the putative regulatory region for genes used in the enrichment analysis.");
-        cc.gridx = 0; cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
         panel.add(regRegionLB, cc);
 
         genePutativeRegulatoryRegionCB = new PutativeRegulatoryRegionComboBox();
-        cc.gridx = 1; cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.gridx = 1;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(genePutativeRegulatoryRegionCB, cc);
@@ -593,17 +623,23 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         final JLabel dbLB = new JLabel("Database:");
         dbLB.setToolTipText("Choose the database.");
-        cc.gridx = 0; cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
         panel.add(dbLB, cc);
 
         this.databaseCB = new DBCombobox();
-        cc.gridx = 1;cc.gridy = yPos;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.gridx = 1;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(this.databaseCB, cc);
@@ -613,23 +649,23 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
     private JPanel createMotif2TFSubPanel() {
         GridBagLayout layoutMotif2TF = new GridBagLayout();
-		GridBagConstraints cMotif2TF = new GridBagConstraints();
-		JPanel panelMotif2TF = new JPanel(layoutMotif2TF);
-		TitledBorder borderMotif2TF = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "TF prediction");
-		borderMotif2TF.setTitleJustification(TitledBorder.LEFT);
-		borderMotif2TF.setTitlePosition(TitledBorder.CENTER);
-		panelMotif2TF.setBorder(borderMotif2TF);
-		int lineY = 0;
+        GridBagConstraints cMotif2TF = new GridBagConstraints();
+        JPanel panelMotif2TF = new JPanel(layoutMotif2TF);
+        TitledBorder borderMotif2TF = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "TF prediction");
+        borderMotif2TF.setTitleJustification(TitledBorder.LEFT);
+        borderMotif2TF.setTitlePosition(TitledBorder.CENTER);
+        panelMotif2TF.setBorder(borderMotif2TF);
+        int lineY = 0;
 
-		JLabel jtl = new JLabel("Minimum identity between orthologous genes:");
-		jtl.setToolTipText("<html>Choose the minimum identity between orthologous genes.<br/>" +
+        JLabel jtl = new JLabel("Minimum identity between orthologous genes:");
+        jtl.setToolTipText("<html>Choose the minimum identity between orthologous genes.<br/>" +
                 "How closer to 0, how more orthologous the transcription factor will be to the gene for which an enriched motif was found.<br/>" +
                 "(Value must be between 0 and 1).</html>");
-		cMotif2TF.gridx = 0;
-		cMotif2TF.gridy = lineY;
-		cMotif2TF.gridwidth = 1;
-		cMotif2TF.weightx=0;
-		cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        cMotif2TF.gridx = 0;
+        cMotif2TF.gridy = lineY;
+        cMotif2TF.gridwidth = 1;
+        cMotif2TF.weightx = 0;
+        cMotif2TF.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         panelMotif2TF.add(jtl, cMotif2TF);
 
@@ -639,27 +675,27 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cMotif2TF.gridx = 1;
         cMotif2TF.gridy = lineY;
         cMotif2TF.gridwidth = 1;
-        cMotif2TF.weightx=0.5;
-        cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        cMotif2TF.weightx = 0.5;
+        cMotif2TF.fill = GridBagConstraints.HORIZONTAL;
         panelMotif2TF.add(this.jtfMinOrthologous, cMotif2TF);
         lineY += 1;
 
-		//max motif similarity FDR
+        //max motif similarity FDR
 		/* SSSSSSS
 		 * SS
 		 * SSSSSSS
 		 * 		SS
 		 * SSSSSSS
 		 */
-		jtl = new JLabel("Maximum false discovery rate (FDR) on motif similarity:");
-		jtl.setToolTipText("<html>Choose the Maximum false discovery rate (FDR) on motif similarity.<br/>" +
+        jtl = new JLabel("Maximum false discovery rate (FDR) on motif similarity:");
+        jtl.setToolTipText("<html>Choose the Maximum false discovery rate (FDR) on motif similarity.<br/>" +
                 "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +
                 "(Value must be between 0 and 1).</html>");
-		cMotif2TF.gridx = 0;
-		cMotif2TF.gridy = lineY;
-		cMotif2TF.gridwidth = 1;
-		cMotif2TF.weightx=0;
-		cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        cMotif2TF.gridx = 0;
+        cMotif2TF.gridy = lineY;
+        cMotif2TF.gridwidth = 1;
+        cMotif2TF.weightx = 0;
+        cMotif2TF.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         panelMotif2TF.add(jtl, cMotif2TF);
 
@@ -670,8 +706,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cMotif2TF.gridx = 1;
         cMotif2TF.gridy = lineY;
         cMotif2TF.gridwidth = 1;
-        cMotif2TF.weightx=0.5;
-        cMotif2TF.fill=GridBagConstraints.HORIZONTAL;
+        cMotif2TF.weightx = 0.5;
+        cMotif2TF.fill = GridBagConstraints.HORIZONTAL;
         panelMotif2TF.add(this.jtfMaxMotifSimilarityFDR, cMotif2TF);
 
         return panelMotif2TF;
@@ -684,95 +720,99 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     public void setJobName(final String name) {
         if (name == null) {
             jobNameTF.setText(deriveDefaultJobName());
-        }  else if (name.length() > MAX_NAME_LENGTH) {
+        } else if (name.length() > MAX_NAME_LENGTH) {
             jobNameTF.setText(name.substring(0, MAX_NAME_LENGTH - 3) + "...");
         } else {
-           jobNameTF.setText(name);
+            jobNameTF.setText(name);
         }
     }
 
     public static String deriveDefaultJobName() {
         final String name = Cytoscape.getCurrentNetwork().getTitle();
-		if (name == null || name.equals("0")) {
-			return BUNDLE.getString("plugin_name") + " name";
-		} else if (name.length() > MAX_NAME_LENGTH) {
+        if (name == null || name.equals("0")) {
+            return BUNDLE.getString("plugin_name") + " name";
+        } else if (name.length() > MAX_NAME_LENGTH) {
             return name.substring(0, MAX_NAME_LENGTH - 3) + "...";
         } else {
             return name;
         }
     }
 
-	public float getNESThreshold(){
-		return Float.parseFloat((this.jtfEscore.getText()));
-	}
-	
-	public float getAUCThreshold(){
-		return Float.parseFloat(this.jtfROC.getText());
-	}
+    public String getMotifCollection() {
+        return this.motifCollectionCB.getSelectedItem().toString();
+    }
 
-	public int getRankThreshold(){
-		return Integer.parseInt(this.jtfVisualisation.getText());
-	}
-	
-	public SpeciesNomenclature getSpeciesNomenclature(){
-		return (SpeciesNomenclature) this.jcbSpecieAndNomenclature.getSelectedItem();
-	}
+    public float getNESThreshold() {
+        return Float.parseFloat((this.jtfEscore.getText()));
+    }
 
-	public float getMinOrthologousIdentity() {
-		return Float.parseFloat(this.jtfMinOrthologous.getText());
-	}
+    public float getAUCThreshold() {
+        return Float.parseFloat(this.jtfROC.getText());
+    }
 
-	public float getMaxMotifSimilarityFDR() {
-		return Float.parseFloat(this.jtfMaxMotifSimilarityFDR.getText());
-	}
+    public int getRankThreshold() {
+        return Integer.parseInt(this.jtfVisualisation.getText());
+    }
 
-	public String getAttributeName() {
-		return (String) this.attributeNameCB.getSelectedItem();
-	}
-	
-	public boolean isRegionBasedDatabase(){
-		return this.searchSpaceTypeCB.isRegionBased();
-	}
-	
-	public RankingsDatabase getRankingsDatabase(){
-		if (this.isRegionBasedDatabase()){
-			return (RankingsDatabase) this.databaseCB.getSelectedItem();
-		}else{
-			return (RankingsDatabase) this.databaseCB.getSelectedItem();
-		}
-	}
-	
-	public Float getOverlapFraction(){
-		if (this.isRegionBasedDatabase()){
-			return Float.parseFloat(this.txtOverlap.getText());
-		}else{
-			return -1f;
-		}
-	}
-	
-	public Delineation getDelineation(){
-		if (this.isRegionBasedDatabase() && this.rbtnDelineation.isSelected()){
-			return (Delineation) this.jcbDelation.getSelectedItem();
-		}else{
-			return new Delineation(null, null);
-		}
-	}
-	
-	public int getUpstreamRegionInBp(){
-		if (this.isRegionBasedDatabase() && this.rbtnConversion.isSelected()){
-			return Integer.parseInt(this.txtUpStream.getText());
-		}else{
-			return -1;
-		}
-	}
-	
-	public int getDownstreamInBp(){
-		if (this.isRegionBasedDatabase() && this.rbtnConversion.isSelected()){
-			return Integer.parseInt(this.txtDownStream.getText());
-		}else{
-			return -1;
-		}
-	}
+    public SpeciesNomenclature getSpeciesNomenclature() {
+        return (SpeciesNomenclature) this.jcbSpecieAndNomenclature.getSelectedItem();
+    }
+
+    public float getMinOrthologousIdentity() {
+        return Float.parseFloat(this.jtfMinOrthologous.getText());
+    }
+
+    public float getMaxMotifSimilarityFDR() {
+        return Float.parseFloat(this.jtfMaxMotifSimilarityFDR.getText());
+    }
+
+    public String getAttributeName() {
+        return (String) this.attributeNameCB.getSelectedItem();
+    }
+
+    public boolean isRegionBasedDatabase() {
+        return this.searchSpaceTypeCB.isRegionBased();
+    }
+
+    public RankingsDatabase getRankingsDatabase() {
+        if (this.isRegionBasedDatabase()) {
+            return (RankingsDatabase) this.databaseCB.getSelectedItem();
+        } else {
+            return (RankingsDatabase) this.databaseCB.getSelectedItem();
+        }
+    }
+
+    public Float getOverlapFraction() {
+        if (this.isRegionBasedDatabase()) {
+            return Float.parseFloat(this.txtOverlap.getText());
+        } else {
+            return -1f;
+        }
+    }
+
+    public Delineation getDelineation() {
+        if (this.isRegionBasedDatabase() && this.rbtnDelineation.isSelected()) {
+            return (Delineation) this.jcbDelation.getSelectedItem();
+        } else {
+            return new Delineation(null, null);
+        }
+    }
+
+    public int getUpstreamRegionInBp() {
+        if (this.isRegionBasedDatabase() && this.rbtnConversion.isSelected()) {
+            return Integer.parseInt(this.txtUpStream.getText());
+        } else {
+            return -1;
+        }
+    }
+
+    public int getDownstreamInBp() {
+        if (this.isRegionBasedDatabase() && this.rbtnConversion.isSelected()) {
+            return Integer.parseInt(this.txtDownStream.getText());
+        } else {
+            return -1;
+        }
+    }
 
     private int getNumberOfSelectedNodes() {
         return CytoscapeNetworkUtilities.getGenes(getAttributeName(), getSpeciesNomenclature()).size();
@@ -787,31 +827,32 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         final String selectedAttributeName = getAttributeName();
         attributeNameCB.removeAllItems();
         final java.util.List<String> attributeNames = CytoscapeNetworkUtilities.getPossibleGeneIDAttributesWithDefault();
-        for (String name: attributeNames) attributeNameCB.addItem(name);
-		if (attributeNames.contains(selectedAttributeName)) attributeNameCB.setSelectedItem(selectedAttributeName);
+        for (String name : attributeNames) attributeNameCB.addItem(name);
+        if (attributeNames.contains(selectedAttributeName)) attributeNameCB.setSelectedItem(selectedAttributeName);
         numberOfNodesTF.setText(Integer.toString(getNumberOfSelectedNodes()));
         registerListeners();
         if (dbListener != null) dbListener.refresh();
     }
 
-	public InputParameters deriveParameters() {
-		return new InputParameters(CytoscapeNetworkUtilities.getGenes(
+    public InputParameters deriveParameters() {
+        return new InputParameters(CytoscapeNetworkUtilities.getGenes(
                 getAttributeName(),
                 getSpeciesNomenclature()),
-				getNESThreshold(),
-				getAUCThreshold(),
-				getRankThreshold(),
-				getSpeciesNomenclature(),
-				IRegulonType.PREDICTED_REGULATORS,
-				getJobName(),
-				getMinOrthologousIdentity(),
-				getMaxMotifSimilarityFDR(),
-				isRegionBasedDatabase(),
-				getRankingsDatabase(),
-				getOverlapFraction(),
-				getDelineation(),
-				getUpstreamRegionInBp(),
-				getDownstreamInBp(),
-				getAttributeName());
-	}
+                getNESThreshold(),
+                getAUCThreshold(),
+                getRankThreshold(),
+                getSpeciesNomenclature(),
+                IRegulonType.PREDICTED_REGULATORS,
+                getJobName(),
+                getMotifCollection(),
+                getMinOrthologousIdentity(),
+                getMaxMotifSimilarityFDR(),
+                isRegionBasedDatabase(),
+                getRankingsDatabase(),
+                getOverlapFraction(),
+                getDelineation(),
+                getUpstreamRegionInBp(),
+                getDownstreamInBp(),
+                getAttributeName());
+    }
 }

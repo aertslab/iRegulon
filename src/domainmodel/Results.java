@@ -6,119 +6,123 @@ import java.util.*;
 
 
 public class Results {
-	private final List<Motif> motifs;
-	private final InputParameters inputParameters;
-	
-	public Results(final Collection<Motif> motifs, final InputParameters inputParameters){
-		this.motifs = new ArrayList<Motif>(motifs);
+    private final List<Motif> motifs;
+    private final InputParameters inputParameters;
+
+    public Results(final Collection<Motif> motifs, final InputParameters inputParameters) {
+        this.motifs = new ArrayList<Motif>(motifs);
         Collections.sort(this.motifs, new Comparator<Motif>() {
             @Override
             public int compare(Motif o1, Motif o2) {
                 return new Integer(o1.getRank()).compareTo(o2.getRank());
             }
         });
-		this.inputParameters = inputParameters;
-	}
-	
-	public List<Motif> getMotifs(){
-		return this.motifs;
-	}
-	
-	public boolean hasParameters(){
-		return (this.inputParameters != null);
-	}
+        this.inputParameters = inputParameters;
+    }
 
-	public InputParameters getParameters() {
-		return this.inputParameters;
-	}
-	
-	public Collection<GeneIdentifier> getGenes(){
-		return this.inputParameters.getGenes();
-	}
-	
-	public float getEScore(){
-		return this.inputParameters.getEScore();
-	}
-	
-	public int getThresholdForVisualisation(){
-		return this.inputParameters.getThresholdForVisualisation();
-	}
-	
-	public float getROCthresholdAUC(){
-		return this.inputParameters.getROCthresholdAUC();
-	}
-	
-	public SpeciesNomenclature getSpeciesNomenclature(){
-		return this.inputParameters.getSpeciesNomenclature();
-	}
-	
-	public IRegulonType getIRegulonType(){
-		return this.inputParameters.getIRegulonType();
-	}
-	
-	public String getName(){
-		return this.inputParameters.getName();
-	}
-	
-	public float getMinOrthologous(){
-		return this.inputParameters.getMinOrthologous();
-	}
-	
-	public float getMaxMotifSimilarityFDR(){
-		return this.inputParameters.getMaxMotifSimilarityFDR();
-	}
-	
-	public boolean isRegionBased(){
-		return this.inputParameters.isRegionBased();
-	}
-	
-	public boolean isGeneBased(){
-		return ! this.inputParameters.isGeneBased();
-	}
-	
-	public String getDatabaseName(){
-		return this.inputParameters.getDatabase().getName();
-	}
-	
-	public String getDatabase(){
-		return this.inputParameters.getDatabase().getCode();
-	}
-	
-	public float getOverlap(){
-		return this.inputParameters.getOverlap();
-	}
-	
-	public String getDelineationName(){
-		if (this.isDelineationBased()){
-			return this.inputParameters.getDelineation().getName();
-		}
-		return null;
-	}
-	
-	public Delineation getDelineation(){
-		return this.inputParameters.getDelineation();
-	}
-	
-	public String getDelineationDatabase(){
-		return this.inputParameters.getDelineation().getCode();
-	}
-	
-	public boolean isDelineationBased(){
-		return this.inputParameters.isDelineationBased();
-	}
-	
-	public int getUpstream(){
-		return this.inputParameters.getUpstream();
-	}
-	
-	public int getDownstream(){
-		return this.inputParameters.getDownstream();
-	}
+    public List<Motif> getMotifs() {
+        return this.motifs;
+    }
+
+    public boolean hasParameters() {
+        return (this.inputParameters != null);
+    }
+
+    public InputParameters getParameters() {
+        return this.inputParameters;
+    }
+
+    public Collection<GeneIdentifier> getGenes() {
+        return this.inputParameters.getGenes();
+    }
+
+    public float getEScore() {
+        return this.inputParameters.getEScore();
+    }
+
+    public int getThresholdForVisualisation() {
+        return this.inputParameters.getThresholdForVisualisation();
+    }
+
+    public float getROCthresholdAUC() {
+        return this.inputParameters.getROCthresholdAUC();
+    }
+
+    public SpeciesNomenclature getSpeciesNomenclature() {
+        return this.inputParameters.getSpeciesNomenclature();
+    }
+
+    public IRegulonType getIRegulonType() {
+        return this.inputParameters.getIRegulonType();
+    }
+
+    public String getName() {
+        return this.inputParameters.getName();
+    }
+
+    public String getMotifCollection() {
+        return this.inputParameters.getMotifCollection();
+    }
+
+    public float getMinOrthologous() {
+        return this.inputParameters.getMinOrthologous();
+    }
+
+    public float getMaxMotifSimilarityFDR() {
+        return this.inputParameters.getMaxMotifSimilarityFDR();
+    }
+
+    public boolean isRegionBased() {
+        return this.inputParameters.isRegionBased();
+    }
+
+    public boolean isGeneBased() {
+        return !this.inputParameters.isGeneBased();
+    }
+
+    public String getDatabaseName() {
+        return this.inputParameters.getDatabase().getName();
+    }
+
+    public String getDatabase() {
+        return this.inputParameters.getDatabase().getCode();
+    }
+
+    public float getOverlap() {
+        return this.inputParameters.getOverlap();
+    }
+
+    public String getDelineationName() {
+        if (this.isDelineationBased()) {
+            return this.inputParameters.getDelineation().getName();
+        }
+        return null;
+    }
+
+    public Delineation getDelineation() {
+        return this.inputParameters.getDelineation();
+    }
+
+    public String getDelineationDatabase() {
+        return this.inputParameters.getDelineation().getCode();
+    }
+
+    public boolean isDelineationBased() {
+        return this.inputParameters.isDelineationBased();
+    }
+
+    public int getUpstream() {
+        return this.inputParameters.getUpstream();
+    }
+
+    public int getDownstream() {
+        return this.inputParameters.getDownstream();
+    }
 
     public List<MotifCluster> getMotifClusters(final Set<String> geneIDs) {
         // 1. Group motifs according to STAMP clusters ...
         final Map<Integer, List<Motif>> code2motifs = new HashMap<Integer, List<Motif>>();
-        for (Motif curMotif: getMotifs()) {
+        for (Motif curMotif : getMotifs()) {
             final int curCode = curMotif.getClusterCode();
             final List<Motif> bucket;
             if (code2motifs.containsKey(curCode)) {
@@ -146,7 +150,7 @@ public class Results {
         // 3. Iterate motifs and translate them to MotifCluster objects ...
         final Set<String> alreadyProcessedTFIDs = new HashSet<String>();
         final List<MotifCluster> result = new ArrayList<MotifCluster>();
-        for(List<Motif> motifs: clusters) {
+        for (List<Motif> motifs : clusters) {
             final int clusterCode = motifs.get(0).getClusterCode();
 
             final List<Motif> sortedMotifs = new ArrayList<Motif>(motifs);
@@ -182,7 +186,7 @@ public class Results {
 
         final List<TranscriptionFactor> result = new ArrayList<TranscriptionFactor>();
         final Set<String> IDs = new HashSet<String>();
-        for (TranscriptionFactorAttributes attributes: tfAttributes) {
+        for (TranscriptionFactorAttributes attributes : tfAttributes) {
             final TranscriptionFactor factor = attributes.createTranscriptionFactor();
             if (!IDs.contains(factor.getName())) {
                 result.add(factor);
@@ -207,7 +211,7 @@ public class Results {
         }
 
         final List<CandidateTargetGene> targetGenes = new ArrayList<CandidateTargetGene>();
-        for (GeneIdentifier ID: geneID2attributes.keySet()) {
+        for (GeneIdentifier ID : geneID2attributes.keySet()) {
             final TargetGeneAttributes curAttributes = geneID2attributes.get(ID);
             targetGenes.add(new CandidateTargetGene(ID, curAttributes.getMinRank(), curAttributes.getMotifCount()));
         }

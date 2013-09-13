@@ -26,8 +26,12 @@ public class SummaryLabel extends JLabel {
         builder.append(results.getSpeciesNomenclature().toString());
         builder.append("<br/>");
 
-        builder.append("<b>Mimumum NEScore:</b> ");
+        builder.append("<b>Minimum NEScore:</b> ");
         builder.append(results.getEScore());
+        builder.append("<br/>");
+
+        builder.append("<b>Motif collection:</b> ");
+        builder.append(results.getMotifCollection());
         builder.append("<br/>");
 
         builder.append("<b>Rank threshold for visualisation:</b> ");
@@ -50,21 +54,25 @@ public class SummaryLabel extends JLabel {
         builder.append(results.getDatabaseName());
         builder.append("<br/>");
 
+        builder.append("<b>Number of valid nodes:</b> ");
+        builder.append(results.getGenes().size());
+        builder.append("<br/>");
+
         if (results.isRegionBased()) {
             builder.append("<b>Overlap fraction:</b> ");
-            builder.append(results.getOverlap() );
+            builder.append(results.getOverlap());
             builder.append("<br/>");
 
             if (results.isDelineationBased()) {
-                 builder.append("<b>Putative regulatory region:</b> ");
-                 builder.append(results.getDelineationName());
-                 builder.append("<br/>");
+                builder.append("<b>Putative regulatory region:</b> ");
+                builder.append(results.getDelineationName());
+                builder.append("<br/>");
             } else {
-                 builder.append("<b>Putative regulatory region:</b> [TSS-");
-                 builder.append(results.getUpstream());
-                 builder.append("kb,TSS+");
-                 builder.append(results.getDownstream());
-                 builder.append("kb]<br/>");
+                builder.append("<b>Putative regulatory region:</b> [TSS-");
+                builder.append(results.getUpstream());
+                builder.append("kb,TSS+");
+                builder.append(results.getDownstream());
+                builder.append("kb]<br/>");
             }
         }
 

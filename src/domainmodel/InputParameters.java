@@ -16,6 +16,7 @@ public class InputParameters {
     private final SpeciesNomenclature speciesNomenclature;
     private final IRegulonType iRegulonType;
     private final String name;
+    private final String motifCollection;
     private final float minOrthologous;
     private final float maxMotifSimilarityFDR;
 
@@ -32,10 +33,10 @@ public class InputParameters {
 
     public InputParameters(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC,
                            int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
-                           IRegulonType iRegulonType, String runName, float minOrthologous,
-                           float maxMotifSimilarityFDR, boolean isRegionBased, RankingsDatabase database,
-                           float overlap, Delineation delineation, int upstream, int downstream,
-                           String attributeName) {
+                           IRegulonType iRegulonType, String runName, String motifCollection,
+                           float minOrthologous, float maxMotifSimilarityFDR, boolean isRegionBased,
+                           RankingsDatabase database, float overlap, Delineation delineation,
+                           int upstream, int downstream, String attributeName) {
         this.genes = genes;
         this.eScore = escore;
         this.thresholdForVisualisation = visualisationThreshold;
@@ -43,6 +44,7 @@ public class InputParameters {
         this.speciesNomenclature = speciesNomenclature;
         this.iRegulonType = iRegulonType;
         this.name = runName;
+        this.motifCollection = motifCollection;
         this.minOrthologous = minOrthologous;
         this.maxMotifSimilarityFDR = maxMotifSimilarityFDR;
         this.isRegionBased = isRegionBased;
@@ -98,6 +100,13 @@ public class InputParameters {
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * @return the name of the run
+     */
+    public String getMotifCollection() {
+        return this.motifCollection;
     }
 
     /**

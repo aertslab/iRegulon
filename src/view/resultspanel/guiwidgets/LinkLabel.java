@@ -17,16 +17,21 @@ public final class LinkLabel extends JLabel {
 
     public LinkLabel() {
         super();
+
         mouseListener = new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON1) {
                     open(uri);
                 }
-                public void mouseEntered(MouseEvent e) {
-                    setText(originalText,false);
-                }
-                public void mouseExited(MouseEvent e) {
-                    setText(originalText,true);
-                }
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                setText(originalText, false);
+            }
+
+            public void mouseExited(MouseEvent e) {
+                setText(originalText, true);
+            }
         };
     }
 
@@ -62,11 +67,12 @@ public final class LinkLabel extends JLabel {
         setToolTipText("");
     }
 
-    public void enableLink(final String text, final URI link){
+    public void enableLink(final String text, final URI link) {
         setOriginalText(text);
         setUri(link);
         setText(text, true);
         setToolTipText(link.toString());
+        unregisterListener();
         registerListener();
     }
 
@@ -74,8 +80,8 @@ public final class LinkLabel extends JLabel {
         if (text == null) {
             super.setText("");
         } else {
-            final String link = ul ? "<u>"+text+"</u>" : text;
-            super.setText("<html><span style=\"color: #000099;\">"+link+"</span></html>");
+            final String link = ul ? "<u>" + text + "</u>" : text;
+            super.setText("<html><span style=\"color: #000099;\">" + link + "</span></html>");
         }
     }
 

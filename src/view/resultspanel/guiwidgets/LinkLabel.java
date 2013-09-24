@@ -86,14 +86,13 @@ public final class LinkLabel extends JLabel {
                 desktop.browse(uri);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null,
-                        "Failed to launch the link, " +
-                                "your computer is likely misconfigured.",
-                        "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
+                        "Failed to open the requested URL in a web browser.",
+                        "Launching web browser failed", JOptionPane.WARNING_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null,
-                    "Java is not able to launch links on your computer.",
-                    "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
+                    "Opening a web browser on this platform is not supported.",
+                    "Launching web browser not supported", JOptionPane.WARNING_MESSAGE);
         }
     }
 }

@@ -103,10 +103,19 @@ public class IRegulonPlugin extends CytoscapePlugin {
             aboutText.addHyperlinkListener(new HyperlinkListener() {
                 public void hyperlinkUpdate(HyperlinkEvent e) {
                     if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                        try {
-                            Desktop.getDesktop().browse(URI.create(e.getURL().toString()));
-                        } catch (IOException e2) {
-                            e2.printStackTrace();
+                        if (Desktop.isDesktopSupported()) {
+                            final Desktop desktop = Desktop.getDesktop();
+                            try {
+                                desktop.browse(URI.create(e.getURL().toString()));
+                            } catch (IOException e2) {
+                                JOptionPane.showMessageDialog(null,
+                                        "Failed to open the requested URL in a web browser.",
+                                        "Launching web browser failed", JOptionPane.WARNING_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Opening a web browser on this platform is not supported.",
+                                    "Launching web browser not supported", JOptionPane.WARNING_MESSAGE);
                         }
                     }
                 }

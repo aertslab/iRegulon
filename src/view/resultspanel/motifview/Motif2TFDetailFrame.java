@@ -3,27 +3,24 @@ package view.resultspanel.motifview;
 import cytoscape.Cytoscape;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
-import view.resultspanel.guiwidgets.CopyToClipboardMouseListener;
 import view.resultspanel.guiwidgets.LogoMouseListener;
 import view.resultspanel.guiwidgets.LogoUtilities;
-import view.resultspanel.motifview.tablemodels.CandidateTargetGeneTableModel;
 import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-import javax.swing.*;
-
 
 public final class Motif2TFDetailFrame extends JDialog {
-	private final TFandMotifSelected information;
+    private final TFandMotifSelected information;
 
-    private static final String[] PREFIXES = new String[] {"A", "B", "C", "D"};
+    private static final String[] PREFIXES = new String[]{"A", "B", "C", "D"};
 
-	public Motif2TFDetailFrame(final TFandMotifSelected information) {
+    public Motif2TFDetailFrame(final TFandMotifSelected information) {
         super(Cytoscape.getDesktop(), true);
 
-		this.information = information;
+        this.information = information;
 
         setTitle(deriveTitle());
         setContentPane(new JPanel(new BorderLayout()) {
@@ -37,7 +34,7 @@ public final class Motif2TFDetailFrame extends JDialog {
             }
         });
         pack();
-	}
+    }
 
     public TFandMotifSelected getInformation() {
         return information;
@@ -57,9 +54,12 @@ public final class Motif2TFDetailFrame extends JDialog {
         final GridBagConstraints cc = new GridBagConstraints();
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.BOTH;
-        cc.gridheight = 1; cc.gridwidth = 1;
-        cc.weightx = 1.0; cc.weighty = 1.0;
-        cc.gridx = 0; cc.gridy = 0;
+        cc.gridheight = 1;
+        cc.gridwidth = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 1.0;
+        cc.gridx = 0;
+        cc.gridy = 0;
 
         String prevComponent = "Enriched motif";
         content.add(createEnrichedMotifPanel(cc.gridy, getInformation().getMotif()), cc);
@@ -108,7 +108,7 @@ public final class Motif2TFDetailFrame extends JDialog {
 
         addTitle(idx, "Similar to motif", cc, panel);
         addLabel("Name", factor.getSimilarMotifName(), cc, panel);
-        addLabel("Description",factor.getSimilarMotifDescription(), cc, panel);
+        addLabel("Description", factor.getSimilarMotifDescription(), cc, panel);
         addLabel("Similarity (FDR)", factor.getMaxMotifSimilarityFDR(), cc, panel);
         addLogo(factor.getSimilarMotifName(), cc, panel);
 
@@ -122,7 +122,7 @@ public final class Motif2TFDetailFrame extends JDialog {
 
         addTitle(idx, "Annotated for gene", cc, panel);
         addLabel("Name", factor.getOrthologousGeneName(), cc, panel);
-        addLabel("Species",factor.getOrthologousSpecies(), cc, panel);
+        addLabel("Species", factor.getOrthologousSpecies(), cc, panel);
         addLabel("Identity (fraction)", factor.getMinOrthologousIdentity(), cc, panel);
         addVerticalSpanner(cc, panel);
 
@@ -168,8 +168,10 @@ public final class Motif2TFDetailFrame extends JDialog {
     private void addTitle(final int idx, final String title, final GridBagConstraints cc, final JComponent container) {
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        cc.weightx = 1.0; cc.weighty = 0.0;
-        cc.gridwidth = 2; cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
+        cc.gridwidth = 2;
+        cc.gridheight = 1;
         cc.gridx = 0;
 
         final JLabel titleLB = new JLabel(PREFIXES[idx] + ". " + title);
@@ -182,8 +184,10 @@ public final class Motif2TFDetailFrame extends JDialog {
     private void addLabel(final String label, final Object value, final GridBagConstraints cc, final JComponent container) {
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
-        cc.weightx = 0.0; cc.weighty = 0.0;
-        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
         cc.gridx = 0;
 
         final JLabel labelLB = new JLabel(label + ":");
@@ -191,11 +195,13 @@ public final class Motif2TFDetailFrame extends JDialog {
 
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        cc.weightx = 1.0; cc.weighty = 0.0;
-        cc.gridwidth = 1; cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
         cc.gridx = 1;
 
-        final JTextField fieldTF =  new JTextField(value == null ? "" : value.toString());
+        final JTextField fieldTF = new JTextField(value == null ? "" : value.toString());
         fieldTF.setEditable(false);
         container.add(fieldTF, cc);
 
@@ -205,16 +211,23 @@ public final class Motif2TFDetailFrame extends JDialog {
     private void addLogo(final String motifName, final GridBagConstraints cc, final JComponent container) {
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.BOTH;
-        cc.weightx = 1.0; cc.weighty = 1.0;
-        cc.gridwidth = 2; cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 1.0;
+        cc.gridwidth = 2;
+        cc.gridheight = 1;
         cc.gridx = 0;
 
-        final ImageIcon imageIcon = LogoUtilities.createImageIcon(motifName);
-        final JLabel logoLabel = new JLabel(imageIcon);
-        // Left click + Ctrl-C will copy the logo to the clipboard.
-        logoLabel.addMouseListener(new CopyToClipboardMouseListener(imageIcon));
-        // Right click will save the logo to a PNG file.
-        logoLabel.addMouseListener(new LogoMouseListener(motifName));
+        final JLabel logoLabel = new JLabel();
+        logoLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        final ImageIcon logoIcon = LogoUtilities.createImageIcon(motifName);
+        if (logoIcon != null) {
+            logoLabel.setIcon(logoIcon);
+            logoLabel.addMouseListener(new LogoMouseListener(motifName));
+        } else {
+            logoLabel.setText("<html><br><i>This motif cannot be shown as it is part of TRANSFAC Pro.</i><br><br></html>");
+        }
+
         container.add(logoLabel, cc);
 
         cc.gridy++;
@@ -223,8 +236,10 @@ public final class Motif2TFDetailFrame extends JDialog {
     private void addVerticalSpanner(final GridBagConstraints cc, final JComponent container) {
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.BOTH;
-        cc.weightx = 1.0; cc.weighty = 1.0;
-        cc.gridwidth = 2; cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 1.0;
+        cc.gridwidth = 2;
+        cc.gridheight = 1;
         cc.gridx = 0;
 
         container.add(Box.createGlue(), cc);

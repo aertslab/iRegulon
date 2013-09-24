@@ -7,10 +7,10 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
-final class LogoTransferable implements Transferable {
+public final class LogoTransferable implements Transferable {
     private final ImageIcon logo;
 
-    LogoTransferable(ImageIcon logo) {
+    public LogoTransferable(ImageIcon logo) {
         this.logo = logo;
     }
 
@@ -20,7 +20,7 @@ final class LogoTransferable implements Transferable {
 
     @Override
     public DataFlavor[] getTransferDataFlavors() {
-        return new DataFlavor[] { DataFlavor.imageFlavor };
+        return new DataFlavor[]{DataFlavor.imageFlavor};
     }
 
     @Override

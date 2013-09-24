@@ -2,26 +2,25 @@ package view.resultspanel.guiwidgets;
 
 import domainmodel.Motif;
 
-import java.awt.*;
-
 import javax.swing.*;
+import java.awt.*;
 
 
 public class LogoThumbnail extends JLabel {
     public static final int THUMBNAIL_HEIGHT = 50;
-	public static final int THUMBNAIL_WIDTH  = 200;
+    public static final int THUMBNAIL_WIDTH = 200;
 
     private Motif motif;
-	private LogoThumbnailMouseListener curMouseListener;
+    private LogoThumbnailMouseListener curMouseListener;
 
     public LogoThumbnail() {
         this(null);
     }
-	
-	public LogoThumbnail(final Motif motif) {
-		super();
+
+    public LogoThumbnail(final Motif motif) {
+        super();
         setMotif(motif);
-	}
+    }
 
     public boolean hasMotif() {
         return motif != null;
@@ -43,22 +42,28 @@ public class LogoThumbnail extends JLabel {
         if (curMouseListener != null) removeMouseListener(curMouseListener);
 
         if (hasMotif()) {
-            setIcon(LogoUtilities.createResizedImageIcon(getMotif().getName()));
-            ImageIcon fullSizedLogo = LogoUtilities.createImageIcon(getMotif().getName());
-            // Left click + Ctrl-C will copy the logo to the clipboard.
-            this.addMouseListener(new CopyToClipboardMouseListener(fullSizedLogo));
-            // Right click will save the logo to a PNG file.
-            curMouseListener = new LogoThumbnailMouseListener(getMotif().getName(), this);
+            String motifName = getMotif().getName();
+            ImageIcon thumbIcon = LogoUtilities.createResizedImageIcon(motifName);
+            if (thumbIcon != null) {
+                setIcon(thumbIcon);
+                setText("");
+                curMouseListener = new LogoThumbnailMouseListener(motifName, this);
+            } else {
+                setIcon(null);
+                setText("<html><i>This motif cannot be shown as it is part of TRANSFAC Pro.</i></html>");
+                curMouseListener = null;
+            }
         } else {
             setIcon(null);
+            setText("");
             curMouseListener = null;
         }
 
         final Dimension dim = new Dimension(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
         setMaximumSize(dim);
-		setMinimumSize(dim);
+        setMinimumSize(dim);
 
-		if (curMouseListener != null) addMouseListener(curMouseListener);
+        if (curMouseListener != null) addMouseListener(curMouseListener);
     }
 }
 

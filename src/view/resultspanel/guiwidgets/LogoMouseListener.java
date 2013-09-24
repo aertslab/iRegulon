@@ -1,27 +1,34 @@
 package view.resultspanel.guiwidgets;
 
-import view.actions.SaveLoadDialogs;
+import view.actions.CopyLogoAction;
+import view.actions.SaveLogoAction;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class LogoMouseListener implements MouseListener {
-    private final String MotifName;
+    private final String motifName;
     private final java.net.URL fullSizedLogoFileURL;
 
-    public LogoMouseListener(final String MotifName){
-        this.MotifName = MotifName;
-        this.fullSizedLogoFileURL = LogoUtilities.getImageFileURL(MotifName);
+    public LogoMouseListener(final String motifName) {
+        this.motifName = motifName;
+        this.fullSizedLogoFileURL = LogoUtilities.getImageFileURL(motifName);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // Save the current motif logo to a file when a right click on the logo is detected.
-        if(e.getButton() == MouseEvent.BUTTON3)
-        {
+        if (e.getButton() == MouseEvent.BUTTON3) {
             if (fullSizedLogoFileURL != null) {
-                SaveLoadDialogs.saveLogo(fullSizedLogoFileURL, MotifName);
+                RightClickPopupMenu menu = new RightClickPopupMenu();
+
+                final CopyLogoAction copyLogoAction = new CopyLogoAction(motifName);
+                menu.addAction(copyLogoAction);
+
+                final SaveLogoAction saveLogoAction = new SaveLogoAction(fullSizedLogoFileURL, motifName);
+                menu.addAction(saveLogoAction);
+
+                menu.show(e.getComponent(), e.getX(), e.getY());
             }
         }
     }
@@ -41,4 +48,16 @@ public class LogoMouseListener implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
+
+    private static class RightClickPopupMenu extends JPopupMenu {
+
+        public RightClickPopupMenu() {
+            super();
+        }
+
+        public void addAction(Action action) {
+            add(new JMenuItem(action));
+        }
+    }
 }
+

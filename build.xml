@@ -9,16 +9,17 @@
     <property name="web.folder" value="web/"/>
 
     <property name="plugin.name" value="iRegulon"/>
-    <property name="plugin.version" value="0.97"/>
-    <property name="plugin.bin.filename" value="iRegulon-${plugin.version}-bin.jar"/>
-    <property name="plugin.bin.notransfac.filename" value="iRegulon-${plugin.version}-bin-no-transfac.jar"/>
-    <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src.zip"/>
-    <property name="plugin.src.notransfac.filename" value="iRegulon-${plugin.version}-src-no-transfac.zip"/>
+    <property name="plugin.version" value="1.0"/>
+    <property name="plugin.bin.filename" value="iRegulon-${plugin.version}-bin-with-transfac.jar"/>
+    <property name="plugin.bin.notransfac.filename" value="iRegulon-${plugin.version}-bin-without-transfac.jar"/>
+    <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src-with-transfac.zip"/>
+    <property name="plugin.src.notransfac.filename" value="iRegulon-${plugin.version}-src-without-transfac.zip"/>
     <property name="plugin.package" value="view"/>
     <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
 
     <tstamp>
-        <format property="TODAY" pattern="dd-MM-yyyy" locale="nl,BE"/>
+        <format property="TODAY" pattern="yyyy-MM-dd" locale="us,US"/>
+        <format property="TODAY_long" pattern="MMMM d, yyyy" locale="us,US"/>
     </tstamp>
 
     <!-- =================================================================== -->
@@ -72,7 +73,9 @@
                     <token key="pluginName" value="${plugin.name}"/>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
-                    <token key="webserverUrl" value="${webserver.url}"/>
+                    <token key="releaseDateLong" value="${TODAY_long}"/>
+                    <token key="websiteUrl" value="${website.url}"/>
+                    <token key="webclientBaseUrl" value="${webclient.baseurl}"/>
                 </replacetokens>
             </filterchain>
         </copy>
@@ -91,7 +94,8 @@
                     <token key="pluginName" value="${plugin.name}"/>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
-                    <token key="webserverUrl" value="${webserver.url}"/>
+                    <token key="websiteUrl" value="${website.url}"/>
+                    <token key="webclientBaseUrl" value="${webclient.baseurl}"/>
                     <token key="buildNumber" value="${build.number}"/>
                 </replacetokens>
             </filterchain>

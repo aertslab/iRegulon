@@ -1,23 +1,35 @@
 # This props file should be filled out and included in the plugin jar file.  This props file will be used
 # to put information into the Plugin Manager about the plugin
 
+# -- The following properties are REQUIRED -- #
+
 # The plugin name that will be displayed to users, white space within name is not allowed
 pluginName=@pluginName@
-# Plugin version number, this must be two numbers separated by a decimal.  Ex. 0.2, 14.03
-pluginVersion=@pluginVersion@
+
 # Description used to give users information about the plugin such as what it does.
 # Html tags are encouraged for formatting purposes.
-pluginDescription=@pluginName@ predicts causal transcription factors for sets of differentially expressed genes derived from expression micro-array or RNA-Seq experiments.
+pluginDescription=A regulon consists of a transcription factor (TF) and its direct transcriptional targets, which contain common TF binding sites in their cis-regulatory control elements.<p>The iRegulon plugin allows you to identify regulons using motif discovery in an existing network or in a set of co-regulated genes.<br><ul type=disc><li>Motif discovery is performed in proximal and distal sequences, across ten vertebrate genomes, using more than six thousand candidate motifs (position weight matrices or PWMs).</li><li>The output of iRegulon is a list of enriched motifs, alongside with candidate transcription factors. The Motif2TF associations are based on PWM annotation, the use of TF homology, and of motif similarity.</li><li>New networks can be automatically generated based on the predicted TF-target interactions.</li><li>The iRegulon plugin can also be used to query high-confidence target genes predicted from the systematic analysis of thousands of cancer gene signatures.</li></ul><a href="@websiteUrl@">@websiteUrl@</a></p>
+
+# Plugin version number, this must be two numbers separated by a decimal.  Ex. 0.2, 14.03
+pluginVersion=@pluginVersion@
+
+# Compatible Cytoscape version. If there are more than one version, separate by ",".
+cytoscapeVersion=2.8
+
+# Category, use one of the categories listed on the http://chianti.ucsd.edu/cyto_web/plugins/
+pluginCategory=Network generation
+
+# -- The following properties are OPTIONAL -- #
+
 # URL to a website that gives more information about your plugin, Ex. http://my-lab-site.org
-projectURL=@webserverUrl@
+projectURL=@websiteUrl@
+
 # List of authors.  Note each author and institution pair are separated by a : (colon)
 # each additional author institution pair must be separated from other pairs bye a ; (semicolon)
-pluginAuthorsInstitutions=Koen Herten:KULeuven;Bram Van De Sande:KULeuven;Gert Hulselmans:KULeuven
-# Compatible Cytoscape version. If there are more than one version, seperate by ",".
-cytoscapeVersion=2.8
-# Category, use one of the categories listed on the http://cytoscape.org/plugins2.php site
-pluginCategory=Network generation
+pluginAuthorsInstitutions=Gert Hulselmans, Koen Herten, Bram Van de Sande, Rekin's Janky and Stein Aerts:KULeuven
+
 # Date this plugin/plugin version was released
-releaseDate=@releaseDate@
+releaseDate=@releaseDateLong@
+
 # If this plugin is never meant to be downloaded except as part of a plugin (not common) add this property.  Default is "no"
 themeOnly=no

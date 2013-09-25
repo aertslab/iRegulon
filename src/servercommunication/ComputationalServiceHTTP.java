@@ -1,90 +1,100 @@
 package servercommunication;
 
-import domainmodel.*;
-import infrastructure.Logger;
-import servercommunication.protocols.*;
-
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.*;
-
-
 import cytoscape.Cytoscape;
+import cytoscape.CytoscapeVersion;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
+import domainmodel.*;
+import infrastructure.Logger;
+import servercommunication.protocols.HTTPProtocol;
+import servercommunication.protocols.Protocol;
+import servercommunication.protocols.State;
 import view.IRegulonResourceBundle;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 
 public class ComputationalServiceHTTP extends IRegulonResourceBundle implements ComputationalService {
     private static final boolean DEBUG = false;
     private static final String PARAMETER_NAME = "featureIDandTarget=";
 
+    private final String userAgent = this.getBundle().getString("User_Agent")
+            + " Cytoscape: " + CytoscapeVersion.version
+            + "; " + System.getProperty("os.name")
+            + "; " + System.getProperty("os.version")
+            + "; " + System.getProperty("os.arch") + ')';
+
     private final Protocol service = new HTTPProtocol();
 
     @Override
-	public List<Motif> findPredictedRegulators(InputParameters input) throws ServerCommunicationException {
-		final FindPredictedRegulatorsTask task = new FindPredictedRegulatorsTask(service, input);
-		
-		final JTaskConfig taskConfig = new JTaskConfig();
-		taskConfig.setOwner(Cytoscape.getDesktop());
-		taskConfig.displayCloseButton(true);
-		taskConfig.displayCancelButton(true);
-		taskConfig.displayStatus(true);
-		taskConfig.setAutoDispose(true);
+    public List<Motif> findPredictedRegulators(InputParameters input) throws ServerCommunicationException {
 
-		TaskManager.executeTask(task, taskConfig);
+        final FindPredictedRegulatorsTask task = new FindPredictedRegulatorsTask(service, input);
 
-		if (task.getFinishedState().equals(State.ERROR) && !task.getIsInterupted()) {
-			throw new ServerCommunicationException(task.getErrorMessage());
-		} else {
-			final Collection<Motif> motifs = task.getMotifs();
+        final JTaskConfig taskConfig = new JTaskConfig();
+        taskConfig.setOwner(Cytoscape.getDesktop());
+        taskConfig.displayCloseButton(true);
+        taskConfig.displayCancelButton(true);
+        taskConfig.displayStatus(true);
+        taskConfig.setAutoDispose(true);
+
+        TaskManager.executeTask(task, taskConfig);
+
+        if (task.getFinishedState().equals(State.ERROR) && !task.getIsInterupted()) {
+            throw new ServerCommunicationException(task.getErrorMessage());
+        } else {
+            final Collection<Motif> motifs = task.getMotifs();
             return new ArrayList<Motif>(motifs);
-		}
-	}
+        }
+    }
 
     @Override
     public Set<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException {
         if (speciesNomenclature == null) throw new IllegalArgumentException();
-        final URLConnection connection;
+        final HttpURLConnection connection;
         try {
             connection = createConnection4BundleKey("URL_metatargetomes_query_factors");
         } catch (IOException e) {
-            throw new ServerCommunicationException("Server is not available.");
+            throw new ServerCommunicationException("Getting transcription factors with predicted targetome failed. Server is not available.");
         }
+
         try {
-		    // Send the nomenclature code ...
+            /* Send the nomenclature code. */
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");
             builder.append(speciesNomenclature.getCode());
-            builder.append("\n");
             send(connection, builder.toString());
 
-		    // Get the response ...
-		    final Set<GeneIdentifier> result = new HashSet<GeneIdentifier>();
+            /* Check if the requested page exists. */
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new ServerCommunicationException("Retrieving '" + this.getBundle().getString("URL_metatargetomes_query_factors") + "' failed.");
+            }
+
+            /* Get the response. */
+            final Set<GeneIdentifier> result = new HashSet<GeneIdentifier>();
+
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
-                    if (DEBUG) Logger.getInstance().warning(line);
+                    String[] columns = line.split("\t");
 
-                    if (line.startsWith("#") || line.trim().equals("")) return;
-
-                    final String prefix = "ID=";
-                    if (line.startsWith(prefix)) {
-                        result.add(new GeneIdentifier(line.substring(prefix.length()), speciesNomenclature));
-                    } else {
-                        throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
+                    if (columns.length == 2) {
+                        if (columns[0].equals("TF:")) {
+                            result.add(new GeneIdentifier(columns[1], speciesNomenclature));
+                        } else if (columns[0].equals("ERROR:")) {
+                            throw new ServerCommunicationException(columns[1]);
+                        }
                     }
                 }
             });
 
             return result;
-		} catch (IOException e) {
+        } catch (IOException e) {
             Logger.getInstance().error(e);
             throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
-		}
+        }
     }
 
     @Override
@@ -95,14 +105,15 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         if (factor == null || databases == null) {
             throw new IllegalArgumentException();
         }
-        final URLConnection connection;
+        final HttpURLConnection connection;
         try {
             connection = createConnection4BundleKey("URL_metatargetomes_query_targetome");
         } catch (IOException e) {
-            throw new ServerCommunicationException("Server is not available.");
+            throw new ServerCommunicationException("Getting predicted targetome failed. Server is not available.");
         }
+
         try {
-            // Send the necessary information ...
+            /* Send the necessary information. */
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");
             builder.append(factor.getSpeciesNomenclature().getCode());
@@ -118,43 +129,48 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                 builder.append(",");
                 builder.append(database.getDbCode());
             }
-            builder.append("\n");
+
             send(connection, builder.toString());
 
-		    // Get the response ...
-		    final List<CandidateTargetGene> result = new ArrayList<CandidateTargetGene>();
+            /* Check if the requested page exists. */
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new ServerCommunicationException("Retrieving '" + this.getBundle().getString("URL_metatargetomes_query_targetome") + "' failed.");
+            }
+
+            /* Get the response. */
+            final List<CandidateTargetGene> result = new ArrayList<CandidateTargetGene>();
+
             read(connection, new LineProcessor() {
                 @Override
                 public void process(final String line) throws ServerCommunicationException {
-                    if (DEBUG) Logger.getInstance().warning(line);
+                    String[] columns = line.split("\t");
 
-                    if (line.startsWith("#") || line.trim().equals("")) return;
+                    if (columns.length == 3) {
+                        if (columns[0].equals("gene_occurrence:")) {
+                            try {
+                                int occurrenceCount = Integer.parseInt(columns[2]);
 
-                    final String prefix = "ID_occurenceCount=";
-                    if (line.startsWith(prefix)) {
-                        final String[] columns = line.substring(prefix.length()).split(";");
-                        if (columns.length != 2) {
-                            throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
+                                if (occurrenceCount < occurrenceCountThreshold) return;
+
+                                result.add(new CandidateTargetGene(
+                                        new GeneIdentifier(columns[1],
+                                                factor.getSpeciesNomenclature()),
+                                        occurrenceCount));
+                            } catch (NumberFormatException e) {
+                                throw new ServerCommunicationException("Gene occurrence count is not a number.");
+                            }
                         }
-                        try {
-                            int occurenceCount = Integer.parseInt(columns[1]);
-
-                            if (occurenceCount < occurenceCountThreshold) return;
-
-                            result.add(new CandidateTargetGene(
-                                new GeneIdentifier(columns[0], factor.getSpeciesNomenclature()),
-                                occurenceCount));
-                        } catch (NumberFormatException e) {
-                            throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
+                    } else if (columns.length == 2) {
+                        if (columns[0].equals("ERROR:")) {
+                            throw new ServerCommunicationException(columns[1]);
                         }
-                    } else {
-                        throw new ServerCommunicationException("Invalid format of message received from server: \"" + line + "\".");
+
                     }
                 }
             });
 
             Collections.sort(result, new Comparator<CandidateTargetGene>() {
-               @Override
+                @Override
                 public int compare(CandidateTargetGene o1, CandidateTargetGene o2) {
                     int r = new Integer(o2.getRank()).compareTo(o1.getRank());
                     if (r != 0) return r;
@@ -168,10 +184,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
                 final int minOccurrenceCount = result.get(maxNodeCount - 1).getRank();
                 return filter(result, minOccurrenceCount);
             }
-		} catch (IOException e) {
+        } catch (IOException e) {
             Logger.getInstance().error(e);
             throw new ServerCommunicationException("Error while trying to communicate with server: \"" + e.getMessage() + "\".", e);
-		}
+        }
     }
 
     private List<CandidateTargetGene> filter(List<CandidateTargetGene> genes, int minOccurrenceCount) {
@@ -182,32 +198,35 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         return results;
     }
 
-    private URLConnection createConnection4BundleKey(String bundleKey) throws IOException {
+    private HttpURLConnection createConnection4BundleKey(String bundleKey) throws IOException {
         return createConnection(getBundle().getString(bundleKey));
     }
 
-    private URLConnection createConnection(String resource) throws IOException {
+    private HttpURLConnection createConnection(String resource) throws IOException {
         final URL url = new URL(resource);
-		final URLConnection connection = url.openConnection();
-		connection.setDoInput(true);
-		connection.setDoOutput(true);
+        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("User-Agent", userAgent);
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
         return connection;
     }
 
     private void send(final URLConnection connection, String message) throws IOException {
         final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         writer.write(message);
-        writer.newLine();
         writer.flush();
+        writer.close();
     }
 
     private void read(final URLConnection connection, final LineProcessor processor) throws IOException, ServerCommunicationException {
         final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
-		     processor.process(line.trim());
-		}
-		reader.close();
+            processor.process(line.trim());
+        }
+        reader.close();
     }
 
     private static interface LineProcessor {
@@ -216,13 +235,14 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
     @Override
     public List<EnhancerRegion> getEnhancerRegions(final AbstractMotif motif) throws ServerCommunicationException {
-        final URLConnection connection;
+        final HttpURLConnection connection;
         try {
             final String uri = getBundle().getString("URL_motifBedGenerator") + "?" + generateParameters(motif);
             connection = createConnection(uri);
         } catch (IOException e) {
-            throw new ServerCommunicationException("Server is not available.");
+            throw new ServerCommunicationException("Unable to get enhancer regions. Server is not available.");
         }
+
         try {
             final List<EnhancerRegion> result = new ArrayList<EnhancerRegion>();
             read(connection, new LineProcessor() {

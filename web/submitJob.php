@@ -1,73 +1,130 @@
 <?php
-//parameters for the MySQLDatabase
-$ini_array = parse_ini_file("configuration.ini");
-$servername = $ini_array['servername'];
-$username = $ini_array['username'];
-$password = $ini_array['password'];
-$database = $ini_array['database'];
 
-//the parameters get from cytoscape plugin CisTargetView
-$AUCThreshold = $_POST["AUCThreshold"];
-$rankThreshold = $_POST["rankThreshold"];
-$NESThreshold = $_POST["NESThreshold"];
-$SpeciesNomenclature = $_POST["SpeciesNomenclature"];
-$genes = $_POST["genes"];
-$jobName = $_POST["jobName"];
-$jobStatusCode = "1";
-$minOrthologous = $_POST["minOrthologous"];
-$maxMotifSimilarityFDR = $_POST["maxMotifSimilarityFDR"];
-$selectedDatabase = $_POST["selectedDatabase"];
-if (isset($_POST["conversionDelineation"])){
-	$delineation = $_POST["conversionDelineation"];
-}else{
-	$delineation = NULL;
+include_once 'common.php';
+
+
+/* Set jobStatus code to 'requested' status. */
+$jobStatusCode = Job_status_codes::REQUESTED;
+
+
+
+/* Get parameters from the iRegulon Cytoscape plugin which should always be set (else error out). */
+$AUCThreshold = retrieve_post_value('AUCThreshold', false, 'float_positive');
+$rankThreshold = retrieve_post_value('rankThreshold', false, 'int_positive');
+$NESThreshold = retrieve_post_value('NESThreshold', false, 'float_positive');
+$SpeciesNomenclature = retrieve_post_value('SpeciesNomenclature', false, 'int_positive');
+$genes = retrieve_post_value('genes', false, 'string');
+$jobName = retrieve_post_value('jobName', false, 'string');
+$minOrthologous = retrieve_post_value('minOrthologous', false, 'float_positive');
+$maxMotifSimilarityFDR = retrieve_post_value('maxMotifSimilarityFDR', false, 'float_positive');
+$selectedDatabase = retrieve_post_value('selectedDatabase', false, 'string');
+
+
+/*
+ * Get parameters from the iRegulon Cytoscape plugin which could be set,
+ * depending on the selected options.
+ */
+$delineation = retrieve_post_value('conversionDelineation', true, 'string');
+$overlap = retrieve_post_value('conversionFractionOfOverlap', true, 'float_positive');
+$upstream = retrieve_post_value('conversionUpstreamRegionInBp', true, 'int_positive');
+$downstream = retrieve_post_value('conversionDownstreamRegionInBp', true, 'int_positive');
+
+
+
+/* Get MySQL connection parameters from configuration file. */
+$mysql_connection_parameters = get_mysql_connection_parameters();
+
+/* Connect to MySQL server. */
+try {
+    $dbh = new PDO('mysql:host=' . $mysql_connection_parameters['servername']
+                      . ';port=' . $mysql_connection_parameters['port']
+                      . ';dbname=' . $mysql_connection_parameters['database'],
+                   $mysql_connection_parameters['username'],
+                   $mysql_connection_parameters['password'],
+                   array( PDO::ATTR_PERSISTENT => false));
+} catch (PDOException $e) {
+    echo("ERROR:\tCan't connect to MySQL database.\n");
+    exit(1);
 }
-if (isset($_POST["conversionFractionOfOverlap"])){
-	$overlap = $_POST["conversionFractionOfOverlap"];
-}else{
-	$overlap = NULL;
+
+
+
+$query = 'INSERT INTO jobQueue
+                  (
+                      name, jobStatusCode, jobRequestTime,
+                      nomenclatureCode, rankingDatabaseCode, conversionDelineation,
+                      conversionUpstreamRegionInBp, conversionDownstreamRegionInBp, conversionFractionOfOverlap,
+                      rankThreshold, AUCRankThresholdAsPercentage, NESThreshold,
+                      minOrthologousIdentity, maxMotifSimilarityFDR, geneIDs,
+                      ip, user_agent
+		          )
+          VALUES (
+                      :name, :jobStatusCode, NOW(),
+                      :nomenclatureCode, :rankingDatabaseCode, :conversionDelineation,
+                      :conversionUpstreamRegionInBp, :conversionDownstreamRegionInBp, :conversionFractionOfOverlap,
+                      :rankThreshold, :AUCRankThresholdAsPercentage, :NESThreshold,
+                      :minOrthologousIdentity, :maxMotifSimilarityFDR, :geneIDs,
+                      :ip, :user_agent
+                  )';
+
+try {
+    $stmt = $dbh->prepare($query);
+} catch (PDOException $e) {
+    echo("ERROR:\tPreparing statement failed.\n");
+    exit(1);
 }
-if (isset($_POST["conversionUpstreamRegionInBp"])){
-	$upstream = $_POST["conversionUpstreamRegionInBp"];
-}else{
-	$upstream = NULL;
+
+
+
+/* Bind parameters. */
+try {
+    $stmt->bindParam(':name', $jobName, PDO::PARAM_STR);
+    $stmt->bindParam(':jobStatusCode', $jobStatusCode, PDO::PARAM_STR);
+    $stmt->bindParam(':nomenclatureCode', $SpeciesNomenclature, PDO::PARAM_INT);
+    $stmt->bindParam(':rankingDatabaseCode', $selectedDatabase, PDO::PARAM_STR);
+    $stmt->bindParam(':conversionDelineation', $delineation, PDO::PARAM_STR);
+    $stmt->bindParam(':conversionUpstreamRegionInBp', $upstream, PDO::PARAM_INT);
+    $stmt->bindParam(':conversionDownstreamRegionInBp', $downstream, PDO::PARAM_INT);
+    $stmt->bindParam(':conversionFractionOfOverlap', $overlap, PDO::PARAM_STR);
+    $stmt->bindParam(':rankThreshold', $rankThreshold, PDO::PARAM_INT);
+    $stmt->bindParam(':AUCRankThresholdAsPercentage',$AUCThreshold, PDO::PARAM_STR);
+    $stmt->bindParam(':NESThreshold', $NESThreshold, PDO::PARAM_STR);
+    $stmt->bindParam(':minOrthologousIdentity', $minOrthologous, PDO::PARAM_STR);
+    $stmt->bindParam(':maxMotifSimilarityFDR', $maxMotifSimilarityFDR, PDO::PARAM_STR);
+    $stmt->bindParam(':geneIDs', $genes, PDO::PARAM_STR);
+    $stmt->bindParam(':ip', $client_ip, PDO::PARAM_STR);
+    $stmt->bindParam(':user_agent', $client_version, PDO::PARAM_STR);
+} catch (PDOException $e) {
+    echo("ERROR:\tBinding parameters failed.\n");
+    exit(1);
 }
-if (isset($_POST["conversionDownstreamRegionInBp"])){
-	$downstream = $_POST["conversionDownstreamRegionInBp"];
-}else{
-	$downstream = NULL;
+
+
+
+/* Execute prepared statement. */
+try {
+    $stmt->execute();
+} catch (PDOException $e) {
+    echo("ERROR:\tExecuting prepared statement failed.\n");
+    exit(1);
 }
 
-//sending the job into the database, and getting the jobID
-$jobID = -1;
-
-$Connection = mysql_connect($servername,$username,$password);
-
-mysql_select_db($database, $Connection) or die(mysql_error($Connection));
-
-$query = "
-INSERT INTO 
-		jobQueue (name, jobStatusCode, nomenclatureCode, rankThreshold, 
-		AUCRankThresholdAsPercentage, NESThreshold, minOrthologousIdentity, maxMotifSimilarityFDR, 
-		geneIDs, jobRequestTime, rankingDatabaseCode, conversionDelineation,
-		conversionUpstreamRegionInBp, conversionDownstreamRegionInBp, 
-		conversionFractionOfOverlap)
-VALUES (
-		'$jobName','$jobStatusCode','$SpeciesNomenclature','$rankThreshold',
-		'$AUCThreshold', '$NESThreshold', '$minOrthologous', '$maxMotifSimilarityFDR', 
-		'$genes', NOW(), '$selectedDatabase', '$delineation', '$upstream', 
-		'$downstream', '$overlap')";
 
 
-mysql_query($query, $Connection);
-if (mysql_errno($Connection)) die (mysql_error($Connection));
+/* Get job ID from the MySQL table. */
+try {
+    $jobID = $dbh->lastInsertId('ID'); ;
+} catch (PDOException $e) {
+    echo("ERROR:\tGetting job ID failed.\n");
+    exit(1);
+}
 
-$jobID = mysql_insert_id($Connection);
-if (mysql_errno($Connection)) die (mysql_error($Connection));
 
-mysql_close($Connection);
+/* Close connection */
+$dbh = null;
 
-echo $jobID;
 
+/* Send job ID to the client. */
+echo("jobID:\t" . $jobID . "\n");
 
 ?>

@@ -1,43 +1,95 @@
 <?php
 
-//parameters for the MySQLDatabase
-$ini_array = parse_ini_file("configuration.ini");
-$servername = $ini_array['servername'];
-$username = $ini_array['username'];
-$password = $ini_array['password'];
-$database = $ini_array['database'];
-
-//possible statusses: WAITING, RUNNING, FINISHED, FAILED, ERROR;
-
-$jobID = $_POST["jobID"];
-
-$Connection = mysql_connect($servername,$username,$password);
-
-mysql_select_db($database, $Connection) or die(mysql_error($Connection));
-
-//selecting all id of all features (motifs)
-$query = "
-SELECT
-	errorMessage
-FROM
-	jobQueue
-WHERE
-	ID='$jobID'";
+include_once 'common.php';
 
 
-$result = mysql_query($query, $Connection);
-if (mysql_errno($Connection)) die (mysql_error($Connection));
 
-$output = "No error Message";
-while($row = mysql_fetch_array($result)){
-	$output = $row[0];
-	//echo "a error";
-	//print_r($row);
+/* Check if the a 'jobID' POST field exists and if it contains an integer. */
+$jobID = retrieve_post_value('jobID', false, 'int');
+
+
+
+/* Get MySQL connection parameters from configuration file. */
+$mysql_connection_parameters = get_mysql_connection_parameters();
+
+/* Connect to MySQL server. */
+try {
+    $dbh = new PDO('mysql:host=' . $mysql_connection_parameters['servername']
+        . ';port=' . $mysql_connection_parameters['port']
+        . ';dbname=' . $mysql_connection_parameters['database'],
+        $mysql_connection_parameters['username'],
+        $mysql_connection_parameters['password'],
+        array( PDO::ATTR_PERSISTENT => false));
+} catch (PDOException $e) {
+    echo("ERROR:\tCan't connect to MySQL database.\n");
+    exit(1);
 }
 
 
-echo $output;
 
 
+
+/* Build query. */
+$query = 'SELECT
+		          errorMessage
+          FROM
+		          jobQueue
+          WHERE
+		          ID = :jobID
+		      AND
+		          ip = :ip';
+
+try {
+    $stmt = $dbh->prepare($query);
+} catch (PDOException $e) {
+    echo("ERROR:\tPreparing statement failed.\n");
+    exit(1);
+}
+
+
+
+/* Bind parameters. */
+try {
+    $stmt->bindParam(':jobID', $jobID, PDO::PARAM_INT);
+    $stmt->bindParam(':ip', $client_ip, PDO::PARAM_STR);
+} catch (PDOException $e) {
+    echo("ERROR:\tBinding parameters failed.\n");
+    exit(1);
+}
+
+
+
+/* Execute prepared statement. */
+try {
+    $stmt->execute();
+} catch (PDOException $e) {
+    echo("ERROR:\tExecuting prepared statement failed.\n");
+    exit(1);
+}
+
+
+
+/* Get error message from the MySQL table. */
+try {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row === false) {
+        echo("ERROR:\tJob ID doesn't exist.\n");
+        exit(1);
+    }
+    $JobError = $row['errorMessage'];
+} catch (PDOException $e) {
+    echo("ERROR:\tGetting error message failed.\n");
+    exit(1);
+}
+
+
+
+if (is_null($JobError)) {
+    $JobError = 'No error message.';
+}
+
+
+
+echo "JOB_ERROR:\t$JobError\n";
 
 ?>

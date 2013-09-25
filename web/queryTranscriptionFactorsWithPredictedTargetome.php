@@ -1,21 +1,89 @@
 <?php
-$ini_array = parse_ini_file("configuration.ini");
-$servername = $ini_array['servername'];
-$username = $ini_array['username'];
-$password = $ini_array['password'];
-$database = $ini_array['database'];
 
-$speciesnomenclature_code = $_POST["SpeciesNomenclatureCode"];
+include_once 'common.php';
 
-$connection = mysql_connect($servername, $username, $password);
-mysql_select_db($database, $connection) or die(mysql_error($connection));
 
-$query = "SELECT DISTINCT(tfName) FROM metatargetomeMetaData WHERE speciesNomenclatureCode = " . $speciesnomenclature_code;
-echo "#Available factors for speciesNomemclature with code = " . $speciesnomenclature_code . "\n";
-$result = mysql_query($query, $connection);
-if (mysql_errno($connection)) die (mysql_error($connection));
 
-while($row = mysql_fetch_array($result)){
-	echo "ID=" . $row[0] . "\n";
+/* Check if the a 'SpeciesNomenclatureCode' POST field exists and if it contains an integer. */
+$species_nomenclature_code = retrieve_post_value('SpeciesNomenclatureCode', false, 'int');
+
+
+
+/* Get MySQL connection parameters from configuration file. */
+$mysql_connection_parameters = get_mysql_connection_parameters();
+
+/* Connect to MySQL server. */
+try {
+    $dbh = new PDO('mysql:host=' . $mysql_connection_parameters['servername']
+        . ';port=' . $mysql_connection_parameters['port']
+        . ';dbname=' . $mysql_connection_parameters['database'],
+        $mysql_connection_parameters['username'],
+        $mysql_connection_parameters['password'],
+        array( PDO::ATTR_PERSISTENT => false));
+} catch (PDOException $e) {
+    echo("ERROR:\tCan't connect to MySQL database.\n");
+    exit(1);
 }
+
+
+
+
+
+/* Build query. */
+$query = 'SELECT DISTINCT
+		          tfName
+          FROM
+		          metatargetomeMetaData
+          WHERE
+		          speciesNomenclatureCode = :speciesNomenclatureCode';
+
+try {
+    $stmt = $dbh->prepare($query);
+} catch (PDOException $e) {
+    echo("ERROR:\tPreparing statement failed.\n");
+    exit(1);
+}
+
+
+
+/* Bind parameters. */
+try {
+    $stmt->bindParam(':speciesNomenclatureCode', $species_nomenclature_code, PDO::PARAM_INT);
+} catch (PDOException $e) {
+    echo("ERROR:\tBinding parameters failed.\n");
+    exit(1);
+}
+
+
+
+/* Execute prepared statement. */
+try {
+    $stmt->execute();
+} catch (PDOException $e) {
+    echo("ERROR:\tExecuting prepared statement failed.\n");
+    exit(1);
+}
+
+
+
+/* Get job ID from the MySQL table. */
+try {
+    $rows = $stmt->fetchall(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo("ERROR:\tGetting transcription factors for predicted metatargetome failed.\n");
+    exit(1);
+}
+
+
+
+/* Close connection */
+$dbh = null;
+
+
+
+foreach ($rows as $row) {
+    $TF_name = $row['tfName'];
+    echo "TF:\t" . $TF_name . "\n";
+}
+
 ?>

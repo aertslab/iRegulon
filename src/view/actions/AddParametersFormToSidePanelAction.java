@@ -213,7 +213,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
             } else {
                 parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
             }
-            parameterForm.setDatabases(TargetomeDatabase.getAllDatabases());
+            parameterForm.setTargetomeDatabases(TargetomeDatabase.getAllTargetomeDatabases());
         }
 
         public MetatargetomeParameterForm getForm() {

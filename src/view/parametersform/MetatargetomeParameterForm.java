@@ -30,7 +30,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
 
     private JComboBox transcriptionFactorCB;
     private JComboBox speciesNomenclatureCB;
-    private JList databaseList;
+    private JList targetomeDatabaseList;
     private JComboBox attributeNameCB;
     private JTextField occurrenceCountLimitTF;
     private JTextField maxNodeCountTF;
@@ -104,7 +104,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         final GeneIdentifier factor = parameters.getTranscriptionFactor();
         setSpeciesNomenclature(factor == null ? null : parameters.getTranscriptionFactor().getSpeciesNomenclature());
         setTranscriptionFactor(factor);
-        setDatabases(parameters.getDatabases());
+        setTargetomeDatabases(parameters.getTargetomeDatabases());
         setAttributeName(parameters.getAttributeName());
         setCreateNewNetwork(parameters.createNewNetwork());
     }
@@ -130,19 +130,19 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         fireParametersChanged();
     }
 
-    public void setDatabases(List<TargetomeDatabase> databases) {
-        databaseList.clearSelection();
-        for (TargetomeDatabase database: databases) {
-            final int idx = findDatabase(database);
+    public void setTargetomeDatabases(List<TargetomeDatabase> targetomeDatabases) {
+        targetomeDatabaseList.clearSelection();
+        for (TargetomeDatabase targetomeDatabase: targetomeDatabases) {
+            final int idx = findTargetomeDatabase(targetomeDatabase);
             if (idx >= 0) {
-                databaseList.getSelectionModel().addSelectionInterval(idx, idx);
+                targetomeDatabaseList.getSelectionModel().addSelectionInterval(idx, idx);
             }
         }
     }
 
-    private int findDatabase(TargetomeDatabase database) {
-        for (int idx = 0; idx < databaseList.getModel().getSize(); idx++) {
-             if (databaseList.getModel().getElementAt(idx).equals(database)) {
+    private int findTargetomeDatabase(TargetomeDatabase targetomeDatabase) {
+        for (int idx = 0; idx < targetomeDatabaseList.getModel().getSize(); idx++) {
+             if (targetomeDatabaseList.getModel().getElementAt(idx).equals(targetomeDatabase)) {
                  return idx;
              }
         }
@@ -150,10 +150,10 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     }
 
     @Override
-    public List<TargetomeDatabase> getDatabases() {
+    public List<TargetomeDatabase> getTargetomeDatabases() {
         final List<TargetomeDatabase> result = new ArrayList<TargetomeDatabase>();
-        for (Object database : databaseList.getSelectedValues()) {
-            result.add((TargetomeDatabase) database);
+        for (Object targetomeDatabase : targetomeDatabaseList.getSelectedValues()) {
+            result.add((TargetomeDatabase) targetomeDatabase);
         }
         return result;
     }
@@ -255,10 +255,10 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         DBborder.setTitlePosition(TitledBorder.CENTER);
         DBpanel.setBorder(DBborder);
 
-        final JLabel databasesLB = new JLabel("Databases:");
-        databaseList = new JList(new TargetomeDatabaseListModel(TargetomeDatabase.getAllDatabases()));
-        databasesLB.setLabelFor(databaseList);
-        databaseList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        final JLabel targetomeDatabasesLB = new JLabel("Databases:");
+        targetomeDatabaseList = new JList(new TargetomeDatabaseListModel(TargetomeDatabase.getAllTargetomeDatabases()));
+        targetomeDatabasesLB.setLabelFor(targetomeDatabaseList);
+        targetomeDatabaseList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         DBcc.gridx = 0; DBcc.gridy = 0;
         DBcc.gridwidth = 1; DBcc.gridheight = 1;
@@ -266,14 +266,14 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         DBcc.fill = GridBagConstraints.NONE;
         DBcc.anchor = GridBagConstraints.LINE_START;
         DBcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
-        DBpanel.add(databasesLB, DBcc);
+        DBpanel.add(targetomeDatabasesLB, DBcc);
 
         DBcc.gridx++; DBcc.gridy = 0;
         DBcc.gridwidth = 1; DBcc.gridheight = 1;
         DBcc.weightx = 1.0; DBcc.weighty = 1.0;
         DBcc.fill = GridBagConstraints.BOTH;
         DBcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
-        JScrollPane DBscroll = new JScrollPane(databaseList);
+        JScrollPane DBscroll = new JScrollPane(targetomeDatabaseList);
         DBscroll.setPreferredSize(new Dimension(DBscroll.getWidth() , 70));
         DBpanel.add(DBscroll, DBcc);
 
@@ -359,7 +359,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     private void registerListeners() {
         speciesNomenclatureCB.addActionListener(actionListener);
         attributeNameCB.addActionListener(actionListener);
-        databaseList.getSelectionModel().addListSelectionListener(selectionListener);
+        targetomeDatabaseList.getSelectionModel().addListSelectionListener(selectionListener);
         transcriptionFactorCB.addActionListener(actionListener);
         transcriptionFactorCB.addItemListener(itemListener);
         occurrenceCountLimitTF.getDocument().addDocumentListener(documentListener);
@@ -370,7 +370,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     private void unregisterListeners() {
         speciesNomenclatureCB.removeActionListener(actionListener);
         attributeNameCB.removeActionListener(actionListener);
-        databaseList.getSelectionModel().removeListSelectionListener(selectionListener);
+        targetomeDatabaseList.getSelectionModel().removeListSelectionListener(selectionListener);
         transcriptionFactorCB.removeActionListener(actionListener);
         transcriptionFactorCB.removeItemListener(itemListener);
         occurrenceCountLimitTF.getDocument().removeDocumentListener(documentListener);

@@ -17,7 +17,7 @@ $genes = retrieve_post_value('genes', false, 'string');
 $jobName = retrieve_post_value('jobName', false, 'string');
 $minOrthologous = retrieve_post_value('minOrthologous', false, 'float_positive');
 $maxMotifSimilarityFDR = retrieve_post_value('maxMotifSimilarityFDR', false, 'float_positive');
-$selectedDatabase = retrieve_post_value('selectedDatabase', false, 'string');
+$selectedMotifRankingsDatabase = retrieve_post_value('selectedMotifRankingsDatabase', false, 'string');
 
 
 /*
@@ -60,7 +60,7 @@ $query = 'INSERT INTO jobQueue
 		          )
           VALUES (
                       :name, :jobStatusCode, NOW(),
-                      :nomenclatureCode, :rankingDatabaseCode, :conversionDelineation,
+                      :nomenclatureCode, :motifRankingDatabaseCode, :conversionDelineation,
                       :conversionUpstreamRegionInBp, :conversionDownstreamRegionInBp, :conversionFractionOfOverlap,
                       :rankThreshold, :AUCRankThresholdAsPercentage, :NESThreshold,
                       :minOrthologousIdentity, :maxMotifSimilarityFDR, :geneIDs,
@@ -81,7 +81,7 @@ try {
     $stmt->bindParam(':name', $jobName, PDO::PARAM_STR);
     $stmt->bindParam(':jobStatusCode', $jobStatusCode, PDO::PARAM_STR);
     $stmt->bindParam(':nomenclatureCode', $SpeciesNomenclature, PDO::PARAM_INT);
-    $stmt->bindParam(':rankingDatabaseCode', $selectedDatabase, PDO::PARAM_STR);
+    $stmt->bindParam(':motifRankingDatabaseCode', $selectedMotifRankingsDatabase, PDO::PARAM_STR);
     $stmt->bindParam(':conversionDelineation', $delineation, PDO::PARAM_STR);
     $stmt->bindParam(':conversionUpstreamRegionInBp', $upstream, PDO::PARAM_INT);
     $stmt->bindParam(':conversionDownstreamRegionInBp', $downstream, PDO::PARAM_INT);

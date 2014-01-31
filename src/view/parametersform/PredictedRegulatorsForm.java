@@ -3,12 +3,12 @@ package view.parametersform;
 import cytoscape.Cytoscape;
 import domainmodel.Delineation;
 import domainmodel.InputParameters;
-import domainmodel.RankingsDatabase;
+import domainmodel.MotifRankingsDatabase;
 import domainmodel.SpeciesNomenclature;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
 import view.parametersform.actions.PredictRegulatorsAction;
-import view.parametersform.databaseselection.DBCombobox;
+import view.parametersform.databaseselection.MotifRankingsDBCombobox;
 import view.parametersform.databaseselection.MotifCollectionComboBox;
 import view.parametersform.databaseselection.PutativeRegulatoryRegionComboBox;
 import view.parametersform.databaseselection.SearchSpaceTypeComboBox;
@@ -43,7 +43,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     private MotifCollectionComboBox motifCollectionCB;
     private PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB;
     private SearchSpaceTypeComboBox searchSpaceTypeCB;
-    private DBCombobox databaseCB;
+    private MotifRankingsDBCombobox motifRankingsDatabaseCB;
     private JTextField txtOverlap;
     private JComboBox jcbDelation;
     private JTextField txtUpStream;
@@ -465,7 +465,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
                 this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR,
                 this.jcbSpecieAndNomenclature,
                 this.motifCollectionCB, this.genePutativeRegulatoryRegionCB,
-                this.searchSpaceTypeCB, this.databaseCB,
+                this.searchSpaceTypeCB, this.motifRankingsDatabaseCB,
                 overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion,
                 this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.attributeNameCB, numberOfNodesTF,
                 submitButton);
@@ -491,7 +491,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.genePutativeRegulatoryRegionCB.addActionListener(this.dbListener);
         this.motifCollectionCB.addActionListener(this.dbListener);
         this.searchSpaceTypeCB.addActionListener(this.dbListener);
-        this.databaseCB.addActionListener(this.dbListener);
+        this.motifRankingsDatabaseCB.addActionListener(this.dbListener);
         this.txtOverlap.addActionListener(this.dbListener);
         this.txtOverlap.getDocument().addDocumentListener(this.dbListener);
         rbtnDelineation.addActionListener(this.dbListener);
@@ -522,7 +522,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.genePutativeRegulatoryRegionCB.removeActionListener(this.dbListener);
         this.motifCollectionCB.removeActionListener(this.dbListener);
         this.searchSpaceTypeCB.removeActionListener(this.dbListener);
-        this.databaseCB.removeActionListener(this.dbListener);
+        this.motifRankingsDatabaseCB.removeActionListener(this.dbListener);
         this.txtOverlap.removeActionListener(this.dbListener);
         this.txtOverlap.getDocument().removeDocumentListener(this.dbListener);
         rbtnDelineation.removeActionListener(this.dbListener);
@@ -546,8 +546,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         int yPos = 0;
 
-        final JLabel motifsLB = new JLabel("Motif collection:");
-        motifsLB.setToolTipText("Choose the motif collection used in the enrichment analysis.");
+        final JLabel motifCollectionLB = new JLabel("Motif collection:");
+        motifCollectionLB.setToolTipText("Choose the motif collection used in the enrichment analysis.");
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -556,7 +556,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
-        panel.add(motifsLB, cc);
+        panel.add(motifCollectionLB, cc);
 
         this.motifCollectionCB = new MotifCollectionComboBox();
         cc.gridx = 1;
@@ -621,8 +621,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         yPos += 1;
 
-        final JLabel dbLB = new JLabel("Database:");
-        dbLB.setToolTipText("Choose the database.");
+        final JLabel motifRankingsDatabaseLB = new JLabel("Motif rankings database:");
+        motifRankingsDatabaseLB.setToolTipText("Choose the motif rankings database.");
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -631,9 +631,9 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
-        panel.add(dbLB, cc);
+        panel.add(motifRankingsDatabaseLB, cc);
 
-        this.databaseCB = new DBCombobox();
+        this.motifRankingsDatabaseCB = new MotifRankingsDBCombobox();
         cc.gridx = 1;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -642,7 +642,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(this.databaseCB, cc);
+        panel.add(this.motifRankingsDatabaseCB, cc);
 
         return panel;
     }
@@ -774,11 +774,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         return this.searchSpaceTypeCB.isRegionBased();
     }
 
-    public RankingsDatabase getRankingsDatabase() {
+    public MotifRankingsDatabase getMotifRankingsDatabase() {
         if (this.isRegionBasedDatabase()) {
-            return (RankingsDatabase) this.databaseCB.getSelectedItem();
+            return (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
         } else {
-            return (RankingsDatabase) this.databaseCB.getSelectedItem();
+            return (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
         }
     }
 
@@ -848,7 +848,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
                 getMinOrthologousIdentity(),
                 getMaxMotifSimilarityFDR(),
                 isRegionBasedDatabase(),
-                getRankingsDatabase(),
+                getMotifRankingsDatabase(),
                 getOverlapFraction(),
                 getDelineation(),
                 getUpstreamRegionInBp(),

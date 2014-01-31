@@ -50,8 +50,8 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
 
         @Override
-        public List<TargetomeDatabase> getDatabases() {
-            return TargetomeDatabase.getAllDatabases();
+        public List<TargetomeDatabase> getTargetomeDatabases() {
+            return TargetomeDatabase.getAllTargetomeDatabases();
         }
 
         @Override
@@ -146,7 +146,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         try {
             targetome = service.queryPredictedTargetome(
                     parameters.getTranscriptionFactor(),
-                    parameters.getDatabases(),
+                    parameters.getTargetomeDatabases(),
                     parameters.getOccurrenceCountThreshold(),
                     parameters.getMaxNumberOfNodes());
         } catch (ServerCommunicationException e) {
@@ -198,7 +198,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
 
     private boolean checkEnabled() {
         if (getParameters() == null) return false;
-        if (getParameters().getDatabases().isEmpty()) return false;
+        if (getParameters().getTargetomeDatabases().isEmpty()) return false;
         final GeneIdentifier factor = getParameters().getTranscriptionFactor();
         if (factor == null) return false;
         if (getParameters().getOccurrenceCountThreshold() < 0) return false;

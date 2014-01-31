@@ -11,7 +11,7 @@ public interface MetatargetomeParameters {
 
     GeneIdentifier getTranscriptionFactor();
 
-    List<TargetomeDatabase> getDatabases();
+    List<TargetomeDatabase> getTargetomeDatabases();
 
     int getOccurrenceCountThreshold();
 

@@ -10,9 +10,8 @@ import view.IRegulonResourceBundle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-public class RankingsDatabase extends IRegulonResourceBundle {
+public class MotifRankingsDatabase extends IRegulonResourceBundle {
     private static final String DATABASES_TAG_NAME = "databases";
     private static final String DATABASE_TAG_NAME = "database";
     private static final String TYPE_TAG_NAME = "type";
@@ -35,13 +34,13 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     private static final float DEFAULT_AUC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
     private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
 
-    public static List<RankingsDatabase> loadFromConfiguration() {
+    public static List<MotifRankingsDatabase> loadFromConfiguration() {
         final Document document = Configuration.getDocument();
-        final List<RankingsDatabase> result = new ArrayList<RankingsDatabase>();
+        final List<MotifRankingsDatabase> motifRankingsDatabases = new ArrayList<MotifRankingsDatabase>();
         for (Element child : findElements(document.getElementsByTagName(DATABASES_TAG_NAME), DATABASE_TAG_NAME)) {
-            result.add(createDatabase(child));
+            motifRankingsDatabases.add(createMotifDatabase(child));
         }
-        return result;
+        return motifRankingsDatabases;
     }
 
     private static List<Element> findElements(final NodeList nodeList, final String tagName) {
@@ -58,7 +57,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         return elements;
     }
 
-    private static RankingsDatabase createDatabase(Node nNode) {
+    private static MotifRankingsDatabase createMotifDatabase(Node nNode) {
         final NodeList childNodes = nNode.getChildNodes();
 
         final String code = nNode.getAttributes().getNamedItem(ID_ATTRIBUTE_NAME).getNodeValue();
@@ -69,7 +68,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         final String species = readValue(childNodes, SPECIES_TAG_NAME);
         final int nomenclatureCode = Integer.parseInt(readAttribute(childNodes, NOMENCLATURE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
 
-        final MotifCollection collection = MotifCollection.forCode(readAttribute(childNodes, MOTIF_COLLECTION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
+        final MotifCollection motifCollection = MotifCollection.forCode(readAttribute(childNodes, MOTIF_COLLECTION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
 
         final int speciesCount = Integer.parseInt(readValue(childNodes, NUMBER_OF_SPECIES_TAG_NAME));
 
@@ -92,7 +91,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
 
         if (Type.GENE.equals(type)) {
             final GenePutativeRegulatoryRegion regulatoryRegion = GenePutativeRegulatoryRegion.forCode(readAttribute(childNodes, DELINEATION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
-            return new RankingsDatabase(code, name, type, nomenclatureCode, collection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), delineationDefault, nesThreshold, aucThreshold, rankThreshold);
+            return new MotifRankingsDatabase(code, name, type, nomenclatureCode, motifCollection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else if (Type.REGION.equals(type)) {
             final List<Delineation> delineations = new ArrayList<Delineation>();
             final NodeList mappings = findElement(childNodes, MAPPINGS_TAG_NAME);
@@ -107,7 +106,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
                     }
                 }
             }
-            return new RankingsDatabase(code, name, type, nomenclatureCode, collection, speciesCount, GenePutativeRegulatoryRegion.UNKNOWN, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
+            return new MotifRankingsDatabase(code, name, type, nomenclatureCode, motifCollection, speciesCount, GenePutativeRegulatoryRegion.UNKNOWN, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else {
           throw new IllegalStateException();
         }
@@ -160,7 +159,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
 	private final float AUCvalue;
 	private final int visualisationValue;
 
-    public RankingsDatabase(String code, String name, Type type, int speciesNomenclature, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
+    public MotifRankingsDatabase(String code, String name, Type type, int speciesNomenclature, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
         this.code = code;
         this.name = name;
         this.type = type;
@@ -175,7 +174,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         this.visualisationValue = visualisationValue;
     }
 
-    public RankingsDatabase(String code, String name, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
+    public MotifRankingsDatabase(String code, String name, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
 		this(code, name, Type.GENE, -1, MotifCollection.UNKNOWN, 0, GenePutativeRegulatoryRegion.UNKNOWN, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
 	}
 

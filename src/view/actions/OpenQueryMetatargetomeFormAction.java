@@ -53,7 +53,7 @@ public class OpenQueryMetatargetomeFormAction extends ResourceAction implements 
 
     private boolean checkEnabled() {
         if (getParameters() == null) return false;
-        if (getParameters().getDatabases().isEmpty()) return false;
+        if (getParameters().getTargetomeDatabases().isEmpty()) return false;
         final GeneIdentifier factor = getParameters().getTranscriptionFactor();
         if (factor == null) return false;
         if (getParameters().getOccurrenceCountThreshold() < 0) return false;

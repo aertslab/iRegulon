@@ -53,7 +53,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
         float maxMotifSimilarityFDR = input.getMaxMotifSimilarityFDR();
 
         boolean isRegionBased = input.isRegionBased();
-        String database = input.getDatabase().getCode();
+        String motifRankingsDatabase = input.getMotifRankingsDatabase().getCode();
         float overlap = input.getOverlap();
         String delineation = input.getDelineation().getCode();
         int upstream = input.getUpstream();
@@ -67,7 +67,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                     + "&NESThreshold=" + NESThreshold
                     + "&minOrthologous=" + minOrthologous
                     + "&maxMotifSimilarityFDR=" + maxMotifSimilarityFDR
-                    + "&selectedDatabase=" + database;
+                    + "&selectedMotifRankingsDatabase=" + motifRankingsDatabase;
 
             if (isRegionBased) {
                 if (delineation != null) {

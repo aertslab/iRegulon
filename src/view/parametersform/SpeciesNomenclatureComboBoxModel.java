@@ -1,7 +1,6 @@
 package view.parametersform;
 
 import domainmodel.SpeciesNomenclature;
-import domainmodel.TargetomeDatabase;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
@@ -12,10 +11,10 @@ import java.util.List;
 
 final class SpeciesNomenclatureComboBoxModel implements ComboBoxModel {
     private Object selection;
-    private final List<SpeciesNomenclature> databases;
+    private final List<SpeciesNomenclature> speciesNomenclatureDatabases;
 
-    public SpeciesNomenclatureComboBoxModel(final Collection<SpeciesNomenclature> databases) {
-        this.databases = new ArrayList<SpeciesNomenclature>(databases);
+    public SpeciesNomenclatureComboBoxModel(final Collection<SpeciesNomenclature> speciesNomenclatureDatabases) {
+        this.speciesNomenclatureDatabases = new ArrayList<SpeciesNomenclature>(speciesNomenclatureDatabases);
     }
 
     @Override
@@ -30,12 +29,12 @@ final class SpeciesNomenclatureComboBoxModel implements ComboBoxModel {
 
     @Override
     public int getSize() {
-        return this.databases.size();
+        return this.speciesNomenclatureDatabases.size();
     }
 
     @Override
     public Object getElementAt(int index) {
-        return this.databases.get(index);
+        return this.speciesNomenclatureDatabases.get(index);
     }
 
     @Override

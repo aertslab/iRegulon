@@ -1,37 +1,36 @@
 package view.parametersform.databaseselection;
 
-import domainmodel.RankingsDatabase;
+import domainmodel.MotifRankingsDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComboBox;
 
 public class SearchSpaceTypeComboBox extends JComboBox {
-	public SearchSpaceTypeComboBox(final RankingsDatabase.Type[] types) {
+	public SearchSpaceTypeComboBox(final MotifRankingsDatabase.Type[] types) {
 		super();
-        for (RankingsDatabase.Type type: types) {
+        for (MotifRankingsDatabase.Type type: types) {
             this.addItem(type);
         }
 		this.setSelectedIndex(0);
 	}
 
     public SearchSpaceTypeComboBox() {
-        this(RankingsDatabase.Type.values());
+        this(MotifRankingsDatabase.Type.values());
     }
 
     public boolean isRegionBased() {
-        return RankingsDatabase.Type.REGION.equals(getSelectedItem());
+        return MotifRankingsDatabase.Type.REGION.equals(getSelectedItem());
 	}
 	
 	public boolean isGeneBased(){
-		return RankingsDatabase.Type.GENE.equals(getSelectedItem());
+		return MotifRankingsDatabase.Type.GENE.equals(getSelectedItem());
 	}
 
-    public void setTypes(final List<RankingsDatabase.Type> types) {
-        final RankingsDatabase.Type curSelection = (RankingsDatabase.Type) getSelectedItem();
+    public void setTypes(final List<MotifRankingsDatabase.Type> types) {
+        final MotifRankingsDatabase.Type curSelection = (MotifRankingsDatabase.Type) getSelectedItem();
         removeAllItems();
-        for (RankingsDatabase.Type type: types) {
+        for (MotifRankingsDatabase.Type type: types) {
             addItem(type);
         }
         if (types.size() == 1) setSelectedItem(types.get(0));

@@ -50,8 +50,8 @@ public class SummaryLabel extends JLabel {
         builder.append(results.getMaxMotifSimilarityFDR());
         builder.append("<br/>");
 
-        builder.append("<b>Database:</b> ");
-        builder.append(results.getDatabaseName());
+        builder.append("<b>Motif rankings database:</b> ");
+        builder.append(results.getMotifRankingsDatabaseName());
         builder.append("<br/>");
 
         builder.append("<b>Number of valid nodes:</b> ");

@@ -1,13 +1,11 @@
 package persistence;
 
+import com.thoughtworks.xstream.XStream;
+import domainmodel.*;
 import view.parametersform.IRegulonType;
 
 import java.util.Collection;
 import java.util.Iterator;
-
-import com.thoughtworks.xstream.XStream;
-
-import domainmodel.*;
 
 import static view.ResourceAction.getBundle;
 
@@ -16,40 +14,40 @@ public class PersistenceUtilities {
     public static final String NATIVE_FILE_EXTENSION = ".irf";
     public static final String TSV_FILE_EXTENSION = ".tsv";
 
-	private PersistenceUtilities() {
-	}
-	
-	public static String convertResultsToXML(final Results result) {
-		final XStream xstream = new XStream();
-		xstream.alias("motif", Motif.class);
-		xstream.alias("candidateTargetGene", CandidateTargetGene.class);
-		xstream.alias("geneIdentifier", GeneIdentifier.class);
-		xstream.alias("transcriptionFactor", TranscriptionFactor.class);
-		xstream.alias("inputParameters", InputParameters.class);
-		xstream.alias("iRegulonType", IRegulonType.class);
+    private PersistenceUtilities() {
+    }
+
+    public static String convertResultsToXML(final Results result) {
+        final XStream xstream = new XStream();
+        xstream.alias("motif", Motif.class);
+        xstream.alias("candidateTargetGene", CandidateTargetGene.class);
+        xstream.alias("geneIdentifier", GeneIdentifier.class);
+        xstream.alias("transcriptionFactor", TranscriptionFactor.class);
+        xstream.alias("inputParameters", InputParameters.class);
+        xstream.alias("iRegulonType", IRegulonType.class);
         xstream.omitField(CandidateTargetGene.class, "numberOfMotifs");
         xstream.omitField(TranscriptionFactor.class, "motifs");
-        xstream.omitField(RankingsDatabase.class, "type");
-        xstream.omitField(RankingsDatabase.class, "speciesNomenclature");
-        xstream.omitField(RankingsDatabase.class, "motifCollection");
-        xstream.omitField(RankingsDatabase.class, "speciesCount");
-        xstream.omitField(RankingsDatabase.class, "putativeRegulatoryRegion");
-        xstream.omitField(RankingsDatabase.class, "gene2regionDelineations");
+        xstream.omitField(MotifRankingsDatabase.class, "type");
+        xstream.omitField(MotifRankingsDatabase.class, "speciesNomenclature");
+        xstream.omitField(MotifRankingsDatabase.class, "motifCollection");
+        xstream.omitField(MotifRankingsDatabase.class, "speciesCount");
+        xstream.omitField(MotifRankingsDatabase.class, "putativeRegulatoryRegion");
+        xstream.omitField(MotifRankingsDatabase.class, "gene2regionDelineations");
 
-		xstream.setMode(XStream.NO_REFERENCES);
-		xstream.registerConverter(new SpeciesNomenclatureConverter());
-		
-		return xstream.toXML(result);
-	}
-	
-	public static Results loadResultsFromXML(final String xml) throws LoadException {
-		final XStream xstream = new XStream();
-		xstream.alias("motif", Motif.class);
-		xstream.alias("candidateTargetGene", CandidateTargetGene.class);
-		xstream.alias("geneIdentifier", GeneIdentifier.class);
-		xstream.alias("transcriptionFactor", TranscriptionFactor.class);
-		xstream.alias("inputParameters", InputParameters.class);
-		xstream.alias("iRegulonType", IRegulonType.class);
+        xstream.setMode(XStream.NO_REFERENCES);
+        xstream.registerConverter(new SpeciesNomenclatureConverter());
+
+        return xstream.toXML(result);
+    }
+
+    public static Results loadResultsFromXML(final String xml) throws LoadException {
+        final XStream xstream = new XStream();
+        xstream.alias("motif", Motif.class);
+        xstream.alias("candidateTargetGene", CandidateTargetGene.class);
+        xstream.alias("geneIdentifier", GeneIdentifier.class);
+        xstream.alias("transcriptionFactor", TranscriptionFactor.class);
+        xstream.alias("inputParameters", InputParameters.class);
+        xstream.alias("iRegulonType", IRegulonType.class);
         xstream.registerConverter(new SpeciesNomenclatureConverter());
 
         xstream.aliasField("cisCisTargetType", InputParameters.class, "iRegulonType");
@@ -61,19 +59,19 @@ public class PersistenceUtilities {
         xstream.aliasField("enrichedMotifID", Motif.class, "name");
         xstream.aliasField("minOrthologous", TranscriptionFactor.class, "minOrthologousIdentity");
 
-        xstream.omitField(RankingsDatabase.class, "type");
-        xstream.omitField(RankingsDatabase.class, "speciesNomenclature");
-        xstream.omitField(RankingsDatabase.class, "motifCollection");
-        xstream.omitField(RankingsDatabase.class, "speciesCount");
-        xstream.omitField(RankingsDatabase.class, "putativeRegulatoryRegion");
-        xstream.omitField(RankingsDatabase.class, "gene2regionDelineations");
+        xstream.omitField(MotifRankingsDatabase.class, "type");
+        xstream.omitField(MotifRankingsDatabase.class, "speciesNomenclature");
+        xstream.omitField(MotifRankingsDatabase.class, "motifCollection");
+        xstream.omitField(MotifRankingsDatabase.class, "speciesCount");
+        xstream.omitField(MotifRankingsDatabase.class, "putativeRegulatoryRegion");
+        xstream.omitField(MotifRankingsDatabase.class, "gene2regionDelineations");
 
         try {
             return (Results) xstream.fromXML(xml);
         } catch (Exception e) {
             throw new LoadException("The IRF file has an invalid format.", e);
         }
-	}
+    }
 
     public static String convertResultsToTSV(final Results results) {
         final Collection<Motif> motifs = results.getMotifs();
@@ -85,14 +83,14 @@ public class PersistenceUtilities {
         /* iRegulon parameters. */
         results_tsv_builder.append("; Name\t" + results.getName() + "\n"
                 + "; Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n"
-                + "; Motif collection\t" + results.getMotifCollection()  + "\n"
+                + "; Motif collection\t" + results.getMotifCollection() + "\n"
                 + "; Minimum NEScore\t" + results.getEScore() + "\n"
                 + "; Rank threshold for visualization\t" + results.getThresholdForVisualisation() + "\n"
                 + "; ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
                 + "; Minimum identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
                 + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n"
-                + "; Database\t" + results.getDatabaseName() + "\n"
-                + "; Number of valid nodes\t" + results.getGenes().size()  + "\n"
+                + "; Motif rankings database\t" + results.getMotifRankingsDatabaseName() + "\n"
+                + "; Number of valid nodes\t" + results.getGenes().size() + "\n"
                 + "; iRegulon version\t" + getBundle().getString("plugin_name_version_release") + "\n");
 
         if (results.isRegionBased()) {

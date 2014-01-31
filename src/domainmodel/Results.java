@@ -80,12 +80,12 @@ public class Results {
         return !this.inputParameters.isGeneBased();
     }
 
-    public String getDatabaseName() {
-        return this.inputParameters.getDatabase().getName();
+    public String getMotifRankingsDatabaseName() {
+        return this.inputParameters.getMotifRankingsDatabase().getName();
     }
 
-    public String getDatabase() {
-        return this.inputParameters.getDatabase().getCode();
+    public String getMotifRankingsDatabase() {
+        return this.inputParameters.getMotifRankingsDatabase().getCode();
     }
 
     public float getOverlap() {

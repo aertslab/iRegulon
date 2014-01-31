@@ -10,7 +10,7 @@ import java.util.List;
 public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
     private String attributeName;
     private GeneIdentifier transcriptionFactor;
-    private List<TargetomeDatabase> databases;
+    private List<TargetomeDatabase> targetomeDatabases;
     private int occurrenceCountThreshold;
     private int maxNumberOfNodes;
     private boolean createNewNetwork;
@@ -18,7 +18,7 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
     public DefaultMetatargetomeParameters(final MetatargetomeParameters parameters) {
         this.attributeName = parameters.getAttributeName();
         this.transcriptionFactor = parameters.getTranscriptionFactor();
-        this.databases = new ArrayList<TargetomeDatabase>(parameters.getDatabases());
+        this.targetomeDatabases = new ArrayList<TargetomeDatabase>(parameters.getTargetomeDatabases());
         this.occurrenceCountThreshold = parameters.getOccurrenceCountThreshold();
         this.maxNumberOfNodes = parameters.getMaxNumberOfNodes();
         this.createNewNetwork = parameters.createNewNetwork();
@@ -38,8 +38,8 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
     }
 
     @Override
-    public List<TargetomeDatabase> getDatabases() {
-        return databases;
+    public List<TargetomeDatabase> getTargetomeDatabases() {
+        return targetomeDatabases;
     }
 
     @Override
@@ -65,8 +65,8 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
         this.transcriptionFactor = transcriptionFactor;
     }
 
-    public void setDatabases(List<TargetomeDatabase> databases) {
-        this.databases = databases;
+    public void setTranscriptomeDatabases(List<TargetomeDatabase> transcriptomeDatabases) {
+        this.targetomeDatabases = transcriptomeDatabases;
     }
 
     public void setOccurrenceCountThreshold(int occurrenceCountThreshold) {

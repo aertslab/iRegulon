@@ -7,22 +7,22 @@ import java.util.List;
 import java.util.Map;
 
 public final class TargetomeDatabase {
-    private static final Map<String,TargetomeDatabase> CODE2DATABASE = new HashMap<String, TargetomeDatabase>();
+    private static final Map<String,TargetomeDatabase> CODE2TARGETOMEDATABASE = new HashMap<String, TargetomeDatabase>();
 
     public static final TargetomeDatabase MSIGDB = new TargetomeDatabase("msigdb", "MSigDB");
     public static final TargetomeDatabase GENESIGDB = new TargetomeDatabase("genesigdb", "GeneSigDB");
     public static final TargetomeDatabase GANESH = new TargetomeDatabase("ganesh", "Ganesh Clusters");
     public static final TargetomeDatabase UNKNOWN = new TargetomeDatabase("?", "?");
 
-    public static TargetomeDatabase getDatabase(final String code) {
-        if (CODE2DATABASE.containsKey(code)) {
-            return CODE2DATABASE.get(code);
+    public static TargetomeDatabase getTargetomeDatabase(final String code) {
+        if (CODE2TARGETOMEDATABASE.containsKey(code)) {
+            return CODE2TARGETOMEDATABASE.get(code);
         }
         return UNKNOWN;
     }
 
-    public static List<TargetomeDatabase> getAllDatabases() {
-        final List<TargetomeDatabase> result = new ArrayList<TargetomeDatabase>(CODE2DATABASE.values());
+    public static List<TargetomeDatabase> getAllTargetomeDatabases() {
+        final List<TargetomeDatabase> result = new ArrayList<TargetomeDatabase>(CODE2TARGETOMEDATABASE.values());
         result.remove(UNKNOWN);
         return result;
     }
@@ -33,7 +33,7 @@ public final class TargetomeDatabase {
     private TargetomeDatabase(final String dbCode, final String description) {
         this.dbCode = dbCode;
         this.description = description;
-        CODE2DATABASE.put(dbCode, this);
+        CODE2TARGETOMEDATABASE.put(dbCode, this);
     }
 
     public String getDbCode() {

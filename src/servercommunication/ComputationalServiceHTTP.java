@@ -98,11 +98,11 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     }
 
     @Override
-    public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> databases,
+    public List<CandidateTargetGene> queryPredictedTargetome(final GeneIdentifier factor, List<TargetomeDatabase> targetomeDatabases,
                                                              final int occurrenceCountThreshold, final int maxNodeCount)
             throws ServerCommunicationException {
 
-        if (factor == null || databases == null) {
+        if (factor == null || targetomeDatabases == null) {
             throw new IllegalArgumentException();
         }
         final HttpURLConnection connection;
@@ -122,12 +122,12 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             builder.append(factor.getGeneName());
             builder.append("&");
             builder.append("TargetomeDatabaseCode=");
-            if (!databases.isEmpty()) {
-                builder.append(databases.get(0).getDbCode());
+            if (!targetomeDatabases.isEmpty()) {
+                builder.append(targetomeDatabases.get(0).getDbCode());
             }
-            for (TargetomeDatabase database : databases.subList(1, databases.size())) {
+            for (TargetomeDatabase targetomeDatabase : targetomeDatabases.subList(1, targetomeDatabases.size())) {
                 builder.append(",");
-                builder.append(database.getDbCode());
+                builder.append(targetomeDatabase.getDbCode());
             }
 
             send(connection, builder.toString());

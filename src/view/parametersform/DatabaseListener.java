@@ -173,7 +173,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private void refreshEscore(){
 		this.txtEscore.setBackground(Color.WHITE);
         if (this.changedMotifRankingsDatabase){
-            MotifRankingsDatabase motifRankingsDatabase = (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+            RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
             this.txtEscore.setText("" + motifRankingsDatabase.getNESvalue());
         }
 		try{
@@ -190,7 +190,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private void refreshAUC(){
 		this.txtAUCvalue.setBackground(Color.WHITE);
 		if (this.changedMotifRankingsDatabase){
-			MotifRankingsDatabase motifRankingsDatabase = (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+			RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
 			this.txtAUCvalue.setText("" + motifRankingsDatabase.getAUCvalue());
 		}
 		try{
@@ -208,7 +208,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private void refreshVisualisation(){
 		this.txtVisualisation.setBackground(Color.WHITE);
 		if (this.changedMotifRankingsDatabase){
-			MotifRankingsDatabase motifRankingsDatabase = (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+			RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
 			this.txtVisualisation.setText("" + motifRankingsDatabase.getVisualisationValue());
 		}
 		
@@ -262,8 +262,8 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
         }
         this.motifCollectionCB.setSelectedItem(curMotifCollection);
 
-        MotifRankingsDatabase.Type curSearchSpaceType = (MotifRankingsDatabase.Type) this.searchSpaceTypeCB.getSelectedItem();
-        final List<MotifRankingsDatabase.Type> searchSpaceTypes = speciesNomenclature.getSearchSpaceTypes();
+        RankingsDatabase.Type curSearchSpaceType = (RankingsDatabase.Type) this.searchSpaceTypeCB.getSelectedItem();
+        final List<RankingsDatabase.Type> searchSpaceTypes = speciesNomenclature.getSearchSpaceTypes();
         this.searchSpaceTypeCB.setTypes(searchSpaceTypes);
         if (!searchSpaceTypes.contains(curSearchSpaceType)) {
             curSearchSpaceType = searchSpaceTypes.get(0);
@@ -272,14 +272,16 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 
         GenePutativeRegulatoryRegion curRegion = (GenePutativeRegulatoryRegion) this.genePutativeRegulatoryRegionCB.getSelectedItem();
         final List<GenePutativeRegulatoryRegion> regions = speciesNomenclature.getPutativeRegulatoryRegions(curMotifCollection, curSearchSpaceType);
+
+        //final List<GenePutativeRegulatoryRegion> regions = speciesNomenclature.getPutativeRegulatoryRegions(curChipCollection, curMotifCollection, curSearchSpaceType);
         this.genePutativeRegulatoryRegionCB.setRegions(regions);
         if (!regions.contains(curRegion)) {
             curRegion = regions.get(0);
         }
         this.genePutativeRegulatoryRegionCB.setSelectedItem(curRegion);
 
-        final MotifRankingsDatabase curMotifRankingsDatabase = (MotifRankingsDatabase) motifRankingsDatabaseCB.getSelectedItem();
-        final List<MotifRankingsDatabase> motifRankingsDatabases = speciesNomenclature.getMotifDatabases(curMotifCollection, curSearchSpaceType, curRegion);
+        final RankingsDatabase curMotifRankingsDatabase = (RankingsDatabase) motifRankingsDatabaseCB.getSelectedItem();
+        final List<RankingsDatabase> motifRankingsDatabases = speciesNomenclature.getMotifDatabases(curMotifCollection, curSearchSpaceType, curRegion);
         this.motifRankingsDatabaseCB.updateDatabases(motifRankingsDatabases);
         if (motifRankingsDatabases.contains(curMotifRankingsDatabase)) {
             this.motifRankingsDatabaseCB.setSelectedItem(curMotifRankingsDatabase);
@@ -318,7 +320,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 			boolean delineation = this.rbtnDelineation.isSelected();
 			this.rbtnConversion.setEnabled(true);
 			this.rbtnDelineation.setEnabled(true);
-			final MotifRankingsDatabase motifRankingsDatabase = (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+			final RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
             if (motifRankingsDatabase.getGene2regionDelineations().isEmpty()){
 				this.rbtnDelineation.setEnabled(false);
 				this.rbtnConversion.setSelected(true);
@@ -354,7 +356,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	
 	private void refreshDelineation(){
 		final Delineation curDelineation = (Delineation) this.jcbDelineation.getSelectedItem();
-		final MotifRankingsDatabase motifRankingsDatabase = (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+		final RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
         this.jcbDelineation.removeAllItems();
 		for (Delineation key : motifRankingsDatabase.getGene2regionDelineations()){
 			this.jcbDelineation.addItem(key);

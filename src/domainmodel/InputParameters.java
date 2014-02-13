@@ -22,7 +22,7 @@ public class InputParameters {
 
     /* Database */
     private final boolean isRegionBased;
-    private final MotifRankingsDatabase motifRankingsDatabase;
+    private final RankingsDatabase motifRankingsDatabase;
     private final float overlap;
     private final Delineation delineation;
     private final int upstream;
@@ -35,7 +35,7 @@ public class InputParameters {
                            int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
                            IRegulonType iRegulonType, String runName, String motifCollection,
                            float minOrthologous, float maxMotifSimilarityFDR, boolean isRegionBased,
-                           MotifRankingsDatabase motifRankingsDatabase, float overlap, Delineation delineation,
+                           RankingsDatabase motifRankingsDatabase, float overlap, Delineation delineation,
                            int upstream, int downstream, String attributeName) {
         this.genes = genes;
         this.eScore = escore;
@@ -140,7 +140,7 @@ public class InputParameters {
     /**
      * @return the motif rankings database
      */
-    public MotifRankingsDatabase getMotifRankingsDatabase() {
+    public RankingsDatabase getMotifRankingsDatabase() {
         return this.motifRankingsDatabase;
     }
 

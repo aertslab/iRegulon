@@ -7,17 +7,17 @@ import java.util.*;
 
 public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	private static final Map<Integer,SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer,SpeciesNomenclature>();
-    private static final Map<Integer, List<MotifRankingsDatabase>> CODE2MOTIFDATABASES = new HashMap<Integer, List<MotifRankingsDatabase>>();
+    private static final Map<Integer, List<RankingsDatabase>> CODE2DATABASES = new HashMap<Integer, List<RankingsDatabase>>();
     static {
-        for (MotifRankingsDatabase db: MotifRankingsDatabase.loadFromConfiguration()) {
-            final List<MotifRankingsDatabase> motifRankingsDatabaseList;
-            if (CODE2MOTIFDATABASES.containsKey(db.getSpeciesNomenclature())) {
-                motifRankingsDatabaseList = CODE2MOTIFDATABASES.get(db.getSpeciesNomenclature());
+        for (RankingsDatabase db: RankingsDatabase.loadFromConfiguration()) {
+            final List<RankingsDatabase> rankingsDatabaseList;
+            if (CODE2DATABASES.containsKey(db.getSpeciesNomenclature())) {
+                rankingsDatabaseList = CODE2DATABASES.get(db.getSpeciesNomenclature());
             } else {
-                motifRankingsDatabaseList = new ArrayList<MotifRankingsDatabase>();
-                CODE2MOTIFDATABASES.put(db.getSpeciesNomenclature(), motifRankingsDatabaseList);
+                rankingsDatabaseList = new ArrayList<RankingsDatabase>();
+                CODE2DATABASES.put(db.getSpeciesNomenclature(), rankingsDatabaseList);
             }
-            motifRankingsDatabaseList.add(db);
+            rankingsDatabaseList.add(db);
         }
     }
 
@@ -45,7 +45,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 	private final int code;
 	private final String name;
     private final String assembly;
-    private final List<MotifRankingsDatabase> motifRankingsDatabases;
+    private final List<RankingsDatabase> rankingsDatabases;
 
     private SpeciesNomenclature() {
         this(-1, "?", "?");
@@ -55,7 +55,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 		this.code = code;
 		this.name = name;
         this.assembly = assembly;
-        this.motifRankingsDatabases = (this.code > 0) ? CODE2MOTIFDATABASES.get(code): Collections.<MotifRankingsDatabase>emptyList();
+        this.rankingsDatabases = (this.code > 0) ? CODE2DATABASES.get(code): Collections.<RankingsDatabase>emptyList();
         CODE2NOMENCLATURE.put(code, this);
 	}
 
@@ -71,26 +71,46 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         return this.assembly;
     }
 
-    public List<MotifRankingsDatabase> getMotifRankingsDatabases() {
-        return motifRankingsDatabases;
+    public List<RankingsDatabase> getRankingsDatabases() {
+        return rankingsDatabases;
+    }
+
+    public List<ChipCollection> getChipCollections() {
+        final Set<ChipCollection> chipCollections = new HashSet<ChipCollection>();
+        for (RankingsDatabase db: getRankingsDatabases()) {
+            // When the rankings database doesn't contain a ChIP collection, exclude it.
+            if (db.hasChipCollection()) {
+                chipCollections.add(db.getChipCollection());
+            }
+        }
+        final List<ChipCollection> chipCollectionArrayList = new ArrayList<ChipCollection>(chipCollections);
+        Collections.sort(chipCollectionArrayList);
+        // Add a "No motif collection" option at the end of the list.
+        chipCollectionArrayList.add(ChipCollection.NONE);
+        return chipCollectionArrayList;
     }
 
     public List<MotifCollection> getMotifCollections() {
         final Set<MotifCollection> motifCollections = new HashSet<MotifCollection>();
-        for (MotifRankingsDatabase db: getMotifRankingsDatabases()) {
-            motifCollections.add(db.getMotifCollection());
+        for (RankingsDatabase db: getRankingsDatabases()) {
+            // When the rankings database doesn't contain a motif collection, exclude it.
+            if (db.hasMotifCollection()) {
+                motifCollections.add(db.getMotifCollection());
+            }
         }
-        final List<MotifCollection> result = new ArrayList<MotifCollection>(motifCollections);
-        Collections.sort(result);
-        return result;
+        final List<MotifCollection> motifCollectionArrayList = new ArrayList<MotifCollection>(motifCollections);
+        Collections.sort(motifCollectionArrayList);
+        // Add a "No motif collection" option at the end of the list.
+        motifCollectionArrayList.add(MotifCollection.NONE);
+        return motifCollectionArrayList;
     }
 
-    public List<MotifRankingsDatabase.Type> getSearchSpaceTypes() {
-        final Set<MotifRankingsDatabase.Type> types = new HashSet<MotifRankingsDatabase.Type>();
-        for (MotifRankingsDatabase db: getMotifRankingsDatabases()) {
+    public List<RankingsDatabase.Type> getSearchSpaceTypes() {
+        final Set<RankingsDatabase.Type> types = new HashSet<RankingsDatabase.Type>();
+        for (RankingsDatabase db: getRankingsDatabases()) {
             types.add(db.getType());
         }
-        final List<MotifRankingsDatabase.Type> result = new ArrayList<MotifRankingsDatabase.Type>(types);
+        final List<RankingsDatabase.Type> result = new ArrayList<RankingsDatabase.Type>(types);
         Collections.sort(result);
         return result;
     }
@@ -112,12 +132,27 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         }
     }
 
-    public List<MotifRankingsDatabase> getMotifDatabases(final MotifCollection motifCollection,
-                                                    final MotifRankingsDatabase.Type type,
-                                                    final GenePutativeRegulatoryRegion region) {
-        final List<MotifRankingsDatabase> dbs = new ArrayList<MotifRankingsDatabase>();
-        for (MotifRankingsDatabase db: getMotifRankingsDatabases()) {
+    public List<RankingsDatabase> getChipDatabases(final ChipCollection chipCollection,
+                                                   final RankingsDatabase.Type type,
+                                                   final GenePutativeRegulatoryRegion region) {
+        final List<RankingsDatabase> dbs = new ArrayList<RankingsDatabase>();
+        for (RankingsDatabase db: getRankingsDatabases()) {
             if (type.equals(db.getType())
+                    && db.hasChipCollection()
+                    && db.getChipCollection().equals(chipCollection)
+                    && db.getPutativeRegulatoryRegion().equals(region))
+                dbs.add(db);
+        }
+        return dbs;
+    }
+
+    public List<RankingsDatabase> getMotifDatabases(final MotifCollection motifCollection,
+                                                    final RankingsDatabase.Type type,
+                                                    final GenePutativeRegulatoryRegion region) {
+        final List<RankingsDatabase> dbs = new ArrayList<RankingsDatabase>();
+        for (RankingsDatabase db: getRankingsDatabases()) {
+            if (type.equals(db.getType())
+                 && db.hasMotifCollection()
                  && db.getMotifCollection().equals(motifCollection)
                  && db.getPutativeRegulatoryRegion().equals(region))
                 dbs.add(db);

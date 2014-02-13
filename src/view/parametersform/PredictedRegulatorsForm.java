@@ -3,7 +3,7 @@ package view.parametersform;
 import cytoscape.Cytoscape;
 import domainmodel.Delineation;
 import domainmodel.InputParameters;
-import domainmodel.MotifRankingsDatabase;
+import domainmodel.RankingsDatabase;
 import domainmodel.SpeciesNomenclature;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
@@ -774,11 +774,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         return this.searchSpaceTypeCB.isRegionBased();
     }
 
-    public MotifRankingsDatabase getMotifRankingsDatabase() {
+    public RankingsDatabase getMotifRankingsDatabase() {
         if (this.isRegionBasedDatabase()) {
-            return (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+            return (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
         } else {
-            return (MotifRankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+            return (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
         }
     }
 

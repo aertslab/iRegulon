@@ -1,22 +1,25 @@
 package domainmodel;
 
 
-import java.util.*;
-
 import infrastructure.Configuration;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
-public final class MotifCollection implements Comparable<MotifCollection> {
-    private static Map<String, MotifCollection> CODE2COLLECTION = new LinkedHashMap<String, MotifCollection>();
-    public static MotifCollection NONE = new MotifCollection("none", "No motif collection");
-    public static MotifCollection UNKNOWN = new MotifCollection("unknown", "Unknown motif collection");
+public final class ChipCollection implements Comparable<ChipCollection> {
+    private static Map<String, ChipCollection> CODE2COLLECTION = new LinkedHashMap<String, ChipCollection>();
+    public static ChipCollection NONE = new ChipCollection("none", "No ChIP collection");
+    public static ChipCollection UNKNOWN = new ChipCollection("unknown", "Unknown ChIP collection");
 
-    private static final String GROUP_TAGNAME = "motif-collections";
-    private static final String TAGNAME = "motif-collection";
+    private static final String GROUP_TAGNAME = "chip-collections";
+    private static final String TAGNAME = "chip-collection";
     private static final String ATTRIBUTENAME = "id";
 
     static {
@@ -24,7 +27,7 @@ public final class MotifCollection implements Comparable<MotifCollection> {
         for (Element child : findElements(document.getElementsByTagName(GROUP_TAGNAME), TAGNAME)) {
             final String description = child.getTextContent().trim();
             final String code = child.getAttribute(ATTRIBUTENAME);
-            CODE2COLLECTION.put(code, new MotifCollection(code, description));
+            CODE2COLLECTION.put(code, new ChipCollection(code, description));
         }
     }
 
@@ -42,18 +45,18 @@ public final class MotifCollection implements Comparable<MotifCollection> {
         return elements;
     }
 
-    public static MotifCollection forCode(final String code) {
+    public static ChipCollection forCode(final String code) {
         return CODE2COLLECTION.containsKey(code) ? CODE2COLLECTION.get(code) : UNKNOWN;
     }
 
-    public static List<MotifCollection> all() {
-        return new ArrayList<MotifCollection>(CODE2COLLECTION.values());
+    public static List<ChipCollection> all() {
+        return new ArrayList<ChipCollection>(CODE2COLLECTION.values());
     }
 
     private final String code;
     private final String description;
 
-    private MotifCollection(String code, String description) {
+    private ChipCollection(String code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -71,7 +74,7 @@ public final class MotifCollection implements Comparable<MotifCollection> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MotifCollection that = (MotifCollection) o;
+        ChipCollection that = (ChipCollection) o;
 
         if (!code.equals(that.code)) return false;
         if (!description.equals(that.description)) return false;
@@ -92,7 +95,7 @@ public final class MotifCollection implements Comparable<MotifCollection> {
     }
 
     @Override
-    public int compareTo(MotifCollection o) {
+    public int compareTo(ChipCollection o) {
         return description.compareTo(o.description);
     }
 }

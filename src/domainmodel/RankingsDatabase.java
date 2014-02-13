@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MotifRankingsDatabase extends IRegulonResourceBundle {
+public class RankingsDatabase extends IRegulonResourceBundle {
     private static final String DATABASES_TAG_NAME = "databases";
     private static final String DATABASE_TAG_NAME = "database";
     private static final String TYPE_TAG_NAME = "type";
     private static final String NAME_TAG_NAME = "name";
+    private static final String COLLECTION_TYPE_TAG_NAME = "collection";
     private static final String SPECIES_TAG_NAME = "species";
     private static final String NOMENCLATURE_TAG_NAME = "nomenclature";
-    private static final String MOTIF_COLLECTION_TAG_NAME = "motif-collection";
     private static final String DELINEATION_TAG_NAME = "delineation";
     private static final String NUMBER_OF_SPECIES_TAG_NAME = "number-of-species";
     private static final String DEFAULT_NES_THRESHOLD_TAG_NAME = "default-nes-threshold";
@@ -29,14 +29,15 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
     private static final String ID_ATTRIBUTE_NAME = "id";
     private static final String REF_ID_ATTRIBUTE_NAME = "refid";
     private static final String DEFAULT_ATTRIBUTE_NAME = "default";
+    private static final String TYPE_ATTRIBUTE_NAME = "type";
 
     private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_escore"));
     private static final float DEFAULT_AUC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
     private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
 
-    public static List<MotifRankingsDatabase> loadFromConfiguration() {
+    public static List<RankingsDatabase> loadFromConfiguration() {
         final Document document = Configuration.getDocument();
-        final List<MotifRankingsDatabase> motifRankingsDatabases = new ArrayList<MotifRankingsDatabase>();
+        final List<RankingsDatabase> motifRankingsDatabases = new ArrayList<RankingsDatabase>();
         for (Element child : findElements(document.getElementsByTagName(DATABASES_TAG_NAME), DATABASE_TAG_NAME)) {
             motifRankingsDatabases.add(createMotifDatabase(child));
         }
@@ -57,18 +58,34 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
         return elements;
     }
 
-    private static MotifRankingsDatabase createMotifDatabase(Node nNode) {
+    private static RankingsDatabase createMotifDatabase(Node nNode) {
         final NodeList childNodes = nNode.getChildNodes();
 
         final String code = nNode.getAttributes().getNamedItem(ID_ATTRIBUTE_NAME).getNodeValue();
         final String name = readValue(childNodes, NAME_TAG_NAME);
 
+        final CollectionType collectionType = CollectionType.forCode(readAttribute(childNodes, COLLECTION_TYPE_TAG_NAME, TYPE_ATTRIBUTE_NAME));
         final Type type = Type.forCode(readValue(childNodes, TYPE_TAG_NAME));
 
         final String species = readValue(childNodes, SPECIES_TAG_NAME);
         final int nomenclatureCode = Integer.parseInt(readAttribute(childNodes, NOMENCLATURE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
 
-        final MotifCollection motifCollection = MotifCollection.forCode(readAttribute(childNodes, MOTIF_COLLECTION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
+        final ChipCollection chipCollection;
+        final MotifCollection motifCollection;
+
+        if (CollectionType.CHIP.equals(collectionType)) {
+            chipCollection = ChipCollection.forCode(readAttribute(childNodes, COLLECTION_TYPE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
+            motifCollection = MotifCollection.NONE;
+        } else if (CollectionType.MOTIF.equals(collectionType)) {
+            chipCollection = ChipCollection.NONE;
+            motifCollection = MotifCollection.forCode(readAttribute(childNodes, COLLECTION_TYPE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
+        } else {
+            throw new IllegalStateException();
+        }
+
+        //final MotifCollection motifCollection = MotifCollection.UNKNOWN;
+
+        //final MotifCollection motifCollection = MotifCollection.forCode(readAttribute(childNodes, MOTIF_COLLECTION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
 
         final int speciesCount = Integer.parseInt(readValue(childNodes, NUMBER_OF_SPECIES_TAG_NAME));
 
@@ -91,7 +108,7 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
 
         if (Type.GENE.equals(type)) {
             final GenePutativeRegulatoryRegion regulatoryRegion = GenePutativeRegulatoryRegion.forCode(readAttribute(childNodes, DELINEATION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
-            return new MotifRankingsDatabase(code, name, type, nomenclatureCode, motifCollection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), delineationDefault, nesThreshold, aucThreshold, rankThreshold);
+            return new RankingsDatabase(code, name, type, nomenclatureCode, chipCollection, motifCollection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else if (Type.REGION.equals(type)) {
             final List<Delineation> delineations = new ArrayList<Delineation>();
             final NodeList mappings = findElement(childNodes, MAPPINGS_TAG_NAME);
@@ -106,7 +123,7 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
                     }
                 }
             }
-            return new MotifRankingsDatabase(code, name, type, nomenclatureCode, motifCollection, speciesCount, GenePutativeRegulatoryRegion.UNKNOWN, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
+            return new RankingsDatabase(code, name, type, nomenclatureCode, chipCollection, motifCollection, speciesCount, GenePutativeRegulatoryRegion.UNKNOWN, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else {
           throw new IllegalStateException();
         }
@@ -150,6 +167,7 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
 	private final String name;
     private final Type type;
     private final int speciesNomenclature;
+    private final ChipCollection chipCollection;
     private final MotifCollection motifCollection;
     private final int speciesCount;
     private final GenePutativeRegulatoryRegion putativeRegulatoryRegion;
@@ -159,11 +177,12 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
 	private final float AUCvalue;
 	private final int visualisationValue;
 
-    public MotifRankingsDatabase(String code, String name, Type type, int speciesNomenclature, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
+    public RankingsDatabase(String code, String name, Type type, int speciesNomenclature, ChipCollection chipCollection, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
         this.code = code;
         this.name = name;
         this.type = type;
         this.speciesNomenclature = speciesNomenclature;
+        this.chipCollection = chipCollection;
         this.motifCollection = motifCollection;
         this.speciesCount = speciesCount;
         this.putativeRegulatoryRegion = putativeRegulatoryRegion;
@@ -174,8 +193,8 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
         this.visualisationValue = visualisationValue;
     }
 
-    public MotifRankingsDatabase(String code, String name, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
-		this(code, name, Type.GENE, -1, MotifCollection.UNKNOWN, 0, GenePutativeRegulatoryRegion.UNKNOWN, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
+    public RankingsDatabase(String code, String name, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
+		this(code, name, Type.GENE, -1, ChipCollection.UNKNOWN, MotifCollection.UNKNOWN, 0, GenePutativeRegulatoryRegion.UNKNOWN, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
 	}
 
 	public String getCode(){
@@ -194,8 +213,20 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
         return speciesNomenclature;
     }
 
+    public ChipCollection getChipCollection() {
+        return chipCollection;
+    }
+
+    public boolean hasChipCollection() {
+        return ! chipCollection.equals(ChipCollection.NONE);
+    }
+
     public MotifCollection getMotifCollection() {
         return motifCollection;
+    }
+
+    public boolean hasMotifCollection() {
+        return ! motifCollection.equals(MotifCollection.NONE);
     }
 
     public int getSpeciesCount() {
@@ -252,6 +283,37 @@ public class MotifRankingsDatabase extends IRegulonResourceBundle {
         public static Type forCode(final String code) {
             if (REGION.getCode().equals(code)) return REGION;
             else if (GENE.getCode().equals(code)) return GENE;
+            else throw new IllegalStateException();
+        }
+
+        @Override
+        public String toString() {
+            return description;
+        }
+    }
+
+    public static enum CollectionType {
+        CHIP("chip", "ChIP collection"), MOTIF("motif", "motif collection");
+
+        private final String code;
+        private final String description;
+
+        private CollectionType(final String code, final String description) {
+            this.code = code;
+            this.description = description;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public static CollectionType forCode(final String code) {
+            if (CHIP.getCode().equals(code)) return CHIP;
+            else if (MOTIF.getCode().equals(code)) return MOTIF;
             else throw new IllegalStateException();
         }
 

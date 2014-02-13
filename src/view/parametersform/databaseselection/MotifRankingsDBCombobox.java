@@ -5,26 +5,26 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import domainmodel.MotifRankingsDatabase;
+import domainmodel.RankingsDatabase;
 
 public class MotifRankingsDBCombobox extends JComboBox{
 
-	private List<MotifRankingsDatabase> motifRankingsDatabase;
+	private List<RankingsDatabase> motifRankingsDatabase;
 	
 	public MotifRankingsDBCombobox(){
 		super();
-		this.motifRankingsDatabase = new ArrayList<MotifRankingsDatabase>();
+		this.motifRankingsDatabase = new ArrayList<RankingsDatabase>();
 	}
 	
-	public void updateDatabases(List<MotifRankingsDatabase> newMotifRankingsDatabase){
+	public void updateDatabases(List<RankingsDatabase> newMotifRankingsDatabase){
 		this.motifRankingsDatabase = newMotifRankingsDatabase;
 		this.removeAllItems();
-		for (MotifRankingsDatabase db : newMotifRankingsDatabase){
+		for (RankingsDatabase db : newMotifRankingsDatabase){
 			this.addItem(db);
 		}
 	}
 	
-	public boolean canBeSelected(MotifRankingsDatabase aMotifRankingsDatabase){
+	public boolean canBeSelected(RankingsDatabase aMotifRankingsDatabase){
 		return this.motifRankingsDatabase.contains(aMotifRankingsDatabase);
 	}
 	

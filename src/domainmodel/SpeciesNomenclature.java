@@ -85,7 +85,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         }
         final List<ChipCollection> chipCollectionArrayList = new ArrayList<ChipCollection>(chipCollections);
         Collections.sort(chipCollectionArrayList);
-        // Add a "No motif collection" option at the end of the list.
+        // Add a "No ChIP collection" option at the end of the list.
         chipCollectionArrayList.add(ChipCollection.NONE);
         return chipCollectionArrayList;
     }
@@ -115,20 +115,47 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         return result;
     }
 
-    public List<GenePutativeRegulatoryRegion> getPutativeRegulatoryRegions(
-                                                final MotifCollection motifCollection,
-                                               final MotifRankingsDatabase.Type type) {
-        if (MotifRankingsDatabase.Type.REGION.equals(type)) {
-            return Collections.singletonList(GenePutativeRegulatoryRegion.UNKNOWN);
+    public List<GenePutativeRegulatoryRegion> getPutativeRegulatoryRegions(final ChipCollection chipCollection,
+                                                                           final MotifCollection motifCollection,
+                                                                           final RankingsDatabase.Type type) {
+        if (RankingsDatabase.Type.REGION.equals(type)) {
+            return Collections.singletonList(GenePutativeRegulatoryRegion.NONE);
         } else {
-            final List<GenePutativeRegulatoryRegion> result = new ArrayList<GenePutativeRegulatoryRegion>();
-            for (MotifRankingsDatabase db: getMotifRankingsDatabases()) {
-                if (type.equals(db.getType())
-                        && db.getMotifCollection().equals(motifCollection)
-                        && !result.contains(db.getPutativeRegulatoryRegion()))
-                    result.add(db.getPutativeRegulatoryRegion());
+            boolean hasChipRankingsDatabases = false;
+            boolean hasMotifRankingsDatabases = false;
+
+            final Set<GenePutativeRegulatoryRegion> genePutativeRegulatoryRegionChipSet = new HashSet<GenePutativeRegulatoryRegion>();
+            final Set<GenePutativeRegulatoryRegion> genePutativeRegulatoryRegionMotifSet = new HashSet<GenePutativeRegulatoryRegion>();
+            final Set<GenePutativeRegulatoryRegion> genePutativeRegulatoryRegionSet;
+
+            for (RankingsDatabase db : getRankingsDatabases()) {
+                if (type.equals(db.getType())) {
+                    if (db.hasChipCollection() && db.getChipCollection().equals(chipCollection)) {
+                        genePutativeRegulatoryRegionChipSet.add(db.getPutativeRegulatoryRegion());
+                        hasChipRankingsDatabases = true;
+                    }
+                    if (db.hasMotifCollection() && db.getMotifCollection().equals(motifCollection)) {
+                        genePutativeRegulatoryRegionMotifSet.add(db.getPutativeRegulatoryRegion());
+                        hasMotifRankingsDatabases = true;
+                    }
+                }
             }
-            return result;
+
+            if (hasChipRankingsDatabases && hasMotifRankingsDatabases) {
+                // Take only those gene putative regulatory regions that are supported in both the ChIP and motif rankings databases.
+                genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionChipSet);
+                genePutativeRegulatoryRegionSet.retainAll(genePutativeRegulatoryRegionMotifSet);
+            } else if (hasChipRankingsDatabases) {
+                // Take only those gene putative regulatory regions that are supported in the ChIP rankings databases.
+                genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionChipSet);
+            } else {
+                // Take only those gene putative regulatory regions that are supported in the motif rankings databases.
+                genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionMotifSet);
+            }
+
+            final List genePutativeRegulatoryRegionList = new ArrayList<Object>(genePutativeRegulatoryRegionSet);
+
+            return genePutativeRegulatoryRegionList;
         }
     }
 
@@ -138,7 +165,6 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         final List<RankingsDatabase> dbs = new ArrayList<RankingsDatabase>();
         for (RankingsDatabase db: getRankingsDatabases()) {
             if (type.equals(db.getType())
-                    && db.hasChipCollection()
                     && db.getChipCollection().equals(chipCollection)
                     && db.getPutativeRegulatoryRegion().equals(region))
                 dbs.add(db);
@@ -152,7 +178,6 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         final List<RankingsDatabase> dbs = new ArrayList<RankingsDatabase>();
         for (RankingsDatabase db: getRankingsDatabases()) {
             if (type.equals(db.getType())
-                 && db.hasMotifCollection()
                  && db.getMotifCollection().equals(motifCollection)
                  && db.getPutativeRegulatoryRegion().equals(region))
                 dbs.add(db);

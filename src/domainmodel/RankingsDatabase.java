@@ -83,10 +83,6 @@ public class RankingsDatabase extends IRegulonResourceBundle {
             throw new IllegalStateException();
         }
 
-        //final MotifCollection motifCollection = MotifCollection.UNKNOWN;
-
-        //final MotifCollection motifCollection = MotifCollection.forCode(readAttribute(childNodes, MOTIF_COLLECTION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
-
         final int speciesCount = Integer.parseInt(readValue(childNodes, NUMBER_OF_SPECIES_TAG_NAME));
 
         String value = readValue(childNodes, DEFAULT_NES_THRESHOLD_TAG_NAME);
@@ -123,9 +119,9 @@ public class RankingsDatabase extends IRegulonResourceBundle {
                     }
                 }
             }
-            return new RankingsDatabase(code, name, type, nomenclatureCode, chipCollection, motifCollection, speciesCount, GenePutativeRegulatoryRegion.UNKNOWN, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
+            return new RankingsDatabase(code, name, type, nomenclatureCode, chipCollection, motifCollection, speciesCount, GenePutativeRegulatoryRegion.NONE, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else {
-          throw new IllegalStateException();
+            throw new IllegalStateException();
         }
     }
 
@@ -163,8 +159,8 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         return null;
     }
 
-	private final String code;
-	private final String name;
+    private final String code;
+    private final String name;
     private final Type type;
     private final int speciesNomenclature;
     private final ChipCollection chipCollection;
@@ -174,8 +170,8 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     private final List<Delineation> gene2regionDelineations;
     private final Delineation delineationDefault;
     private final float NESvalue;
-	private final float AUCvalue;
-	private final int visualisationValue;
+    private final float AUCvalue;
+    private final int visualisationValue;
 
     public RankingsDatabase(String code, String name, Type type, int speciesNomenclature, ChipCollection chipCollection, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
         this.code = code;
@@ -194,16 +190,16 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     }
 
     public RankingsDatabase(String code, String name, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
-		this(code, name, Type.GENE, -1, ChipCollection.UNKNOWN, MotifCollection.UNKNOWN, 0, GenePutativeRegulatoryRegion.UNKNOWN, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
-	}
+        this(code, name, Type.GENE, -1, ChipCollection.NONE, MotifCollection.NONE, 0, GenePutativeRegulatoryRegion.NONE, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
+    }
 
-	public String getCode(){
-		return this.code;
-	}
-	
-	public String getName(){
-		return this.name;
-	}
+    public String getCode() {
+        return this.code;
+    }
+
+    public String getName() {
+        return this.name;
+    }
 
     public Type getType() {
         return type;
@@ -218,7 +214,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     }
 
     public boolean hasChipCollection() {
-        return ! chipCollection.equals(ChipCollection.NONE);
+        return !chipCollection.equals(ChipCollection.NONE);
     }
 
     public MotifCollection getMotifCollection() {
@@ -226,7 +222,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     }
 
     public boolean hasMotifCollection() {
-        return ! motifCollection.equals(MotifCollection.NONE);
+        return !motifCollection.equals(MotifCollection.NONE);
     }
 
     public int getSpeciesCount() {
@@ -241,27 +237,27 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         return gene2regionDelineations;
     }
 
-    public Delineation getDelineationDefault(){
+    public Delineation getDelineationDefault() {
         return this.delineationDefault;
     }
 
-    public float getNESvalue(){
+    public float getNESvalue() {
         return this.NESvalue;
     }
 
-    public float getAUCvalue(){
-		return this.AUCvalue;
-	}
-	
-	public int getVisualisationValue(){
-		return this.visualisationValue;
-	}
-	
-	public String toString(){
-		return this.name;
-	}
-	
-	public static enum Type {
+    public float getAUCvalue() {
+        return this.AUCvalue;
+    }
+
+    public int getVisualisationValue() {
+        return this.visualisationValue;
+    }
+
+    public String toString() {
+        return this.name;
+    }
+
+    public static enum Type {
         GENE("genes", "gene-based"), REGION("regions", "region-based");
 
         private final String code;

@@ -1,29 +1,19 @@
 package view.parametersform;
 
+import cytoscape.Cytoscape;
 import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
+import view.parametersform.databaseselection.*;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
-import cytoscape.Cytoscape;
-
-
-import view.parametersform.databaseselection.MotifCollectionComboBox;
-import view.parametersform.databaseselection.MotifRankingsDBCombobox;
-import view.parametersform.databaseselection.PutativeRegulatoryRegionComboBox;
-import view.parametersform.databaseselection.SearchSpaceTypeComboBox;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 final class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener {
 
@@ -35,10 +25,12 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private final JTextField txtMaxSimilarity;
 	
 	private final JComboBox speciesNomenclatureCB;
+    private final ChipCollectionComboBox chipCollectionCB;
     private final MotifCollectionComboBox motifCollectionCB;
     private final PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB;
 	private final SearchSpaceTypeComboBox searchSpaceTypeCB;
-	private final MotifRankingsDBCombobox motifRankingsDatabaseCB;
+    private final RankingsDBCombobox chipRankingsDatabaseCB;
+	private final RankingsDBCombobox motifRankingsDatabaseCB;
 	private final JLabel labelOverlap;
 	private final JTextField txtOverlap;
 	private final JRadioButton rbtnDelineation;
@@ -55,31 +47,36 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	
 	private boolean canSubmit;
 	private boolean isBussy;
-	private boolean changedMotifRankingsDatabase;
-	
-	public DatabaseListener(JTextField txtName, 
-								JTextField txtEscore, 
-								JTextField txtAUCvalue, 
-								JTextField txtVisualisation, 
-								JTextField txtMinOrthologous, 
-								JTextField txtMaxSimilarity, 
-								JComboBox speciesNomenclatureCB,
-                                MotifCollectionComboBox motifCollectionCB,
-                                PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB,
-								SearchSpaceTypeComboBox jcbBased,
-								MotifRankingsDBCombobox motifRankingsDatabaseCB,
-								JLabel labelOverlap,
-								JTextField txtOverlap, 
-								JRadioButton rbtnDelineation,
-								JComboBox jcbDelineation, 
-								JRadioButton rbtnConversion, 
-								JTextField txtUp, 
-								JLabel labelUp,
-								JTextField txtDown, 
-								JLabel labelDown,
-								JComboBox jcbGeneNameAttr, 
-								JTextField txtAmountNodes, 
-								JButton btnSubmit){
+	private boolean changedChipRankingsDatabase;
+    private boolean changedMotifRankingsDatabase;
+    private boolean hasChipCollection;
+    private boolean hasMotifCollection;
+
+    public DatabaseListener(JTextField txtName,
+                            JTextField txtEscore,
+                            JTextField txtAUCvalue,
+                            JTextField txtVisualisation,
+                            JTextField txtMinOrthologous,
+                            JTextField txtMaxSimilarity,
+                            JComboBox speciesNomenclatureCB,
+                            ChipCollectionComboBox chipCollectionCB,
+                            MotifCollectionComboBox motifCollectionCB,
+                            PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB,
+                            SearchSpaceTypeComboBox jcbBased,
+                            RankingsDBCombobox chipRankingsDatabaseCB,
+                            RankingsDBCombobox motifRankingsDatabaseCB,
+                            JLabel labelOverlap,
+                            JTextField txtOverlap,
+                            JRadioButton rbtnDelineation,
+                            JComboBox jcbDelineation,
+                            JRadioButton rbtnConversion,
+                            JTextField txtUp,
+                            JLabel labelUp,
+                            JTextField txtDown,
+                            JLabel labelDown,
+                            JComboBox jcbGeneNameAttr,
+                            JTextField txtAmountNodes,
+                            JButton btnSubmit){
 		this.txtName = txtName;
 		this.txtEscore = txtEscore;
 		this.txtAUCvalue = txtAUCvalue;
@@ -88,6 +85,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		this.txtMaxSimilarity = txtMaxSimilarity;
 		this.speciesNomenclatureCB = speciesNomenclatureCB;
 		this.searchSpaceTypeCB = jcbBased;
+        this.chipRankingsDatabaseCB = chipRankingsDatabaseCB;
 		this.motifRankingsDatabaseCB = motifRankingsDatabaseCB;
 		this.labelOverlap = labelOverlap;
 		this.txtOverlap = txtOverlap;
@@ -103,7 +101,11 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		this.btnSubmit = btnSubmit;
 		this.canSubmit = true;
 		this.isBussy = false;
-		this.changedMotifRankingsDatabase = false;
+        this.hasChipCollection = false;
+        this.hasMotifCollection = false;
+		this.changedChipRankingsDatabase = false;
+        this.changedMotifRankingsDatabase = false;
+        this.chipCollectionCB = chipCollectionCB;
         this.motifCollectionCB = motifCollectionCB;
         this.genePutativeRegulatoryRegionCB = genePutativeRegulatoryRegionCB;
 		
@@ -132,9 +134,12 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 
 	public void refresh(){
 		if (! this.isBussy){
+            this.hasChipCollection = false;
+            this.hasMotifCollection = false;
 			this.isBussy = true;
 			this.canSubmit = true;
 			this.changedMotifRankingsDatabase = false;
+            this.changedChipRankingsDatabase = false;
 			this.refreshName();
 			this.refreshRankingDatabases();
 			this.refreshOverlap();
@@ -192,7 +197,11 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		if (this.changedMotifRankingsDatabase){
 			RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
 			this.txtAUCvalue.setText("" + motifRankingsDatabase.getAUCvalue());
-		}
+		} else if (this.changedChipRankingsDatabase){
+            RankingsDatabase chipRankingsDatabase = (RankingsDatabase) this.chipRankingsDatabaseCB.getSelectedItem();
+            this.txtAUCvalue.setText("" + chipRankingsDatabase.getAUCvalue());
+        }
+
 		try{
 			if (this.txtAUCvalue.getText().isEmpty() || 0 > Float.parseFloat(this.txtAUCvalue.getText())
 					|| Float.parseFloat(this.txtAUCvalue.getText()) > 1){
@@ -210,7 +219,10 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 		if (this.changedMotifRankingsDatabase){
 			RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
 			this.txtVisualisation.setText("" + motifRankingsDatabase.getVisualisationValue());
-		}
+		} else if (this.changedChipRankingsDatabase){
+            RankingsDatabase chipRankingsDatabase = (RankingsDatabase) this.chipRankingsDatabaseCB.getSelectedItem();
+            this.txtVisualisation.setText("" + chipRankingsDatabase.getVisualisationValue());
+        }
 		
 		try{
 			if (this.txtVisualisation.getText().isEmpty() || 1 > Integer.parseInt(this.txtVisualisation.getText())){
@@ -262,6 +274,14 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
         }
         this.motifCollectionCB.setSelectedItem(curMotifCollection);
 
+        ChipCollection curChipCollection = (ChipCollection) this.chipCollectionCB.getSelectedItem();
+        final List<ChipCollection> chipCollections = speciesNomenclature.getChipCollections();
+        this.chipCollectionCB.setChipCollections(chipCollections);
+        if (!chipCollections.contains(curChipCollection)) {
+            curChipCollection = chipCollections.get(0);
+        }
+        this.chipCollectionCB.setSelectedItem(curChipCollection);
+
         RankingsDatabase.Type curSearchSpaceType = (RankingsDatabase.Type) this.searchSpaceTypeCB.getSelectedItem();
         final List<RankingsDatabase.Type> searchSpaceTypes = speciesNomenclature.getSearchSpaceTypes();
         this.searchSpaceTypeCB.setTypes(searchSpaceTypes);
@@ -270,29 +290,72 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
         }
         this.searchSpaceTypeCB.setSelectedItem(curSearchSpaceType);
 
-        GenePutativeRegulatoryRegion curRegion = (GenePutativeRegulatoryRegion) this.genePutativeRegulatoryRegionCB.getSelectedItem();
-        final List<GenePutativeRegulatoryRegion> regions = speciesNomenclature.getPutativeRegulatoryRegions(curMotifCollection, curSearchSpaceType);
-
-        //final List<GenePutativeRegulatoryRegion> regions = speciesNomenclature.getPutativeRegulatoryRegions(curChipCollection, curMotifCollection, curSearchSpaceType);
-        this.genePutativeRegulatoryRegionCB.setRegions(regions);
-        if (!regions.contains(curRegion)) {
-            curRegion = regions.get(0);
-        }
-        this.genePutativeRegulatoryRegionCB.setSelectedItem(curRegion);
-
-        final RankingsDatabase curMotifRankingsDatabase = (RankingsDatabase) motifRankingsDatabaseCB.getSelectedItem();
-        final List<RankingsDatabase> motifRankingsDatabases = speciesNomenclature.getMotifDatabases(curMotifCollection, curSearchSpaceType, curRegion);
-        this.motifRankingsDatabaseCB.updateDatabases(motifRankingsDatabases);
-        if (motifRankingsDatabases.contains(curMotifRankingsDatabase)) {
-            this.motifRankingsDatabaseCB.setSelectedItem(curMotifRankingsDatabase);
-            this.changedMotifRankingsDatabase = false;
+        if (curMotifCollection.getCode().equals(MotifCollection.NONE.getCode())) {
+            this.hasMotifCollection = false;
         } else {
-            this.motifRankingsDatabaseCB.setSelectedItem(motifRankingsDatabases.get(0));
-            this.changedMotifRankingsDatabase = true;
+            this.hasMotifCollection = true;
+        }
+
+        if (curChipCollection.getCode().equals(ChipCollection.NONE.getCode())) {
+            this.hasChipCollection = false;
+        } else {
+            this.hasChipCollection = true;
+        }
+
+        GenePutativeRegulatoryRegion curRegion = GenePutativeRegulatoryRegion.NONE;
+
+        if (!hasMotifCollection && !hasChipCollection) {
+            List<GenePutativeRegulatoryRegion> unknownGenePutativeRegulatoryRegion = new ArrayList<GenePutativeRegulatoryRegion>();
+            unknownGenePutativeRegulatoryRegion.add(GenePutativeRegulatoryRegion.NONE);
+            this.genePutativeRegulatoryRegionCB.setRegions(unknownGenePutativeRegulatoryRegion);
+
+            this.canSubmit = false;
+        } else {
+            curRegion = (GenePutativeRegulatoryRegion) this.genePutativeRegulatoryRegionCB.getSelectedItem();
+            final List<GenePutativeRegulatoryRegion> regions = speciesNomenclature.getPutativeRegulatoryRegions(curChipCollection, curMotifCollection, curSearchSpaceType);
+
+            this.genePutativeRegulatoryRegionCB.setRegions(regions);
+            if (!regions.contains(curRegion)) {
+                curRegion = regions.get(0);
+            }
+            this.genePutativeRegulatoryRegionCB.setSelectedItem(curRegion);
+        }
+
+        if (this.hasMotifCollection) {
+            final RankingsDatabase curMotifRankingsDatabase = (RankingsDatabase) motifRankingsDatabaseCB.getSelectedItem();
+            final List<RankingsDatabase> motifRankingsDatabases = speciesNomenclature.getMotifDatabases(curMotifCollection, curSearchSpaceType, curRegion);
+            this.motifRankingsDatabaseCB.updateDatabases(motifRankingsDatabases);
+            if (motifRankingsDatabases.contains(curMotifRankingsDatabase)) {
+                this.motifRankingsDatabaseCB.setSelectedItem(curMotifRankingsDatabase);
+                this.changedMotifRankingsDatabase = false;
+            } else {
+                this.motifRankingsDatabaseCB.setSelectedItem(motifRankingsDatabases.get(0));
+                this.changedMotifRankingsDatabase = true;
+            }
+            this.motifRankingsDatabaseCB.setEnabled(true);
+
+        } else {
+            this.motifRankingsDatabaseCB.setEnabled(false);
+        }
+
+        if (this.hasChipCollection) {
+            final RankingsDatabase curChipRankingsDatabase = (RankingsDatabase) chipRankingsDatabaseCB.getSelectedItem();
+            final List<RankingsDatabase> chipRankingsDatabases = speciesNomenclature.getChipDatabases(curChipCollection, curSearchSpaceType, curRegion);
+            this.chipRankingsDatabaseCB.updateDatabases(chipRankingsDatabases);
+            if (chipRankingsDatabases.contains(curChipRankingsDatabase)) {
+                this.chipRankingsDatabaseCB.setSelectedItem(curChipRankingsDatabase);
+                this.changedChipRankingsDatabase = false;
+            } else {
+                this.chipRankingsDatabaseCB.setSelectedItem(chipRankingsDatabases.get(0));
+                this.changedChipRankingsDatabase = true;
+            }
+            this.chipRankingsDatabaseCB.setEnabled(true);
+        } else {
+            this.chipRankingsDatabaseCB.setEnabled(false);
         }
     }
-	
-	private void refreshOverlap(){
+
+    private void refreshOverlap(){
 		this.txtOverlap.setBackground(Color.WHITE);
 		if (this.searchSpaceTypeCB.isGeneBased()){
 			this.labelOverlap.setEnabled(false);
@@ -357,17 +420,32 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
 	private void refreshDelineation(){
 		final Delineation curDelineation = (Delineation) this.jcbDelineation.getSelectedItem();
 		final RankingsDatabase motifRankingsDatabase = (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
-        this.jcbDelineation.removeAllItems();
-		for (Delineation key : motifRankingsDatabase.getGene2regionDelineations()){
-			this.jcbDelineation.addItem(key);
-		}
-        if (this.changedMotifRankingsDatabase){
-            if (motifRankingsDatabase.getGene2regionDelineations().contains(motifRankingsDatabase.getDelineationDefault())){
-                this.jcbDelineation.setSelectedItem(motifRankingsDatabase.getDelineationDefault());
+        final RankingsDatabase chipRankingsDatabase = (RankingsDatabase) this.chipRankingsDatabaseCB.getSelectedItem();
+        if (motifRankingsDatabase.hasMotifCollection()) {
+            this.jcbDelineation.removeAllItems();
+		    for (Delineation key : motifRankingsDatabase.getGene2regionDelineations()){
+			    this.jcbDelineation.addItem(key);
+		    }
+            if (this.changedMotifRankingsDatabase){
+                if (motifRankingsDatabase.getGene2regionDelineations().contains(motifRankingsDatabase.getDelineationDefault())){
+                    this.jcbDelineation.setSelectedItem(motifRankingsDatabase.getDelineationDefault());
+                }
+            }else if (motifRankingsDatabase.getGene2regionDelineations().contains(curDelineation)){
+			    this.jcbDelineation.setSelectedItem(curDelineation);
+		    }
+        } else if (chipRankingsDatabase.hasChipCollection()) {
+            this.jcbDelineation.removeAllItems();
+            for (Delineation key : chipRankingsDatabase.getGene2regionDelineations()){
+                this.jcbDelineation.addItem(key);
             }
-        }else if (motifRankingsDatabase.getGene2regionDelineations().contains(curDelineation)){
-			this.jcbDelineation.setSelectedItem(curDelineation);
-		}
+            if (this.changedChipRankingsDatabase){
+                if (chipRankingsDatabase.getGene2regionDelineations().contains(chipRankingsDatabase.getDelineationDefault())){
+                    this.jcbDelineation.setSelectedItem(chipRankingsDatabase.getDelineationDefault());
+                }
+            }else if (chipRankingsDatabase.getGene2regionDelineations().contains(curDelineation)){
+                this.jcbDelineation.setSelectedItem(curDelineation);
+            }
+        }
 	}
 	
 	private void refreshUp(){

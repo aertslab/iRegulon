@@ -8,9 +8,11 @@ import org.w3c.dom.NodeList;
 
 import java.util.*;
 
-public final class GenePutativeRegulatoryRegion {
+public final class GenePutativeRegulatoryRegion implements Comparable<GenePutativeRegulatoryRegion> {
     private static Map<String, GenePutativeRegulatoryRegion> CODE2COLLECTION = new LinkedHashMap<String, GenePutativeRegulatoryRegion>();
-    public static GenePutativeRegulatoryRegion UNKNOWN = new GenePutativeRegulatoryRegion("?", "");
+    public static GenePutativeRegulatoryRegion NONE = new GenePutativeRegulatoryRegion("none", "No gene putative regulatory region");
+    public static GenePutativeRegulatoryRegion UNKNOWN = new GenePutativeRegulatoryRegion("unknown", "Unknown gene putative regulatory region");
+
 
     private static final String GROUP_TAGNAME = "regulatory-region-delineations";
     private static final String TAGNAME = "delineation";
@@ -47,10 +49,14 @@ public final class GenePutativeRegulatoryRegion {
         return new ArrayList<GenePutativeRegulatoryRegion>(CODE2COLLECTION.values());
     }
 
+    private static int count = 0;
+    private final int indexNumber;
     private final String code;
     private final String description;
 
     private GenePutativeRegulatoryRegion(String code, String description) {
+        count += 1;
+        this.indexNumber = count;
         this.code = code;
         this.description = description;
     }
@@ -61,6 +67,10 @@ public final class GenePutativeRegulatoryRegion {
 
     public String getDescription() {
         return description;
+    }
+
+    public int getIndexNumber() {
+        return indexNumber;
     }
 
     @Override
@@ -74,6 +84,11 @@ public final class GenePutativeRegulatoryRegion {
         if (!description.equals(that.description)) return false;
 
         return true;
+    }
+
+    @Override
+    public int compareTo(GenePutativeRegulatoryRegion o) {
+        return(this.indexNumber < o.getIndexNumber() ? -1: (this.indexNumber == o.getIndexNumber() ? 0 : 1));
     }
 
     @Override

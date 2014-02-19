@@ -16,12 +16,14 @@ public class InputParameters {
     private final SpeciesNomenclature speciesNomenclature;
     private final IRegulonType iRegulonType;
     private final String name;
+    private final String chipCollection;
     private final String motifCollection;
     private final float minOrthologous;
     private final float maxMotifSimilarityFDR;
 
     /* Database */
     private final boolean isRegionBased;
+    private final RankingsDatabase chipRankingsDatabase;
     private final RankingsDatabase motifRankingsDatabase;
     private final float overlap;
     private final Delineation delineation;
@@ -33,10 +35,10 @@ public class InputParameters {
 
     public InputParameters(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC,
                            int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
-                           IRegulonType iRegulonType, String runName, String motifCollection,
+                           IRegulonType iRegulonType, String runName, String chipCollection, String motifCollection,
                            float minOrthologous, float maxMotifSimilarityFDR, boolean isRegionBased,
-                           RankingsDatabase motifRankingsDatabase, float overlap, Delineation delineation,
-                           int upstream, int downstream, String attributeName) {
+                           RankingsDatabase chipRankingsDatabase, RankingsDatabase motifRankingsDatabase,
+                           float overlap, Delineation delineation, int upstream, int downstream, String attributeName) {
         this.genes = genes;
         this.eScore = escore;
         this.thresholdForVisualisation = visualisationThreshold;
@@ -44,10 +46,12 @@ public class InputParameters {
         this.speciesNomenclature = speciesNomenclature;
         this.iRegulonType = iRegulonType;
         this.name = runName;
+        this.chipCollection = chipCollection;
         this.motifCollection = motifCollection;
         this.minOrthologous = minOrthologous;
         this.maxMotifSimilarityFDR = maxMotifSimilarityFDR;
         this.isRegionBased = isRegionBased;
+        this.chipRankingsDatabase = chipRankingsDatabase;
         this.motifRankingsDatabase = motifRankingsDatabase;
         this.overlap = overlap;
         this.delineation = delineation;
@@ -103,7 +107,14 @@ public class InputParameters {
     }
 
     /**
-     * @return the name of the run
+     * @return the name of the ChIP collection
+     */
+    public String getChipCollection() {
+        return this.chipCollection;
+    }
+
+    /**
+     * @return the name of the motif collection
      */
     public String getMotifCollection() {
         return this.motifCollection;
@@ -136,6 +147,14 @@ public class InputParameters {
     public boolean isGeneBased() {
         return !this.isRegionBased;
     }
+
+    /**
+     * @return the ChIP rankings database
+     */
+    public RankingsDatabase getChipRankingsDatabase() {
+        return this.chipRankingsDatabase;
+    }
+
 
     /**
      * @return the motif rankings database
@@ -188,6 +207,9 @@ public class InputParameters {
      */
     public boolean parametersAreValid() {
         boolean parametersAreOkay = true;
+        if (this.getChipCollection().equals(ChipCollection.NONE) && this.getMotifCollection().equals(MotifCollection.NONE)) {
+            parametersAreOkay = false;
+        }
         if (0 > this.getMaxMotifSimilarityFDR() || this.getMaxMotifSimilarityFDR() > 1) {
             parametersAreOkay = false;
         }
@@ -216,6 +238,10 @@ public class InputParameters {
     public String getErrorMessage() {
         boolean parametersAreOkay = true;
         String message = "<html> Error: You have filled in a wrong parameter value: <br /> <br />";
+        if (this.getChipCollection().equals(ChipCollection.NONE) && this.getMotifCollection().equals(MotifCollection.NONE)) {
+            parametersAreOkay = false;
+            message = message + "Choose motif and/or ChIP collection. <br /> <br />";
+        }
         if (0 > this.getMaxMotifSimilarityFDR() || this.getMaxMotifSimilarityFDR() > 1) {
             parametersAreOkay = false;
             message = message + "Max motif Similarity FDR must be between 0 and 1. <br /> <br />";
@@ -226,7 +252,7 @@ public class InputParameters {
         }
         if (1 > this.getThresholdForVisualisation()) {
             parametersAreOkay = false;
-            message = message + "The treshold for visualisation must be greater then 1. <br /> <br />";
+            message = message + "The threshold for visualisation must be greater then 1. <br /> <br />";
         }
         if (0 > this.getROCthresholdAUC() || this.getROCthresholdAUC() > 1) {
             parametersAreOkay = false;

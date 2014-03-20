@@ -76,7 +76,7 @@ try {
         echo("ERROR:\tJob ID doesn't exist.\n");
         exit(1);
     }
-    $JobError = $row['errorMessage'];
+    $JobError = str_replace("\n", "\\n", $row['errorMessage']);
 } catch (PDOException $e) {
     echo("ERROR:\tGetting error message failed.\n");
     exit(1);

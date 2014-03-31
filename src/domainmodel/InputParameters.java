@@ -207,7 +207,7 @@ public class InputParameters {
      */
     public boolean parametersAreValid() {
         boolean parametersAreOkay = true;
-        if (this.getChipCollection().equals(ChipCollection.NONE) && this.getMotifCollection().equals(MotifCollection.NONE)) {
+        if (this.getChipCollection().equals(ChipCollection.NONE.getDescription()) && this.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
             parametersAreOkay = false;
         }
         if (0 > this.getMaxMotifSimilarityFDR() || this.getMaxMotifSimilarityFDR() > 1) {
@@ -238,7 +238,7 @@ public class InputParameters {
     public String getErrorMessage() {
         boolean parametersAreOkay = true;
         String message = "<html> Error: You have filled in a wrong parameter value: <br /> <br />";
-        if (this.getChipCollection().equals(ChipCollection.NONE) && this.getMotifCollection().equals(MotifCollection.NONE)) {
+        if (this.getChipCollection().equals(ChipCollection.NONE.getDescription()) && this.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
             parametersAreOkay = false;
             message = message + "Choose motif and/or ChIP collection. <br /> <br />";
         }

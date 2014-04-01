@@ -37,12 +37,12 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     private JTextField jtfVisualisation;
     private JTextField jtfMinOrthologous;
     private JTextField jtfMaxMotifSimilarityFDR;
-    private ChipCollectionComboBox chipCollectionCB;
     private MotifCollectionComboBox motifCollectionCB;
+    private TrackCollectionComboBox trackCollectionCB;
     private PutativeRegulatoryRegionComboBox genePutativeRegulatoryRegionCB;
     private SearchSpaceTypeComboBox searchSpaceTypeCB;
-    private RankingsDBCombobox chipRankingsDatabaseCB;
     private RankingsDBCombobox motifRankingsDatabaseCB;
+    private RankingsDBCombobox trackRankingsDatabaseCB;
     private JTextField txtOverlap;
     private JComboBox jcbDelation;
     private JTextField txtUpStream;
@@ -462,9 +462,9 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.dbListener = new DatabaseListener(this.jobNameTF,
                 this.jtfEscore, this.jtfROC, this.jtfVisualisation,
                 this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR,
-                this.jcbSpecieAndNomenclature, this.chipCollectionCB,
-                this.motifCollectionCB, this.genePutativeRegulatoryRegionCB,
-                this.searchSpaceTypeCB, this.chipRankingsDatabaseCB, this.motifRankingsDatabaseCB,
+                this.jcbSpecieAndNomenclature, this.motifCollectionCB, this.trackCollectionCB,
+                this.genePutativeRegulatoryRegionCB,
+                this.searchSpaceTypeCB, this.motifRankingsDatabaseCB, this.trackRankingsDatabaseCB,
                 overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion,
                 this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.attributeNameCB, numberOfNodesTF,
                 submitButton);
@@ -488,10 +488,10 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.jtfMaxMotifSimilarityFDR.getDocument().addDocumentListener(this.dbListener);
         this.jcbSpecieAndNomenclature.addActionListener(this.dbListener);
         this.genePutativeRegulatoryRegionCB.addActionListener(this.dbListener);
-        this.chipCollectionCB.addActionListener(this.dbListener);
+        this.trackCollectionCB.addActionListener(this.dbListener);
         this.motifCollectionCB.addActionListener(this.dbListener);
         this.searchSpaceTypeCB.addActionListener(this.dbListener);
-        this.chipRankingsDatabaseCB.addActionListener(this.dbListener);
+        this.trackRankingsDatabaseCB.addActionListener(this.dbListener);
         this.motifRankingsDatabaseCB.addActionListener(this.dbListener);
         this.txtOverlap.addActionListener(this.dbListener);
         this.txtOverlap.getDocument().addDocumentListener(this.dbListener);
@@ -521,7 +521,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         this.jtfMaxMotifSimilarityFDR.getDocument().removeDocumentListener(this.dbListener);
         this.jcbSpecieAndNomenclature.removeActionListener(this.dbListener);
         this.genePutativeRegulatoryRegionCB.removeActionListener(this.dbListener);
-        this.chipCollectionCB.removeActionListener(this.dbListener);
+        this.trackCollectionCB.removeActionListener(this.dbListener);
         this.motifCollectionCB.removeActionListener(this.dbListener);
         this.searchSpaceTypeCB.removeActionListener(this.dbListener);
         this.motifRankingsDatabaseCB.removeActionListener(this.dbListener);
@@ -549,7 +549,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         int yPos = 0;
 
         final JLabel motifCollectionLB = new JLabel("Motif collection:");
-        motifCollectionLB.setToolTipText("Choose the motif collection used in the enrichment analysis.");
+        motifCollectionLB.setToolTipText("Choose the motif collection to use in the enrichment analysis.");
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -573,8 +573,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         yPos += 1;
 
-        final JLabel chipsLB = new JLabel("ChIP collection:");
-        chipsLB.setToolTipText("Choose the ChIP-Seq collection used in the enrichment analysis.");
+        final JLabel tracksLB = new JLabel("Track collection:");
+        tracksLB.setToolTipText("Choose the track collection to use in the enrichment analysis.");
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -583,9 +583,9 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
-        panel.add(chipsLB, cc);
+        panel.add(tracksLB, cc);
 
-        this.chipCollectionCB = new ChipCollectionComboBox();
+        this.trackCollectionCB = new TrackCollectionComboBox();
         cc.gridx = 1;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -594,7 +594,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(chipCollectionCB, cc);
+        panel.add(trackCollectionCB, cc);
 
         yPos += 1;
 
@@ -673,8 +673,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         yPos += 1;
 
-        final JLabel chipdbLB = new JLabel("ChIP rankings database:");
-        chipdbLB.setToolTipText("Choose the ChIP rankings database.");
+        final JLabel trackdbLB = new JLabel("Track rankings database:");
+        trackdbLB.setToolTipText("Choose the track rankings database.");
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -683,9 +683,9 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.fill = GridBagConstraints.NONE;
-        panel.add(chipdbLB, cc);
+        panel.add(trackdbLB, cc);
 
-        this.chipRankingsDatabaseCB = new RankingsDBCombobox();
+        this.trackRankingsDatabaseCB = new RankingsDBCombobox();
         cc.gridx = 1;
         cc.gridy = yPos;
         cc.gridwidth = 1;
@@ -694,7 +694,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.weighty = 0.0;
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(this.chipRankingsDatabaseCB, cc);
+        panel.add(this.trackRankingsDatabaseCB, cc);
 
         return panel;
     }
@@ -790,12 +790,12 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         }
     }
 
-    public String getChipCollection() {
-        return this.chipCollectionCB.getSelectedItem().toString();
-    }
-
     public String getMotifCollection() {
         return this.motifCollectionCB.getSelectedItem().toString();
+    }
+
+    public String getTrackCollection() {
+        return this.trackCollectionCB.getSelectedItem().toString();
     }
 
     public float getNESThreshold() {
@@ -830,19 +830,19 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         return this.searchSpaceTypeCB.isRegionBased();
     }
 
-    public RankingsDatabase getChipRankingsDatabase() {
-        if (this.isRegionBasedDatabase()) {
-            return (RankingsDatabase) this.chipRankingsDatabaseCB.getSelectedItem();
-        } else {
-            return (RankingsDatabase) this.chipRankingsDatabaseCB.getSelectedItem();
-        }
-    }
-
     public RankingsDatabase getMotifRankingsDatabase() {
         if (this.isRegionBasedDatabase()) {
             return (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
         } else {
             return (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
+        }
+    }
+
+    public RankingsDatabase getTrackRankingsDatabase() {
+        if (this.isRegionBasedDatabase()) {
+            return (RankingsDatabase) this.trackRankingsDatabaseCB.getSelectedItem();
+        } else {
+            return (RankingsDatabase) this.trackRankingsDatabaseCB.getSelectedItem();
         }
     }
 
@@ -908,13 +908,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
                 getSpeciesNomenclature(),
                 IRegulonType.PREDICTED_REGULATORS,
                 getJobName(),
-                getChipCollection(),
                 getMotifCollection(),
+                getTrackCollection(),
                 getMinOrthologousIdentity(),
                 getMaxMotifSimilarityFDR(),
                 isRegionBasedDatabase(),
-                getChipRankingsDatabase(),
                 getMotifRankingsDatabase(),
+                getTrackRankingsDatabase(),
                 getOverlapFraction(),
                 getDelineation(),
                 getUpstreamRegionInBp(),

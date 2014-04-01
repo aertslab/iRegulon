@@ -70,15 +70,15 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         final String species = readValue(childNodes, SPECIES_TAG_NAME);
         final int nomenclatureCode = Integer.parseInt(readAttribute(childNodes, NOMENCLATURE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
 
-        final ChipCollection chipCollection;
+        final TrackCollection trackCollection;
         final MotifCollection motifCollection;
 
-        if (CollectionType.CHIP.equals(collectionType)) {
-            chipCollection = ChipCollection.forCode(readAttribute(childNodes, COLLECTION_TYPE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
-            motifCollection = MotifCollection.NONE;
-        } else if (CollectionType.MOTIF.equals(collectionType)) {
-            chipCollection = ChipCollection.NONE;
+        if (CollectionType.MOTIF.equals(collectionType)) {
             motifCollection = MotifCollection.forCode(readAttribute(childNodes, COLLECTION_TYPE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
+            trackCollection = TrackCollection.NONE;
+        } else if (CollectionType.TRACK.equals(collectionType)) {
+            motifCollection = MotifCollection.NONE;
+            trackCollection = TrackCollection.forCode(readAttribute(childNodes, COLLECTION_TYPE_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
         } else {
             throw new IllegalStateException();
         }
@@ -104,7 +104,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
 
         if (Type.GENE.equals(type)) {
             final GenePutativeRegulatoryRegion regulatoryRegion = GenePutativeRegulatoryRegion.forCode(readAttribute(childNodes, DELINEATION_TAG_NAME, REF_ID_ATTRIBUTE_NAME));
-            return new RankingsDatabase(code, name, type, nomenclatureCode, chipCollection, motifCollection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), delineationDefault, nesThreshold, aucThreshold, rankThreshold);
+            return new RankingsDatabase(code, name, type, nomenclatureCode, motifCollection, trackCollection, speciesCount, regulatoryRegion, Collections.<Delineation>emptyList(), delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else if (Type.REGION.equals(type)) {
             final List<Delineation> delineations = new ArrayList<Delineation>();
             final NodeList mappings = findElement(childNodes, MAPPINGS_TAG_NAME);
@@ -119,7 +119,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
                     }
                 }
             }
-            return new RankingsDatabase(code, name, type, nomenclatureCode, chipCollection, motifCollection, speciesCount, GenePutativeRegulatoryRegion.NONE, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
+            return new RankingsDatabase(code, name, type, nomenclatureCode, motifCollection, trackCollection, speciesCount, GenePutativeRegulatoryRegion.NONE, delineations, delineationDefault, nesThreshold, aucThreshold, rankThreshold);
         } else {
             throw new IllegalStateException();
         }
@@ -163,8 +163,8 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     private final String name;
     private final Type type;
     private final int speciesNomenclature;
-    private final ChipCollection chipCollection;
     private final MotifCollection motifCollection;
+    private final TrackCollection trackCollection;
     private final int speciesCount;
     private final GenePutativeRegulatoryRegion putativeRegulatoryRegion;
     private final List<Delineation> gene2regionDelineations;
@@ -173,13 +173,13 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     private final float AUCvalue;
     private final int visualisationValue;
 
-    public RankingsDatabase(String code, String name, Type type, int speciesNomenclature, ChipCollection chipCollection, MotifCollection motifCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
+    public RankingsDatabase(String code, String name, Type type, int speciesNomenclature, MotifCollection motifCollection, TrackCollection trackCollection, int speciesCount, GenePutativeRegulatoryRegion putativeRegulatoryRegion, List<Delineation> gene2regionDelineations, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
         this.code = code;
         this.name = name;
         this.type = type;
         this.speciesNomenclature = speciesNomenclature;
-        this.chipCollection = chipCollection;
         this.motifCollection = motifCollection;
+        this.trackCollection = trackCollection;
         this.speciesCount = speciesCount;
         this.putativeRegulatoryRegion = putativeRegulatoryRegion;
         this.gene2regionDelineations = gene2regionDelineations;
@@ -190,7 +190,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     }
 
     public RankingsDatabase(String code, String name, Delineation delineationDefault, float NESvalue, float AUCvalue, int visualisationValue) {
-        this(code, name, Type.GENE, -1, ChipCollection.NONE, MotifCollection.NONE, 0, GenePutativeRegulatoryRegion.NONE, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
+        this(code, name, Type.GENE, -1, MotifCollection.NONE, TrackCollection.NONE, 0, GenePutativeRegulatoryRegion.NONE, Collections.<Delineation>emptyList(), delineationDefault, NESvalue, AUCvalue, visualisationValue);
     }
 
     public String getCode() {
@@ -209,20 +209,20 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         return speciesNomenclature;
     }
 
-    public ChipCollection getChipCollection() {
-        return chipCollection;
-    }
-
-    public boolean hasChipCollection() {
-        return !chipCollection.equals(ChipCollection.NONE);
-    }
-
     public MotifCollection getMotifCollection() {
         return motifCollection;
     }
 
     public boolean hasMotifCollection() {
         return !motifCollection.equals(MotifCollection.NONE);
+    }
+
+    public TrackCollection getTrackCollection() {
+        return trackCollection;
+    }
+
+    public boolean hasTrackCollection() {
+        return !trackCollection.equals(TrackCollection.NONE);
     }
 
     public int getSpeciesCount() {
@@ -289,7 +289,7 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     }
 
     public static enum CollectionType {
-        CHIP("chip", "ChIP collection"), MOTIF("motif", "motif collection");
+        MOTIF("motif", "motif collection"), TRACK("track", "track collection");
 
         private final String code;
         private final String description;
@@ -308,8 +308,8 @@ public class RankingsDatabase extends IRegulonResourceBundle {
         }
 
         public static CollectionType forCode(final String code) {
-            if (CHIP.getCode().equals(code)) return CHIP;
-            else if (MOTIF.getCode().equals(code)) return MOTIF;
+            if (MOTIF.getCode().equals(code)) return MOTIF;
+            else if (TRACK.getCode().equals(code)) return TRACK;
             else throw new IllegalStateException();
         }
 

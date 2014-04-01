@@ -18,6 +18,7 @@ $jobName = retrieve_post_value('jobName', false, 'string');
 $minOrthologous = retrieve_post_value('minOrthologous', false, 'float_positive');
 $maxMotifSimilarityFDR = retrieve_post_value('maxMotifSimilarityFDR', false, 'float_positive');
 $selectedMotifRankingsDatabase = retrieve_post_value('selectedMotifRankingsDatabase', false, 'string');
+$selectedTrackRankingsDatabase = retrieve_post_value('selectedTrackRankingsDatabase', false, 'string');
 
 
 /*
@@ -28,6 +29,23 @@ $delineation = retrieve_post_value('conversionDelineation', true, 'string');
 $overlap = retrieve_post_value('conversionFractionOfOverlap', true, 'float_positive');
 $upstream = retrieve_post_value('conversionUpstreamRegionInBp', true, 'int_positive');
 $downstream = retrieve_post_value('conversionDownstreamRegionInBp', true, 'int_positive');
+
+
+/*
+ * Combine ranking databases to one string separated by ";".
+ */
+$selectedRankingsDatabases = ';';
+
+if ($selectedMotifRankingsDatabase !== "none" && $selectedMotifRankingsDatabase !== "unknown") {
+    $selectedRankingsDatabases = $selectedRankingsDatabases . $selectedMotifRankingsDatabase . ';';
+}
+
+if ($selectedTrackRankingsDatabase !== "none" && $selectedTrackRankingsDatabase !== "unknown") {
+    $selectedRankingsDatabases = $selectedRankingsDatabases . $selectedTrackRankingsDatabase . ';';
+}
+
+/* Remove extra ";" at the beginning and end of the string. */
+$selectedRankingsDatabases = substr($selectedRankingsDatabases, 1, -1);
 
 
 
@@ -60,7 +78,7 @@ $query = 'INSERT INTO jobQueue
 		          )
           VALUES (
                       :name, :jobStatusCode, NOW(),
-                      :nomenclatureCode, :motifRankingDatabaseCode, :conversionDelineation,
+                      :nomenclatureCode, :rankingDatabaseCode, :conversionDelineation,
                       :conversionUpstreamRegionInBp, :conversionDownstreamRegionInBp, :conversionFractionOfOverlap,
                       :rankThreshold, :AUCRankThresholdAsPercentage, :NESThreshold,
                       :minOrthologousIdentity, :maxMotifSimilarityFDR, :geneIDs,
@@ -81,7 +99,7 @@ try {
     $stmt->bindParam(':name', $jobName, PDO::PARAM_STR);
     $stmt->bindParam(':jobStatusCode', $jobStatusCode, PDO::PARAM_STR);
     $stmt->bindParam(':nomenclatureCode', $SpeciesNomenclature, PDO::PARAM_INT);
-    $stmt->bindParam(':motifRankingDatabaseCode', $selectedMotifRankingsDatabase, PDO::PARAM_STR);
+    $stmt->bindParam(':rankingDatabaseCode', $selectedRankingsDatabases, PDO::PARAM_STR);
     $stmt->bindParam(':conversionDelineation', $delineation, PDO::PARAM_STR);
     $stmt->bindParam(':conversionUpstreamRegionInBp', $upstream, PDO::PARAM_INT);
     $stmt->bindParam(':conversionDownstreamRegionInBp', $downstream, PDO::PARAM_INT);

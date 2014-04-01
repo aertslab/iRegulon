@@ -1,20 +1,20 @@
 package view.parametersform.databaseselection;
 
 
-import domainmodel.ChipCollection;
+import domainmodel.TrackCollection;
 
 import javax.swing.*;
 import java.util.List;
 
-public class ChipCollectionComboBox extends JComboBox {
-    public ChipCollectionComboBox() {
+public class TrackCollectionComboBox extends JComboBox {
+    public TrackCollectionComboBox() {
         super();
     }
 
-    public void setChipCollections(final List<ChipCollection> types) {
-        final ChipCollection curSelection = (ChipCollection) getSelectedItem();
+    public void setTrackCollections(final List<TrackCollection> types) {
+        final TrackCollection curSelection = (TrackCollection) getSelectedItem();
         removeAllItems();
-        for (ChipCollection type: types) {
+        for (TrackCollection type: types) {
             addItem(type);
         }
         if (types.size() == 1) setSelectedItem(types.get(0));

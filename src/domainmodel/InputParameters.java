@@ -16,15 +16,15 @@ public class InputParameters {
     private final SpeciesNomenclature speciesNomenclature;
     private final IRegulonType iRegulonType;
     private final String name;
-    private final String chipCollection;
     private final String motifCollection;
+    private final String trackCollection;
     private final float minOrthologous;
     private final float maxMotifSimilarityFDR;
 
     /* Database */
     private final boolean isRegionBased;
-    private final RankingsDatabase chipRankingsDatabase;
     private final RankingsDatabase motifRankingsDatabase;
+    private final RankingsDatabase trackRankingsDatabase;
     private final float overlap;
     private final Delineation delineation;
     private final int upstream;
@@ -35,9 +35,9 @@ public class InputParameters {
 
     public InputParameters(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC,
                            int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
-                           IRegulonType iRegulonType, String runName, String chipCollection, String motifCollection,
+                           IRegulonType iRegulonType, String runName, String motifCollection, String trackCollection,
                            float minOrthologous, float maxMotifSimilarityFDR, boolean isRegionBased,
-                           RankingsDatabase chipRankingsDatabase, RankingsDatabase motifRankingsDatabase,
+                           RankingsDatabase motifRankingsDatabase, RankingsDatabase trackRankingsDatabase,
                            float overlap, Delineation delineation, int upstream, int downstream, String attributeName) {
         this.genes = genes;
         this.eScore = escore;
@@ -46,13 +46,13 @@ public class InputParameters {
         this.speciesNomenclature = speciesNomenclature;
         this.iRegulonType = iRegulonType;
         this.name = runName;
-        this.chipCollection = chipCollection;
         this.motifCollection = motifCollection;
+        this.trackCollection = trackCollection;
         this.minOrthologous = minOrthologous;
         this.maxMotifSimilarityFDR = maxMotifSimilarityFDR;
         this.isRegionBased = isRegionBased;
-        this.chipRankingsDatabase = chipRankingsDatabase;
         this.motifRankingsDatabase = motifRankingsDatabase;
+        this.trackRankingsDatabase = trackRankingsDatabase;
         this.overlap = overlap;
         this.delineation = delineation;
         this.upstream = upstream;
@@ -107,13 +107,6 @@ public class InputParameters {
     }
 
     /**
-     * @return the name of the ChIP collection
-     */
-    public String getChipCollection() {
-        return this.chipCollection;
-    }
-
-    /**
      * @return the name of the motif collection
      */
     public String getMotifCollection() {
@@ -121,7 +114,14 @@ public class InputParameters {
     }
 
     /**
-     * @return the minimal othologous
+     * @return the name of the track collection
+     */
+    public String getTrackCollection() {
+        return this.trackCollection;
+    }
+
+    /**
+     * @return the minimal orthology
      */
     public float getMinOrthologous() {
         return this.minOrthologous;
@@ -149,18 +149,17 @@ public class InputParameters {
     }
 
     /**
-     * @return the ChIP rankings database
-     */
-    public RankingsDatabase getChipRankingsDatabase() {
-        return this.chipRankingsDatabase;
-    }
-
-
-    /**
      * @return the motif rankings database
      */
     public RankingsDatabase getMotifRankingsDatabase() {
         return this.motifRankingsDatabase;
+    }
+
+    /**
+     * @return the track rankings database
+     */
+    public RankingsDatabase getTrackRankingsDatabase() {
+        return this.trackRankingsDatabase;
     }
 
     /**
@@ -207,7 +206,7 @@ public class InputParameters {
      */
     public boolean parametersAreValid() {
         boolean parametersAreOkay = true;
-        if (this.getChipCollection().equals(ChipCollection.NONE.getDescription()) && this.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
+        if (this.getMotifCollection().equals(MotifCollection.NONE.getDescription()) && this.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
             parametersAreOkay = false;
         }
         if (0 > this.getMaxMotifSimilarityFDR() || this.getMaxMotifSimilarityFDR() > 1) {
@@ -238,9 +237,9 @@ public class InputParameters {
     public String getErrorMessage() {
         boolean parametersAreOkay = true;
         String message = "<html> Error: You have filled in a wrong parameter value: <br /> <br />";
-        if (this.getChipCollection().equals(ChipCollection.NONE.getDescription()) && this.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
+        if (this.getMotifCollection().equals(MotifCollection.NONE.getDescription()) && this.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
             parametersAreOkay = false;
-            message = message + "Choose motif and/or ChIP collection. <br /> <br />";
+            message = message + "Choose motif and/or track collection. <br /> <br />";
         }
         if (0 > this.getMaxMotifSimilarityFDR() || this.getMaxMotifSimilarityFDR() > 1) {
             parametersAreOkay = false;

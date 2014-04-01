@@ -75,21 +75,6 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         return rankingsDatabases;
     }
 
-    public List<ChipCollection> getChipCollections() {
-        final Set<ChipCollection> chipCollections = new HashSet<ChipCollection>();
-        for (RankingsDatabase db: getRankingsDatabases()) {
-            // When the rankings database doesn't contain a ChIP collection, exclude it.
-            if (db.hasChipCollection()) {
-                chipCollections.add(db.getChipCollection());
-            }
-        }
-        final List<ChipCollection> chipCollectionArrayList = new ArrayList<ChipCollection>(chipCollections);
-        Collections.sort(chipCollectionArrayList);
-        // Add a "No ChIP collection" option at the end of the list.
-        chipCollectionArrayList.add(ChipCollection.NONE);
-        return chipCollectionArrayList;
-    }
-
     public List<MotifCollection> getMotifCollections() {
         final Set<MotifCollection> motifCollections = new HashSet<MotifCollection>();
         for (RankingsDatabase db: getRankingsDatabases()) {
@@ -105,6 +90,21 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         return motifCollectionArrayList;
     }
 
+    public List<TrackCollection> getTrackCollections() {
+        final Set<TrackCollection> trackCollections = new HashSet<TrackCollection>();
+        for (RankingsDatabase db: getRankingsDatabases()) {
+            // When the rankings database doesn't contain a track collection, exclude it.
+            if (db.hasTrackCollection()) {
+                trackCollections.add(db.getTrackCollection());
+            }
+        }
+        final List<TrackCollection> trackCollectionArrayList = new ArrayList<TrackCollection>(trackCollections);
+        Collections.sort(trackCollectionArrayList);
+        // Add a "No track collection" option at the end of the list.
+        trackCollectionArrayList.add(TrackCollection.NONE);
+        return trackCollectionArrayList;
+    }
+
     public List<RankingsDatabase.Type> getSearchSpaceTypes() {
         final Set<RankingsDatabase.Type> types = new HashSet<RankingsDatabase.Type>();
         for (RankingsDatabase db: getRankingsDatabases()) {
@@ -115,42 +115,42 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         return result;
     }
 
-    public List<GenePutativeRegulatoryRegion> getPutativeRegulatoryRegions(final ChipCollection chipCollection,
-                                                                           final MotifCollection motifCollection,
+    public List<GenePutativeRegulatoryRegion> getPutativeRegulatoryRegions(final MotifCollection motifCollection,
+                                                                           final TrackCollection trackCollection,
                                                                            final RankingsDatabase.Type type) {
         if (RankingsDatabase.Type.REGION.equals(type)) {
             return Collections.singletonList(GenePutativeRegulatoryRegion.NONE);
         } else {
-            boolean hasChipRankingsDatabases = false;
             boolean hasMotifRankingsDatabases = false;
+            boolean hasTrackRankingsDatabases = false;
 
-            final Set<GenePutativeRegulatoryRegion> genePutativeRegulatoryRegionChipSet = new HashSet<GenePutativeRegulatoryRegion>();
             final Set<GenePutativeRegulatoryRegion> genePutativeRegulatoryRegionMotifSet = new HashSet<GenePutativeRegulatoryRegion>();
+            final Set<GenePutativeRegulatoryRegion> genePutativeRegulatoryRegionTrackSet = new HashSet<GenePutativeRegulatoryRegion>();
             final Set<GenePutativeRegulatoryRegion> genePutativeRegulatoryRegionSet;
 
             for (RankingsDatabase db : getRankingsDatabases()) {
                 if (type.equals(db.getType())) {
-                    if (db.hasChipCollection() && db.getChipCollection().equals(chipCollection)) {
-                        genePutativeRegulatoryRegionChipSet.add(db.getPutativeRegulatoryRegion());
-                        hasChipRankingsDatabases = true;
-                    }
                     if (db.hasMotifCollection() && db.getMotifCollection().equals(motifCollection)) {
                         genePutativeRegulatoryRegionMotifSet.add(db.getPutativeRegulatoryRegion());
                         hasMotifRankingsDatabases = true;
                     }
+                    if (db.hasTrackCollection() && db.getTrackCollection().equals(trackCollection)) {
+                        genePutativeRegulatoryRegionTrackSet.add(db.getPutativeRegulatoryRegion());
+                        hasTrackRankingsDatabases = true;
+                    }
                 }
             }
 
-            if (hasChipRankingsDatabases && hasMotifRankingsDatabases) {
-                // Take only those gene putative regulatory regions that are supported in both the ChIP and motif rankings databases.
-                genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionChipSet);
-                genePutativeRegulatoryRegionSet.retainAll(genePutativeRegulatoryRegionMotifSet);
-            } else if (hasChipRankingsDatabases) {
-                // Take only those gene putative regulatory regions that are supported in the ChIP rankings databases.
-                genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionChipSet);
-            } else {
+            if (hasMotifRankingsDatabases && hasTrackRankingsDatabases) {
+                // Take only those gene putative regulatory regions that are supported in both the motif and track rankings databases.
+                genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionMotifSet);
+                genePutativeRegulatoryRegionSet.retainAll(genePutativeRegulatoryRegionTrackSet);
+            } else if (hasMotifRankingsDatabases) {
                 // Take only those gene putative regulatory regions that are supported in the motif rankings databases.
                 genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionMotifSet);
+            } else {
+                // Take only those gene putative regulatory regions that are supported in the track rankings databases.
+                genePutativeRegulatoryRegionSet = new TreeSet<GenePutativeRegulatoryRegion>(genePutativeRegulatoryRegionTrackSet);
             }
 
             final List genePutativeRegulatoryRegionList = new ArrayList<Object>(genePutativeRegulatoryRegionSet);
@@ -159,27 +159,27 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         }
     }
 
-    public List<RankingsDatabase> getChipDatabases(final ChipCollection chipCollection,
-                                                   final RankingsDatabase.Type type,
-                                                   final GenePutativeRegulatoryRegion region) {
+    public List<RankingsDatabase> getMotifDatabases(final MotifCollection motifCollection,
+                                                    final RankingsDatabase.Type type,
+                                                    final GenePutativeRegulatoryRegion region) {
         final List<RankingsDatabase> dbs = new ArrayList<RankingsDatabase>();
-        for (RankingsDatabase db: getRankingsDatabases()) {
+        for (RankingsDatabase db : getRankingsDatabases()) {
             if (type.equals(db.getType())
-                    && db.getChipCollection().equals(chipCollection)
+                    && db.getMotifCollection().equals(motifCollection)
                     && db.getPutativeRegulatoryRegion().equals(region))
                 dbs.add(db);
         }
         return dbs;
     }
 
-    public List<RankingsDatabase> getMotifDatabases(final MotifCollection motifCollection,
+    public List<RankingsDatabase> getTrackDatabases(final TrackCollection trackCollection,
                                                     final RankingsDatabase.Type type,
                                                     final GenePutativeRegulatoryRegion region) {
         final List<RankingsDatabase> dbs = new ArrayList<RankingsDatabase>();
-        for (RankingsDatabase db: getRankingsDatabases()) {
+        for (RankingsDatabase db : getRankingsDatabases()) {
             if (type.equals(db.getType())
-                 && db.getMotifCollection().equals(motifCollection)
-                 && db.getPutativeRegulatoryRegion().equals(region))
+                    && db.getTrackCollection().equals(trackCollection)
+                    && db.getPutativeRegulatoryRegion().equals(region))
                 dbs.add(db);
         }
         return dbs;

@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 
-public final class ChipCollection implements Comparable<ChipCollection> {
-    private static Map<String, ChipCollection> CODE2COLLECTION = new LinkedHashMap<String, ChipCollection>();
-    public static ChipCollection NONE = new ChipCollection("none", "No ChIP collection");
-    public static ChipCollection UNKNOWN = new ChipCollection("unknown", "Unknown ChIP collection");
+public final class TrackCollection implements Comparable<TrackCollection> {
+    private static Map<String, TrackCollection> CODE2COLLECTION = new LinkedHashMap<String, TrackCollection>();
+    public static TrackCollection NONE = new TrackCollection("none", "No track collection");
+    public static TrackCollection UNKNOWN = new TrackCollection("unknown", "Unknown track collection");
 
-    private static final String GROUP_TAGNAME = "chip-collections";
-    private static final String TAGNAME = "chip-collection";
+    private static final String GROUP_TAGNAME = "track-collections";
+    private static final String TAGNAME = "track-collection";
     private static final String ATTRIBUTENAME = "id";
 
     static {
@@ -27,7 +27,7 @@ public final class ChipCollection implements Comparable<ChipCollection> {
         for (Element child : findElements(document.getElementsByTagName(GROUP_TAGNAME), TAGNAME)) {
             final String description = child.getTextContent().trim();
             final String code = child.getAttribute(ATTRIBUTENAME);
-            CODE2COLLECTION.put(code, new ChipCollection(code, description));
+            CODE2COLLECTION.put(code, new TrackCollection(code, description));
         }
     }
 
@@ -45,18 +45,18 @@ public final class ChipCollection implements Comparable<ChipCollection> {
         return elements;
     }
 
-    public static ChipCollection forCode(final String code) {
+    public static TrackCollection forCode(final String code) {
         return CODE2COLLECTION.containsKey(code) ? CODE2COLLECTION.get(code) : UNKNOWN;
     }
 
-    public static List<ChipCollection> all() {
-        return new ArrayList<ChipCollection>(CODE2COLLECTION.values());
+    public static List<TrackCollection> all() {
+        return new ArrayList<TrackCollection>(CODE2COLLECTION.values());
     }
 
     private final String code;
     private final String description;
 
-    private ChipCollection(String code, String description) {
+    private TrackCollection(String code, String description) {
         this.code = code;
         this.description = description;
     }
@@ -74,7 +74,7 @@ public final class ChipCollection implements Comparable<ChipCollection> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ChipCollection that = (ChipCollection) o;
+        TrackCollection that = (TrackCollection) o;
 
         if (!code.equals(that.code)) return false;
         if (!description.equals(that.description)) return false;
@@ -95,7 +95,7 @@ public final class ChipCollection implements Comparable<ChipCollection> {
     }
 
     @Override
-    public int compareTo(ChipCollection o) {
+    public int compareTo(TrackCollection o) {
         return description.compareTo(o.description);
     }
 }

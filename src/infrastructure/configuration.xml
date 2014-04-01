@@ -3,9 +3,9 @@
         <motif-collection id="v3">6383 PWMs</motif-collection>
     </motif-collections>
 
-    <chip-collections>
-        <chip-collection id="v1">1120 ChIP-Seqs</chip-collection>
-    </chip-collections>
+    <track-collections>
+        <track-collection id="v1">1120 ChIP-Seqs</track-collection>
+    </track-collections>
 
     <regulatory-region-delineations>
         <delineation id="centered20kb">20kb centered around TSS</delineation>
@@ -223,7 +223,7 @@
 
         <database id="hg19_tss_up_500bp_chip">
             <name>500bp upstream (ChIP-seq-derived)</name>
-            <collection type="chip" refid="v1"/>
+            <collection type="track" refid="v1"/>
             <type>genes</type>
 
             <species>hg19</species>
@@ -237,7 +237,7 @@
         </database>
         <database id="hg19_tss_centered_5kb_chip">
             <name>10kb centered around TSS (ChIP-seq-derived)</name>
-            <collection type="chip" refid="v1"/>
+            <collection type="track" refid="v1"/>
             <type>genes</type>
 
             <species>hg19</species>
@@ -251,7 +251,7 @@
         </database>
         <database id="hg19_tss_centered_10kb_chip">
             <name>20kb centered around TSS (ChIP-seq-derived)</name>
-            <collection type="chip" refid="v1"/>
+            <collection type="track" refid="v1"/>
             <type>genes</type>
 
             <species>hg19</species>

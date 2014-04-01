@@ -831,19 +831,11 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     public RankingsDatabase getMotifRankingsDatabase() {
-        if (this.isRegionBasedDatabase()) {
-            return (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
-        } else {
-            return (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
-        }
+        return (RankingsDatabase) this.motifRankingsDatabaseCB.getSelectedItem();
     }
 
     public RankingsDatabase getTrackRankingsDatabase() {
-        if (this.isRegionBasedDatabase()) {
-            return (RankingsDatabase) this.trackRankingsDatabaseCB.getSelectedItem();
-        } else {
-            return (RankingsDatabase) this.trackRankingsDatabaseCB.getSelectedItem();
-        }
+        return (RankingsDatabase) this.trackRankingsDatabaseCB.getSelectedItem();
     }
 
     public Float getOverlapFraction() {

@@ -1,7 +1,11 @@
 package view.parametersform.actions;
 
+import cytoscape.Cytoscape;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
+import domainmodel.AbstractMotifAndTrack;
+import domainmodel.InputParameters;
+import domainmodel.Results;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
@@ -10,17 +14,10 @@ import view.parametersform.IRegulonType;
 import view.parametersform.PredictedRegulatorsParameters;
 import view.resultspanel.ResultsView;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.*;
-
-import cytoscape.Cytoscape;
-
-import java.util.*;
-
-import domainmodel.InputParameters;
-import domainmodel.Motif;
-import domainmodel.Results;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PredictRegulatorsAction extends ResourceAction {
@@ -46,21 +43,21 @@ public class PredictRegulatorsAction extends ResourceAction {
             return;
         }
 
-        final List<Motif> motifList;
+        final List<AbstractMotifAndTrack> motifsAndTracks;
         try {
-            motifList = service.findPredictedRegulators(input);
+            motifsAndTracks = service.findPredictedRegulators(input);
         } catch (ServerCommunicationException e) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (!motifList.isEmpty()) {
-            final ResultsView outputView = new ResultsView(input.getName(), new Results(motifList, input));
+        if (!motifsAndTracks.isEmpty()) {
+            final ResultsView outputView = new ResultsView(input.getName(), new Results(motifsAndTracks, input));
             final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
             panel.setState(CytoPanelState.DOCK);
             outputView.addToPanel(panel);
         } else {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                    "Not a single motif is enriched for your input gene signature.");
+                    "Not a single motif or track is enriched for your input gene signature.");
         }
     }
 

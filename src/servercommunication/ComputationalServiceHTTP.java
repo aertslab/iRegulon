@@ -29,7 +29,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     private final Protocol service = new HTTPProtocol();
 
     @Override
-    public List<Motif> findPredictedRegulators(InputParameters input) throws ServerCommunicationException {
+    public List<AbstractMotifAndTrack> findPredictedRegulators(InputParameters input) throws ServerCommunicationException {
 
         final FindPredictedRegulatorsTask task = new FindPredictedRegulatorsTask(service, input);
 
@@ -45,8 +45,8 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         if (task.getFinishedState().equals(State.ERROR) && !task.getIsInterupted()) {
             throw new ServerCommunicationException(task.getErrorMessage());
         } else {
-            final Collection<Motif> motifs = task.getMotifs();
-            return new ArrayList<Motif>(motifs);
+            final Collection<AbstractMotifAndTrack> motifsAndTracks = task.getMotifsAndTracks();
+            return new ArrayList<AbstractMotifAndTrack>(motifsAndTracks);
         }
     }
 
@@ -234,10 +234,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     }
 
     @Override
-    public List<EnhancerRegion> getEnhancerRegions(final AbstractMotif motif) throws ServerCommunicationException {
+    public List<EnhancerRegion> getEnhancerRegions(final AbstractMotifAndTrack motifOrTrack) throws ServerCommunicationException {
         final HttpURLConnection connection;
         try {
-            final String uri = getBundle().getString("URL_motifBedGenerator") + "?" + generateParameters(motif);
+            final String uri = getBundle().getString("URL_motifBedGenerator") + "?" + generateParameters(motifOrTrack);
             connection = createConnection(uri);
         } catch (IOException e) {
             throw new ServerCommunicationException("Unable to get enhancer regions. Server is not available.");
@@ -270,14 +270,14 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     }
 
     @Override
-    public URI getLink2GenomeBrowser4EnhancerRegions(AbstractMotif motif) {
+    public URI getLink2GenomeBrowser4EnhancerRegions(AbstractMotifAndTrack motifOrTrack) {
         final StringBuilder builder = new StringBuilder();
         builder.append(getBundle().getString("URL_UCSC_Regions_part1"));
-        builder.append(motif.getCandidateTargetGenes().get(0).getSpeciesNomenclature().getAssembly());
+        builder.append(motifOrTrack.getCandidateTargetGenes().get(0).getSpeciesNomenclature().getAssembly());
         builder.append(getBundle().getString("URL_UCSC_Regions_part2"));
         builder.append(getBundle().getString("URL_motifBedGenerator"));
         builder.append("?");
-        builder.append(generateParameters(motif));
+        builder.append(generateParameters(motifOrTrack));
         try {
             return new URI(builder.toString());
         } catch (URISyntaxException e) {
@@ -286,19 +286,19 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         }
     }
 
-    private String generateParameters(final AbstractMotif motif) {
+    private String generateParameters(final AbstractMotifAndTrack motifOrTrack) {
         final StringBuilder parameters = new StringBuilder();
         parameters.append(PARAMETER_NAME);
-        parameters.append(motif.getDatabaseID());
+        parameters.append(motifOrTrack.getDatabaseID());
         parameters.append(':');
-        if (motif.getCandidateTargetGenes().size() >= 1) {
-            parameters.append(motif.getCandidateTargetGenes().get(0).getGeneName());
+        if (motifOrTrack.getCandidateTargetGenes().size() >= 1) {
+            parameters.append(motifOrTrack.getCandidateTargetGenes().get(0).getGeneName());
         }
         parameters.append(':');
-        if (!motif.getTranscriptionFactors().isEmpty()) {
-            parameters.append(motif.getTranscriptionFactors().get(0));
+        if (!motifOrTrack.getTranscriptionFactors().isEmpty()) {
+            parameters.append(motifOrTrack.getTranscriptionFactors().get(0));
         }
-        for (TranscriptionFactor tf : motif.getTranscriptionFactors().subList(0, motif.getTranscriptionFactors().size())) {
+        for (TranscriptionFactor tf : motifOrTrack.getTranscriptionFactors().subList(0, motifOrTrack.getTranscriptionFactors().size())) {
             parameters.append(",");
             parameters.append(tf.getName());
         }

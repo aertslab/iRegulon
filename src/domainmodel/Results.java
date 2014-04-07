@@ -7,21 +7,44 @@ import java.util.*;
 
 public class Results {
     private final List<Motif> motifs;
+    private final List<Track> tracks;
     private final InputParameters inputParameters;
 
-    public Results(final Collection<Motif> motifs, final InputParameters inputParameters) {
-        this.motifs = new ArrayList<Motif>(motifs);
+    public Results(final Collection<AbstractMotifAndTrack> motifsAndTracks, final InputParameters inputParameters) {
+        this.motifs = new ArrayList<Motif>();
+        this.tracks = new ArrayList<Track>();
+
+        for (AbstractMotifAndTrack motifOrTrack : motifsAndTracks) {
+            if (motifOrTrack.isMotif()) {
+                this.motifs.add((Motif) motifOrTrack);
+            } else if (motifOrTrack.isTrack()) {
+                this.tracks.add((Track) motifOrTrack);
+            }
+        }
+
         Collections.sort(this.motifs, new Comparator<Motif>() {
             @Override
             public int compare(Motif o1, Motif o2) {
                 return new Integer(o1.getRank()).compareTo(o2.getRank());
             }
         });
+
+        Collections.sort(this.tracks, new Comparator<Track>() {
+            @Override
+            public int compare(Track o1, Track o2) {
+                return new Integer(o1.getRank()).compareTo(o2.getRank());
+            }
+        });
+
         this.inputParameters = inputParameters;
     }
 
     public List<Motif> getMotifs() {
         return this.motifs;
+    }
+
+    public List<Track> getTracks() {
+        return this.tracks;
     }
 
     public boolean hasParameters() {
@@ -64,6 +87,10 @@ public class Results {
         return this.inputParameters.getMotifCollection();
     }
 
+    public String getTrackCollection() {
+        return this.inputParameters.getTrackCollection();
+    }
+
     public float getMinOrthologous() {
         return this.inputParameters.getMinOrthologous();
     }
@@ -86,6 +113,14 @@ public class Results {
 
     public String getMotifRankingsDatabase() {
         return this.inputParameters.getMotifRankingsDatabase().getCode();
+    }
+
+    public String getTrackRankingsDatabaseName() {
+        return this.inputParameters.getTrackRankingsDatabase().getName();
+    }
+
+    public String getTrackRankingsDatabase() {
+        return this.inputParameters.getTrackRankingsDatabase().getCode();
     }
 
     public float getOverlap() {

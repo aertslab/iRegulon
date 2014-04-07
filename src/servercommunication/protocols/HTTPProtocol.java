@@ -53,7 +53,18 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
         float maxMotifSimilarityFDR = input.getMaxMotifSimilarityFDR();
 
         boolean isRegionBased = input.isRegionBased();
-        String motifRankingsDatabase = input.getMotifRankingsDatabase().getCode();
+        String motifRankingsDatabase;
+        if (input.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
+            motifRankingsDatabase = "none";
+        } else {
+            motifRankingsDatabase = input.getMotifRankingsDatabase().getCode();
+        }
+        String trackRankingsDatabase;
+        if (input.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
+            trackRankingsDatabase = "none";
+        } else {
+            trackRankingsDatabase = input.getTrackRankingsDatabase().getCode();
+        }
         float overlap = input.getOverlap();
         String delineation = input.getDelineation().getCode();
         int upstream = input.getUpstream();
@@ -67,7 +78,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                     + "&NESThreshold=" + NESThreshold
                     + "&minOrthologous=" + minOrthologous
                     + "&maxMotifSimilarityFDR=" + maxMotifSimilarityFDR
-                    + "&selectedMotifRankingsDatabase=" + motifRankingsDatabase;
+                    + "&selectedMotifRankingsDatabase=" + motifRankingsDatabase
+                    + "&selectedTrackRankingsDatabase=" + trackRankingsDatabase;
 
             if (isRegionBased) {
                 if (delineation != null) {
@@ -272,11 +284,27 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     }
 
     /**
+     *
+     * @param input
      * @param jobID the id of the job
      * @return a collection of Motifs
      */
-    public Collection<Motif> getMotifs(int jobID) throws ServerCommunicationException {
-        Collection<Motif> motifs = new ArrayList<Motif>();
+    public Collection<AbstractMotifAndTrack> getMotifsAndTracks(InputParameters input, int jobID) throws ServerCommunicationException {
+        String motifRankingsDatabase;
+        if (input.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
+            motifRankingsDatabase = "none";
+        } else {
+            motifRankingsDatabase = input.getMotifRankingsDatabase().getCode();
+        }
+        String trackRankingsDatabase;
+        if (input.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
+            trackRankingsDatabase = "none";
+        } else {
+            trackRankingsDatabase = input.getTrackRankingsDatabase().getCode();
+        }
+
+        Collection<AbstractMotifAndTrack> motifsAndTracks = new ArrayList<AbstractMotifAndTrack>();
+
         try {
             /* Create connection. */
             final HttpURLConnection connection;
@@ -290,14 +318,14 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                 wr.flush();
                 wr.close();
             } catch (IOException e) {
-                Logger.getInstance().error("Unable to get motifs from iRegulon server. Server is not available.");
-                throw new ServerCommunicationException("Unable to get motifs from iRegulon server. Server is not available.", e);
+                Logger.getInstance().error("Unable to get motifs and/or tracks from iRegulon server. Server is not available.");
+                throw new ServerCommunicationException("Unable to get motifs and/or tracks from iRegulon server. Server is not available.", e);
             }
 
             /* Check if the requested page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Logger.getInstance().error("Unable to get motifs from iRegulon server. Unable to access '" + this.getBundle().getString("URL_results") + "'.");
-                throw new ServerCommunicationException("Unable to get motifs from iRegulon server. Unable to access '" + this.getBundle().getString("URL_results") + "'.");
+                Logger.getInstance().error("Unable to get motifs and/or tracks from iRegulon server. Unable to access '" + this.getBundle().getString("URL_results") + "'.");
+                throw new ServerCommunicationException("Unable to get motifs and/or tracks from iRegulon server. Unable to access '" + this.getBundle().getString("URL_results") + "'.");
             }
 
             /* Get and parse the reply. */
@@ -308,40 +336,41 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             int clustercount = 0;
 
             while ((line = rd.readLine()) != null) {
-                String[] motifVariables = line.split("\t");
+                String[] motifOrTrackVariables = line.split("\t");
 
-                if (motifVariables.length == 10 || motifVariables.length == 17) {
+                if (motifOrTrackVariables.length == 11 || motifOrTrackVariables.length == 18) {
                     /**
                      * The following columns are always available:
-                     *    0 	nomenclature code
-                     *    1 	motif rank
-                     *    2 	motif name
-                     *    3     feature ID
-                     *    4 	motif description
-                     *    5 	AUCValue
-                     *    6 	NEScore
-                     *    7 	clusterNumber
-                     *    8 	candidateTargetIDs (separated by ;)
-                     *    9 	candidateTargetRanks (separated by ;)
+                     *     0	nomenclature code
+                     *     1	rankingsdatabase ID
+                     *     2	motif rank
+                     *     3	motif name
+                     *     4	feature ID
+                     *     5	motif description
+                     *     6	AUCValue
+                     *     7	NEScore
+                     *     8	clusterNumber
+                     *     9	candidateTargetIDs (separated by ;)
+                     *    10	candidateTargetRanks (separated by ;)
                      *
                      * The following columns are only available (actually not empty) if the motif is annotated:
-                     *    10 	transcriptionFactorNames (separated by ;)
-                     *    11	motifSimilarityFDR (separated by ;) of the corresponding TF
-                     *    12	orthologousIdentity (separated by ;) of the corresponding TF
-                     *    13	similarMotifName (separated by ;) of the corresponding TF
-                     *    14	similarMotifDescription (separated by ;) of the corresponding TF
-                     *    15	orthologousGeneName (separated by ;) of the corresponding TF
-                     *    16	orthologousSpecies (separated by ;) of the corresponding TF
+                     *    11	transcriptionFactorNames (separated by ;)
+                     *    12	motifSimilarityFDR (separated by ;) of the corresponding TF
+                     *    13	orthologousIdentity (separated by ;) of the corresponding TF
+                     *    14	similarMotifName (separated by ;) of the corresponding TF
+                     *    15	similarMotifDescription (separated by ;) of the corresponding TF
+                     *    16	orthologousGeneName (separated by ;) of the corresponding TF
+                     *    17	orthologousSpecies (separated by ;) of the corresponding TF
                      */
 
-                    SpeciesNomenclature sn = SpeciesNomenclature.getNomenclature(Integer.parseInt(motifVariables[0]));
+                    SpeciesNomenclature sn = SpeciesNomenclature.getNomenclature(Integer.parseInt(motifOrTrackVariables[0]));
 
                     /* The candidate target genes. */
                     List<CandidateTargetGene> candidateTargetGenes = new ArrayList<CandidateTargetGene>();
-                    /* The candidate target gene IDs */
-                    String[] candidateTargetGeneIDs = motifVariables[8].split(";");
+                    /* The candidate target gene IDs. */
+                    String[] candidateTargetGeneIDs = motifOrTrackVariables[9].split(";");
                     /* The ranks of the target genes. */
-                    String[] candidateTargetGeneRanks = motifVariables[9].split(";");
+                    String[] candidateTargetGeneRanks = motifOrTrackVariables[10].split(";");
                     for (int index = 0; index < candidateTargetGeneIDs.length; index++) {
                         GeneIdentifier geneID = new GeneIdentifier(candidateTargetGeneIDs[index], sn);
                         CandidateTargetGene gene = new CandidateTargetGene(geneID, Integer.parseInt(candidateTargetGeneRanks[index]));
@@ -350,21 +379,21 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
                     /* Make all the transcription factors related stuff if the 7 last columns have data. */
                     List<TranscriptionFactor> transcriptionFactors = new ArrayList<TranscriptionFactor>();
-                    if (motifVariables.length == 17) {
+                    if (motifOrTrackVariables.length == 18) {
                         /* Transcription factor names. */
-                        String[] transcriptionFactorNames = motifVariables[10].split(";");
+                        String[] transcriptionFactorNames = motifOrTrackVariables[11].split(";");
                         /* False discovery rate of similar motifs. */
-                        String[] transcriptionFactorMotifSimilarityFDR = motifVariables[11].split(";");
+                        String[] transcriptionFactorMotifSimilarityFDR = motifOrTrackVariables[12].split(";");
                         /* Identity between orthologous genes. */
-                        String[] transcriptionFactorOrthologousIdentity = motifVariables[12].split(";");
+                        String[] transcriptionFactorOrthologousIdentity = motifOrTrackVariables[13].split(";");
                         /* Names of similar motifs. */
-                        String[] transcriptionFactorSimilarMotifName = motifVariables[13].split(";");
+                        String[] transcriptionFactorSimilarMotifName = motifOrTrackVariables[14].split(";");
                         /* Motif descriptions of similar motifs.  */
-                        String[] transcriptionFactorSimilarMotifDescription = motifVariables[14].split(";");
+                        String[] transcriptionFactorSimilarMotifDescription = motifOrTrackVariables[15].split(";");
                         /* Orthologous gene names. */
-                        String[] transcriptionFactorOrthologousGeneName = motifVariables[15].split(";");
+                        String[] transcriptionFactorOrthologousGeneName = motifOrTrackVariables[16].split(";");
                         /* Orthologous species. */
-                        String[] transcriptionFactorOrthologousSpecies = motifVariables[16].split(";");
+                        String[] transcriptionFactorOrthologousSpecies = motifOrTrackVariables[17].split(";");
 
                         for (int index = 0; index < transcriptionFactorNames.length; index++) {
                             GeneIdentifier geneID = new GeneIdentifier(transcriptionFactorNames[index], sn);
@@ -400,28 +429,38 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                     }
 
                     /* Create a new motif and add it to the collection. */
-                    int clusternumber = Integer.parseInt(motifVariables[7]);
+                    int clusterNumber = Integer.parseInt(motifOrTrackVariables[8]);
 
-                    if (!clusterNrMap.containsKey(clusternumber)) {
-                        clusterNrMap.put(clusternumber, clustercount);
+                    if (!clusterNrMap.containsKey(clusterNumber)) {
+                        clusterNrMap.put(clusterNumber, clustercount);
                         clustercount++;
                     }
 
-                    int actualClusterNumber = clusterNrMap.get(clusternumber);
+                    int actualClusterNumber = clusterNrMap.get(clusterNumber);
 
 
-                    Motif mtf = new Motif(motifVariables[2], candidateTargetGenes,
-                            transcriptionFactors, Float.parseFloat(motifVariables[6]),
-                            actualClusterNumber + 1, Float.parseFloat(motifVariables[5]),
-                            Integer.parseInt(motifVariables[1]), motifVariables[4],
-                            Integer.parseInt(motifVariables[3]), jobID);
+                    if (motifOrTrackVariables[1].equals(motifRankingsDatabase)) {
+                        Motif mtf = new Motif(motifOrTrackVariables[3], candidateTargetGenes,
+                                transcriptionFactors, Float.parseFloat(motifOrTrackVariables[7]),
+                                actualClusterNumber + 1, Float.parseFloat(motifOrTrackVariables[6]),
+                                Integer.parseInt(motifOrTrackVariables[2]), motifOrTrackVariables[5],
+                                Integer.parseInt(motifOrTrackVariables[4]), jobID);
+                        motifsAndTracks.add(mtf);
+                    } else if (motifOrTrackVariables[1].equals(trackRankingsDatabase)) {
+                        Track track = new Track(motifOrTrackVariables[3], candidateTargetGenes,
+                                transcriptionFactors, Float.parseFloat(motifOrTrackVariables[7]),
+                                actualClusterNumber + 1, Float.parseFloat(motifOrTrackVariables[6]),
+                                Integer.parseInt(motifOrTrackVariables[2]), motifOrTrackVariables[5],
+                                Integer.parseInt(motifOrTrackVariables[4]), jobID);
+                        motifsAndTracks.add(track);
+                    } else {
+                        throw new ServerCommunicationException("Motif or track rankingsdatabase '" + motifOrTrackVariables[1] + "' is unknown.");
+                    }
 
-                    motifs.add(mtf);
-
-                } else if (motifVariables.length == 2) {
-                    if (motifVariables[0].equals("ERROR:")) {
+                } else if (motifOrTrackVariables.length == 2) {
+                    if (motifOrTrackVariables[0].equals("ERROR:")) {
                         rd.close();
-                        throw new ServerCommunicationException(motifVariables[1]);
+                        throw new ServerCommunicationException(motifOrTrackVariables[1]);
                     }
                 }
             }
@@ -431,7 +470,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
         } catch (IOException e) {
             throw new ServerCommunicationException(e.getMessage());
         }
-        return motifs;
+
+        return motifsAndTracks;
     }
 
     @Override

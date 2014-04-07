@@ -247,6 +247,7 @@ try {
 
         /* Combine all the retrieved info to one line and append to the output so we get a TAB-separated file. */
         $output .= $nomenclature . "\t" .
+            $row_enrichedFeature['rankingsdb'] . "\t" .
             $row_enrichedFeature['rank'] . "\t" .
             $row_enrichedFeature['name'] . "\t" .
             $row_enrichedFeature['ID'] . "\t" .

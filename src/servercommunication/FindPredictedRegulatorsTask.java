@@ -3,12 +3,15 @@ package servercommunication;
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import domainmodel.InputParameters;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.Motif;
+import domainmodel.Track;
 import infrastructure.Logger;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
 import view.IRegulonResourceBundle;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -17,7 +20,10 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
 
     private cytoscape.task.TaskMonitor taskMonitor;
 
+    private Collection<AbstractMotifAndTrack> motifsAndTracks = Collections.emptyList();
     private Collection<Motif> motifs = Collections.emptyList();
+    private Collection<Track> tracks = Collections.emptyList();
+
     private State state = State.ERROR;
     private boolean interrupted = false;
     private Protocol service;
@@ -41,7 +47,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
     private void interrupt(final String msg) {
         this.interrupted = true;
         this.errorMessage = msg;
-        this.motifs = Collections.emptyList();
+        this.motifsAndTracks = Collections.emptyList();
         this.state = State.ERROR;
     }
 
@@ -107,10 +113,18 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
             if (State.FINISHED.equals(this.state)) {
                 taskMonitor.setStatus("Receiving analysis results.");
                 this.errorMessage = "";
-                this.motifs = service.getMotifs(jobID);
+                this.motifsAndTracks = service.getMotifsAndTracks(input, jobID);
+
+                for (AbstractMotifAndTrack motifOrTrack : this.motifsAndTracks) {
+                    if(motifOrTrack.isMotif()) {
+                        motifs.add((Motif) motifOrTrack);
+                    } else if(motifOrTrack.isTrack()) {
+                        tracks.add((Track) motifOrTrack);
+                    }
+                }
             } else if (State.ERROR.equals(this.state)) {
                 taskMonitor.setStatus("Error.");
-                this.motifs = Collections.emptyList();
+                this.motifsAndTracks = Collections.emptyList();
                 this.errorMessage = service.getErrorMessage(jobID);
             }
         } catch (ServerCommunicationException e) {
@@ -126,8 +140,16 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
         taskMonitor = monitor;
     }
 
+    public Collection<AbstractMotifAndTrack> getMotifsAndTracks() {
+        return this.motifsAndTracks;
+    }
+
     public Collection<Motif> getMotifs() {
         return this.motifs;
+    }
+
+    public Collection<Track> getTracks() {
+        return this.tracks;
     }
 
     public State getFinishedState() {

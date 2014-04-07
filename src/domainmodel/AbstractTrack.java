@@ -3,10 +3,10 @@ package domainmodel;
 
 import java.util.List;
 
-public abstract class AbstractMotif extends AbstractMotifAndTrack {
+public abstract class AbstractTrack extends AbstractMotifAndTrack {
 
-    public AbstractMotif(int clusterCode, List<CandidateTargetGene> candidateTargetGenes, List<TranscriptionFactor> transcriptionFactors) {
-        super(TrackType.MOTIF, clusterCode, candidateTargetGenes, transcriptionFactors);
+    public AbstractTrack(int clusterCode, List<CandidateTargetGene> candidateTargetGenes, List<TranscriptionFactor> transcriptionFactors) {
+        super(TrackType.TRACK, clusterCode, candidateTargetGenes, transcriptionFactors);
     }
 
     public abstract int getDatabaseID();
@@ -23,9 +23,9 @@ public abstract class AbstractMotif extends AbstractMotifAndTrack {
         return this.clusterCode;
     }
 
-    public abstract Motif getBestMotif();
+    public abstract Track getBestTrack();
 
-    public abstract List<Motif> getMotifs();
+    public abstract List<Track> getTracks();
 
     public List<CandidateTargetGene> getCandidateTargetGenes(){
         return this.candidateTargetGenes;

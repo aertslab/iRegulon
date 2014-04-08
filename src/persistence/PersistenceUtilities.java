@@ -74,7 +74,8 @@ public class PersistenceUtilities {
     }
 
     public static String convertResultsToTSV(final Results results) {
-        final Collection<Motif> motifs = results.getMotifs();
+        final boolean hasMotifCollection = results.hasMotifCollection();
+        final boolean hasTrackCollection = results.hasTrackCollection();
 
         if (!results.hasParameters()) return "";
 
@@ -82,15 +83,17 @@ public class PersistenceUtilities {
         
         /* iRegulon parameters. */
         results_tsv_builder.append("; Name\t" + results.getName() + "\n"
-                + "; Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n"
-                + "; Motif collection\t" + results.getMotifCollection() + "\n"
-                + "; Minimum NEScore\t" + results.getEScore() + "\n"
+                + "; Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n");
+        results_tsv_builder.append((hasMotifCollection) ? "; Motif collection\t" + results.getMotifCollection() + "\n" : "");
+        results_tsv_builder.append((hasTrackCollection) ? "; Track collection\t" + results.getTrackCollection() + "\n" : "");
+        results_tsv_builder.append("; Minimum NEScore\t" + results.getEScore() + "\n"
                 + "; Rank threshold for visualization\t" + results.getThresholdForVisualisation() + "\n"
                 + "; ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
                 + "; Minimum identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
-                + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n"
-                + "; Motif rankings database\t" + results.getMotifRankingsDatabaseName() + "\n"
-                + "; Number of valid nodes\t" + results.getGenes().size() + "\n"
+                + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n");
+        results_tsv_builder.append((hasMotifCollection) ? "; Motif rankings database\t" + results.getMotifRankingsDatabaseName() + "\n" : "");
+        results_tsv_builder.append((hasTrackCollection) ? "; Track rankings database\t" + results.getTrackRankingsDatabaseName() + "\n" : "");
+        results_tsv_builder.append("; Number of valid nodes\t" + results.getGenes().size() + "\n"
                 + "; iRegulon version\t" + getBundle().getString("plugin_name_version_release") + "\n");
 
         if (results.isRegionBased()) {
@@ -102,45 +105,94 @@ public class PersistenceUtilities {
             }
         }
 
-		/* Column headers. */
-        results_tsv_builder.append("# Rank\t"
-                + "Motif id\t"
-                + "AUC\t"
-                + "NES\t"
-                + "ClusterCode\t"
-                + "Transcription factor\t"
-                + "Target genes\n");
+        if (hasMotifCollection) {
+            /* Column headers for the motif lines. */
+            results_tsv_builder.append("# Rank\t"
+                    + "Motif id\t"
+                    + "AUC\t"
+                    + "NES\t"
+                    + "ClusterCode\t"
+                    + "Transcription factor\t"
+                    + "Target genes\n");
 
-        /* Print the info for one motif on one line. */
-        for (Motif motif : motifs) {
-            /* Motif info. */
-            results_tsv_builder.append(motif.getRank() + "\t"
-                    + motif.getName() + "\t"
-                    + motif.getAUCValue() + "\t"
-                    + motif.getNEScore() + "\t"
-                    + motif.getClusterCode() + "\t");
-            
-			/* A comma-separated list of transcription factors. */
-            Iterator<TranscriptionFactor> tfIterator = motif.getTranscriptionFactors().iterator();
-            while (tfIterator.hasNext()) {
-                results_tsv_builder.append(tfIterator.next().getName());
-                if (tfIterator.hasNext()) {
-                    results_tsv_builder.append(",");
+            final Collection<Motif> motifs = results.getMotifs();
+
+            /* Print the info for one motif on one line. */
+            for (Motif motif : motifs) {
+                /* Motif info. */
+                results_tsv_builder.append(motif.getRank() + "\t"
+                        + motif.getName() + "\t"
+                        + motif.getAUCValue() + "\t"
+                        + motif.getNEScore() + "\t"
+                        + motif.getClusterCode() + "\t");
+
+                /* A comma-separated list of transcription factors. */
+                Iterator<TranscriptionFactor> tfIterator = motif.getTranscriptionFactors().iterator();
+                while (tfIterator.hasNext()) {
+                    results_tsv_builder.append(tfIterator.next().getName());
+                    if (tfIterator.hasNext()) {
+                        results_tsv_builder.append(",");
+                    }
                 }
-            }
-            results_tsv_builder.append("\t");
-            
-			/* A comma-separated list of target genes. */
-            Iterator<CandidateTargetGene> tgIterator = motif.getCandidateTargetGenes().iterator();
-            while (tgIterator.hasNext()) {
-                results_tsv_builder.append(tgIterator.next().getGeneName());
-                if (tgIterator.hasNext()) {
-                    results_tsv_builder.append(",");
+                results_tsv_builder.append("\t");
+
+                /* A comma-separated list of target genes. */
+                Iterator<CandidateTargetGene> tgIterator = motif.getCandidateTargetGenes().iterator();
+                while (tgIterator.hasNext()) {
+                    results_tsv_builder.append(tgIterator.next().getGeneName());
+                    if (tgIterator.hasNext()) {
+                        results_tsv_builder.append(",");
+                    }
                 }
+
+                /* End of the motif line. */
+                results_tsv_builder.append("\n");
             }
-            
-			/* End of the motif line. */
-            results_tsv_builder.append("\n");
+        }
+
+        if (hasTrackCollection) {
+            /* Column headers for the track lines. */
+            results_tsv_builder.append("# Rank\t"
+                    + "Track id\t"
+                    + "AUC\t"
+                    + "NES\t"
+                    + "ClusterCode\t"
+                    + "Transcription factor\t"
+                    + "Target genes\n");
+
+            final Collection<Track> tracks = results.getTracks();
+
+            /* Print the info for one track on one line. */
+            for (Track track : tracks) {
+                /* Motif info. */
+                results_tsv_builder.append(track.getRank() + "\t"
+                        + track.getName() + "\t"
+                        + track.getAUCValue() + "\t"
+                        + track.getNEScore() + "\t"
+                        + track.getClusterCode() + "\t");
+
+                /* A comma-separated list of transcription factors. */
+                Iterator<TranscriptionFactor> tfIterator = track.getTranscriptionFactors().iterator();
+                while (tfIterator.hasNext()) {
+                    results_tsv_builder.append(tfIterator.next().getName());
+                    if (tfIterator.hasNext()) {
+                        results_tsv_builder.append(",");
+                    }
+                }
+                results_tsv_builder.append("\t");
+
+                /* A comma-separated list of target genes. */
+                Iterator<CandidateTargetGene> tgIterator = track.getCandidateTargetGenes().iterator();
+                while (tgIterator.hasNext()) {
+                    results_tsv_builder.append(tgIterator.next().getGeneName());
+                    if (tgIterator.hasNext()) {
+                        results_tsv_builder.append(",");
+                    }
+                }
+
+                /* End of the track line. */
+                results_tsv_builder.append("\n");
+            }
         }
 
         return results_tsv_builder.toString();

@@ -99,6 +99,14 @@ public class Results {
         return this.inputParameters.getMaxMotifSimilarityFDR();
     }
 
+    public boolean hasMotifCollection() {
+        return ! getMotifCollection().equals(MotifCollection.NONE.getDescription());
+    }
+
+    public boolean hasTrackCollection() {
+        return ! getTrackCollection().equals(TrackCollection.NONE.getDescription());
+    }
+
     public boolean isRegionBased() {
         return this.inputParameters.isRegionBased();
     }

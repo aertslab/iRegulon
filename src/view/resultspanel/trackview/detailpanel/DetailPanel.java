@@ -1,4 +1,4 @@
-package view.resultspanel.motifview.detailpanel;
+package view.resultspanel.trackview.detailpanel;
 
 
 import domainmodel.*;
@@ -32,7 +32,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     private static final String TRANSFAC_URL = BUNDLE.getString("transfac_pro_url");
 
 	private JTable targetGeneTable;
-	private LinkLabel jlbMotif;
+	private LinkLabel jlbTrack;
 	private JLabel jlbDescription;
 	private LogoThumbnail jlbLogo;
 	private JTable transcriptionFactorTable;
@@ -40,7 +40,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	private NetworkMembershipHighlightRenderer hlcrtg;
 	private NetworkMembershipSupport updateHLCR;
 
-	private TFandMotifSelected tfMotif;
+	private TFandTrackSelected tfTrack;
 
 	private int ipadx = 150;
 	private int ipady = 50;
@@ -51,20 +51,20 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
 	public DetailPanel(InputParameters input){
 		super();
-		this.tfMotif = new TFandMotifSelected(input);
+		this.tfTrack = new TFandTrackSelected(input);
 		this.updateHLCR = new NetworkMembershipSupport();
 
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		
-		this.jlbMotif = new LinkLabel();
-		this.jlbMotif.setEnabled(true);
-		this.jlbMotif.setText("");
+		this.jlbTrack = new LinkLabel();
+		this.jlbTrack.setEnabled(true);
+		this.jlbTrack.setText("");
 		Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 1);
-		this.jlbMotif.setHorizontalAlignment(JLabel.CENTER);
-		this.jlbMotif.setMaximumSize(maximumSize);
-		this.jlbMotif.setMinimumSize(maximumSize);
+		this.jlbTrack.setHorizontalAlignment(JLabel.CENTER);
+		this.jlbTrack.setMaximumSize(maximumSize);
+		this.jlbTrack.setMinimumSize(maximumSize);
 
 		c.gridx = 0;
 		c.gridy = 0;
@@ -72,7 +72,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		c.weighty=0.1;
 		c.ipadx = 1;
 		c.ipady = 1;
-		this.add(this.jlbMotif, c);
+		this.add(this.jlbTrack, c);
 		
 		
 		this.jlbDescription = new JLabel();
@@ -106,7 +106,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 		this.add(new JScrollPane(targetGeneTable), c);
 		
 		
-		this.transcriptionFactorTable = new JTable(new TranscriptionFactorTableModel(null, AbstractMotifAndTrack.TrackType.MOTIF));
+		this.transcriptionFactorTable = new JTable(new TranscriptionFactorTableModel(null, AbstractMotifAndTrack.TrackType.TRACK));
 		this.transcriptionFactorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		this.hlcrtf=new NetworkMembershipHighlightRenderer("Transcription Factor Name");
@@ -157,8 +157,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	}
 
     @Override
-    public AbstractMotif getSelectedMotifOrTrack() {
-        return this.tfMotif.getMotif();
+    public AbstractTrack getSelectedMotifOrTrack() {
+        return this.tfTrack.getTrack();
     }
 
     @Override
@@ -179,12 +179,12 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         }
 
         if (selectedMotifListener == null) {
-		    selectedMotifListener = new SelectedMotifListener(this.transcriptionFactorTable, this.tfMotif);
+		    selectedMotifListener = new SelectedTrackListener(this.transcriptionFactorTable, this.tfTrack);
             this.transcriptionFactorTable.getSelectionModel().addListSelectionListener(selectedMotifListener);
         }
 
         if (popupMouseListener == null) {
-            popupMouseListener = new PopupMouseListener(this.transcriptionFactorTable, this.tfMotif);
+            popupMouseListener = new PopupMouseListener(this.transcriptionFactorTable, this.tfTrack);
             this.transcriptionFactorTable.addMouseListener(popupMouseListener);
         }
     }
@@ -227,25 +227,25 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 	
 	private void refresh(AbstractMotifAndTrack motifOrTrack) {
 		this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motifOrTrack));
-		this.transcriptionFactorTable.setModel(new TranscriptionFactorTableModel(motifOrTrack, AbstractMotifAndTrack.TrackType.MOTIF));
-		this.tfMotif.setMotif((Motif) motifOrTrack);
+		this.transcriptionFactorTable.setModel(new TranscriptionFactorTableModel(motifOrTrack, AbstractMotifAndTrack.TrackType.TRACK));
+		this.tfTrack.setTrack((Track) motifOrTrack);
 		
 		if (motifOrTrack == null) {
 			motifOrTrack = null;
-			this.jlbMotif.disableLink("");
+			this.jlbTrack.disableLink("");
 			this.jlbDescription.setText("");
 			this.jlbDescription.setToolTipText("");
 			this.jlbLogo.setMotif(null);
 		} else {
             if (motifOrTrack.getName().startsWith(TRANSFAC_PREFIX)) {
-			    this.jlbMotif.enableLink(motifOrTrack.getName(), composeURI(motifOrTrack));
+			    this.jlbTrack.enableLink(motifOrTrack.getName(), composeURI(motifOrTrack));
             } else {
-                this.jlbMotif.disableLink(motifOrTrack.getName());
+                this.jlbTrack.disableLink(motifOrTrack.getName());
             }
 			this.jlbDescription.setText(motifOrTrack.getDescription());
 			this.jlbDescription.setToolTipText("Description: " + motifOrTrack.getDescription());
 
-			this.jlbLogo.setMotif((Motif) motifOrTrack);
+			//this.jlbLogo.set((Track) motifOrTrack);
 
 			//colors of the table
             refreshHighlighting();

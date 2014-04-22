@@ -1,13 +1,13 @@
 package view.resultspanel;
 
 
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 
-public interface DetailPanelIF extends MotifListener, Refreshable {
-    public AbstractMotif getSelectedMotif();
+public interface DetailPanelIF extends MotifAndTrackListener, Refreshable {
+    public AbstractMotifAndTrack getSelectedMotifOrTrack();
 
     public TranscriptionFactor getSelectedTranscriptionFactor();
 

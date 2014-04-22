@@ -3,7 +3,7 @@ package view.resultspanel;
 import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.GeneIdentifier;
 import domainmodel.Results;
 import domainmodel.TranscriptionFactor;
@@ -15,8 +15,9 @@ import view.parametersform.DefaultMetatargetomeParameters;
 import view.resultspanel.actions.*;
 import view.resultspanel.guiwidgets.SummaryLabel;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
-import view.resultspanel.motifclusterview.MotifClustersView;
+import view.resultspanel.motifandtrackclusterview.MotifAndTrackClustersView;
 import view.resultspanel.motifview.EnrichedMotifsView;
+import view.resultspanel.trackview.EnrichedTracksView;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -37,7 +38,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     private boolean isSaved;
 
-    private SelectedMotif selectedMotif;
+    private SelectedMotifOrTrack selectedMotifOrTrack;
     private JComboBox filterAttributeCB;
     private JTextField filterValueTF;
     private TranscriptionFactorComboBox transcriptionFactorCB;
@@ -45,6 +46,8 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private JButton closeButton;
     private JPanel mainPanel = null;
     private JTabbedPane tabbedPane;
+    private MotifAndTrackView currentTabView = null;
+    private MotifAndTrackView previousTabView = null;
 
     private final DefaultMetatargetomeParameters parameters;
 
@@ -58,7 +61,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         this.isSaved = false;
 
         this.parameters = new DefaultMetatargetomeParameters(QueryMetatargetomeAction.DEFAULT_PARAMETERS);
-        this.selectedMotif = new SelectedMotif(results.getParameters().getAttributeName());
+        this.selectedMotifOrTrack = new SelectedMotifOrTrack(results.getParameters().getAttributeName());
 
         refreshListener = new PropertyChangeListener() {
             @Override
@@ -97,8 +100,8 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         return results;
     }
 
-    public AbstractMotif getSelectedMotif() {
-        return selectedMotif.getMotif();
+    public AbstractMotifAndTrack getSelectedMotifOrTrack() {
+        return selectedMotifOrTrack.getMotifOrTrack();
     }
 
     public TranscriptionFactor getSelectedTranscriptionFactor() {
@@ -136,7 +139,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         createNewCombinedRegulatoryNetworkAction.refresh();
         drawNodesAndEdgesAction.refresh();
 
-        final MotifView view = (MotifView) tabbedPane.getSelectedComponent();
+        final MotifAndTrackView view = (MotifAndTrackView) tabbedPane.getSelectedComponent();
         if (view != null) view.refresh();
     }
 
@@ -149,61 +152,92 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     }
 
     private JPanel createMainPanel() {
-        // 1. Create toolbar ...
-        this.transcriptionFactorCB = new TranscriptionFactorComboBox(this.selectedMotif, this.results.getSpeciesNomenclature());
+
+        // 1. Create toolbar.
+        this.transcriptionFactorCB = new TranscriptionFactorComboBox(this.selectedMotifOrTrack, this.results.getSpeciesNomenclature());
         this.filterAttributeCB = new JComboBox(FilterAttribute.values());
-        this.filterAttributeCB.setSelectedItem(FilterAttribute.MOTIF);
+        this.filterAttributeCB.setSelectedItem(FilterAttribute.MOTIF_OR_TRACK);
         this.filterValueTF = new JTextField();
         this.closeButton = new JButton();
-        final JPanel toolBar = createToolBar(this.selectedMotif, this.transcriptionFactorCB, this.closeButton, this.filterAttributeCB, this.filterValueTF);
+        final JPanel toolBar = createToolBar(this.selectedMotifOrTrack, this.transcriptionFactorCB, this.closeButton, this.filterAttributeCB, this.filterValueTF);
 
-        // 2. Create enriched motifs view ...
-        final EnrichedMotifsView motifsView = new EnrichedMotifsView(this.results);
-        // 3. Create enriched TF view ...
-        final MotifClustersView tfsView = new MotifClustersView(this.results);
+        final boolean hasMotifCollection = results.hasMotifCollection();
+        final boolean hasTrackCollection = results.hasTrackCollection();
 
-        // 4. Create tabbed pane with these views ...
+        // 2. Create enriched motifs view if there was a motif collection specified.
+        final EnrichedMotifsView motifsView = (hasMotifCollection) ? new EnrichedMotifsView(this.results) : null;
+
+        // 3. Create enriched tracks view if there was a track collection specified.
+        final EnrichedTracksView tracksView = (hasTrackCollection) ? new EnrichedTracksView(this.results) : null;
+
+        // 4. Create enriched TF view.
+        final MotifAndTrackClustersView tfsView = new MotifAndTrackClustersView(this.results);
+
+        // 5. Create tabbed pane with these views.
         tabbedPane = new JTabbedPane();
-        tabbedPane.addTab("Motifs", null,
-                motifsView,
-                "Motif oriented view.");
-        tabbedPane.addTab("Transcription Factors", null,
-                tfsView,
-                "Transcription factor oriented view.");
+
+        if (hasMotifCollection) {
+            tabbedPane.addTab("Motifs", null, motifsView, "Motif oriented view.");
+        }
+
+        if (hasTrackCollection) {
+            tabbedPane.addTab("Tracks", null, tracksView, "Track oriented view.");
+        }
+
+        tabbedPane.addTab("Transcription Factors", null, tfsView, "Transcription factor oriented view.");
         tabbedPane.addChangeListener(new ChangeListener() {
-            private MotifView getOtherView(final MotifView view) {
-                if (view == motifsView) return tfsView;
-                if (view == tfsView) return motifsView;
+            private MotifAndTrackView getCompatibleTabViewForSelection(final MotifAndTrackView previousTabView, final MotifAndTrackView currentTabView) {
+                if (currentTabView == tfsView) {
+                    if (hasMotifCollection) if (previousTabView == motifsView) return motifsView;
+                    if (hasTrackCollection) if (previousTabView == tracksView) return tracksView;
+                } else if (previousTabView == tfsView) {
+                    final AbstractMotifAndTrack selectedMotifOrTrack = tfsView.getSelectedMotifOrTrack();
+                    if (selectedMotifOrTrack != null) {
+                        if (selectedMotifOrTrack.isMotif() && currentTabView == motifsView) return tfsView;
+                        if (selectedMotifOrTrack.isTrack() && currentTabView == tracksView) return tfsView;
+                    }
+                }
                 return null;
             }
-
 
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 final JTabbedPane pane = (JTabbedPane) changeEvent.getSource();
-                final MotifView curView = (MotifView) pane.getSelectedComponent();
-                final MotifView prevView = getOtherView(curView);
 
-                // 1. Refresh this view ...
-                if (curView != null) curView.refresh();
+                previousTabView = currentTabView;
+                currentTabView = (MotifAndTrackView) pane.getSelectedComponent();
 
-                // 2. Refresh motif selection ...
-                motifsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
-                tfsView.unregisterSelectionComponents(selectedMotif, transcriptionFactorCB);
-                if (curView != null) curView.registerSelectionComponents(selectedMotif, transcriptionFactorCB);
+                final MotifAndTrackView compatibleTabViewForSelection = getCompatibleTabViewForSelection(previousTabView, currentTabView);
 
-                // 3. Refresh table row filter ...
-                motifsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
+                // 1. Refresh this view.
+                if (currentTabView != null) currentTabView.refresh();
+
+                // 2. Refresh motif and/or track selection.
+                if (hasMotifCollection)
+                    motifsView.unregisterSelectionComponents(selectedMotifOrTrack, transcriptionFactorCB);
+                if (hasTrackCollection)
+                    tracksView.unregisterSelectionComponents(selectedMotifOrTrack, transcriptionFactorCB);
+                tfsView.unregisterSelectionComponents(selectedMotifOrTrack, transcriptionFactorCB);
+
+                if (currentTabView != null)
+                    currentTabView.registerSelectionComponents(selectedMotifOrTrack, transcriptionFactorCB);
+
+                // 3. Refresh table row filter.
+                if (hasMotifCollection) motifsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
+                if (hasTrackCollection) tracksView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
                 tfsView.unregisterFilterComponents(filterAttributeCB, filterValueTF);
-                if (curView != null) curView.registerFilterComponents(filterAttributeCB, filterValueTF);
 
-                // 4. Take over selection of previous view if possible ...
-                if (curView != null) curView.setSelectedMotif(prevView != null ? prevView.getSelectedMotif() : null);
+                if (currentTabView != null) currentTabView.registerFilterComponents(filterAttributeCB, filterValueTF);
+
+                // 4. Take over the selected motif of track of previous view if possible.
+                if (currentTabView != null)
+                    currentTabView.setSelectedMotifOrTrack(compatibleTabViewForSelection != null ? compatibleTabViewForSelection.getSelectedMotifOrTrack() : null);
             }
         });
-        final MotifView view = (MotifView) tabbedPane.getSelectedComponent();
+
+        final MotifAndTrackView view = (MotifAndTrackView) tabbedPane.getSelectedComponent();
         if (view != null) {
-            view.registerSelectionComponents(selectedMotif, transcriptionFactorCB);
+            view.registerSelectionComponents(selectedMotifOrTrack, transcriptionFactorCB);
             view.registerFilterComponents(filterAttributeCB, filterValueTF);
         }
 
@@ -214,7 +248,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         return result;
     }
 
-    private JPanel createToolBar(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorComboBox,
+    private JPanel createToolBar(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorComboBox,
                                  final JButton closeButton, final JComboBox filterAttributeCB, final JTextField filterValueTF) {
         final JPanel toolBar = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
@@ -247,7 +281,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         c.gridheight = 1;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
+        drawNodesAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotifOrTrack, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
         final JButton buttonDrawEdges = new JButton(drawNodesAndEdgesAction);
         buttonDrawEdges.setText("");
         toolBar.add(buttonDrawEdges, c);
@@ -258,7 +292,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
-        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
+        final TranscriptionFactorDependentAction drawNetworkAction = new CreateNewRegulatoryNetworkAction(selectedMotifOrTrack, transcriptionFactorComboBox, this, results.getParameters().getAttributeName());
         JButton buttonDrawNetwork = new JButton(drawNetworkAction);
         buttonDrawNetwork.setText("");
         toolBar.add(buttonDrawNetwork, c);

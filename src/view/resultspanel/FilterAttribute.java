@@ -2,7 +2,7 @@ package view.resultspanel;
 
 
 public enum FilterAttribute {
-	MOTIF("motif"),
+	MOTIF_OR_TRACK("motif/track"),
 	TRANSCRIPTION_FACTOR("transcription factor"),
 	TARGET_GENE("target");
 	

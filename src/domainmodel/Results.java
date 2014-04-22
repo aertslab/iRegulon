@@ -162,63 +162,88 @@ public class Results {
         return this.inputParameters.getDownstream();
     }
 
-    public List<MotifCluster> getMotifClusters(final Set<String> geneIDs) {
-        // 1. Group motifs according to STAMP clusters ...
-        final Map<Integer, List<Motif>> code2motifs = new HashMap<Integer, List<Motif>>();
+    public List<MotifAndTrackCluster> getMotifAndTrackClusters(final Set<String> geneIDs) {
+        // 1. Group motifs according to STAMP cluster number.
+        final Map<Integer, List<AbstractMotifAndTrack>> code2motifsAndTracks = new HashMap<Integer, List<AbstractMotifAndTrack>>();
         for (Motif curMotif : getMotifs()) {
             final int curCode = curMotif.getClusterCode();
-            final List<Motif> bucket;
-            if (code2motifs.containsKey(curCode)) {
-                bucket = code2motifs.get(curCode);
+            final List<AbstractMotifAndTrack> bucket;
+            if (code2motifsAndTracks.containsKey(curCode)) {
+                bucket = code2motifsAndTracks.get(curCode);
             } else {
-                bucket = new ArrayList<Motif>();
-                code2motifs.put(curCode, bucket);
+                bucket = new ArrayList<AbstractMotifAndTrack>();
+                code2motifsAndTracks.put(curCode, bucket);
             }
             bucket.add(curMotif);
         }
 
-        // 2. Sort clusters according to maximum NESCore ...
-        final List<List<Motif>> clusters = new ArrayList<List<Motif>>(code2motifs.values());
-        Collections.sort(clusters, new Comparator<List<Motif>>() {
-            private float getMaximumNEScore(List<Motif> motifs) {
-                return Collections.min(motifs, new MotifComparator()).getNEScore();
+        // 2. Group tracks in clusters by transcription factor name.
+        for (Track curTrack : getTracks()) {
+            final int curCode = curTrack.getClusterCode();
+            final List<AbstractMotifAndTrack> bucket;
+            if (code2motifsAndTracks.containsKey(curCode)) {
+                bucket = code2motifsAndTracks.get(curCode);
+            } else {
+                bucket = new ArrayList<AbstractMotifAndTrack>();
+                code2motifsAndTracks.put(curCode, bucket);
+            }
+            bucket.add(curTrack);
+        }
+
+        // 3. Sort clusters according to maximum NESCore.
+        final List<List<AbstractMotifAndTrack>> clusters = new ArrayList<List<AbstractMotifAndTrack>>(code2motifsAndTracks.values());
+        Collections.sort(clusters, new Comparator<List<AbstractMotifAndTrack>>() {
+            private float getMaximumNEScore(List<AbstractMotifAndTrack> motifsAndTracks) {
+                return Collections.min(motifsAndTracks, new AbstractMotifAndTrackComparator()).getNEScore();
             }
 
             @Override
-            public int compare(List<Motif> o1, List<Motif> o2) {
+            public int compare(List<AbstractMotifAndTrack> o1, List<AbstractMotifAndTrack> o2) {
                 return Float.compare(getMaximumNEScore(o2), getMaximumNEScore(o1));
             }
         });
 
-        // 3. Iterate motifs and translate them to MotifCluster objects ...
-        final Set<String> alreadyProcessedTFIDs = new HashSet<String>();
-        final List<MotifCluster> result = new ArrayList<MotifCluster>();
-        for (List<Motif> motifs : clusters) {
-            final int clusterCode = motifs.get(0).getClusterCode();
+        // 4. Iterate motifs and tracks and translate them to MotifAndTrackCluster objects.
+        final Set<String> alreadyProcessedTFIDsForMotifs = new HashSet<String>();
+        final Set<String> alreadyProcessedTFIDsForTracks = new HashSet<String>();
+        final List<MotifAndTrackCluster> result = new ArrayList<MotifAndTrackCluster>();
+        for (List<AbstractMotifAndTrack> motifsAndTracks : clusters) {
+            final int clusterCode = motifsAndTracks.get(0).getClusterCode();
 
-            final List<Motif> sortedMotifs = new ArrayList<Motif>(motifs);
-            Collections.sort(sortedMotifs, new MotifComparator());
+            final List<AbstractMotifAndTrack> sortedMotifsOrTracks = new ArrayList<AbstractMotifAndTrack>(motifsAndTracks);
+            Collections.sort(sortedMotifsOrTracks, new AbstractMotifAndTrackComparator());
 
-            final List<TranscriptionFactor> transcriptionFactors = combineTranscriptionFactors(motifs, geneIDs);
+            final List<TranscriptionFactor> transcriptionFactors = combineTranscriptionFactors(motifsAndTracks, geneIDs);
             if (transcriptionFactors.isEmpty()) continue;
-            final String curTFID = transcriptionFactors.get(0).getGeneID().getGeneName();
-            if (alreadyProcessedTFIDs.contains(curTFID)) continue;
 
-            result.add(new MotifCluster(clusterCode, sortedMotifs, transcriptionFactors, combineTargetGenes(motifs)));
-            alreadyProcessedTFIDs.add(curTFID);
+            final String curTFID = transcriptionFactors.get(0).getGeneID().getGeneName();
+
+            if (motifsAndTracks.get(0).isMotif()) {
+                if (alreadyProcessedTFIDsForMotifs.contains(curTFID)) continue;
+
+                result.add(new MotifAndTrackCluster(clusterCode, sortedMotifsOrTracks, transcriptionFactors, combineTargetGenes(motifsAndTracks)));
+
+                alreadyProcessedTFIDsForMotifs.add(curTFID);
+            } else if (motifsAndTracks.get(0).isTrack()) {
+                if (alreadyProcessedTFIDsForTracks.contains(curTFID)) continue;
+
+                result.add(new MotifAndTrackCluster(clusterCode, sortedMotifsOrTracks, transcriptionFactors, combineTargetGenes(motifsAndTracks)));
+
+                alreadyProcessedTFIDsForTracks.add(curTFID);
+            }
         }
         return result;
     }
 
-    private List<TranscriptionFactor> combineTranscriptionFactors(final List<Motif> motifs, final Set<String> geneIDs) {
+    private List<TranscriptionFactor> combineTranscriptionFactors(final List<AbstractMotifAndTrack> motifsAndTracks, final Set<String> geneIDs) {
         final Map<TranscriptionFactor, TranscriptionFactorAttributes> tf2attributes = new HashMap<TranscriptionFactor, TranscriptionFactorAttributes>();
-        for (Motif motif : motifs) {
-            for (TranscriptionFactor tf : motif.getTranscriptionFactors()) {
+        for (AbstractMotifAndTrack motifOrTrack : motifsAndTracks) {
+            for (TranscriptionFactor tf : motifOrTrack.getTranscriptionFactors()) {
                 if (tf2attributes.containsKey(tf)) {
                     final TranscriptionFactorAttributes attributes = tf2attributes.get(tf);
-                    attributes.update(motif);
+                    attributes.update(motifOrTrack);
                 } else {
-                    final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motif, geneIDs.contains(tf.getName()));
+                    final TranscriptionFactorAttributes attributes = new TranscriptionFactorAttributes(tf, motifOrTrack, geneIDs.contains(tf.getName()));
                     tf2attributes.put(tf, attributes);
                 }
             }
@@ -240,10 +265,10 @@ public class Results {
         return result;
     }
 
-    private List<CandidateTargetGene> combineTargetGenes(final List<Motif> motifs) {
+    private List<CandidateTargetGene> combineTargetGenes(final List<AbstractMotifAndTrack> motifsAndTracks) {
         final Map<GeneIdentifier, TargetGeneAttributes> geneID2attributes = new HashMap<GeneIdentifier, TargetGeneAttributes>();
-        for (Motif motif : motifs) {
-            for (CandidateTargetGene targetGene : motif.getCandidateTargetGenes()) {
+        for (AbstractMotifAndTrack motifOrTrack : motifsAndTracks) {
+            for (CandidateTargetGene targetGene : motifOrTrack.getCandidateTargetGenes()) {
                 if (geneID2attributes.containsKey(targetGene.getGeneID())) {
                     final TargetGeneAttributes curAttributes = geneID2attributes.get(targetGene.getGeneID());
                     curAttributes.update(targetGene.getRank());
@@ -256,7 +281,7 @@ public class Results {
         final List<CandidateTargetGene> targetGenes = new ArrayList<CandidateTargetGene>();
         for (GeneIdentifier ID : geneID2attributes.keySet()) {
             final TargetGeneAttributes curAttributes = geneID2attributes.get(ID);
-            targetGenes.add(new CandidateTargetGene(ID, curAttributes.getMinRank(), curAttributes.getMotifCount()));
+            targetGenes.add(new CandidateTargetGene(ID, curAttributes.getMinRank(), curAttributes.getMotifAndTrackCount()));
         }
 
         Collections.sort(targetGenes);
@@ -266,15 +291,15 @@ public class Results {
 
     private static class TargetGeneAttributes {
         private int minRank = 0;
-        private int motifCount = 0;
+        private int motifAndTrackCount = 0;
 
         public TargetGeneAttributes(final int rank) {
-            motifCount = 1;
+            motifAndTrackCount = 1;
             minRank = rank;
         }
 
         public void update(final int rank) {
-            incrementMotifCount();
+            incrementMotifAndTrackCount();
             updateRank(rank);
         }
 
@@ -282,16 +307,16 @@ public class Results {
             minRank = (rank < minRank) ? rank : minRank;
         }
 
-        private void incrementMotifCount() {
-            motifCount++;
+        private void incrementMotifAndTrackCount() {
+            motifAndTrackCount++;
         }
 
         public int getMinRank() {
             return minRank;
         }
 
-        public int getMotifCount() {
-            return motifCount;
+        public int getMotifAndTrackCount() {
+            return motifAndTrackCount;
         }
     }
 
@@ -301,16 +326,21 @@ public class Results {
 
         private float NEScore;
         private final Set<AbstractMotif> motifs = new HashSet<AbstractMotif>();
+        private final Set<AbstractTrack> tracks = new HashSet<AbstractTrack>();
 
-        private TranscriptionFactorAttributes(TranscriptionFactor transcriptionFactor, final Motif motif, boolean presentInSignature) {
+        private TranscriptionFactorAttributes(TranscriptionFactor transcriptionFactor, final AbstractMotifAndTrack motifOrTrack, boolean presentInSignature) {
             this.transcriptionFactor = transcriptionFactor;
             this.isPresentInSignature = presentInSignature;
-            update(motif);
+            update(motifOrTrack);
         }
 
-        public void update(final Motif motif) {
-            NEScore = (motif.getNEScore() > NEScore) ? motif.getNEScore() : NEScore;
-            motifs.add(motif);
+        public void update(final AbstractMotifAndTrack motifOrTrack) {
+            NEScore = (motifOrTrack.getNEScore() > NEScore) ? motifOrTrack.getNEScore() : NEScore;
+            if (motifOrTrack.isMotif()) {
+                motifs.add((Motif) motifOrTrack);
+            } else if (motifOrTrack.isTrack()) {
+                tracks.add((Track) motifOrTrack);
+            }
         }
 
         public TranscriptionFactor createTranscriptionFactor() {
@@ -321,7 +351,8 @@ public class Results {
                     transcriptionFactor.getSimilarMotifDescription(),
                     transcriptionFactor.getOrthologousGeneName(),
                     transcriptionFactor.getOrthologousSpecies(),
-                    motifs);
+                    motifs,
+                    tracks);
         }
 
         public TranscriptionFactor getTranscriptionFactor() {
@@ -340,6 +371,10 @@ public class Results {
             return motifs;
         }
 
+        public Set<AbstractTrack> getTracks() {
+            return tracks;
+        }
+
         @Override
         public int compareTo(TranscriptionFactorAttributes other) {
             if (isPresentInSignature() && !other.isPresentInSignature()) {
@@ -355,8 +390,8 @@ public class Results {
         }
     }
 
-    private static class MotifComparator implements Comparator<Motif> {
-        public int compare(Motif o1, Motif o2) {
+    private static class AbstractMotifAndTrackComparator implements Comparator<AbstractMotifAndTrack> {
+        public int compare(AbstractMotifAndTrack o1, AbstractMotifAndTrack o2) {
             return Float.compare(o2.getNEScore(), o1.getNEScore());
         }
     }

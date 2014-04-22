@@ -1,7 +1,7 @@
-package view.resultspanel.motifclusterview.tablemodels;
+package view.resultspanel.motifandtrackclusterview.tablemodels;
 
 
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.CandidateTargetGene;
 import view.resultspanel.CandidateTargetGeneTableModelIF;
 
@@ -16,16 +16,16 @@ public final class ExtendedCandidateTargetGeneTableModel extends AbstractTableMo
             "Maximum rank of the target.",
             "Number of motifs this gene is associated with.",
             "Name of the predicted target."};
-        private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 3, 2);
+    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 3, 2);
 
-    private final AbstractMotif motif;
+    private final AbstractMotifAndTrack motifOrTrack;
 
-    public ExtendedCandidateTargetGeneTableModel(final AbstractMotif motif) {
-        this.motif = motif;
+    public ExtendedCandidateTargetGeneTableModel(final AbstractMotifAndTrack motifOrTrack) {
+        this.motifOrTrack = motifOrTrack;
     }
 
     public ExtendedCandidateTargetGeneTableModel() {
-        this.motif = null;
+        this.motifOrTrack = null;
     }
 
     public int getColumnCount() {
@@ -37,12 +37,12 @@ public final class ExtendedCandidateTargetGeneTableModel extends AbstractTableMo
     }
 
     public int getRowCount() {
-        return (this.motif == null) ? 0 : this.motif.getCandidateTargetGenes().size();
+        return (this.motifOrTrack == null) ? 0 : this.motifOrTrack.getCandidateTargetGenes().size();
     }
 
     @Override
     public CandidateTargetGene getCandidateTargetGeneAtRow(final int rowIndex) {
-        return this.motif.getCandidateTargetGenes().get(rowIndex);
+        return this.motifOrTrack.getCandidateTargetGenes().get(rowIndex);
     }
 
     public Object getValueAt(int row, int column) {
@@ -60,12 +60,16 @@ public final class ExtendedCandidateTargetGeneTableModel extends AbstractTableMo
     }
 
     public Class<?> getColumnClass(int columnIndex) {
-    	switch (columnIndex){
-    	case 0 : return Integer.class;
-    	case 1 : return Integer.class;
-        case 2 : return String.class;
-        default: throw new IndexOutOfBoundsException();
-    	}
+        switch (columnIndex) {
+            case 0:
+                return Integer.class;
+            case 1:
+                return Integer.class;
+            case 2:
+                return String.class;
+            default:
+                throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override

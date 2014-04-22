@@ -1,7 +1,12 @@
 package view.resultspanel.guiwidgets;
 
 
-import java.util.*;
+import domainmodel.AbstractMotifAndTrack;
+import domainmodel.GeneIdentifier;
+import domainmodel.SpeciesNomenclature;
+import domainmodel.TranscriptionFactor;
+import view.resultspanel.MotifAndTrackListener;
+import view.resultspanel.SelectedMotifOrTrack;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -9,10 +14,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-
-import domainmodel.*;
-import view.resultspanel.MotifListener;
-import view.resultspanel.SelectedMotif;
+import java.util.*;
 
 
 public final class TranscriptionFactorComboBox extends JComboBox {
@@ -20,20 +22,20 @@ public final class TranscriptionFactorComboBox extends JComboBox {
 
     private final List<TranscriptionFactorListener> listeners = new ArrayList<TranscriptionFactorListener>();
 
-    public TranscriptionFactorComboBox(final SelectedMotif selectedMotif, final SpeciesNomenclature speciesNomenclature) {
-		super();
-        if (selectedMotif == null || speciesNomenclature == null) throw new IllegalArgumentException();
+    public TranscriptionFactorComboBox(final SelectedMotifOrTrack selectedMotifOrTrack, final SpeciesNomenclature speciesNomenclature) {
+        super();
+        if (selectedMotifOrTrack == null || speciesNomenclature == null) throw new IllegalArgumentException();
 
         this.speciesNomenclature = speciesNomenclature;
 
-        selectedMotif.registerListener(new SuggestionsListener());
-        selectedMotif.registerListener(new EnablenessListener());
+        selectedMotifOrTrack.registerListener(new SuggestionsListener());
+        selectedMotifOrTrack.registerListener(new EnablenessListener());
 
         final JTextComponent textComponent = (JTextComponent) getEditor().getEditorComponent();
         textComponent.getDocument().addDocumentListener(new UpdateListenersListener());
 
-		setEnabled(false);
-	}
+        setEnabled(false);
+    }
 
     public void addListener(final TranscriptionFactorListener listener) {
         listeners.add(listener);
@@ -65,9 +67,9 @@ public final class TranscriptionFactorComboBox extends JComboBox {
         }
     }
 
-    private class SuggestionsListener implements MotifListener {
+    private class SuggestionsListener implements MotifAndTrackListener {
         @Override
-        public void newMotifSelected(AbstractMotif currentSelection) {
+        public void newMotifOrTrackSelected(AbstractMotifAndTrack currentSelection) {
             if (currentSelection != null) {
                 final Set<GeneIdentifier> ids = new HashSet<GeneIdentifier>();
                 final List<TranscriptionFactor> tfs = new ArrayList<TranscriptionFactor>();
@@ -85,9 +87,9 @@ public final class TranscriptionFactorComboBox extends JComboBox {
         }
     }
 
-    private class EnablenessListener implements MotifListener {
+    private class EnablenessListener implements MotifAndTrackListener {
         @Override
-        public void newMotifSelected(AbstractMotif currentSelection) {
+        public void newMotifOrTrackSelected(AbstractMotifAndTrack currentSelection) {
             setEnabled(currentSelection != null);
         }
     }

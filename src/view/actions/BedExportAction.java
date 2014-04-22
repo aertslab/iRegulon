@@ -2,16 +2,16 @@ package view.actions;
 
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.EnhancerRegion;
 import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
 import view.ResourceAction;
-import view.resultspanel.MotifListener;
+import view.resultspanel.MotifAndTrackListener;
 import view.resultspanel.Refreshable;
-import view.resultspanel.SelectedMotif;
+import view.resultspanel.SelectedMotifOrTrack;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -27,32 +27,32 @@ public class BedExportAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_save_bed";
 
     private final ComputationalService service = new ComputationalServiceHTTP();
-	private final SelectedMotif selectedMotif;
+    private final SelectedMotifOrTrack selectedMotifOrTrack;
 
     private static final String BED_FILE_EXTENSION = "bed";
 
-	public BedExportAction(final SelectedMotif selectedMotif) {
+    public BedExportAction(final SelectedMotifOrTrack selectedMotifOrTrack) {
         super(NAME);
-		this.selectedMotif = selectedMotif;
+        this.selectedMotifOrTrack = selectedMotifOrTrack;
 
-        final MotifListener enablenessListener = new MotifListener() {
+        final MotifAndTrackListener enablenessListener = new MotifAndTrackListener() {
             @Override
-            public void newMotifSelected(AbstractMotif currentSelection) {
+            public void newMotifOrTrackSelected(AbstractMotifAndTrack currentSelection) {
                 refresh();
             }
         };
-        this.selectedMotif.registerListener(enablenessListener);
+        this.selectedMotifOrTrack.registerListener(enablenessListener);
 
         refresh();
-	}
+    }
 
     @Override
     public void refresh() {
-        setEnabled(getSelectedMotif().getMotif() != null);
+        setEnabled(getSelectedMotifOrTrack().getMotifOrTrack() != null);
     }
 
-    public SelectedMotif getSelectedMotif() {
-        return selectedMotif;
+    public SelectedMotifOrTrack getSelectedMotifOrTrack() {
+        return selectedMotifOrTrack;
     }
 
     private String getPathSuggestion() {
@@ -61,12 +61,12 @@ public class BedExportAction extends ResourceAction implements Refreshable {
     }
 
     private String getFilenameSuggestion() {
-        final AbstractMotif motif = getSelectedMotif().getMotif();
-        return motif != null ? motif.getName() + "." + BED_FILE_EXTENSION : "";
+        final AbstractMotifAndTrack motifOrTrack = getSelectedMotifOrTrack().getMotifOrTrack();
+        return motifOrTrack != null ? motifOrTrack.getName() + "." + BED_FILE_EXTENSION : "";
     }
 
     @Override
-	public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent event) {
         final JFileChooser fc = new JFileChooser(new File(getPathSuggestion()));
         // Display "All Files" filter at the bottom of the list.
         fc.setAcceptAllFileFilterUsed(false);
@@ -95,7 +95,7 @@ public class BedExportAction extends ResourceAction implements Refreshable {
             }
             output = new BufferedWriter(new FileWriter(selectedFile));
             try {
-                for (EnhancerRegion region : service.getEnhancerRegions(selectedMotif.getMotif())) {
+                for (EnhancerRegion region : service.getEnhancerRegions(selectedMotifOrTrack.getMotifOrTrack())) {
                     output.write(region.toString());
                     output.write('\n');
                 }

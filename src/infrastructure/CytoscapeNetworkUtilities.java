@@ -25,6 +25,7 @@ public final class CytoscapeNetworkUtilities {
     public static final String ASSEMBLY_ATTRIBUTE_NAME = "Assembly";
     public static final String FEATURE_ID_ATTRIBUTE_NAME = "featureID";
     public static final String MOTIF_ATTRIBUTE_NAME = "Motif";
+    public static final String TRACK_ATTRIBUTE_NAME = "Track";
     public static final String REGULATORY_FUNCTION_ATTRIBUTE_NAME = "Regulatory function";
     public static final String TARGET_GENE_ATTRIBUTE_NAME = "Target Gene";
     public static final String REGULATOR_GENE_ATTRIBUTE_NAME = "Regulator Gene";
@@ -33,6 +34,7 @@ public final class CytoscapeNetworkUtilities {
     public static final String RANK_ATTRIBUTE_NAME = "Rank";
     private static final String HIDDEN_LABEL_ATTRIBUTE_NAME = "hiddenLabel";
     public static final String MOTIF_ID_ATTRIBUTE_NAME = "MotifID";
+    public static final String TRACK_ID_ATTRIBUTE_NAME = "TrackID";
 
     public static final String REGULATORY_FUNCTION_REGULATOR = "Regulator";
     public static final String REGULATORY_FUNCTION_TARGET_GENE = "Regulated";
@@ -40,6 +42,7 @@ public final class CytoscapeNetworkUtilities {
     public static final String REGULATORY_FUNCTION_METATARGETOME = "Metatargetome";
 
     private static final Set<String> EXCLUDED_ATTRIBUTE_NAMES = new HashSet<String>();
+
     static {
         EXCLUDED_ATTRIBUTE_NAMES.add(HIDDEN_LABEL_ATTRIBUTE_NAME);
         EXCLUDED_ATTRIBUTE_NAMES.add(FEATURE_ID_ATTRIBUTE_NAME);
@@ -49,83 +52,83 @@ public final class CytoscapeNetworkUtilities {
         EXCLUDED_ATTRIBUTE_NAMES.add(RANK_ATTRIBUTE_NAME);
     }
 
-	private CytoscapeNetworkUtilities() {
-	}
-	
-	/**
-	 * @return returns true if there are nodes selected in the current network
-     *         else false is returned.
-	 */
-	public static boolean hasSelectedNodes() {
-        if (Cytoscape.getCurrentNetworkView().getNetwork() == null) return false;
-		final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
-		return !currentNetwork.getSelectedNodes().isEmpty();
-	}
+    private CytoscapeNetworkUtilities() {
+    }
 
-	/**
-	 * Get all the selected nodes in the current network
-	 */
-	public static List<CyNode> getSelectedNodes() {
+    /**
+     * @return returns true if there are nodes selected in the current network
+     *         else false is returned.
+     */
+    public static boolean hasSelectedNodes() {
+        if (Cytoscape.getCurrentNetworkView().getNetwork() == null) return false;
+        final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
+        return !currentNetwork.getSelectedNodes().isEmpty();
+    }
+
+    /**
+     * Get all the selected nodes in the current network
+     */
+    public static List<CyNode> getSelectedNodes() {
         if (Cytoscape.getCurrentNetworkView().getNetwork() == null)
             return Collections.emptyList();
 
         if (!hasSelectedNodes()) return Collections.emptyList();
-		final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
+        final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
         @SuppressWarnings("unchecked")
         final Set<CyNode> selectedNodes = currentNetwork.getSelectedNodes();
         return Collections.unmodifiableList(new ArrayList<CyNode>(selectedNodes));
     }
-	
-	/**
-	 * Get all the nodes in the current network.
+
+    /**
+     * Get all the nodes in the current network.
      */
-	public static List<CyNode> getAllNodes() {
+    public static List<CyNode> getAllNodes() {
         if (Cytoscape.getCurrentNetworkView().getNetwork() == null)
             return Collections.emptyList();
 
         final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
         @SuppressWarnings("unchecked")
-		final Iterator<CyNode> it = currentNetwork.nodesIterator();
-		final List<CyNode> result = new ArrayList<CyNode>();
-		while (it.hasNext()) {
-			result.add(it.next());
-		}
-		return Collections.unmodifiableList(result);
-	}
+        final Iterator<CyNode> it = currentNetwork.nodesIterator();
+        final List<CyNode> result = new ArrayList<CyNode>();
+        while (it.hasNext()) {
+            result.add(it.next());
+        }
+        return Collections.unmodifiableList(result);
+    }
 
-	/**
-	 * Get all the edges in the current network.
-	 */
-	public static List<CyEdge> getAllEdges(){
+    /**
+     * Get all the edges in the current network.
+     */
+    public static List<CyEdge> getAllEdges() {
         if (Cytoscape.getCurrentNetworkView().getNetwork() == null)
             return Collections.emptyList();
 
-		final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
+        final CyNetwork currentNetwork = Cytoscape.getCurrentNetworkView().getNetwork();
         @SuppressWarnings("unchecked")
-		final Iterator<CyEdge> it = currentNetwork.edgesIterator();
-		final List<CyEdge> result = new ArrayList<CyEdge>();
-		while(it.hasNext()) {
-			result.add(it.next());
-		}
-		return result;
-	}
-	
-	/**
-	 * @return the nodes selected in the current network as a collection of GeneIdentifiers.
-	 */
-	public static Collection<GeneIdentifier> getGenes(final String attributeName,
-                                                      final SpeciesNomenclature speciesNomenclature){
-		if (!hasSelectedNodes()) return Collections.emptyList();
-		final Collection<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
+        final Iterator<CyEdge> it = currentNetwork.edgesIterator();
+        final List<CyEdge> result = new ArrayList<CyEdge>();
+        while (it.hasNext()) {
+            result.add(it.next());
+        }
+        return result;
+    }
+
+    /**
+     * @return the nodes selected in the current network as a collection of GeneIdentifiers.
+     */
+    public static Collection<GeneIdentifier> getGenes(final String attributeName,
+                                                      final SpeciesNomenclature speciesNomenclature) {
+        if (!hasSelectedNodes()) return Collections.emptyList();
+        final Collection<GeneIdentifier> result = new ArrayList<GeneIdentifier>();
         final CyAttributes attributes = Cytoscape.getNodeAttributes();
         for (final CyNode node : getSelectedNodes()) {
-		    final String geneName = attributes.getStringAttribute(node.getIdentifier(), attributeName);
-			if (geneName != null) {
-				result.add(new GeneIdentifier(geneName, speciesNomenclature));
-			}
-		}
-		return result;
-	}
+            final String geneName = attributes.getStringAttribute(node.getIdentifier(), attributeName);
+            if (geneName != null) {
+                result.add(new GeneIdentifier(geneName, speciesNomenclature));
+            }
+        }
+        return result;
+    }
 
     public static void addNodeAttribute(CyNode node, String attributeName, String attributeValue) {
         final CyAttributes attributes = Cytoscape.getNodeAttributes();
@@ -156,14 +159,14 @@ public final class CytoscapeNetworkUtilities {
         } else throw new IllegalArgumentException();
     }
 
-    public static void setEdgeAttribute(CyEdge edge, String attributeName, String attributeValue){
-		final CyAttributes attributes = Cytoscape.getEdgeAttributes();
-		attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
-		//Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
+    public static void setEdgeAttribute(CyEdge edge, String attributeName, String attributeValue) {
+        final CyAttributes attributes = Cytoscape.getEdgeAttributes();
+        attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
+        //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
+    }
 
-    public static void setEdgeAttribute(CyEdge edge, String attributeName, int attributeValue){
-		final CyAttributes attributes = Cytoscape.getEdgeAttributes();
+    public static void setEdgeAttribute(CyEdge edge, String attributeName, int attributeValue) {
+        final CyAttributes attributes = Cytoscape.getEdgeAttributes();
         try {
             attributes.setAttribute(edge.getIdentifier(), attributeName, attributeValue);
         } catch (IllegalArgumentException e) {
@@ -171,7 +174,7 @@ public final class CytoscapeNetworkUtilities {
             attributes.setAttribute(edge.getIdentifier(), attributeName, Integer.toString(attributeValue));
         }
         //Cytoscape.firePropertyChange(Cytoscape.ATTRIBUTES_CHANGED, null, null);
-	}
+    }
 
     public static void setNodeAttribute(CyNode node, String attributeName, String attributeValue) {
         final CyAttributes attributes = Cytoscape.getNodeAttributes();
@@ -187,18 +190,18 @@ public final class CytoscapeNetworkUtilities {
         return node;
     }
 
-    public static CyEdge addEdge(CyNode node1, CyNode node2, CyNetwork network, CyNetworkView view, String motif){
-		final String interaction = (motif == null) ? "regulates" : "regulates via " + motif;
+    public static CyEdge addEdge(CyNode node1, CyNode node2, CyNetwork network, CyNetworkView view, String motif) {
+        final String interaction = (motif == null) ? "regulates" : "regulates via " + motif;
         final CyEdge edge = Cytoscape.getCyEdge(node1, node2, Semantics.INTERACTION, interaction, true);
-		network.addEdge(edge);
+        network.addEdge(edge);
         view.addEdgeView(edge.getRootGraphIndex());
-		//view.updateView();
-		return edge;
-	}
+        //view.updateView();
+        return edge;
+    }
 
     public static CyEdge addEdge(CyNode node1, CyNode node2, String motif) {
-		return addEdge(node1, node2, Cytoscape.getCurrentNetwork(), Cytoscape.getCurrentNetworkView(), motif);
-	}
+        return addEdge(node1, node2, Cytoscape.getCurrentNetwork(), Cytoscape.getCurrentNetworkView(), motif);
+    }
 
     public static void addEdgeAttribute(CyEdge edge, String attributeName, String attributeValue) {
         final CyAttributes attributes = Cytoscape.getEdgeAttributes();
@@ -236,64 +239,94 @@ public final class CytoscapeNetworkUtilities {
         } catch (ClassCastException e) {
             return null;
         }
-	}
+    }
 
-    public static CyEdge createEdge(CyNetwork network, CyNetworkView view, final CyNode sourceNode, final CyNode targetNode, final GeneIdentifier factor, final AbstractMotif motif, final GeneIdentifier targetGene, final String regulatoryFunction) {
-        final CyEdge edge = addEdge(sourceNode, targetNode, network, view, motif == null ? null : motif.getName());
+    public static CyEdge createEdge(CyNetwork network, CyNetworkView view, final CyNode sourceNode,
+                                    final CyNode targetNode, final GeneIdentifier factor,
+                                    final AbstractMotifAndTrack motifOrTrack, final GeneIdentifier targetGene,
+                                    final String regulatoryFunction) {
+        final CyEdge edge = addEdge(sourceNode, targetNode, network, view, motifOrTrack == null ? null : motifOrTrack.getName());
         setEdgeAttribute(edge, ASSEMBLY_ATTRIBUTE_NAME, targetGene.getSpeciesNomenclature().getAssembly());
-		setEdgeAttribute(edge, REGULATOR_GENE_ATTRIBUTE_NAME, factor.getGeneName());
-		setEdgeAttribute(edge, TARGET_GENE_ATTRIBUTE_NAME, targetGene.getGeneName());
-	    setEdgeAttribute(edge, REGULATORY_FUNCTION_ATTRIBUTE_NAME, regulatoryFunction);
-        if (motif != null) {
-            for (AbstractMotif curMotif : motif.getMotifs()) {
-		        addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+        setEdgeAttribute(edge, REGULATOR_GENE_ATTRIBUTE_NAME, factor.getGeneName());
+        setEdgeAttribute(edge, TARGET_GENE_ATTRIBUTE_NAME, targetGene.getGeneName());
+        setEdgeAttribute(edge, REGULATORY_FUNCTION_ATTRIBUTE_NAME, regulatoryFunction);
+        if (motifOrTrack != null) {
+            if (motifOrTrack.isMotif()) {
+                AbstractMotif motif = (AbstractMotif) motifOrTrack;
+                for (AbstractMotif curMotif : motif.getMotifs()) {
+                    addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+                }
+                setEdgeAttribute(edge, MOTIF_ID_ATTRIBUTE_NAME, getListOfStringsAttributeForEdge(edge, MOTIF_ATTRIBUTE_NAME, Cytoscape.getEdgeAttributes()).hashCode());
+            } else if (motifOrTrack.isTrack()) {
+                AbstractTrack track = (AbstractTrack) motifOrTrack;
+                for (AbstractTrack curTrack : track.getTracks()) {
+                    addEdgeAttribute(edge, TRACK_ATTRIBUTE_NAME, curTrack.getName());
+                }
+                setEdgeAttribute(edge, TRACK_ID_ATTRIBUTE_NAME, getListOfStringsAttributeForEdge(edge, TRACK_ATTRIBUTE_NAME, Cytoscape.getEdgeAttributes()).hashCode());
             }
-            setEdgeAttribute(edge, MOTIF_ID_ATTRIBUTE_NAME, getListOfStringsAttributeForEdge(edge, MOTIF_ATTRIBUTE_NAME, Cytoscape.getEdgeAttributes()).hashCode());
-            setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, motif.getDatabaseID());
+            setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, motifOrTrack.getDatabaseID());
         } else {
             setEdgeAttribute(edge, MOTIF_ID_ATTRIBUTE_NAME, factor.hashCode());
         }
         return edge;
     }
 
-    public static CyEdge createEdge(final CyNode sourceNode, final CyNode targetNode, final TranscriptionFactor factor, final AbstractMotif motif, final GeneIdentifier targetGene) {
-        return createEdge(Cytoscape.getCurrentNetwork(), Cytoscape.getCurrentNetworkView(), sourceNode, targetNode, factor.getGeneID(), motif, targetGene, REGULATORY_FUNCTION_PREDICTED);
+    public static CyEdge createEdge(final CyNode sourceNode, final CyNode targetNode, final TranscriptionFactor factor, final AbstractMotifAndTrack motifOrTrack, final GeneIdentifier targetGene) {
+        return createEdge(Cytoscape.getCurrentNetwork(), Cytoscape.getCurrentNetworkView(), sourceNode, targetNode, factor.getGeneID(), motifOrTrack, targetGene, REGULATORY_FUNCTION_PREDICTED);
     }
 
-    public static CyNode createSourceNode(final CyNetwork network, final CyNetworkView view, final String attributeName, final GeneIdentifier factorID, final AbstractMotif motif) {
+    public static CyNode createSourceNode(final CyNetwork network, final CyNetworkView view, final String attributeName, final GeneIdentifier factorID, final AbstractMotifAndTrack motifOrTrack) {
         final CyNode node = addNode(factorID.getGeneName(), network, view);
-		adjustSourceNode(node, attributeName, factorID, motif);
+        adjustSourceNode(node, attributeName, factorID, motifOrTrack);
         return node;
     }
 
-    public static void adjustSourceNode(final CyNode node, final String attributeName, final GeneIdentifier factorID, final AbstractMotif motif) {
+    public static void adjustSourceNode(final CyNode node, final String attributeName, final GeneIdentifier factorID,
+                                        final AbstractMotifAndTrack motifOrTrack) {
         setNodeAttribute(node, ID_ATTRIBUTE_NAME, factorID.getGeneName());
         if (!attributeName.equals(ID_ATTRIBUTE_NAME)) {
             setNodeAttribute(node, attributeName, factorID.getGeneName());
         }
-	    setNodeAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_REGULATOR);
-        for (AbstractMotif curMotif : motif.getMotifs()) {
-		    addNodeAttribute(node, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+        setNodeAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_REGULATOR);
+        if (motifOrTrack.isMotif()) {
+            AbstractMotif motif = (AbstractMotif) motifOrTrack;
+            for (AbstractMotif curMotif : motif.getMotifs()) {
+                addNodeAttribute(node, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+            }
+        } else if (motifOrTrack.isTrack()) {
+            AbstractTrack track = (AbstractTrack) motifOrTrack;
+            for (AbstractTrack curTrack : track.getTracks()) {
+                addNodeAttribute(node, TRACK_ATTRIBUTE_NAME, curTrack.getName());
+            }
         }
     }
 
-    public static CyNode createTargetNode(final CyNetwork network, final CyNetworkView view, final String attributeName, final CandidateTargetGene targetGene, final AbstractMotif motif) {
+    public static CyNode createTargetNode(final CyNetwork network, final CyNetworkView view, final String attributeName, final CandidateTargetGene targetGene, final AbstractMotifAndTrack motifOrTrack) {
         final CyNode node = addNode(targetGene.getGeneName(), network, view);
-		adjustTargetNode(node, attributeName, targetGene, motif);
+        adjustTargetNode(node, attributeName, targetGene, motifOrTrack);
         return node;
     }
 
-    public static void adjustTargetNode(final CyNode node, final String attributeName, final CandidateTargetGene targetGene, final AbstractMotif motif) {
+    public static void adjustTargetNode(final CyNode node, final String attributeName, final CandidateTargetGene targetGene, final AbstractMotifAndTrack motifOrTrack) {
         setNodeAttribute(node, ID_ATTRIBUTE_NAME, targetGene.getGeneName());
         if (!attributeName.equals(ID_ATTRIBUTE_NAME)) {
             setNodeAttribute(node, attributeName, targetGene.getGeneName());
         }
         //if the node is a regulator and target at the same time, it must stay a regulator ...
         if (!REGULATORY_FUNCTION_REGULATOR.equals(getNodeStringAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME))) {
-		    setNodeAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_TARGET_GENE);
+            setNodeAttribute(node, REGULATORY_FUNCTION_ATTRIBUTE_NAME, REGULATORY_FUNCTION_TARGET_GENE);
         }
-        for (AbstractMotif curMotif : motif.getMotifs()) {
-		    addNodeAttribute(node, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+
+        if (motifOrTrack.isMotif()) {
+            AbstractMotif motif = (AbstractMotif) motifOrTrack;
+            for (AbstractMotif curMotif : motif.getMotifs()) {
+                addNodeAttribute(node, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+            }
+        } else if (motifOrTrack.isTrack()) {
+            AbstractTrack track = (AbstractTrack) motifOrTrack;
+            for (AbstractTrack curTrack : track.getTracks()) {
+                addNodeAttribute(node, TRACK_ATTRIBUTE_NAME, curTrack.getName());
+            }
         }
     }
 
@@ -304,11 +337,11 @@ public final class CytoscapeNetworkUtilities {
             String attributeValue = (String) attributes.getAttribute(node.getIdentifier(), attributeName);
             if (attributeValue == null) continue;
             if (result.containsKey(attributeValue)) {
-                 result.get(attributeValue).add(node);
+                result.get(attributeValue).add(node);
             } else {
-                 final List<CyNode> list = new ArrayList<CyNode>();
-                 list.add(node);
-                 result.put(attributeValue, list);
+                final List<CyNode> list = new ArrayList<CyNode>();
+                list.add(node);
+                result.put(attributeValue, list);
             }
         }
         return result;
@@ -335,20 +368,20 @@ public final class CytoscapeNetworkUtilities {
         final List<CyNode> nodes = getAllNodes();
         final CyAttributes nodeAttributes = Cytoscape.getNodeAttributes();
         final float minFraction = Float.parseFloat(ResourceBundle.getBundle("iRegulon").getString("percentage_nodes_not_null"));
-		for (String attributeName : nodeAttributes.getAttributeNames()){
-			if (Cytoscape.getNodeAttributes().getType(attributeName) == CyAttributes.TYPE_STRING
-					&& !EXCLUDED_ATTRIBUTE_NAMES.contains(attributeName) ) {
+        for (String attributeName : nodeAttributes.getAttributeNames()) {
+            if (Cytoscape.getNodeAttributes().getType(attributeName) == CyAttributes.TYPE_STRING
+                    && !EXCLUDED_ATTRIBUTE_NAMES.contains(attributeName)) {
                 int nullCount = 0;
-				for (CyNode node : nodes) {
-					if (nodeAttributes.getStringAttribute(node.getIdentifier(), attributeName) == null) {
-						nullCount++;
-					}
-				}
-				if (nullCount < (nodes.size() * minFraction)) {
-					results.add(attributeName);
-				}
-			}
-		}
+                for (CyNode node : nodes) {
+                    if (nodeAttributes.getStringAttribute(node.getIdentifier(), attributeName) == null) {
+                        nullCount++;
+                    }
+                }
+                if (nullCount < (nodes.size() * minFraction)) {
+                    results.add(attributeName);
+                }
+            }
+        }
         Collections.sort(results);
         return results;
     }

@@ -7,19 +7,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class TranscriptionFactor implements Comparable<TranscriptionFactor> {
-	private final GeneIdentifier geneID;
-	private final float minOrthologousIdentity;
-	private final float maxMotifSimilarityFDR;
-	private final String similarMotifName;
-	private final String similarMotifDescription;
-	private final String orthologousGeneName;
-	private final String orthologousSpecies;
+    private final GeneIdentifier geneID;
+    private final float minOrthologousIdentity;
+    private final float maxMotifSimilarityFDR;
+    private final String similarMotifName;
+    private final String similarMotifDescription;
+    private final String orthologousGeneName;
+    private final String orthologousSpecies;
     private final Set<AbstractMotif> motifs;
-	
-	public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity,
-			float maxMotifSimilarityFDR, String similarMotifName, String similarMotifDescription,
-			String orthologousGeneName, String orthologousSpecies, final Collection<AbstractMotif> motifs){
-		this.geneID = geneID;
+    private final Set<AbstractTrack> tracks;
+
+    public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity, float maxMotifSimilarityFDR,
+                               String similarMotifName, String similarMotifDescription, String orthologousGeneName,
+                               String orthologousSpecies, final Collection<AbstractMotif> motifs,
+                               final Collection<AbstractTrack> tracks) {
+        this.geneID = geneID;
 
 		this.minOrthologousIdentity = orthologousGeneName == null ? Float.NaN : minOrthologousIdentity;
         this.orthologousGeneName = orthologousGeneName;
@@ -30,14 +32,15 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
 		this.similarMotifDescription = similarMotifDescription;
 
         this.motifs = new HashSet<AbstractMotif>(motifs);
+        this.tracks = new HashSet<AbstractTrack>(tracks);
 	}
 
     public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity,
 			float maxMotifSimilarityFDR, String similarMotifName, String similarMotifDescription,
 			String orthologousGeneName, String orthologousSpecies) {
 		this(geneID, minOrthologousIdentity, maxMotifSimilarityFDR, similarMotifName, similarMotifDescription,
-                orthologousGeneName, orthologousSpecies,
-                Collections.<AbstractMotif>emptySet());
+                orthologousGeneName, orthologousSpecies, Collections.<AbstractMotif>emptySet(),
+                Collections.<AbstractTrack>emptySet());
 	}
 	
 	public String getName(){
@@ -82,6 +85,10 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
 
     public int getMotifCount() {
         return this.motifs.size();
+    }
+
+    public int getTrackCount() {
+        return this.tracks.size();
     }
 
     private static int compareFloat(final float f1, final float f2, final boolean reverse) {

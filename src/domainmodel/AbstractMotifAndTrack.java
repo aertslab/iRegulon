@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public abstract class AbstractMotifAndTrack {
-    protected final TrackType trackType;
+    protected TrackType trackType;
     protected final int clusterCode;
     protected final List<CandidateTargetGene> candidateTargetGenes;
     protected final List<TranscriptionFactor> transcriptionFactors;
@@ -19,7 +19,9 @@ public abstract class AbstractMotifAndTrack {
 
     public enum TrackType {
         MOTIF,
-        TRACK
+        TRACK,
+        MOTIF_CLUSTER,
+        TRACK_CLUSTER
     }
 
     public abstract int getDatabaseID();
@@ -36,12 +38,24 @@ public abstract class AbstractMotifAndTrack {
         return this.trackType;
     }
 
+    protected void setTrackType(TrackType trackType) {
+        this.trackType = trackType;
+    }
+
     public boolean isMotif() {
         return getTrackType().equals(TrackType.MOTIF);
     }
 
     public boolean isTrack() {
         return getTrackType().equals(TrackType.TRACK);
+    }
+
+    public boolean isMotifCluster() {
+        return getTrackType().equals(TrackType.MOTIF_CLUSTER);
+    }
+
+    public boolean isTrackCluster() {
+        return getTrackType().equals(TrackType.TRACK_CLUSTER);
     }
 
     public int getClusterCode(){

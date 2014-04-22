@@ -1,14 +1,13 @@
-package view.resultspanel.motifclusterview.detailpanel;
+package view.resultspanel.motifandtrackclusterview.detailpanel;
 
 
 import domainmodel.Motif;
+import view.resultspanel.MotifAndTrackTableModel;
 import view.resultspanel.guiwidgets.LogoThumbnail;
-import view.resultspanel.MotifTableModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 
 
 class UpdateLogoListener implements ListSelectionListener {
@@ -26,8 +25,12 @@ class UpdateLogoListener implements ListSelectionListener {
         if (rowIdx < 0) {
             thumbnail.setMotif(null);
         } else {
-            final MotifTableModel model = (MotifTableModel) table.getModel();
-            thumbnail.setMotif((Motif) model.getMotifAtRow(table.convertRowIndexToModel(rowIdx)));
+            final MotifAndTrackTableModel model = (MotifAndTrackTableModel) table.getModel();
+            if (model.getMotifOrTrackAtRow(table.convertRowIndexToModel(rowIdx)).isMotif()) {
+                thumbnail.setMotif((Motif) model.getMotifOrTrackAtRow(table.convertRowIndexToModel(rowIdx)));
+            } else {
+                thumbnail.setMotif(null);
+            }
         }
     }
 }

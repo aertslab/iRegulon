@@ -1,17 +1,17 @@
 package view.resultspanel;
 
 
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 import javax.swing.*;
 
 
-public interface MotifView extends Refreshable {
+public interface MotifAndTrackView extends Refreshable {
     public JTable getMasterTable();
 
-    public AbstractFilterMotifTableModel getModel();
+    public AbstractFilterMotifAndTrackTableModel getModel();
 
     public DetailPanelIF getDetailPanel();
 
@@ -23,15 +23,15 @@ public interface MotifView extends Refreshable {
 
     public void setFilterPatternListener(FilterPatternDocumentListener listener);
 
-    public AbstractMotif getSelectedMotif();
+    public AbstractMotifAndTrack getSelectedMotifOrTrack();
 
-    public void setSelectedMotif(AbstractMotif motif);
+    public void setSelectedMotifOrTrack(AbstractMotifAndTrack motifOrTrack);
 
     public TranscriptionFactor getSelectedTranscriptionFactor();
 
-    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB);
+    public void registerSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorCB);
 
-    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB);
+    public void unregisterSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorCB);
 
     public void registerFilterComponents(final JComboBox filterAttributeTF, final JTextField filterValueTF);
 

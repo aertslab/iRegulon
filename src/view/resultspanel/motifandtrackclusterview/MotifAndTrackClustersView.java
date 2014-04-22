@@ -1,28 +1,30 @@
-package view.resultspanel.motifclusterview;
+package view.resultspanel.motifandtrackclusterview;
 
-import java.awt.*;
-import java.util.Collections;
-import java.util.List;
+import domainmodel.AbstractMotifAndTrack;
+import domainmodel.MotifAndTrackCluster;
+import domainmodel.Results;
+import domainmodel.TranscriptionFactor;
+import view.resultspanel.*;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
+import view.resultspanel.motifandtrackclusterview.detailpanel.DetailPanel;
+import view.resultspanel.motifandtrackclusterview.tablemodels.BaseMotifAndTrackClusterTableModel;
+import view.resultspanel.motifandtrackclusterview.tablemodels.FilterMotifAndTrackClusterTableModel;
+import view.resultspanel.renderers.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
-
-import domainmodel.*;
-import view.resultspanel.*;
-import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
-import view.resultspanel.motifclusterview.detailpanel.DetailPanel;
-import view.resultspanel.renderers.*;
-import view.resultspanel.motifclusterview.tablemodels.BaseMotifClusterTableModel;
-import view.resultspanel.motifclusterview.tablemodels.FilterMotifClusterTableModel;
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
 
 
-public class MotifClustersView extends JPanel implements MotifView {
-    private final MotifViewSupport viewSupport;
+public class MotifAndTrackClustersView extends JPanel implements MotifAndTrackView {
+    private final MotifAndTrackViewSupport viewSupport;
     private final NetworkMembershipSupport networkSupport;
 
     private final Results results;
-    private List<MotifCluster> clusters;
+    private List<MotifAndTrackCluster> clusters;
 
     private JTable table;
     private DetailPanel detailPanel;
@@ -30,13 +32,13 @@ public class MotifClustersView extends JPanel implements MotifView {
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
     private FilterPatternDocumentListener filterPatternDocumentListener;
-    private MotifPopUpMenu popupListener;
+    private MotifAndTrackPopUpMenu popupListener;
 
     private JComboBox filterAttributeCB;
     private JTextField filterValueTF;
 
-    public MotifClustersView(final Results results) {
-        this.viewSupport = new MotifViewSupport(this);
+    public MotifAndTrackClustersView(final Results results) {
+        this.viewSupport = new MotifAndTrackViewSupport(this);
         this.results = results;
 
         this.networkSupport = new NetworkMembershipSupport();
@@ -45,13 +47,13 @@ public class MotifClustersView extends JPanel implements MotifView {
         setLayout(new BorderLayout());
         initPanel();
         refresh();
-	}
+    }
 
     public Results getResults() {
         return results;
     }
 
-    public List<MotifCluster> getMotifClusters() {
+    public List<MotifAndTrackCluster> getMotifAndTrackClusters() {
         return clusters;
     }
 
@@ -66,8 +68,8 @@ public class MotifClustersView extends JPanel implements MotifView {
     }
 
     @Override
-    public AbstractFilterMotifTableModel getModel() {
-        return (AbstractFilterMotifTableModel) table.getModel();
+    public AbstractFilterMotifAndTrackTableModel getModel() {
+        return (AbstractFilterMotifAndTrackTableModel) table.getModel();
     }
 
     @Override
@@ -87,17 +89,17 @@ public class MotifClustersView extends JPanel implements MotifView {
 
     @Override
     public void setFilterPatternListener(FilterPatternDocumentListener listener) {
-       filterPatternDocumentListener = listener;
+        filterPatternDocumentListener = listener;
     }
 
     @Override
-    public AbstractMotif getSelectedMotif() {
-        return detailPanel.getSelectedMotif();
+    public AbstractMotifAndTrack getSelectedMotifOrTrack() {
+        return detailPanel.getSelectedMotifOrTrack();
     }
 
     @Override
-    public void setSelectedMotif(final AbstractMotif motif) {
-        final int modelIdx = findModelIndexForMotif(motif);
+    public void setSelectedMotifOrTrack(final AbstractMotifAndTrack motifOrTrack) {
+        final int modelIdx = findModelIndexForMotifOrTrack(motifOrTrack);
         if (modelIdx < 0) table.getSelectionModel().clearSelection();
         else {
             final int viewIdx = table.convertRowIndexToView(modelIdx);
@@ -105,19 +107,22 @@ public class MotifClustersView extends JPanel implements MotifView {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    detailPanel.setSelectedMotif(motif);
+                    detailPanel.setSelectedMotifOrTrack(motifOrTrack);
                 }
             });
         }
     }
 
-    private int findModelIndexForMotif(final AbstractMotif motif) {
-        if (motif == null) return -1;
-        final MotifTableModel model = (MotifTableModel) table.getModel();
+    private int findModelIndexForMotifOrTrack(final AbstractMotifAndTrack motifOrTrack) {
+        if (motifOrTrack == null) return -1;
+        final MotifAndTrackTableModel model = (MotifAndTrackTableModel) table.getModel();
         for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
-            for (Motif memberMotif: model.getMotifAtRow(rowIndex).getMotifs()) {
-                if (motif.getDatabaseID() == memberMotif.getDatabaseID()) {
-                    return rowIndex;
+            if (model.getMotifOrTrackAtRow(rowIndex) instanceof MotifAndTrackCluster) {
+                MotifAndTrackCluster motifOrTrackCluster = (MotifAndTrackCluster) model.getMotifOrTrackAtRow(rowIndex);
+                for (AbstractMotifAndTrack memberMotifOrTrack : motifOrTrackCluster.getMotifsAndTracks()) {
+                    if (motifOrTrack.getDatabaseID() == memberMotifOrTrack.getDatabaseID()) {
+                        return rowIndex;
+                    }
                 }
             }
         }
@@ -135,23 +140,23 @@ public class MotifClustersView extends JPanel implements MotifView {
 
         //Create a split pane with the two scroll panes in it.
         final JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, masterPanel, detailPanel);
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(200);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(200);
 
-		//Provide minimum sizes for the two components in the split pane
-		final Dimension minimumSize = new Dimension(100, 50);
-		masterPanel.setMinimumSize(minimumSize);
-		detailPanel.setMinimumSize(minimumSize);
+        //Provide minimum sizes for the two components in the split pane
+        final Dimension minimumSize = new Dimension(100, 50);
+        masterPanel.setMinimumSize(minimumSize);
+        detailPanel.setMinimumSize(minimumSize);
 
         add(splitPane, BorderLayout.CENTER);
-	}
+    }
 
     private JComponent createMasterPanel() {
-        final FilterMotifClusterTableModel model = new FilterMotifClusterTableModel(
-                new BaseMotifClusterTableModel(this.clusters),
+        final FilterMotifAndTrackClusterTableModel model = new FilterMotifAndTrackClusterTableModel(
+                new BaseMotifAndTrackClusterTableModel(this.clusters),
                 FilterAttribute.TRANSCRIPTION_FACTOR, "");
         table = new JTable(model);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setAutoCreateRowSorter(true);
 
         final ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
@@ -185,48 +190,48 @@ public class MotifClustersView extends JPanel implements MotifView {
 
     @Override
     public void refresh() {
-        final AbstractMotif currentSelection = getSelectedMotif();
+        final AbstractMotifAndTrack currentSelection = getSelectedMotifOrTrack();
 
         final JComboBox curFilterAttributeCB = filterAttributeCB;
         final JTextField curFilterValueTF = filterValueTF;
         if (curFilterAttributeCB != null) unregisterFilterComponents(filterAttributeCB, filterValueTF);
 
-        final FilterMotifClusterTableModel oldModel = (FilterMotifClusterTableModel) table.getModel();
+        final FilterMotifAndTrackClusterTableModel oldModel = (FilterMotifAndTrackClusterTableModel) table.getModel();
         final FilterAttribute curFilterAttribute = oldModel.getFilterAttribute();
         final String curFilterPattern = oldModel.getPattern();
 
-        this.clusters = results.getMotifClusters(networkSupport.getCurrentIDs());
-        final FilterMotifClusterTableModel newModel = new FilterMotifClusterTableModel(
-                new BaseMotifClusterTableModel(this.clusters),
+        this.clusters = results.getMotifAndTrackClusters(networkSupport.getCurrentIDs());
+        final FilterMotifAndTrackClusterTableModel newModel = new FilterMotifAndTrackClusterTableModel(
+                new BaseMotifAndTrackClusterTableModel(this.clusters),
                 curFilterAttribute, curFilterPattern);
         table.setModel(newModel);
         installRenderers();
 
         if (curFilterAttributeCB != null) registerFilterComponents(curFilterAttributeCB, curFilterValueTF);
 
-        setSelectedMotif(currentSelection);
+        setSelectedMotifOrTrack(currentSelection);
 
         if (popupListener != null) popupListener.refresh();
         detailPanel.refresh();
     }
 
-    public void registerSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB) {
+    public void registerSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorCB) {
         if (selectionListener == null) {
-            selectionListener = TableMotifClusterSelectionConnector.connect(table, selectedMotif);
-            selectedMotif.setMotif(getSelectedMotif());
+            selectionListener = TableMotifAndTrackClusterSelectionConnector.connect(table, selectedMotifOrTrack);
+            selectedMotifOrTrack.setMotifOrTrack(getSelectedMotifOrTrack());
             transcriptionFactorCB.setSelectedItem(getSelectedTranscriptionFactor());
         }
         if (popupListener == null) {
-            popupListener = new MotifPopUpMenu(selectedMotif, transcriptionFactorCB, false, this, results.getParameters().getAttributeName());
+            popupListener = new MotifAndTrackPopUpMenu(selectedMotifOrTrack, transcriptionFactorCB, false, this, results.getParameters().getAttributeName());
             table.addMouseListener(popupListener);
         }
         detailPanel.registerSelectionComponents(transcriptionFactorCB);
-        selectedMotif.registerListener(detailPanel);
+        selectedMotifOrTrack.registerListener(detailPanel);
     }
 
-    public void unregisterSelectionComponents(final SelectedMotif selectedMotif, final TranscriptionFactorComboBox transcriptionFactorCB) {
+    public void unregisterSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorCB) {
         if (selectionListener != null) {
-            TableMotifClusterSelectionConnector.unconnect(table, selectionListener);
+            TableMotifAndTrackClusterSelectionConnector.unconnect(table, selectionListener);
             selectionListener = null;
         }
         if (popupListener != null) {
@@ -234,7 +239,7 @@ public class MotifClustersView extends JPanel implements MotifView {
             popupListener = null;
         }
         detailPanel.unregisterSelectionComponents();
-        selectedMotif.unregisterListener(detailPanel);
+        selectedMotifOrTrack.unregisterListener(detailPanel);
     }
 
     @Override

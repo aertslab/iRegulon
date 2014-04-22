@@ -1,27 +1,27 @@
-package view.resultspanel.motifclusterview.tablemodels;
+package view.resultspanel.motifandtrackclusterview.tablemodels;
 
-import domainmodel.MotifCluster;
+import domainmodel.MotifAndTrackCluster;
 import domainmodel.TranscriptionFactor;
-import view.resultspanel.MotifTableModel;
+import view.resultspanel.MotifAndTrackTableModel;
 
 import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public final class BaseMotifClusterTableModel extends AbstractTableModel implements MotifTableModel {
-    private static final String[] COLUMN_NAMES = {"ClusterCode", "TF", "NES", "#Targets", "#Motifs"};
+public final class BaseMotifAndTrackClusterTableModel extends AbstractTableModel implements MotifAndTrackTableModel {
+    private static final String[] COLUMN_NAMES = { "ClusterCode", "TF", "NES", "#Targets", "#Motifs/Tracks" };
     private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1, 1, 1);
     private static final List<String> COLUMN_TOOLTIPS = Arrays.asList(
-            "Each clustercode contains enriched motifs that are clustered by similarity.",
+            "Each cluster code contains enriched motifs that are clustered by similarity or contains enriched tracks that are clustered by transcription factor name.",
             "ID of the transcription factor.",
-            "The highest enrichment score for a motif that is part of the current clustercode.",
-            "Number of unique target genes detected by the enriched motifs associated to the given transcription factor (UNION).",
-            "Number of motifs that can be associated by the motif2TF algorithm to the given transcription factor.");
+            "The highest enrichment score for a motif/track that is part of the current clustercode.",
+            "Number of unique target genes detected by the enriched motifs/tracks associated to the given transcription factor (UNION).",
+            "Number of motifs/tracks that can be associated to the given transcription factor.");
 
-    private final List<MotifCluster> clusters;
+    private final List<MotifAndTrackCluster> clusters;
 
-    public BaseMotifClusterTableModel(final List<MotifCluster> clusters) {
+    public BaseMotifAndTrackClusterTableModel(final List<MotifAndTrackCluster> clusters) {
         if (clusters == null) throw new IllegalArgumentException();
         this.clusters = clusters;
     }
@@ -38,7 +38,7 @@ public final class BaseMotifClusterTableModel extends AbstractTableModel impleme
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        final MotifCluster cluster = getMotifAtRow(rowIndex);
+        final MotifAndTrackCluster cluster = getMotifOrTrackAtRow(rowIndex);
         switch (columnIndex) {
             case 0:
                 return cluster.getClusterCode();
@@ -49,7 +49,7 @@ public final class BaseMotifClusterTableModel extends AbstractTableModel impleme
             case 3:
                 return cluster.getCandidateTargetGenes().size();
             case 4:
-                return cluster.getMotifs().size();
+                return cluster.getMotifsAndTracks().size();
             default:
                 throw new IndexOutOfBoundsException();
         }
@@ -75,7 +75,7 @@ public final class BaseMotifClusterTableModel extends AbstractTableModel impleme
     }
 
     @Override
-    public MotifCluster getMotifAtRow(int rowIndex) {
+    public MotifAndTrackCluster getMotifOrTrackAtRow(int rowIndex) {
         return clusters.get(rowIndex);
     }
 

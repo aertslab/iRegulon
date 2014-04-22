@@ -50,7 +50,7 @@ public class PredictRegulatorsAction extends ResourceAction {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (!motifsAndTracks.isEmpty()) {
+        if (! motifsAndTracks.isEmpty()) {
             final ResultsView outputView = new ResultsView(input.getName(), new Results(motifsAndTracks, input));
             final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
             panel.setState(CytoPanelState.DOCK);

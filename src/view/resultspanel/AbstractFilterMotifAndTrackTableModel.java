@@ -1,29 +1,28 @@
 package view.resultspanel;
 
 
-import domainmodel.AbstractMotif;
-import domainmodel.Motif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractFilterMotifTableModel extends AbstractTableModel implements MotifTableModel {
+public abstract class AbstractFilterMotifAndTrackTableModel extends AbstractTableModel implements MotifAndTrackTableModel {
     private static final String FILTER_COLUMN_NAME = "Filtered";
-    private static final String FILTER_COLUMN_TOOLTIP = "Check if the filter expression is found in this motif (the motif, target or transcription factor), cross otherwise";
+    private static final String FILTER_COLUMN_TOOLTIP = "Filter result on motif/track, transcription factor or target gene provided in the search box.";
     private static final int FILTER_COLUMN_IMPORTANCE = 3;
-    protected final MotifTableModel model;
+    protected final MotifAndTrackTableModel model;
     protected String pattern;
     protected FilterAttribute filterAttribute;
 
-    public AbstractFilterMotifTableModel(FilterAttribute filterOn, MotifTableModel model, String pattern) {
+    public AbstractFilterMotifAndTrackTableModel(FilterAttribute filterOn, MotifAndTrackTableModel model, String pattern) {
         this.filterAttribute = filterOn;
         this.model = model;
         this.pattern = pattern;
     }
 
-    public MotifTableModel getModel() {
+    public MotifAndTrackTableModel getModel() {
         return model;
     }
 
@@ -79,8 +78,8 @@ public abstract class AbstractFilterMotifTableModel extends AbstractTableModel i
         }
     }
 
-    public AbstractMotif getMotifAtRow(int row) {
-        return this.model.getMotifAtRow(row);
+    public AbstractMotifAndTrack getMotifOrTrackAtRow(int row) {
+        return this.model.getMotifOrTrackAtRow(row);
     }
 
     @Override

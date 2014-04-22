@@ -14,36 +14,36 @@ import view.resultspanel.actions.AddRegulatoryNetworkAction;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 
-public class MotifPopUpMenu extends MouseAdapter implements Refreshable {
+public class MotifAndTrackPopUpMenu extends MouseAdapter implements Refreshable {
 	private PopupMenu menu;
 
     private final AddRegulatoryInteractionsAction drawEdgesAction;
 	
-	public MotifPopUpMenu(final SelectedMotif selectedMotif,
-                          final TranscriptionFactorComboBox transcriptionFactorComboBox,
-                          final boolean isRegionBased,
-                          final Refreshable view,
-                          final String attributeName) {
-		if (selectedMotif == null || transcriptionFactorComboBox == null || view == null) {
+	public MotifAndTrackPopUpMenu(final SelectedMotifOrTrack selectedMotifOrTrack,
+                                  final TranscriptionFactorComboBox transcriptionFactorComboBox,
+                                  final boolean isRegionBased,
+                                  final Refreshable view,
+                                  final String attributeName) {
+		if (selectedMotifOrTrack == null || transcriptionFactorComboBox == null || view == null) {
 			throw new IllegalArgumentException();
 		}
 
 		menu = new PopupMenu();
 
-		final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
+		final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(selectedMotifOrTrack, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(networkAction);
 			
-		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
+		final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(selectedMotifOrTrack, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(drawRegulonsAndEdgesAction);
 			
-		drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotif, transcriptionFactorComboBox, view, attributeName);
+		drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotifOrTrack, transcriptionFactorComboBox, view, attributeName);
 		menu.addAction(drawEdgesAction);
 
 		if (isRegionBased) {
-			final BedExportAction bedExportAction = new BedExportAction(selectedMotif);
+			final BedExportAction bedExportAction = new BedExportAction(selectedMotifOrTrack);
 			menu.addAction(bedExportAction);
 			
-			final OpenLinkToGenomeBrowserAction bedLinkToBrowserAction = new OpenLinkToGenomeBrowserAction(selectedMotif);
+			final OpenLinkToGenomeBrowserAction bedLinkToBrowserAction = new OpenLinkToGenomeBrowserAction(selectedMotifOrTrack);
 			menu.addAction(bedLinkToBrowserAction);
 		}
 	}

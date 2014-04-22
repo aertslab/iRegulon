@@ -1,25 +1,24 @@
-package view.resultspanel.motifview.tablemodels;
+package view.resultspanel.motifandtrackview.tablemodels;
 
-import domainmodel.AbstractMotif;
-import view.resultspanel.AbstractFilterMotifTableModel;
+import domainmodel.AbstractMotifAndTrack;
+import view.resultspanel.AbstractFilterMotifAndTrackTableModel;
 import view.resultspanel.FilterAttribute;
 
 
 import domainmodel.CandidateTargetGene;
-import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
-import view.resultspanel.MotifTableModel;
+import view.resultspanel.MotifAndTrackTableModel;
 
-public class FilterMotifTableModel extends AbstractFilterMotifTableModel {
-    public FilterMotifTableModel(MotifTableModel model, FilterAttribute filterOn, String pattern){
+public class FilterMotifAndTrackTableModel extends AbstractFilterMotifAndTrackTableModel {
+    public FilterMotifAndTrackTableModel(MotifAndTrackTableModel model, FilterAttribute filterOn, String pattern){
         super(filterOn, model, pattern);
     }
 
 
     @Override
     protected boolean hasPattern(int rowIndex){
-		final AbstractMotif motif = this.getMotifAtRow(rowIndex);
-		if (getFilterAttribute() == FilterAttribute.MOTIF){
+		final AbstractMotifAndTrack motif = this.getMotifOrTrackAtRow(rowIndex);
+		if (getFilterAttribute() == FilterAttribute.MOTIF_OR_TRACK){
 			return motif.getName().toLowerCase().contains(getPattern().toLowerCase());
 		}
 

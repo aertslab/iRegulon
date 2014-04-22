@@ -1,36 +1,36 @@
 package view.resultspanel;
 
 
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
 
 import javax.swing.*;
 
 
-public class MotifViewSupport {
-    private final MotifView view;
+public class MotifAndTrackViewSupport {
+    private final MotifAndTrackView view;
 
-    public MotifViewSupport(MotifView view) {
+    public MotifAndTrackViewSupport(MotifAndTrackView view) {
         this.view = view;
     }
 
-    public MotifView getView() {
+    public MotifAndTrackView getView() {
         return view;
     }
 
-    public AbstractMotif getSelectedMotif() {
+    public AbstractMotifAndTrack getSelectedMotifOrTrack() {
         final int selectedRowIndex = getView().getMasterTable().getSelectedRow();
-		if (selectedRowIndex < 0) {
-			return null;
-		} else {
-            final MotifTableModel model = getView().getModel();
-			final int modelRowIdx = getView().getMasterTable().convertRowIndexToModel(selectedRowIndex);
-			return model.getMotifAtRow(modelRowIdx);
-		}
+        if (selectedRowIndex < 0) {
+            return null;
+        } else {
+            final MotifAndTrackTableModel model = getView().getModel();
+            final int modelRowIdx = getView().getMasterTable().convertRowIndexToModel(selectedRowIndex);
+            return model.getMotifOrTrackAtRow(modelRowIdx);
+        }
     }
 
-    public void setSelectedMotif(final AbstractMotif motif) {
-        final int modelIdx = findModelIndexForMotif(motif);
+    public void setSelectedMotifOrTrack(final AbstractMotifAndTrack motifOrTrack) {
+        final int modelIdx = findModelIndexForMotif(motifOrTrack);
         if (modelIdx < 0) getView().getMasterTable().getSelectionModel().clearSelection();
         else {
             final int viewIdx = getView().getMasterTable().convertRowIndexToView(modelIdx);
@@ -38,11 +38,11 @@ public class MotifViewSupport {
         }
     }
 
-    private int findModelIndexForMotif(final AbstractMotif motif) {
-        if (motif == null) return -1;
-        final MotifTableModel model = (MotifTableModel) getView().getMasterTable().getModel();
+    private int findModelIndexForMotif(final AbstractMotifAndTrack motifOrTrack) {
+        if (motifOrTrack == null) return -1;
+        final MotifAndTrackTableModel model = (MotifAndTrackTableModel) getView().getMasterTable().getModel();
         for (int rowIndex = 0; rowIndex < model.getRowCount(); rowIndex++) {
-            if (model.getMotifAtRow(rowIndex).getDatabaseID() == motif.getDatabaseID()) {
+            if (model.getMotifOrTrackAtRow(rowIndex).getDatabaseID() == motifOrTrack.getDatabaseID()) {
                 return rowIndex;
             }
         }
@@ -50,16 +50,16 @@ public class MotifViewSupport {
     }
 
     public TranscriptionFactor getSelectedTranscriptionFactor() {
-        final AbstractMotif motif = getSelectedMotif();
-        if (motif == null) return null;
+        final AbstractMotifAndTrack motifOrTrack = getSelectedMotifOrTrack();
+        if (motifOrTrack == null) return null;
 
         final TranscriptionFactor transcriptionFactor = getView().getDetailPanel().getSelectedTranscriptionFactor();
         if (transcriptionFactor != null) return transcriptionFactor;
-        else return getSelectedMotif().getBestTranscriptionFactor();
+        else return getSelectedMotifOrTrack().getBestTranscriptionFactor();
     }
 
     public void registerFilterComponents(JComboBox filterAttributeCB, JTextField filterValueTF) {
-        final AbstractFilterMotifTableModel filteredModel = getView().getModel();
+        final AbstractFilterMotifAndTrackTableModel filteredModel = getView().getModel();
 
         filteredModel.setFilterAttribute((FilterAttribute) filterAttributeCB.getSelectedItem());
         filteredModel.setPattern(filterValueTF.getText());

@@ -1,10 +1,10 @@
-package view.resultspanel.motifview;
+package view.resultspanel.trackview;
 
 
 import domainmodel.*;
 import view.resultspanel.*;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
-import view.resultspanel.motifview.detailpanel.DetailPanel;
+import view.resultspanel.trackview.detailpanel.DetailPanel;
 import view.resultspanel.motifandtrackview.tablemodels.*;
 import view.resultspanel.renderers.*;
 
@@ -15,23 +15,23 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public final class EnrichedMotifsView extends JPanel implements MotifAndTrackView {
+public final class EnrichedTracksView extends JPanel implements MotifAndTrackView {
     private JTable table;
     private DetailPanel detailPanel;
     private final MotifAndTrackViewSupport viewSupport;
 
     private final Results results;
-    private List<AbstractMotifAndTrack> enrichedMotifs;
+    private List<AbstractMotifAndTrack> enrichedTracks;
 
     private ListSelectionListener selectionListener;
     private FilterAttributeActionListener filterAttributeActionListener;
     private FilterPatternDocumentListener filterPatternDocumentListener;
     private MotifAndTrackPopUpMenu popupListener;
 
-    public EnrichedMotifsView(final Results results) {
+    public  EnrichedTracksView(final Results results) {
         this.viewSupport = new MotifAndTrackViewSupport(this);
         this.results = results;
-        this.enrichedMotifs = new ArrayList<AbstractMotifAndTrack>(results.getMotifs());
+        this.enrichedTracks = new ArrayList<AbstractMotifAndTrack>(results.getTracks());
         setLayout(new BorderLayout());
         initPanel();
 	}
@@ -40,8 +40,8 @@ public final class EnrichedMotifsView extends JPanel implements MotifAndTrackVie
         return results;
     }
 
-    public java.util.List<AbstractMotifAndTrack> getEnrichedMotifs() {
-        return enrichedMotifs;
+    public java.util.List<AbstractMotifAndTrack> getEnrichedTracks() {
+        return enrichedTracks;
     }
 
     @Override
@@ -112,7 +112,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifAndTrackVie
     }
 
 	private JScrollPane createMasterPanel() {
-		final BaseMotifAndTrackTableModel tableModel = new BaseMotifAndTrackTableModel(this.enrichedMotifs, AbstractMotifAndTrack.TrackType.MOTIF);
+		final BaseMotifAndTrackTableModel tableModel = new BaseMotifAndTrackTableModel(this.enrichedTracks, AbstractMotifAndTrack.TrackType.TRACK);
 		final FilterMotifAndTrackTableModel filteredModel = new FilterMotifAndTrackTableModel(tableModel, FilterAttribute.MOTIF_OR_TRACK, "");
 		table = new JTable(filteredModel);
 

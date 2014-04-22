@@ -21,8 +21,8 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
     private cytoscape.task.TaskMonitor taskMonitor;
 
     private Collection<AbstractMotifAndTrack> motifsAndTracks = Collections.emptyList();
-    private Collection<Motif> motifs = Collections.emptyList();
-    private Collection<Track> tracks = Collections.emptyList();
+    private Collection<Motif> motifs = new ArrayList<Motif>();
+    private Collection<Track> tracks = new ArrayList<Track>();
 
     private State state = State.ERROR;
     private boolean interrupted = false;

@@ -2,29 +2,28 @@ package view.resultspanel.actions;
 
 
 import cytoscape.CyNetwork;
+import cytoscape.Cytoscape;
 import cytoscape.view.CyNetworkView;
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.resultspanel.Refreshable;
-import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
+import view.resultspanel.SelectedMotifOrTrack;
 import view.resultspanel.TranscriptionFactorDependentAction;
-import view.resultspanel.SelectedMotif;
+import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 import java.awt.event.ActionEvent;
-
-import cytoscape.Cytoscape;
 
 
 public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependentAction implements Refreshable {
     private static final String NAME = "action_draw_edges";
 
-    public AddRegulatoryInteractionsAction(SelectedMotif selectedMotif, final TranscriptionFactorComboBox selectedTranscriptionFactor,
-                                              final Refreshable view, final String attributeName) {
-		super(NAME, selectedMotif, selectedTranscriptionFactor, view, attributeName);
-		if (selectedMotif == null) throw new IllegalArgumentException();
-		refresh();
-	}
+    public AddRegulatoryInteractionsAction(SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox selectedTranscriptionFactor,
+                                           final Refreshable view, final String attributeName) {
+        super(NAME, selectedMotifOrTrack, selectedTranscriptionFactor, view, attributeName);
+        if (selectedMotifOrTrack == null) throw new IllegalArgumentException();
+        refresh();
+    }
 
     @Override
     public void refresh() {
@@ -37,14 +36,14 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
     }
 
     @Override
-	public void actionPerformed(ActionEvent e) {
-        final AbstractMotif motif = this.getSelectedMotif().getMotif();
-		final TranscriptionFactor factor = this.getTranscriptionFactor();
+    public void actionPerformed(ActionEvent e) {
+        final AbstractMotifAndTrack motifOrTrack = this.getSelectedMotifOrTrack().getMotifOrTrack();
+        final TranscriptionFactor factor = this.getTranscriptionFactor();
 
-		final CyNetwork network =  Cytoscape.getCurrentNetwork();
-		final CyNetworkView view = Cytoscape.getCurrentNetworkView();
+        final CyNetwork network = Cytoscape.getCurrentNetwork();
+        final CyNetworkView view = Cytoscape.getCurrentNetworkView();
 
-		if (!addEdges(network, view, factor, motif, false)) return;
+        if (!addEdges(network, view, factor, motifOrTrack, false)) return;
 
         Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
 
@@ -53,5 +52,5 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
         getView().refresh();
 
         CytoscapeNetworkUtilities.activeSidePanel();
-	}
+    }
 }

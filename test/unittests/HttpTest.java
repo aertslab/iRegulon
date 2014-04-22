@@ -77,7 +77,7 @@ public class HttpTest {
 		while (http.getState(jobID) != State.FINISHED){
 			System.out.println(http.getState(jobID).toString());
 		}
-		Collection<Motif> motifs = http.getMotifs(1);
+		Collection<Motif> motifs = http.getMotifsAndTracks(1);
 		assertEquals(0, motifs.size());
 		
 	}

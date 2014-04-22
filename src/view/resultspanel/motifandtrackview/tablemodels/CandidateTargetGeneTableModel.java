@@ -1,9 +1,9 @@
-package view.resultspanel.motifview.tablemodels;
+package view.resultspanel.motifandtrackview.tablemodels;
 
 
 import javax.swing.table.AbstractTableModel;
 
-import domainmodel.AbstractMotif;
+import domainmodel.AbstractMotifAndTrack;
 import domainmodel.CandidateTargetGene;
 import view.resultspanel.CandidateTargetGeneTableModelIF;
 
@@ -17,14 +17,14 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel impl
             "Name of the predicted target."};
         private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 2);
 
-    private final AbstractMotif motif;
+    private final AbstractMotifAndTrack motifOrTrack;
 
-    public CandidateTargetGeneTableModel(final AbstractMotif motif) {
-        this.motif = motif;
+    public CandidateTargetGeneTableModel(final AbstractMotifAndTrack motifOrTrack) {
+        this.motifOrTrack = motifOrTrack;
     }
 
     public CandidateTargetGeneTableModel() {
-        this.motif = null;
+        this.motifOrTrack = null;
     }
 
     public int getColumnCount() {
@@ -36,12 +36,12 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel impl
     }
 
     public int getRowCount() {
-        return (this.motif == null) ? 0 : this.motif.getCandidateTargetGenes().size();
+        return (this.motifOrTrack == null) ? 0 : this.motifOrTrack.getCandidateTargetGenes().size();
     }
 
     @Override
     public CandidateTargetGene getCandidateTargetGeneAtRow(final int rowIndex) {
-        return this.motif.getCandidateTargetGenes().get(rowIndex);
+        return this.motifOrTrack.getCandidateTargetGenes().get(rowIndex);
     }
 
     public Object getValueAt(int row, int column) {

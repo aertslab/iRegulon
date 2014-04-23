@@ -12,19 +12,20 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
     private final float neScore;
     private final float aucValue;
 
-	public Motif(String name, List<CandidateTargetGene> candidateTargetGenes,
-			List<TranscriptionFactor> transcriptionFactors, float neScore, int clusterCode
-			, float aucValue, int rank, String description, int featureID, int jobID){
+    public Motif(String name, List<CandidateTargetGene> candidateTargetGenes,
+                 List<TranscriptionFactor> transcriptionFactors, float neScore, String clusterCode, int clusterNumber,
+                 float aucValue, int rank, String description, int featureID, int jobID) {
         super(clusterCode, candidateTargetGenes, transcriptionFactors);
         this.name = name;
         Collections.sort(new ArrayList<CandidateTargetGene>(this.candidateTargetGenes));
         Collections.sort(new ArrayList<TranscriptionFactor>(this.transcriptionFactors));
-        this.rank = rank;
-		this.description = description;
-		this.featureID = featureID;
         this.neScore = neScore;
+        setClusterNumber(clusterNumber);
         this.aucValue = aucValue;
-	}
+        this.rank = rank;
+        this.description = description;
+        this.featureID = featureID;
+    }
 
     public int getRank(){
 		return this.rank;

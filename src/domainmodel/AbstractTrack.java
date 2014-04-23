@@ -5,7 +5,7 @@ import java.util.List;
 
 public abstract class AbstractTrack extends AbstractMotifAndTrack {
 
-    public AbstractTrack(int clusterCode, List<CandidateTargetGene> candidateTargetGenes, List<TranscriptionFactor> transcriptionFactors) {
+    public AbstractTrack(String clusterCode, List<CandidateTargetGene> candidateTargetGenes, List<TranscriptionFactor> transcriptionFactors) {
         super(TrackType.TRACK, clusterCode, candidateTargetGenes, transcriptionFactors);
     }
 
@@ -19,7 +19,7 @@ public abstract class AbstractTrack extends AbstractMotifAndTrack {
 
     public abstract float getNEScore();
 
-    public int getClusterCode(){
+    public String getClusterCode(){
         return this.clusterCode;
     }
 

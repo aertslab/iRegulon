@@ -5,13 +5,10 @@ import domainmodel.*;
 import view.resultspanel.MotifAndTrackTableModel;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BaseMotifAndTrackTableModel extends AbstractTableModel implements MotifAndTrackTableModel {
-    private final String[] COLUMN_NAMES_MOTIF = { "Rank", "Enriched Motif ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs" };
+    private final String[] COLUMN_NAMES_MOTIF = { "Rank", "Enriched Motif ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs", "ClusterNumber" };
     private final List<String> COLUMN_TOOLTIPS_MOTIF = Arrays.asList(
             "<html>Rank of the motif.<br/>The motif is ranked using the NEScore.</html>",
             "<html>ID of the motif.</html>",
@@ -21,9 +18,10 @@ public class BaseMotifAndTrackTableModel extends AbstractTableModel implements M
                     "the same cluster will have the same cluster code and the same background color.<br/>" +
                     "The cluster code is given by order of maximal NES per motif cluster.</html>",
             "<html>Number of unique target genes selected for the given motif.</html>",
-            "<html>Number of transcription factors that can be associated by the motif2TF algorithm to the given motif.</html>");
+            "<html>Number of transcription factors that can be associated by the motif2TF algorithm to the given motif.</html>",
+            "<html>Cluster number for coloring the clusters.</html>");
 
-    private final String[] COLUMN_NAMES_TRACK = { "Rank", "Enriched Track ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs" };
+    private final String[] COLUMN_NAMES_TRACK = { "Rank", "Enriched Track ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs", "ClusterNumber" };
     private final List<String> COLUMN_TOOLTIPS_TRACK = Arrays.asList(
             "<html>Rank of the track.<br/>The track is ranked using the NEScore.</html>",
             "<html>ID of the track.</html>",
@@ -31,10 +29,11 @@ public class BaseMotifAndTrackTableModel extends AbstractTableModel implements M
             "<html>Area Under the Curve.<br/>AUC is used for the calculation of the enrichment score and represents the area under the ROC curve.</html>",
             "<html>The enriched track are clustered by transcription factor name.</html>",
             "<html>Number of unique target genes selected for the given track.</html>",
-            "<html>Number of transcription factors that can be assigned to the current track.</html>");
+            "<html>Number of transcription factors that can be assigned to the current track.</html>",
+            "<html>Cluster number for coloring the clusters.</html>");
 
     private String[] COLUMN_NAMES;
-    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 2, 2, 3, 2, 2);
+    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 2, 2, 3, 2, 2, 0);
     private List<String> COLUMN_TOOLTIPS;
 
     private final List<AbstractMotifAndTrack> motifsOrTracks;
@@ -75,10 +74,12 @@ public class BaseMotifAndTrackTableModel extends AbstractTableModel implements M
             case 3:
                 return Float.class;
             case 4:
-                return Integer.class;
+                return String.class;
             case 5:
                 return Integer.class;
             case 6:
+                return Integer.class;
+            case 7:
                 return Integer.class;
         }
         return Object.class;
@@ -121,6 +122,8 @@ public class BaseMotifAndTrackTableModel extends AbstractTableModel implements M
                 return set.size();
             case 6:
                 return curMotifOrTrack.getTranscriptionFactors().size();
+            case 7:
+                return curMotifOrTrack.getClusterNumber();
         }
         return null;
     }

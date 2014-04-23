@@ -1,6 +1,7 @@
 package view.resultspanel;
 
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 import java.util.List;
 
 
@@ -17,7 +18,15 @@ public class ColumnWidthSetter {
         final List<Integer> columnImportance = model.getColumnImportances();
         for (int i = 0, columnImportanceSize = columnImportance.size(); i < columnImportanceSize; i++) {
             final int curImportance = columnImportance.get(i);
-            this.table.getColumnModel().getColumn(i).setPreferredWidth(convertToWidth(curImportance));
+            TableColumn column = this.table.getColumnModel().getColumn(i);
+            /* Hide the column when the column importance is 0. */
+            if (curImportance == 0) {
+                column.setMinWidth(0);
+                column.setMaxWidth(0);
+                column.setPreferredWidth(0);
+            } else {
+                column.setPreferredWidth(convertToWidth(curImportance));
+            }
         }
 	}
 

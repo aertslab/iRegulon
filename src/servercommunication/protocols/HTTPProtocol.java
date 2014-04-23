@@ -332,8 +332,12 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             BufferedReader rd = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
 
-            Map<Object, Integer> clusterNrMap = new HashMap<Object, Integer>();
-            int clustercount = 0;
+            Map<String, Integer> clusterCodeToNumber = new HashMap<String, Integer>();
+            Map<String, Integer> motifClusterCodeToNumber = new HashMap<String, Integer>();
+            Map<String, Integer> trackClusterCodeToNumber = new HashMap<String, Integer>();
+            int totalClusterCount = 0;
+            int motifClusterCount = 0;
+            int trackClusterCount = 0;
 
             while ((line = rd.readLine()) != null) {
                 String[] motifOrTrackVariables = line.split("\t");
@@ -342,18 +346,18 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                     /**
                      * The following columns are always available:
                      *     0	nomenclature code
-                     *     1	rankingsdatabase ID
-                     *     2	motif rank
-                     *     3	motif name
+                     *     1	motif/track rankingsdatabase ID
+                     *     2	motif/track rank
+                     *     3	motif/track name
                      *     4	feature ID
-                     *     5	motif description
+                     *     5	motif/track description
                      *     6	AUCValue
                      *     7	NEScore
                      *     8	clusterNumber
                      *     9	candidateTargetIDs (separated by ;)
                      *    10	candidateTargetRanks (separated by ;)
                      *
-                     * The following columns are only available (actually not empty) if the motif is annotated:
+                     * The following columns are only available (actually not empty) if the motif/track is annotated:
                      *    11	transcriptionFactorNames (separated by ;)
                      *    12	motifSimilarityFDR (separated by ;) of the corresponding TF
                      *    13	orthologousIdentity (separated by ;) of the corresponding TF
@@ -428,28 +432,58 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                         }
                     }
 
-                    /* Create a new motif and add it to the collection. */
-                    int clusterNumber = Integer.parseInt(motifOrTrackVariables[8]);
-
-                    if (!clusterNrMap.containsKey(clusterNumber)) {
-                        clusterNrMap.put(clusterNumber, clustercount);
-                        clustercount++;
-                    }
-
-                    int actualClusterNumber = clusterNrMap.get(clusterNumber);
-
-
                     if (motifOrTrackVariables[1].equals(motifRankingsDatabase)) {
+                        /* Create a motif cluster name with the original motif cluster number. */
+                        String originalMotifClusterCode = "M" + motifOrTrackVariables[8];
+
+                        if (! clusterCodeToNumber.containsKey(originalMotifClusterCode)) {
+                            /* Keep track of the amount of motif clusters. */
+                            motifClusterCodeToNumber.put(originalMotifClusterCode, motifClusterCount + 1);
+                            motifClusterCount++;
+                            /* Keep track of the total amount of motif and track clusters
+                               (needed for coloring motifs/tracks of the same cluster in the same color). */
+                            clusterCodeToNumber.put(originalMotifClusterCode, totalClusterCount + 1);
+                            totalClusterCount++;
+                        }
+
+                        /* Make a motif cluster number so the cluster numbers for motifs and tracks will be different,
+                           so it can be used to show each cluster in a different color. */
+                        int motifClusterNumber = clusterCodeToNumber.get(originalMotifClusterCode);
+                        /* Make a new motif cluster code, so the first motif cluster will be "M1". */
+                        String motifClusterCode = "M" + motifClusterCodeToNumber.get(originalMotifClusterCode);
+
+                        /* Create a new motif and add it to the collection. */
                         Motif mtf = new Motif(motifOrTrackVariables[3], candidateTargetGenes,
                                 transcriptionFactors, Float.parseFloat(motifOrTrackVariables[7]),
-                                actualClusterNumber + 1, Float.parseFloat(motifOrTrackVariables[6]),
+                                motifClusterCode, motifClusterNumber, Float.parseFloat(motifOrTrackVariables[6]),
                                 Integer.parseInt(motifOrTrackVariables[2]), motifOrTrackVariables[5],
                                 Integer.parseInt(motifOrTrackVariables[4]), jobID);
                         motifsAndTracks.add(mtf);
                     } else if (motifOrTrackVariables[1].equals(trackRankingsDatabase)) {
+                        /* Create a track cluster name with the original motif cluster number. */
+                        String originalTrackClusterCode = "T" + motifOrTrackVariables[8];
+
+                        if (! clusterCodeToNumber.containsKey(originalTrackClusterCode)) {
+                            /* Keep track of the amount of track clusters. */
+                            trackClusterCodeToNumber.put(originalTrackClusterCode, trackClusterCount + 1);
+                            trackClusterCount++;
+                            /* Keep track of the total amount of motif and track clusters
+                               (needed for coloring motifs/tracks of the same cluster in the same color).
+                             */
+                            clusterCodeToNumber.put(originalTrackClusterCode, totalClusterCount + 1);
+                            totalClusterCount++;
+                        }
+
+                        /* Get a track cluster number so the cluster numbers for motifs and tracks will be different,
+                           so it can be used to show each cluster in a different color. */
+                        int trackClusterNumber = clusterCodeToNumber.get(originalTrackClusterCode);
+                        /* Make a new track cluster code, so the first track cluster will be "T1". */
+                        String trackClusterCode = "T" + trackClusterCodeToNumber.get(originalTrackClusterCode);
+
+                        /* Create a new track and add it to the collection. */
                         Track track = new Track(motifOrTrackVariables[3], candidateTargetGenes,
                                 transcriptionFactors, Float.parseFloat(motifOrTrackVariables[7]),
-                                actualClusterNumber + 1, Float.parseFloat(motifOrTrackVariables[6]),
+                                trackClusterCode, trackClusterNumber, Float.parseFloat(motifOrTrackVariables[6]),
                                 Integer.parseInt(motifOrTrackVariables[2]), motifOrTrackVariables[5],
                                 Integer.parseInt(motifOrTrackVariables[4]), jobID);
                         motifsAndTracks.add(track);

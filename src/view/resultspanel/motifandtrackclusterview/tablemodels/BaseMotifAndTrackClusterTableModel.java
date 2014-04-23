@@ -10,14 +10,15 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 public final class BaseMotifAndTrackClusterTableModel extends AbstractTableModel implements MotifAndTrackTableModel {
-    private static final String[] COLUMN_NAMES = { "ClusterCode", "TF", "NES", "#Targets", "#Motifs/Tracks" };
-    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1, 1, 1);
+    private static final String[] COLUMN_NAMES = { "ClusterCode", "TF", "NES", "#Targets", "#Motifs/Tracks", "ClusterNumber" };
+    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1, 1, 1, 0);
     private static final List<String> COLUMN_TOOLTIPS = Arrays.asList(
             "Each cluster code contains enriched motifs that are clustered by similarity or contains enriched tracks that are clustered by transcription factor name.",
             "ID of the transcription factor.",
             "The highest enrichment score for a motif/track that is part of the current clustercode.",
             "Number of unique target genes detected by the enriched motifs/tracks associated to the given transcription factor (UNION).",
-            "Number of motifs/tracks that can be associated to the given transcription factor.");
+            "Number of motifs/tracks that can be associated to the given transcription factor.",
+            "Cluster number for coloring the clusters.");
 
     private final List<MotifAndTrackCluster> clusters;
 
@@ -50,6 +51,8 @@ public final class BaseMotifAndTrackClusterTableModel extends AbstractTableModel
                 return cluster.getCandidateTargetGenes().size();
             case 4:
                 return cluster.getMotifsAndTracks().size();
+            case 5:
+                return cluster.getClusterNumber();
             default:
                 throw new IndexOutOfBoundsException();
         }
@@ -58,12 +61,16 @@ public final class BaseMotifAndTrackClusterTableModel extends AbstractTableModel
     public Class<?> getColumnClass(int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return Integer.class;
+                return String.class;
             case 1:
                 return String.class;
             case 2:
                 return Float.class;
-            case 3: case 4:
+            case 3:
+                return Integer.class;
+            case 4:
+                return Integer.class;
+            case 5:
                 return Integer.class;
             default:
                 throw new IndexOutOfBoundsException();

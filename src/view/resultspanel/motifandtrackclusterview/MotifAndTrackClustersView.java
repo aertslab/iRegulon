@@ -169,7 +169,7 @@ public class MotifAndTrackClustersView extends JPanel implements MotifAndTrackVi
     }
 
     private void installRenderers() {
-        final ClusterColorRenderer clusterColorRenderer = new ClusterColorRenderer("ClusterCode");
+        final ClusterColorRenderer clusterColorRenderer = new ClusterColorRenderer("ClusterNumber");
         for (int i = 0; i < table.getModel().getColumnCount(); i++) {
             final CombinedRenderer renderer = new CombinedRenderer();
             if (table.getModel().getColumnClass(i).equals(Float.class)) {

@@ -17,7 +17,7 @@ import java.util.List;
 
 
 abstract class MetatargetomeTask extends IRegulonResourceBundle implements Task {
-    protected static final AbstractMotif NO_MOTIF = new AbstractMotif(-1,
+    protected static final AbstractMotif NO_MOTIF = new AbstractMotif("NaN",
             Collections.<CandidateTargetGene>emptyList(),
             Collections.<TranscriptionFactor>emptyList()) {
         @Override

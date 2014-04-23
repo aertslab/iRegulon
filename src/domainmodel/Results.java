@@ -164,34 +164,34 @@ public class Results {
 
     public List<MotifAndTrackCluster> getMotifAndTrackClusters(final Set<String> geneIDs) {
         // 1. Group motifs according to STAMP cluster number.
-        final Map<Integer, List<AbstractMotifAndTrack>> code2motifsAndTracks = new HashMap<Integer, List<AbstractMotifAndTrack>>();
+        final Map<String, List<AbstractMotifAndTrack>> clusterCode2motifsAndTracks = new HashMap<String, List<AbstractMotifAndTrack>>();
         for (Motif curMotif : getMotifs()) {
-            final int curCode = curMotif.getClusterCode();
+            final String curCode = curMotif.getClusterCode();
             final List<AbstractMotifAndTrack> bucket;
-            if (code2motifsAndTracks.containsKey(curCode)) {
-                bucket = code2motifsAndTracks.get(curCode);
+            if (clusterCode2motifsAndTracks.containsKey(curCode)) {
+                bucket = clusterCode2motifsAndTracks.get(curCode);
             } else {
                 bucket = new ArrayList<AbstractMotifAndTrack>();
-                code2motifsAndTracks.put(curCode, bucket);
+                clusterCode2motifsAndTracks.put(curCode, bucket);
             }
             bucket.add(curMotif);
         }
 
         // 2. Group tracks in clusters by transcription factor name.
         for (Track curTrack : getTracks()) {
-            final int curCode = curTrack.getClusterCode();
+            final String curCode = curTrack.getClusterCode();
             final List<AbstractMotifAndTrack> bucket;
-            if (code2motifsAndTracks.containsKey(curCode)) {
-                bucket = code2motifsAndTracks.get(curCode);
+            if (clusterCode2motifsAndTracks.containsKey(curCode)) {
+                bucket = clusterCode2motifsAndTracks.get(curCode);
             } else {
                 bucket = new ArrayList<AbstractMotifAndTrack>();
-                code2motifsAndTracks.put(curCode, bucket);
+                clusterCode2motifsAndTracks.put(curCode, bucket);
             }
             bucket.add(curTrack);
         }
 
         // 3. Sort clusters according to maximum NESCore.
-        final List<List<AbstractMotifAndTrack>> clusters = new ArrayList<List<AbstractMotifAndTrack>>(code2motifsAndTracks.values());
+        final List<List<AbstractMotifAndTrack>> clusters = new ArrayList<List<AbstractMotifAndTrack>>(clusterCode2motifsAndTracks.values());
         Collections.sort(clusters, new Comparator<List<AbstractMotifAndTrack>>() {
             private float getMaximumNEScore(List<AbstractMotifAndTrack> motifsAndTracks) {
                 return Collections.min(motifsAndTracks, new AbstractMotifAndTrackComparator()).getNEScore();
@@ -208,7 +208,7 @@ public class Results {
         final Set<String> alreadyProcessedTFIDsForTracks = new HashSet<String>();
         final List<MotifAndTrackCluster> result = new ArrayList<MotifAndTrackCluster>();
         for (List<AbstractMotifAndTrack> motifsAndTracks : clusters) {
-            final int clusterCode = motifsAndTracks.get(0).getClusterCode();
+            final String clusterCode = motifsAndTracks.get(0).getClusterCode();
 
             final List<AbstractMotifAndTrack> sortedMotifsOrTracks = new ArrayList<AbstractMotifAndTrack>(motifsAndTracks);
             Collections.sort(sortedMotifsOrTracks, new AbstractMotifAndTrackComparator());

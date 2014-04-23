@@ -5,9 +5,11 @@ import java.util.List;
 public class MotifAndTrackCluster extends AbstractMotifAndTrack {
     private final List<AbstractMotifAndTrack> motifsAndTracks;
 
-    MotifAndTrackCluster(int clusterCode, List<AbstractMotifAndTrack> motifsAndTracks, List<TranscriptionFactor> transcriptionFactors, List<CandidateTargetGene> targetGenes) {
+    MotifAndTrackCluster(String clusterCode, List<AbstractMotifAndTrack> motifsAndTracks, List<TranscriptionFactor> transcriptionFactors, List<CandidateTargetGene> targetGenes) {
         super(motifsAndTracks.get(0).getTrackType(), clusterCode, targetGenes, transcriptionFactors);
         this.motifsAndTracks = motifsAndTracks;
+
+        setClusterNumber(motifsAndTracks.get(0).getClusterNumber());
 
         TrackType trackType = motifsAndTracks.get(0).getTrackType();
         if (trackType.equals(TrackType.MOTIF)) {

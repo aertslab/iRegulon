@@ -5,12 +5,14 @@ import java.util.List;
 
 public abstract class AbstractMotifAndTrack {
     protected TrackType trackType;
-    protected final int clusterCode;
+    protected final String clusterCode;
+    protected int clusterNumber = 0;
     protected final List<CandidateTargetGene> candidateTargetGenes;
     protected final List<TranscriptionFactor> transcriptionFactors;
 
 
-    public AbstractMotifAndTrack(TrackType trackType, int clusterCode, List<CandidateTargetGene> candidateTargetGenes, List<TranscriptionFactor> transcriptionFactors) {
+    public AbstractMotifAndTrack(TrackType trackType, String clusterCode, List<CandidateTargetGene> candidateTargetGenes, List<TranscriptionFactor> transcriptionFactors) {
+
         this.trackType = trackType;
         this.clusterCode = clusterCode;
         this.candidateTargetGenes = candidateTargetGenes;
@@ -42,6 +44,10 @@ public abstract class AbstractMotifAndTrack {
         this.trackType = trackType;
     }
 
+    protected void setClusterNumber(int clusterNumber){
+        this.clusterNumber = clusterNumber;
+    }
+
     public boolean isMotif() {
         return getTrackType().equals(TrackType.MOTIF);
     }
@@ -58,8 +64,12 @@ public abstract class AbstractMotifAndTrack {
         return getTrackType().equals(TrackType.TRACK_CLUSTER);
     }
 
-    public int getClusterCode(){
+    public String getClusterCode(){
         return this.clusterCode;
+    }
+
+    public int getClusterNumber(){
+        return this.clusterNumber;
     }
 
     public List<CandidateTargetGene> getCandidateTargetGenes(){

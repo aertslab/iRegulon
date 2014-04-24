@@ -75,12 +75,15 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         return rankingsDatabases;
     }
 
-    public List<MotifCollection> getMotifCollections() {
+    public List<MotifCollection> getMotifCollections(RankingsDatabase.Type searchSpace) {
         final Set<MotifCollection> motifCollections = new HashSet<MotifCollection>();
         for (RankingsDatabase db: getRankingsDatabases()) {
-            // When the rankings database doesn't contain a motif collection, exclude it.
-            if (db.hasMotifCollection()) {
-                motifCollections.add(db.getMotifCollection());
+            // Only add the rankings database if it has the specified search space ("gene" or "region" based).
+            if (db.getType().equals(searchSpace)) {
+                // Only add the rankings database if it has a motif collection.
+                if (db.hasMotifCollection()) {
+                    motifCollections.add(db.getMotifCollection());
+                }
             }
         }
         final List<MotifCollection> motifCollectionArrayList = new ArrayList<MotifCollection>(motifCollections);
@@ -90,12 +93,15 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         return motifCollectionArrayList;
     }
 
-    public List<TrackCollection> getTrackCollections() {
+    public List<TrackCollection> getTrackCollections(RankingsDatabase.Type searchSpace) {
         final Set<TrackCollection> trackCollections = new HashSet<TrackCollection>();
         for (RankingsDatabase db: getRankingsDatabases()) {
-            // When the rankings database doesn't contain a track collection, exclude it.
-            if (db.hasTrackCollection()) {
-                trackCollections.add(db.getTrackCollection());
+            // Only add the rankings database if it has the specified search space ("gene" or "region" based).
+            if (db.getType().equals(searchSpace)) {
+                // Only add the rankings database if it has a track collection.
+                if (db.hasTrackCollection()) {
+                    trackCollections.add(db.getTrackCollection());
+                }
             }
         }
         final List<TrackCollection> trackCollectionArrayList = new ArrayList<TrackCollection>(trackCollections);

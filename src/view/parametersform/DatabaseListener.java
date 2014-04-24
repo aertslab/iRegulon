@@ -266,22 +266,6 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
     private void refreshRankingDatabases() {
         final SpeciesNomenclature speciesNomenclature = (SpeciesNomenclature) this.speciesNomenclatureCB.getSelectedItem();
 
-        MotifCollection curMotifCollection = (MotifCollection) this.motifCollectionCB.getSelectedItem();
-        final List<MotifCollection> motifCollections = speciesNomenclature.getMotifCollections();
-        this.motifCollectionCB.setMotifCollections(motifCollections);
-        if (!motifCollections.contains(curMotifCollection)) {
-            curMotifCollection = motifCollections.get(0);
-        }
-        this.motifCollectionCB.setSelectedItem(curMotifCollection);
-
-        TrackCollection curTrackCollection = (TrackCollection) this.trackCollectionCB.getSelectedItem();
-        final List<TrackCollection> trackCollections = speciesNomenclature.getTrackCollections();
-        this.trackCollectionCB.setTrackCollections(trackCollections);
-        if (!trackCollections.contains(curTrackCollection)) {
-            curTrackCollection = trackCollections.get(0);
-        }
-        this.trackCollectionCB.setSelectedItem(curTrackCollection);
-
         RankingsDatabase.Type curSearchSpaceType = (RankingsDatabase.Type) this.searchSpaceTypeCB.getSelectedItem();
         final List<RankingsDatabase.Type> searchSpaceTypes = speciesNomenclature.getSearchSpaceTypes();
         this.searchSpaceTypeCB.setTypes(searchSpaceTypes);
@@ -289,6 +273,22 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
             curSearchSpaceType = searchSpaceTypes.get(0);
         }
         this.searchSpaceTypeCB.setSelectedItem(curSearchSpaceType);
+
+        MotifCollection curMotifCollection = (MotifCollection) this.motifCollectionCB.getSelectedItem();
+        final List<MotifCollection> motifCollections = speciesNomenclature.getMotifCollections(curSearchSpaceType);
+        this.motifCollectionCB.setMotifCollections(motifCollections);
+        if (!motifCollections.contains(curMotifCollection)) {
+            curMotifCollection = motifCollections.get(0);
+        }
+        this.motifCollectionCB.setSelectedItem(curMotifCollection);
+
+        TrackCollection curTrackCollection = (TrackCollection) this.trackCollectionCB.getSelectedItem();
+        final List<TrackCollection> trackCollections = speciesNomenclature.getTrackCollections(curSearchSpaceType);
+        this.trackCollectionCB.setTrackCollections(trackCollections);
+        if (!trackCollections.contains(curTrackCollection)) {
+            curTrackCollection = trackCollections.get(0);
+        }
+        this.trackCollectionCB.setSelectedItem(curTrackCollection);
 
         if (curMotifCollection.getCode().equals(MotifCollection.NONE.getCode())) {
             this.hasMotifCollection = false;

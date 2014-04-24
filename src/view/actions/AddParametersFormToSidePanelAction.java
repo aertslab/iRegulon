@@ -88,7 +88,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         }
         metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
 		tabbedPane.addTab("Predict regulators and targets", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
-        tabbedPane.addTab("Query cisTargetDB", null, metatargetomeForm, null);
+        tabbedPane.addTab("Query TF-target database", null, metatargetomeForm, null);
 
         cc.gridx = 0; cc.gridy = 1;
 		cc.gridwidth = 1; cc.gridheight = 1;

@@ -1,10 +1,12 @@
 <configuration>
     <motif-collections>
         <motif-collection id="v3">6383 PWMs</motif-collection>
+        <motif-collection id="v6">9713 PWMs</motif-collection>
     </motif-collections>
 
     <track-collections>
-        <track-collection id="v1">1120 ChIP-Seqs</track-collection>
+        <track-collection id="v1">1120 ChIP-seqs</track-collection>
+        <track-collection id="v2">750 ChIP-seqs</track-collection>
     </track-collections>
 
     <regulatory-region-delineations>
@@ -221,7 +223,7 @@
 
         <!-- ChIP-seq databases for genes -->
 
-        <database id="hg19_tss_up_500bp_chip">
+        <database id="hg19_tss_up_500bp_chip_v1">
             <name>500bp upstream (ChIP-seq-derived)</name>
             <collection type="track" refid="v1"/>
             <type>genes</type>
@@ -235,7 +237,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_5kb_chip">
+        <database id="hg19_tss_centered_5kb_chip_v1">
             <name>10kb centered around TSS (ChIP-seq-derived)</name>
             <collection type="track" refid="v1"/>
             <type>genes</type>
@@ -249,9 +251,52 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_10kb_chip">
+        <database id="hg19_tss_centered_10kb_chip_v1">
             <name>20kb centered around TSS (ChIP-seq-derived)</name>
             <collection type="track" refid="v1"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+        <database id="hg19_tss_up_500bp_chip_v2">
+            <name>500bp upstream (ChIP-seq-derived)</name>
+            <collection type="track" refid="v2"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg19_tss_centered_5kb_chip_v2">
+            <name>10kb centered around TSS (ChIP-seq-derived)</name>
+            <collection type="track" refid="v2"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered10kb"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg19_tss_centered_10kb_chip_v2">
+            <name>20kb centered around TSS (ChIP-seq-derived)</name>
+            <collection type="track" refid="v2"/>
             <type>genes</type>
 
             <species>hg19</species>

@@ -18,7 +18,7 @@
     <databases>
         <!-- Motif databases for genes -->
 
-        <database id="hg19_tss_centered_10kb_7sp">
+        <database id="hg19_tss_centered_10kb_7sp_mc_v3">
             <name>20kb centered around TSS (7 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -32,7 +32,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_10kb_10sp">
+        <database id="hg19_tss_centered_10kb_10sp_mc_v3">
             <name>20kb centered around TSS (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -46,7 +46,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_5kb_7sp">
+        <database id="hg19_tss_centered_5kb_7sp_mc_v3">
             <name>10kb centered around TSS (7 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -60,7 +60,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_5kb_10sp">
+        <database id="hg19_tss_centered_5kb_10sp_mc_v3">
             <name>10kb centered around TSS (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -74,7 +74,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_5kb_10sp_legacy">
+        <database id="hg19_tss_centered_5kb_10sp_legacy_mc_v3">
             <name>10kb centered around TSS (10 species, legacy)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -89,7 +89,7 @@
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
 
-        <database id="hg19_tss_up_500bp_7sp">
+        <database id="hg19_tss_up_500bp_7sp_mc_v3">
             <name>500bp upstream (7 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -103,7 +103,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_up_500bp_10sp">
+        <database id="hg19_tss_up_500bp_10sp_mc_v3">
             <name>500bp upstream (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -119,7 +119,7 @@
         </database>
 
 
-        <database id="mm9_tss_centered_10kb_7sp">
+        <database id="mm9_tss_centered_10kb_7sp_mc_v3">
             <name>20kb centered around TSS (7 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -133,7 +133,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="mm9_tss_centered_10kb_10sp">
+        <database id="mm9_tss_centered_10kb_10sp_mc_v3">
             <name>20kb centered around TSS (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -147,7 +147,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="mm9_tss_centered_10kb_10sp_legacy">
+        <database id="mm9_tss_centered_10kb_10sp_legacy_mc_v3">
             <name>20kb centered around TSS (10 species, legacy)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -162,7 +162,7 @@
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
 
-        <database id="mm9_tss_centered_5kb_7sp">
+        <database id="mm9_tss_centered_5kb_7sp_mc_v3">
             <name>10kb centered around TSS (7 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -176,7 +176,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="mm9_tss_centered_5kb_10sp">
+        <database id="mm9_tss_centered_5kb_10sp_mc_v3">
             <name>10kb centered around TSS (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -191,7 +191,7 @@
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
 
-        <database id="mm9_tss_up_500bp_7sp">
+        <database id="mm9_tss_up_500bp_7sp_mc_v3">
             <name>500bp upstream (7 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -205,7 +205,7 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="mm9_tss_up_500bp_10sp">
+        <database id="mm9_tss_up_500bp_10sp_mc_v3">
             <name>500bp upstream (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>genes</type>
@@ -366,7 +366,7 @@
         </database>
         -->
 
-        <database id="dm3_regions_pwm_11sp">
+        <database id="dm3_regions_pwm_11sp_mc_v3">
             <name>136K regions (11 species)</name>
             <collection type="motif" refid="v3"/>
             <type>regions</type>
@@ -388,7 +388,7 @@
                 <mapping id="dm3_symbol_up5kb_introns_legacy">5kb upstream and all introns (legacy)</mapping>
             </mappings>
         </database>
-        <database id="dm3_regions_pwm_11sp">
+        <database id="dm3_regions_pwm_11sp_mc_v3">
             <name>136K regions (11 species)</name>
             <collection type="motif" refid="v3"/>
             <type>regions</type>

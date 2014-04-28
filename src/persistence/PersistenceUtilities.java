@@ -84,15 +84,29 @@ public class PersistenceUtilities {
         /* iRegulon parameters. */
         results_tsv_builder.append("; Name\t" + results.getName() + "\n"
                 + "; Species and nomenclature\t" + results.getSpeciesNomenclature().toString() + "\n");
-        results_tsv_builder.append((hasMotifCollection) ? "; Motif collection\t" + results.getMotifCollection() + "\n" : "");
-        results_tsv_builder.append((hasTrackCollection) ? "; Track collection\t" + results.getTrackCollection() + "\n" : "");
+
+        if (hasMotifCollection) {
+            results_tsv_builder.append("; Motif collection\t" + results.getMotifCollection() + "\n");
+        }
+
+        if (hasTrackCollection) {
+            results_tsv_builder.append("; Track collection\t" + results.getTrackCollection() + "\n");
+        }
+
         results_tsv_builder.append("; Minimum NEScore\t" + results.getEScore() + "\n"
                 + "; Rank threshold for visualization\t" + results.getThresholdForVisualisation() + "\n"
-                + "; ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n"
-                + "; Minimum identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
-                + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n");
-        results_tsv_builder.append((hasMotifCollection) ? "; Motif rankings database\t" + results.getMotifRankingsDatabaseName() + "\n" : "");
-        results_tsv_builder.append((hasTrackCollection) ? "; Track rankings database\t" + results.getTrackRankingsDatabaseName() + "\n" : "");
+                + "; ROC threshold for AUC calculation (%)\t" + results.getROCthresholdAUC() + "\n");
+
+        if (hasMotifCollection) {
+            results_tsv_builder.append("; Minimum identity between orthologous genes\t" + results.getMinOrthologous() + "\n"
+                    + "; Maximum false discovery rate (FDR) on motif similarity\t" + results.getMaxMotifSimilarityFDR() + "\n"
+                    + "; Motif rankings database\t" + results.getMotifRankingsDatabaseName() + "\n");
+        }
+
+        if (hasTrackCollection) {
+            results_tsv_builder.append("; Track rankings database\t" + results.getTrackRankingsDatabaseName() + "\n");
+        }
+
         results_tsv_builder.append("; Number of valid nodes\t" + results.getGenes().size() + "\n"
                 + "; iRegulon version\t" + getBundle().getString("plugin_name_version_release") + "\n");
 

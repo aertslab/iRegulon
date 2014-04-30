@@ -16,9 +16,14 @@ public class PutativeRegulatoryRegionComboBox extends JComboBox {
         for (GenePutativeRegulatoryRegion region : regions) {
             addItem(region);
         }
-        if (regions.size() == 1) setSelectedItem(regions.get(0));
-        else if (regions.contains(curSelection)) setSelectedItem(curSelection);
-        else setSelectedItem(regions.get(0));
+
+        if (regions.size() == 1) {
+            setSelectedItem(regions.get(0));
+        } else if (regions.contains(curSelection)) {
+            setSelectedItem(curSelection);
+        } else {
+            setSelectedItem(regions.get(0));
+        }
 
         setEnabled(regions.size() != 1
                    || !(GenePutativeRegulatoryRegion.UNKNOWN.equals(regions.get(0))

@@ -33,8 +33,13 @@ public class SearchSpaceTypeComboBox extends JComboBox {
         for (RankingsDatabase.Type type: types) {
             addItem(type);
         }
-        if (types.size() == 1) setSelectedItem(types.get(0));
-        else if (types.contains(curSelection)) setSelectedItem(curSelection);
-        else setSelectedItem(types.get(0));
+
+        if (types.size() == 1) {
+            setSelectedItem(types.get(0));
+        } else if (types.contains(curSelection)) {
+            setSelectedItem(curSelection);
+        } else {
+            setSelectedItem(types.get(0));
+        }
     }
 }

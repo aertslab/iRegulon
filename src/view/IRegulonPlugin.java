@@ -128,14 +128,12 @@ public class IRegulonPlugin extends CytoscapePlugin {
                             "<p><b>Version:</b> " + bundle.getString("version") + "<br/>" +
                             "<b>Build ID:</b> " + bundle.getString("build_ID") + "<br/>" +
                             "<b>Released:</b> " + bundle.getString("release_date") + "<br/>" +
-                            "<b>Developers:</b> Koen Herten, Bram Van de Sande, Gert Hulselmans and Rekin's Janky." + "<br/>" +
-                            "<b>Copyright:</b> 2012-2013 KU Leuven." + "<br/>" +
+                            "<b>Developers:</b> Gert Hulselmans &amp; Rekin's Janky (&ge;0.97); Bram Van de Sande (&le;0.96); Koen Herten (&le;0.2)." + "<br/>" +
+                            "<b>Copyright:</b> 2012-2014 KU Leuven." + "<br/>" +
                             "<b>Website:</b> " + bundle.getString("website") + "<br/>" +
                             "<b>Download:</b> " + bundle.getString("download_page") + "<br/>" +
                             "<b>Contact:</b> " + bundle.getString("contact") + "<br/>" +
-                            "<b>Citation:</b> Rekin’s Janky, Annelien Verfaillie, Bram Van de Sande, Laura Standaert, Valerie Christiaens, Gert Hulselmans, Koen Herten, Marina Naval Sanchez, Delphine Potier, Dmitry\n" +
-                            "Svetlichnyy, Hana Imrichová, Zeynep Kalender Atak, Mark Fiers, Jean-Christophe Marine, and Stein Aerts. <u>Detection of cis-regulatory master regulators enables reverse\n" +
-                            "engineering human regulons from cancer gene signatures.</u> <i>Manuscript submitted.</i>" + "<br/>" +
+                            "<b>Citation:</b> Rekin’s Janky, Annelien Verfaillie, Bram Van de Sande, Laura Standaert, Valerie Christiaens, Gert Hulselmans, Koen Herten, Marina Naval Sanchez, Delphine Potier, Dmitry Svetlichnyy, Hana Imrichová, Zeynep Kalender Atak, Mark Fiers, Jean-Christophe Marine, and Stein Aerts. <u>iRegulon: from a gene list to a gene regulatory network using large motif and track collections.</u> <i>Manuscript under revision.</i>" + "<br/>" +
                             "<b>Comment:</b> A full version of the plugin including TRANSFAC Professional motifs (<a href=\"http://www.gene-regulation.com/pub/databases.html\">http://www.gene-regulation.com/pub/databases.html</a>) is provided from the website  " + bundle.getString("download_page") + ". To download the TRANSFAC PRO version, the user will need to have a valid subscription to TRANSFAC Professional." +
                             "</p>" +
                             "<h2>Software License Agreement (hereinafter \"Agreement\")</h2>" +

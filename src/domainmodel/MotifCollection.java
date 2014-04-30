@@ -15,9 +15,12 @@ public final class MotifCollection implements Comparable<MotifCollection> {
     public static MotifCollection NONE = new MotifCollection("none", "No motif collection");
     public static MotifCollection UNKNOWN = new MotifCollection("unknown", "Unknown motif collection");
 
+    public static MotifCollection defaultMotifCollection;
+
     private static final String GROUP_TAGNAME = "motif-collections";
     private static final String TAGNAME = "motif-collection";
     private static final String ATTRIBUTENAME = "id";
+    private static final String DEFAULT_ATTRIBUTE_NAME = "default";
 
     static {
         final Document document = Configuration.getDocument();
@@ -25,6 +28,9 @@ public final class MotifCollection implements Comparable<MotifCollection> {
             final String description = child.getTextContent().trim();
             final String code = child.getAttribute(ATTRIBUTENAME);
             CODE2COLLECTION.put(code, new MotifCollection(code, description));
+            if (child.hasAttribute(DEFAULT_ATTRIBUTE_NAME) && child.getAttribute(DEFAULT_ATTRIBUTE_NAME).toLowerCase().equals("true")) {
+                defaultMotifCollection = new MotifCollection(code, description);
+            }
         }
     }
 

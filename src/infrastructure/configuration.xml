@@ -1,11 +1,11 @@
 <configuration>
     <motif-collections>
         <motif-collection id="v3">6383 PWMs</motif-collection>
-        <motif-collection id="v6">9713 PWMs</motif-collection>
+        <motif-collection id="v6" default="true">9713 PWMs</motif-collection>
     </motif-collections>
 
     <track-collections>
-        <track-collection id="v1">1120 ChIP-seq tracks (ENCODE raw signals)</track-collection>
+        <track-collection id="v1" default="true">1120 ChIP-seq tracks (ENCODE raw signals)</track-collection>
         <track-collection id="v2">750 ChIP-seq tracks (ENCODE uniform signals)</track-collection>
     </track-collections>
 

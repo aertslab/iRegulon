@@ -17,8 +17,15 @@ public class TrackCollectionComboBox extends JComboBox {
         for (TrackCollection type: types) {
             addItem(type);
         }
-        if (types.size() == 1) setSelectedItem(types.get(0));
-        else if (types.contains(curSelection)) setSelectedItem(curSelection);
-        else setSelectedItem(types.get(0));
+
+        if (types.size() == 1) {
+            setSelectedItem(types.get(0));
+        } else if (types.contains(curSelection)) {
+            setSelectedItem(curSelection);
+        } else if (types.contains(TrackCollection.defaultTrackCollection)) {
+            setSelectedItem(TrackCollection.defaultTrackCollection);
+        } else {
+            setSelectedItem(types.get(0));
+        }
     }
 }

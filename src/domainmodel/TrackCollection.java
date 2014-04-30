@@ -18,9 +18,12 @@ public final class TrackCollection implements Comparable<TrackCollection> {
     public static TrackCollection NONE = new TrackCollection("none", "No track collection");
     public static TrackCollection UNKNOWN = new TrackCollection("unknown", "Unknown track collection");
 
+    public static TrackCollection defaultTrackCollection;
+
     private static final String GROUP_TAGNAME = "track-collections";
     private static final String TAGNAME = "track-collection";
     private static final String ATTRIBUTENAME = "id";
+    private static final String DEFAULT_ATTRIBUTE_NAME = "default";
 
     static {
         final Document document = Configuration.getDocument();
@@ -28,6 +31,9 @@ public final class TrackCollection implements Comparable<TrackCollection> {
             final String description = child.getTextContent().trim();
             final String code = child.getAttribute(ATTRIBUTENAME);
             CODE2COLLECTION.put(code, new TrackCollection(code, description));
+            if (child.hasAttribute(DEFAULT_ATTRIBUTE_NAME) && child.getAttribute(DEFAULT_ATTRIBUTE_NAME).toLowerCase().equals("true")) {
+                defaultTrackCollection = new TrackCollection(code, description);
+            }
         }
     }
 

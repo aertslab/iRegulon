@@ -502,7 +502,7 @@
 
         <!-- Motif databases for regions -->
         <!--
-        <database id="hg19_regions_all_10sp">
+        <database id="hg19_regions_all_10sp_mc_v3">
             <name>All regulatory features (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>regions</type>
@@ -521,7 +521,7 @@
                 <mapping id="hg19_hgnc_tss_centered_10kb">20kb centered around TSS</mapping>
             </mappings>
         </database>
-        <database id="hg19_regions_nodhs_10sp">
+        <database id="hg19_regions_nodhs_10sp_mc_v3">
             <name>No DHS features (10 species)</name>
             <collection type="motif" refid="v3"/>
             <type>regions</type>
@@ -541,7 +541,7 @@
             </mappings>
         </database>
 
-        <database id="hg19_tss_up500bp_down100bp_10sp_lncrnas">
+        <database id="hg19_tss_up500bp_down100bp_10sp_lncrnas_mc_v3">
             <name>lncRNAs (10 species, UCSC + ENSEMBL IDs)</name>
             <collection type="motif" refid="v3"/>
             <type>regions</type>

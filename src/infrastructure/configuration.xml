@@ -5,8 +5,8 @@
     </motif-collections>
 
     <track-collections>
-        <track-collection id="v1">1120 ChIP-seqs</track-collection>
-        <track-collection id="v2">750 ChIP-seqs</track-collection>
+        <track-collection id="v1">1120 ChIP-seq tracks (ENCODE raw signals)</track-collection>
+        <track-collection id="v2">750 ChIP-seq tracks (ENCODE uniform signals)</track-collection>
     </track-collections>
 
     <regulatory-region-delineations>

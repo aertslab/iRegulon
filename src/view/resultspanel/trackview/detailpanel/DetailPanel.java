@@ -29,7 +29,7 @@ import javax.swing.table.TableColumn;
 public class DetailPanel extends JPanel implements DetailPanelIF {
     private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("iRegulon");
     private static final String TRANSFAC_PREFIX = "transfac_pro-";
-    private static final String TRANSFAC_URL = BUNDLE.getString("transfac_pro_url");
+    private static final String TRANSFAC_URL = BUNDLE.getString("transfac_url");
 
 	private JTable targetGeneTable;
 	private LinkLabel jlbTrack;

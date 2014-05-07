@@ -35,7 +35,10 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     private JComboBox jcbSpecieAndNomenclature;
     private JTextField jtfROC;
     private JTextField jtfVisualisation;
+
+    private JLabel labelMinOrthologous;
     private JTextField jtfMinOrthologous;
+    private JLabel labelMaxMotifSimilarityFDR;
     private JTextField jtfMaxMotifSimilarityFDR;
     private MotifCollectionComboBox motifCollectionCB;
     private TrackCollectionComboBox trackCollectionCB;
@@ -120,9 +123,69 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         yPos += 1;
 
-        //Choose the database system
-        int lineY;
+        int lineY = 0;
 
+        GridBagLayout layoutNode = new GridBagLayout();
+        GridBagConstraints cNode = new GridBagConstraints();
+        JPanel panelNode = new JPanel(layoutNode);
+        TitledBorder borderNode = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Node information");
+        borderNode.setTitleJustification(TitledBorder.LEFT);
+        borderNode.setTitlePosition(TitledBorder.CENTER);
+        panelNode.setBorder(borderNode);
+        lineY = 0;
+
+        jtl = new JLabel("Node attribute that corresponds to geneID:");
+        jtl.setToolTipText("<html>Choose the node attribute that represents the gene name.</html>");
+
+        cNode.gridx = 0;
+        cNode.gridy = lineY;
+        cNode.gridwidth = 1;
+        cNode.weightx = 0;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
+        jtl.setVisible(true);
+        panelNode.add(jtl, cNode);
+
+        this.attributeNameCB = new JComboBox();
+        cNode.gridx = 1;
+        cNode.gridy = lineY;
+        cNode.gridwidth = 1;
+        cNode.weightx = 0.5;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
+        panelNode.add(this.attributeNameCB, cNode);
+        lineY += 1;
+
+
+        jtl = new JLabel("Number of selected genes (nodes):");
+        jtl.setToolTipText("<html>The number of selected nodes that have an ID usable for the analysis." + "<p>" +
+                "This does not mean that all nodes have valid names!</html>");
+        cNode.gridx = 0;
+        cNode.gridy = lineY;
+        cNode.gridwidth = 1;
+        cNode.weightx = 0;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
+        jtl.setVisible(true);
+        panelNode.add(jtl, cNode);
+
+        numberOfNodesTF = new JTextField("0");
+        numberOfNodesTF.setEditable(false);
+
+        cNode.gridx = 1;
+        cNode.gridy = lineY;
+        cNode.gridwidth = 1;
+        cNode.weightx = 0.5;
+        cNode.fill = GridBagConstraints.HORIZONTAL;
+        panelNode.add(numberOfNodesTF, cNode);
+        lineY += 1;
+
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 5;
+        cNode.weightx = 0.5;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(panelNode, cc);
+        yPos += 1;
+
+        //Choose the database system
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 5;
@@ -239,13 +302,13 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panel.add(panelRegion, cc);
         yPos += 1;
 
-        GridBagLayout layoutMotif = new GridBagLayout();
-        GridBagConstraints cMotif = new GridBagConstraints();
-        JPanel panelMotif = new JPanel(layoutMotif);
-        TitledBorder borderMotif = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Motif prediction");
-        borderMotif.setTitleJustification(TitledBorder.LEFT);
-        borderMotif.setTitlePosition(TitledBorder.CENTER);
-        panelMotif.setBorder(borderMotif);
+        GridBagLayout layoutRecovery = new GridBagLayout();
+        GridBagConstraints cRecovery = new GridBagConstraints();
+        JPanel panelRecovery = new JPanel(layoutRecovery);
+        TitledBorder borderRecovery = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Recovery");
+        borderRecovery.setTitleJustification(TitledBorder.LEFT);
+        borderRecovery.setTitlePosition(TitledBorder.CENTER);
+        panelRecovery.setBorder(borderRecovery);
         lineY = 0;
         // Escore
         /*
@@ -259,24 +322,24 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
          */
 
         jtl = new JLabel("Enrichment score threshold:");
-        cMotif.gridx = 0;
-        cMotif.gridy = lineY;
-        cMotif.gridwidth = 1;
-        cMotif.weightx = 0;
-        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        cRecovery.gridx = 0;
+        cRecovery.gridy = lineY;
+        cRecovery.gridwidth = 1;
+        cRecovery.weightx = 0;
+        cRecovery.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
         jtl.setToolTipText("<html>Choose the minimal score threshold to consider a motif as being relevant.</html>");
-        panelMotif.add(jtl, cMotif);
+        panelRecovery.add(jtl, cRecovery);
 
         this.jtfEscore = new JTextField(Float.toString(DEFAULT_NES_THRESHOLD));
         this.jtfEscore.setVisible(true);
-        cMotif.gridx = 1;
-        cMotif.gridy = lineY;
-        cMotif.gridwidth = 1;
-        cMotif.weightx = 0.5;
-        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        cRecovery.gridx = 1;
+        cRecovery.gridy = lineY;
+        cRecovery.gridwidth = 1;
+        cRecovery.weightx = 0.5;
+        cRecovery.fill = GridBagConstraints.HORIZONTAL;
         this.jtfEscore.setVisible(true);
-        panelMotif.add(this.jtfEscore, cMotif);
+        panelRecovery.add(this.jtfEscore, cRecovery);
         lineY += 1;
 
         // ROCthresholdAUC
@@ -292,24 +355,24 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         jtl.setToolTipText("<html>The x-axis (region rank) cut-off at which to calculate the Area Under the Curve. This <br/>" +
                 "measure is used to compare and rank all motifs. </html>");
 
-        cMotif.gridx = 0;
-        cMotif.gridy = lineY;
-        cMotif.gridwidth = 1;
-        cMotif.weightx = 0;
-        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        cRecovery.gridx = 0;
+        cRecovery.gridy = lineY;
+        cRecovery.gridwidth = 1;
+        cRecovery.weightx = 0;
+        cRecovery.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
-        panelMotif.add(jtl, cMotif);
+        panelRecovery.add(jtl, cRecovery);
 
         this.jtfROC = new JTextField(Float.toString(DEFAULT_ROC_THRESHOLD));
         this.jtfROC.setEditable(true);
 
-        cMotif.gridx = 1;
-        cMotif.gridy = lineY;
-        cMotif.gridwidth = 1;
-        cMotif.weightx = 0.5;
-        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        cRecovery.gridx = 1;
+        cRecovery.gridy = lineY;
+        cRecovery.gridwidth = 1;
+        cRecovery.weightx = 0.5;
+        cRecovery.fill = GridBagConstraints.HORIZONTAL;
         this.jtfROC.setVisible(true);
-        panelMotif.add(this.jtfROC, cMotif);
+        panelRecovery.add(this.jtfROC, cRecovery);
         lineY += 1;
 
         // threshold for visualisation
@@ -324,31 +387,31 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         jtl = new JLabel("Rank threshold:");
         jtl.setToolTipText("<html>The x-axis cut-off for calculation of the ROC.</html>");
 
-        cMotif.gridx = 0;
-        cMotif.gridy = lineY;
-        cMotif.gridwidth = 1;
-        cMotif.weightx = 0;
-        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        cRecovery.gridx = 0;
+        cRecovery.gridy = lineY;
+        cRecovery.gridwidth = 1;
+        cRecovery.weightx = 0;
+        cRecovery.fill = GridBagConstraints.HORIZONTAL;
         jtl.setVisible(true);
-        panelMotif.add(jtl, cMotif);
+        panelRecovery.add(jtl, cRecovery);
 
         this.jtfVisualisation = new JTextField(Integer.toString(DEFAULT_RANK_THRESHOLD));
         this.jtfVisualisation.setEditable(true);
 
-        cMotif.gridx = 1;
-        cMotif.gridy = lineY;
-        cMotif.gridwidth = 1;
-        cMotif.weightx = 0.5;
-        cMotif.fill = GridBagConstraints.HORIZONTAL;
+        cRecovery.gridx = 1;
+        cRecovery.gridy = lineY;
+        cRecovery.gridwidth = 1;
+        cRecovery.weightx = 0.5;
+        cRecovery.fill = GridBagConstraints.HORIZONTAL;
         this.jtfVisualisation.setVisible(true);
-        panelMotif.add(this.jtfVisualisation, cMotif);
+        panelRecovery.add(this.jtfVisualisation, cRecovery);
         lineY += 1;
 
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 5;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(panelMotif, cc);
+        panel.add(panelRecovery, cc);
         yPos += 1;
 
         //Minimal Orthologous id
@@ -363,66 +426,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.gridwidth = 5;
         cc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(createMotif2TFSubPanel(), cc);
-        yPos += 1;
-
-        GridBagLayout layoutNode = new GridBagLayout();
-        GridBagConstraints cNode = new GridBagConstraints();
-        JPanel panelNode = new JPanel(layoutNode);
-        TitledBorder borderNode = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Node information");
-        borderNode.setTitleJustification(TitledBorder.LEFT);
-        borderNode.setTitlePosition(TitledBorder.CENTER);
-        panelNode.setBorder(borderNode);
-        lineY = 0;
-
-        jtl = new JLabel("Node attribute that corresponds to geneID:");
-        jtl.setToolTipText("<html>Choose the node attribute that represents the gene name.</html>");
-
-        cNode.gridx = 0;
-        cNode.gridy = lineY;
-        cNode.gridwidth = 1;
-        cNode.weightx = 0;
-        cNode.fill = GridBagConstraints.HORIZONTAL;
-        jtl.setVisible(true);
-        panelNode.add(jtl, cNode);
-
-        this.attributeNameCB = new JComboBox();
-        cNode.gridx = 1;
-        cNode.gridy = lineY;
-        cNode.gridwidth = 1;
-        cNode.weightx = 0.5;
-        cNode.fill = GridBagConstraints.HORIZONTAL;
-        panelNode.add(this.attributeNameCB, cNode);
-        lineY += 1;
-
-
-        jtl = new JLabel("Number of valid genes (nodes):");
-        jtl.setToolTipText("<html>The number of nodes that have an ID usable for the analysis." + "<P>" +
-                "This doesn't mean that all nodes have valid names! </html>");
-        cNode.gridx = 0;
-        cNode.gridy = lineY;
-        cNode.gridwidth = 1;
-        cNode.weightx = 0;
-        cNode.fill = GridBagConstraints.HORIZONTAL;
-        jtl.setVisible(true);
-        panelNode.add(jtl, cNode);
-
-        numberOfNodesTF = new JTextField("0");
-        numberOfNodesTF.setEditable(false);
-
-        cNode.gridx = 1;
-        cNode.gridy = lineY;
-        cNode.gridwidth = 1;
-        cNode.weightx = 0.5;
-        cNode.fill = GridBagConstraints.HORIZONTAL;
-        panelNode.add(numberOfNodesTF, cNode);
-        lineY += 1;
-
-        cc.gridx = 0;
-        cc.gridy = yPos;
-        cc.gridwidth = 5;
-        cNode.weightx = 0.5;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(panelNode, cc);
         yPos += 1;
 
         final JPanel mainPanel = new JPanel(new BorderLayout());
@@ -460,14 +463,14 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
 
         this.dbListener = new DatabaseListener(this.jobNameTF,
-                this.jtfEscore, this.jtfROC, this.jtfVisualisation,
-                this.jtfMinOrthologous, this.jtfMaxMotifSimilarityFDR,
-                this.jcbSpecieAndNomenclature, this.motifCollectionCB, this.trackCollectionCB,
-                this.genePutativeRegulatoryRegionCB,
-                this.searchSpaceTypeCB, this.motifRankingsDatabaseCB, this.trackRankingsDatabaseCB,
-                overlapJtl, this.txtOverlap, rbtnDelineation, this.jcbDelation, rbtnConversion,
-                this.txtUpStream, labelUp, this.txtDownStream, labelDown, this.attributeNameCB, numberOfNodesTF,
-                submitButton);
+                this.jtfEscore, this.jtfROC, this.jtfVisualisation, this.labelMinOrthologous,
+                this.jtfMinOrthologous, this.labelMaxMotifSimilarityFDR,
+                this.jtfMaxMotifSimilarityFDR, this.jcbSpecieAndNomenclature,
+                this.motifCollectionCB,
+                this.trackCollectionCB, this.genePutativeRegulatoryRegionCB, this.searchSpaceTypeCB,
+                this.motifRankingsDatabaseCB, this.trackRankingsDatabaseCB, overlapJtl, this.txtOverlap, rbtnDelineation,
+                this.jcbDelation, rbtnConversion, this.txtUpStream, labelUp, this.txtDownStream, labelDown,
+                this.attributeNameCB, numberOfNodesTF, submitButton);
         registerListeners();
 
         return mainPanel;
@@ -541,12 +544,37 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     private JPanel createDatabaseSubPanel() {
         final GridBagConstraints cc = new GridBagConstraints();
         final JPanel panel = new JPanel(new GridBagLayout());
-        final TitledBorder border = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Database");
+        final TitledBorder border = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Ranking");
         border.setTitleJustification(TitledBorder.LEFT);
         border.setTitlePosition(TitledBorder.CENTER);
         panel.setBorder(border);
 
         int yPos = 0;
+
+        final JLabel typeLB = new JLabel("Type of search space:");
+        typeLB.setToolTipText("Choose the type of search space to use in the analysis.");
+        cc.gridx = 0;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.LINE_START;
+        cc.fill = GridBagConstraints.NONE;
+        panel.add(typeLB, cc);
+
+        this.searchSpaceTypeCB = new SearchSpaceTypeComboBox();
+        cc.gridx = 1;
+        cc.gridy = yPos;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
+        cc.anchor = GridBagConstraints.CENTER;
+        cc.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(this.searchSpaceTypeCB, cc);
+
+        yPos += 1;
 
         final JLabel motifCollectionLB = new JLabel("Motif collection:");
         motifCollectionLB.setToolTipText("Choose the motif collection to use in the enrichment analysis.");
@@ -595,31 +623,6 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cc.anchor = GridBagConstraints.CENTER;
         cc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(trackCollectionCB, cc);
-
-        yPos += 1;
-
-        final JLabel typeLB = new JLabel("Type of search space:");
-        typeLB.setToolTipText("Choose the type of search space to use in the analysis.");
-        cc.gridx = 0;
-        cc.gridy = yPos;
-        cc.gridwidth = 1;
-        cc.gridheight = 1;
-        cc.weightx = 0.0;
-        cc.weighty = 0.0;
-        cc.anchor = GridBagConstraints.LINE_START;
-        cc.fill = GridBagConstraints.NONE;
-        panel.add(typeLB, cc);
-
-        this.searchSpaceTypeCB = new SearchSpaceTypeComboBox();
-        cc.gridx = 1;
-        cc.gridy = yPos;
-        cc.gridwidth = 1;
-        cc.gridheight = 1;
-        cc.weightx = 1.0;
-        cc.weighty = 0.0;
-        cc.anchor = GridBagConstraints.CENTER;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(this.searchSpaceTypeCB, cc);
 
         yPos += 1;
 
@@ -709,8 +712,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panelMotif2TF.setBorder(borderMotif2TF);
         int lineY = 0;
 
-        JLabel jtl = new JLabel("Minimum identity between orthologous genes:");
-        jtl.setToolTipText("<html>Choose the minimum identity between orthologous genes.<br/>" +
+        this.labelMinOrthologous = new JLabel("Minimum identity between orthologous genes:");
+        this.labelMinOrthologous.setToolTipText("<html>Choose the minimum identity between orthologous genes.<br/>" +
                 "How closer to 0, how more orthologous the transcription factor will be to the gene for which an enriched motif was found.<br/>" +
                 "(Value must be between 0 and 1).</html>");
         cMotif2TF.gridx = 0;
@@ -718,8 +721,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cMotif2TF.gridwidth = 1;
         cMotif2TF.weightx = 0;
         cMotif2TF.fill = GridBagConstraints.HORIZONTAL;
-        jtl.setVisible(true);
-        panelMotif2TF.add(jtl, cMotif2TF);
+        this.labelMinOrthologous.setVisible(true);
+        panelMotif2TF.add(this.labelMinOrthologous, cMotif2TF);
 
         this.jtfMinOrthologous = new JTextField(Float.toString(DEFAULT_MIN_ORTHOLOGOUS_IDENTITY));
         this.jtfMinOrthologous.setEditable(true);
@@ -739,8 +742,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 		 * 		SS
 		 * SSSSSSS
 		 */
-        jtl = new JLabel("Maximum false discovery rate (FDR) on motif similarity:");
-        jtl.setToolTipText("<html>Choose the Maximum false discovery rate (FDR) on motif similarity.<br/>" +
+        this.labelMaxMotifSimilarityFDR = new JLabel("Maximum false discovery rate (FDR) on motif similarity:");
+        this.labelMaxMotifSimilarityFDR.setToolTipText("<html>Choose the Maximum false discovery rate (FDR) on motif similarity.<br/>" +
                 "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +
                 "(Value must be between 0 and 1).</html>");
         cMotif2TF.gridx = 0;
@@ -748,8 +751,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         cMotif2TF.gridwidth = 1;
         cMotif2TF.weightx = 0;
         cMotif2TF.fill = GridBagConstraints.HORIZONTAL;
-        jtl.setVisible(true);
-        panelMotif2TF.add(jtl, cMotif2TF);
+        this.labelMaxMotifSimilarityFDR.setVisible(true);
+        panelMotif2TF.add(this.labelMaxMotifSimilarityFDR, cMotif2TF);
 
         this.jtfMaxMotifSimilarityFDR = new JTextField(Float.toString(DEFAULT_MAX_MOTIF_SIMILARITY_FDR));
         this.jtfMaxMotifSimilarityFDR.setEditable(true);

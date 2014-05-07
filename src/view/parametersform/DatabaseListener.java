@@ -21,7 +21,9 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
     private final JTextField txtEscore;
     private final JTextField txtAUCvalue;
     private final JTextField txtVisualisation;
+    private final JLabel labelMinOrthologous;
     private final JTextField txtMinOrthologous;
+    private final JLabel labelMaxSimilarity;
     private final JTextField txtMaxSimilarity;
 
     private final JComboBox speciesNomenclatureCB;
@@ -56,7 +58,9 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
                             JTextField txtEscore,
                             JTextField txtAUCvalue,
                             JTextField txtVisualisation,
+                            JLabel labelMinOrthologous,
                             JTextField txtMinOrthologous,
+                            JLabel labelMaxSimilarity,
                             JTextField txtMaxSimilarity,
                             JComboBox speciesNomenclatureCB,
                             MotifCollectionComboBox motifCollectionCB,
@@ -81,7 +85,9 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
         this.txtEscore = txtEscore;
         this.txtAUCvalue = txtAUCvalue;
         this.txtVisualisation = txtVisualisation;
+        this.labelMinOrthologous = labelMinOrthologous;
         this.txtMinOrthologous = txtMinOrthologous;
+        this.labelMaxSimilarity = labelMaxSimilarity;
         this.txtMaxSimilarity = txtMaxSimilarity;
         this.speciesNomenclatureCB = speciesNomenclatureCB;
         this.searchSpaceTypeCB = jcbBased;
@@ -317,8 +323,19 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
             }
             this.motifRankingsDatabaseCB.setEnabled(true);
 
+            /* Allow setting of TF prediction related settings. */
+            this.labelMaxSimilarity.setEnabled(true);
+            this.txtMaxSimilarity.setEnabled(true);
+            this.labelMinOrthologous.setEnabled(true);
+            this.txtMinOrthologous.setEnabled(true);
         } else {
             this.motifRankingsDatabaseCB.setEnabled(false);
+
+            /* Disallow setting of TF prediction related settings. */
+            this.labelMaxSimilarity.setEnabled(false);
+            this.txtMaxSimilarity.setEnabled(false);
+            this.labelMinOrthologous.setEnabled(false);
+            this.txtMinOrthologous.setEnabled(false);
         }
 
         if (this.hasTrackCollection) {

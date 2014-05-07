@@ -10,20 +10,20 @@ Article 1 - Definitions
 -----------------------
 
 1.1 "Software" shall mean the iRegulon Cytoscape plugin as available on the
-    website http://med.kuleuven.be/lcb/iRegulon and via the Cytoscape App Store
-    as jar file. The software that you install is the client of a client-server
+    website http://iregulon.aertslab.org and via the Cytoscape App Store as
+    jar file. The software that you install is the client of a client-server
     system whereby the client sends a request to a web server (for example,
     running at the KU Leuven). The request consists of a list of genes
     (i.e., a list of nodes in a Cytoscape network), along with parameters.
-    The client receives the results of the motif discovery and motif2TF mapping
-    as a table with motifs, candidate transcription factors, and predicted
-    target genes. These results can be used to 'annotate' the active Cytoscape
-    networks, and can be saved as text or xml format.
+    The client receives the results of the motif/track discovery and motif2TF
+    mapping as a table with motifs, tracks, candidate transcription factors, and
+    predicted target genes. These results can be used to 'annotate' the active
+    Cytoscape networks, and can be saved as text or irf format.
 
 1.2 "Effective Date" shall mean the date on which you download or install the
-    iRegulon Cytoscape plugin (as available on
-    http://med.kuleuven.be/lcb/iRegulon and via the Cytoscape App store) on
-    your system and which provide you access to the iRegulon webapplication.
+    iRegulon Cytoscape plugin (as available on http://iregulon.aertslab.org and
+    via the Cytoscape App store) on your system and which provide you access to
+    the iRegulon webapplication.
 
 1.3 "Non-commercial User" shall mean a person using the Software for
     non-commercial research purposes on its own behalf or on behalf of a legal
@@ -87,7 +87,7 @@ Article 6 - Warranty
 --------------------
 
 6.1 The Software is provided "as is" by KU LEUVEN without warranty of any kind,
-    whether express or implied.  KU LEUVEN specifically disclaims the implied
+    whether express or implied. KU LEUVEN specifically disclaims the implied
     warranties of merchantability and fitness for a particular purpose or that
     the use of the Software will not infringe any patents, copyrights or
     trademarks or other rights of third parties. The entire risk as to the
@@ -149,15 +149,22 @@ the courts of Leuven and Belgian Law shall be applicable.
 Publication
 ===========
 
-The Academic User shall acknowledge KU Leuven as the provider of software and shall include a reference to Rekin's
-Janky, Annelien Verfaillie, Bram Van de Sande, Valerie Christiaens, Laura Standaerdt, Gert Hulselmans, Koen Herten,
-Zeynep Kalender, Jean-Christophe Marine, and Stein Aerts. iRegulon: Sequence-based Discovery of Human Regulons.
-Manuscript in preparation; in any manuscript describing data obtained using Licensed Software.
+The Academic User shall acknowledge KU Leuven as the provider of software and
+shall include a reference to Rekin’s Janky, Annelien Verfaillie, Bram Van de
+Sande, Laura Standaert, Valerie Christiaens, Gert Hulselmans, Koen Herten,
+Marina Naval Sanchez, Delphine Potier, Dmitry Svetlichnyy, Hana Imrichová,
+Zeynep Kalender Atak, Mark Fiers, Jean-Christophe Marine, and Stein Aerts.
+iRegulon: from a gene list to a gene regulatory network using large motif and
+track collections. Manuscript under revision; in any manuscript describing data
+obtained using Licensed Software.
 
 Citation
 ========
 
-Rekin's Janky, Annelien Verfaillie, Bram Van de Sande, Valerie Christiaens, Laura Standaerdt, Gert Hulselmans, Koen
-Herten, Zeynep Kalender, Jean-Christophe Marine, and Stein Aerts. iRegulon: Sequence-based Discovery of Human Regulons.
-Manuscript submitted.
+Rekin’s Janky, Annelien Verfaillie, Bram Van de Sande, Laura Standaert, Valerie
+Christiaens, Gert Hulselmans, Koen Herten, Marina Naval Sanchez, Delphine
+Potier, Dmitry Svetlichnyy, Hana Imrichová, Zeynep Kalender Atak, Mark Fiers,
+Jean-Christophe Marine, and Stein Aerts. iRegulon: from a gene list to a gene
+regulatory network using large motif and track collections.
+Manuscript under revision.
 

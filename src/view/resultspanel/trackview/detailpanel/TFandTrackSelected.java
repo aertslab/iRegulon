@@ -1,6 +1,6 @@
 package view.resultspanel.trackview.detailpanel;
 
-import domainmodel.InputParameters;
+import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Track;
 import domainmodel.TranscriptionFactor;
 
@@ -8,12 +8,12 @@ public class TFandTrackSelected {
 
     private Track track;
     private TranscriptionFactor tf;
-    private InputParameters input;
+    private PredictRegulatorsParameters predictRegulatorsParameters;
 
-    public TFandTrackSelected(InputParameters input) {
+    public TFandTrackSelected(PredictRegulatorsParameters predictRegulatorsParameters) {
         this.track = null;
         this.tf = null;
-        this.input = input;
+        this.predictRegulatorsParameters = predictRegulatorsParameters;
     }
 
 
@@ -33,8 +33,8 @@ public class TFandTrackSelected {
         this.tf = tf;
     }
 
-    public InputParameters getInput() {
-        return this.input;
+    public PredictRegulatorsParameters getPredictRegulatorsParameters() {
+        return this.predictRegulatorsParameters;
     }
 
 }

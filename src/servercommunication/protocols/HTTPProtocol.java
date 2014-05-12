@@ -43,32 +43,32 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
      * @throws servercommunication.ServerCommunicationException
      *
      */
-    public int sentJob(InputParameters input) throws ServerCommunicationException {
-        String name = input.getName();
-        Collection<GeneIdentifier> geneIDs = input.getGenes();
-        float AUCThreshold = input.getROCthresholdAUC();
-        int rankThreshold = input.getThresholdForVisualisation();
-        float NESThreshold = input.getEScore();
-        float minOrthologous = input.getMinOrthologous();
-        float maxMotifSimilarityFDR = input.getMaxMotifSimilarityFDR();
+    public int sentJob(PredictRegulatorsParameters predictRegulatorsParameters) throws ServerCommunicationException {
+        String name = predictRegulatorsParameters.getName();
+        Collection<GeneIdentifier> geneIDs = predictRegulatorsParameters.getGenes();
+        float AUCThreshold = predictRegulatorsParameters.getROCthresholdAUC();
+        int rankThreshold = predictRegulatorsParameters.getThresholdForVisualisation();
+        float NESThreshold = predictRegulatorsParameters.getEScore();
+        float minOrthologous = predictRegulatorsParameters.getMinOrthologous();
+        float maxMotifSimilarityFDR = predictRegulatorsParameters.getMaxMotifSimilarityFDR();
 
-        boolean isRegionBased = input.isRegionBased();
+        boolean isRegionBased = predictRegulatorsParameters.isRegionBased();
         String motifRankingsDatabase;
-        if (input.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
+        if (predictRegulatorsParameters.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
             motifRankingsDatabase = "none";
         } else {
-            motifRankingsDatabase = input.getMotifRankingsDatabase().getCode();
+            motifRankingsDatabase = predictRegulatorsParameters.getMotifRankingsDatabase().getCode();
         }
         String trackRankingsDatabase;
-        if (input.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
+        if (predictRegulatorsParameters.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
             trackRankingsDatabase = "none";
         } else {
-            trackRankingsDatabase = input.getTrackRankingsDatabase().getCode();
+            trackRankingsDatabase = predictRegulatorsParameters.getTrackRankingsDatabase().getCode();
         }
-        float overlap = input.getOverlap();
-        String delineation = input.getDelineation().getCode();
-        int upstream = input.getUpstream();
-        int downstream = input.getDownstream();
+        float overlap = predictRegulatorsParameters.getOverlap();
+        String delineation = predictRegulatorsParameters.getDelineation().getCode();
+        int upstream = predictRegulatorsParameters.getUpstream();
+        int downstream = predictRegulatorsParameters.getDownstream();
 
         try {
             /* Creating the data to send as a POST request. */
@@ -284,22 +284,22 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     }
 
     /**
-     * @param input
+     * @param predictRegulatorsParameters
      * @param jobID the id of the job
      * @return a collection of Motifs
      */
-    public Collection<AbstractMotifAndTrack> getMotifsAndTracks(InputParameters input, int jobID) throws ServerCommunicationException {
+    public Collection<AbstractMotifAndTrack> getMotifsAndTracks(PredictRegulatorsParameters predictRegulatorsParameters, int jobID) throws ServerCommunicationException {
         String motifRankingsDatabase;
-        if (input.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
+        if (predictRegulatorsParameters.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
             motifRankingsDatabase = "none";
         } else {
-            motifRankingsDatabase = input.getMotifRankingsDatabase().getCode();
+            motifRankingsDatabase = predictRegulatorsParameters.getMotifRankingsDatabase().getCode();
         }
         String trackRankingsDatabase;
-        if (input.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
+        if (predictRegulatorsParameters.getTrackCollection().equals(TrackCollection.NONE.getDescription())) {
             trackRankingsDatabase = "none";
         } else {
-            trackRankingsDatabase = input.getTrackRankingsDatabase().getCode();
+            trackRankingsDatabase = predictRegulatorsParameters.getTrackRankingsDatabase().getCode();
         }
 
         Collection<AbstractMotifAndTrack> motifsAndTracks = new ArrayList<AbstractMotifAndTrack>();

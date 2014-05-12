@@ -1,6 +1,6 @@
 package view.resultspanel.motifview.detailpanel;
 
-import domainmodel.InputParameters;
+import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Motif;
 import domainmodel.TranscriptionFactor;
 
@@ -8,12 +8,12 @@ public class TFandMotifSelected {
 
     private Motif motif;
     private TranscriptionFactor tf;
-    private InputParameters input;
+    private PredictRegulatorsParameters predictRegulatorsParameters;
 
-    public TFandMotifSelected(InputParameters input) {
+    public TFandMotifSelected(PredictRegulatorsParameters predictRegulatorsParameters) {
         this.motif = null;
         this.tf = null;
-        this.input = input;
+        this.predictRegulatorsParameters = predictRegulatorsParameters;
     }
 
 
@@ -33,8 +33,8 @@ public class TFandMotifSelected {
         this.tf = tf;
     }
 
-    public InputParameters getInput() {
-        return this.input;
+    public PredictRegulatorsParameters getPredictRegulatorsParameters() {
+        return this.predictRegulatorsParameters;
     }
 
 }

@@ -45,9 +45,9 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     private ListSelectionListener selectedMotifListener;
     private MouseListener popupMouseListener;
 
-    public DetailPanel(InputParameters input) {
+    public DetailPanel(PredictRegulatorsParameters predictRegulatorsParameters) {
         super();
-        this.tfMotif = new TFandMotifSelected(input);
+        this.tfMotif = new TFandMotifSelected(predictRegulatorsParameters);
         this.updateHLCR = new NetworkMembershipSupport();
 
         this.setLayout(new GridBagLayout());

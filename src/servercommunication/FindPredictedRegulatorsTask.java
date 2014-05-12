@@ -3,7 +3,7 @@ package servercommunication;
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import domainmodel.AbstractMotifAndTrack;
-import domainmodel.InputParameters;
+import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Motif;
 import domainmodel.Track;
 import infrastructure.Logger;
@@ -29,11 +29,11 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
     private Protocol service;
     private String errorMessage = "";
 
-    private InputParameters input;
+    private PredictRegulatorsParameters predictRegulatorsParameters;
 
-    public FindPredictedRegulatorsTask(Protocol service, InputParameters input) {
+    public FindPredictedRegulatorsTask(Protocol service, PredictRegulatorsParameters predictRegulatorsParameters) {
         this.service = service;
-        this.input = input;
+        this.predictRegulatorsParameters = predictRegulatorsParameters;
     }
 
     public void halt() {
@@ -56,7 +56,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
             taskMonitor.setStatus("Starting request.");
             taskMonitor.setPercentCompleted(0);
 
-            final int jobID = service.sentJob(input);
+            final int jobID = service.sentJob(predictRegulatorsParameters);
 
             if (jobID < 0) {
                 interrupt("Invalid job ID received from server.");
@@ -113,7 +113,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
             if (State.FINISHED.equals(this.state)) {
                 taskMonitor.setStatus("Receiving analysis results.");
                 this.errorMessage = "";
-                this.motifsAndTracks = service.getMotifsAndTracks(input, jobID);
+                this.motifsAndTracks = service.getMotifsAndTracks(predictRegulatorsParameters, jobID);
 
                 for (AbstractMotifAndTrack motifOrTrack : this.motifsAndTracks) {
                     if (motifOrTrack.isMotif()) {

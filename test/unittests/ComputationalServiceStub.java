@@ -11,7 +11,7 @@ import java.util.List;
 public class ComputationalServiceStub implements ComputationalService {
 
     @Override
-    public List<Motif> findPredictedRegulators(InputParameters input) {
+    public List<Motif> findPredictedRegulators(PredictRegulatorsParameters predictRegulatorsParameters) {
 
 
         //String[] proteinen = {"603627", "603626", "555135", "603627", "603627"};

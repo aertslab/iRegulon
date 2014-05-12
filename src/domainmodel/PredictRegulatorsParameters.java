@@ -5,7 +5,7 @@ import view.parametersform.IRegulonType;
 import java.util.Collection;
 
 
-public class InputParameters {
+public class PredictRegulatorsParameters {
 
 
     /* All input variables */
@@ -33,12 +33,12 @@ public class InputParameters {
     private final String attributeName;
 
 
-    public InputParameters(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC,
-                           int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
-                           IRegulonType iRegulonType, String runName, String motifCollection, String trackCollection,
-                           float minOrthologous, float maxMotifSimilarityFDR, boolean isRegionBased,
-                           RankingsDatabase motifRankingsDatabase, RankingsDatabase trackRankingsDatabase,
-                           float overlap, Delineation delineation, int upstream, int downstream, String attributeName) {
+    public PredictRegulatorsParameters(Collection<GeneIdentifier> genes, float escore, float ROCthresholdAUC,
+                                       int visualisationThreshold, SpeciesNomenclature speciesNomenclature,
+                                       IRegulonType iRegulonType, String runName, String motifCollection, String trackCollection,
+                                       float minOrthologous, float maxMotifSimilarityFDR, boolean isRegionBased,
+                                       RankingsDatabase motifRankingsDatabase, RankingsDatabase trackRankingsDatabase,
+                                       float overlap, Delineation delineation, int upstream, int downstream, String attributeName) {
         this.genes = genes;
         this.eScore = escore;
         this.thresholdForVisualisation = visualisationThreshold;

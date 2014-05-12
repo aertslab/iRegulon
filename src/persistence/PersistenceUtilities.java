@@ -23,7 +23,7 @@ public class PersistenceUtilities {
         xstream.alias("candidateTargetGene", CandidateTargetGene.class);
         xstream.alias("geneIdentifier", GeneIdentifier.class);
         xstream.alias("transcriptionFactor", TranscriptionFactor.class);
-        xstream.alias("inputParameters", InputParameters.class);
+        xstream.alias("predictRegulatorsParameters", PredictRegulatorsParameters.class);
         xstream.alias("iRegulonType", IRegulonType.class);
         xstream.omitField(CandidateTargetGene.class, "numberOfMotifs");
         xstream.omitField(TranscriptionFactor.class, "motifs");
@@ -46,16 +46,16 @@ public class PersistenceUtilities {
         xstream.alias("candidateTargetGene", CandidateTargetGene.class);
         xstream.alias("geneIdentifier", GeneIdentifier.class);
         xstream.alias("transcriptionFactor", TranscriptionFactor.class);
-        xstream.alias("inputParameters", InputParameters.class);
+        xstream.alias("predictRegulatorsParameters", PredictRegulatorsParameters.class);
         xstream.alias("iRegulonType", IRegulonType.class);
         xstream.registerConverter(new SpeciesNomenclatureConverter());
 
-        xstream.aliasField("cisCisTargetType", InputParameters.class, "iRegulonType");
+        xstream.aliasField("cisCisTargetType", PredictRegulatorsParameters.class, "iRegulonType");
 
         xstream.omitField(Motif.class, "jobID");
         xstream.omitField(CandidateTargetGene.class, "numberOfMotifs");
         xstream.omitField(TranscriptionFactor.class, "motifs");
-        xstream.aliasField("parameters", Results.class, "inputParameters");
+        xstream.aliasField("parameters", Results.class, "predictRegulatorsParameters");
         xstream.aliasField("enrichedMotifID", Motif.class, "name");
         xstream.aliasField("minOrthologous", TranscriptionFactor.class, "minOrthologousIdentity");
 

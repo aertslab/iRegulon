@@ -4,7 +4,7 @@ import cytoscape.Cytoscape;
 import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.AbstractMotifAndTrack;
-import domainmodel.InputParameters;
+import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Results;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
@@ -37,21 +37,21 @@ public class PredictRegulatorsAction extends ResourceAction {
 
     @Override
 	public void actionPerformed(ActionEvent event) {
-        final InputParameters input = this.parameters.deriveParameters();
-        if (!input.getIRegulonType().equals(IRegulonType.PREDICTED_REGULATORS)) {
+        final PredictRegulatorsParameters predictRegulatorsParameters = this.parameters.deriveParameters();
+        if (!predictRegulatorsParameters.getIRegulonType().equals(IRegulonType.PREDICTED_REGULATORS)) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "This option is not yet implemented.");
             return;
         }
 
         final List<AbstractMotifAndTrack> motifsAndTracks;
         try {
-            motifsAndTracks = service.findPredictedRegulators(input);
+            motifsAndTracks = service.findPredictedRegulators(predictRegulatorsParameters);
         } catch (ServerCommunicationException e) {
             JOptionPane.showMessageDialog(Cytoscape.getDesktop(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if (! motifsAndTracks.isEmpty()) {
-            final ResultsView outputView = new ResultsView(input.getName(), new Results(motifsAndTracks, input));
+            final ResultsView outputView = new ResultsView(predictRegulatorsParameters.getName(), new Results(motifsAndTracks, predictRegulatorsParameters));
             final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
             panel.setState(CytoPanelState.DOCK);
             outputView.addToPanel(panel);

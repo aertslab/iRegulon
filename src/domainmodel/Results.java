@@ -8,9 +8,9 @@ import java.util.*;
 public class Results {
     private final List<Motif> motifs;
     private final List<Track> tracks;
-    private final InputParameters inputParameters;
+    private final PredictRegulatorsParameters predictRegulatorsParameters;
 
-    public Results(final Collection<AbstractMotifAndTrack> motifsAndTracks, final InputParameters inputParameters) {
+    public Results(final Collection<AbstractMotifAndTrack> motifsAndTracks, final PredictRegulatorsParameters predictRegulatorsParameters) {
         this.motifs = new ArrayList<Motif>();
         this.tracks = new ArrayList<Track>();
 
@@ -36,7 +36,7 @@ public class Results {
             }
         });
 
-        this.inputParameters = inputParameters;
+        this.predictRegulatorsParameters = predictRegulatorsParameters;
     }
 
     public List<Motif> getMotifs() {
@@ -48,55 +48,55 @@ public class Results {
     }
 
     public boolean hasParameters() {
-        return (this.inputParameters != null);
+        return (this.predictRegulatorsParameters != null);
     }
 
-    public InputParameters getParameters() {
-        return this.inputParameters;
+    public PredictRegulatorsParameters getParameters() {
+        return this.predictRegulatorsParameters;
     }
 
     public Collection<GeneIdentifier> getGenes() {
-        return this.inputParameters.getGenes();
+        return this.predictRegulatorsParameters.getGenes();
     }
 
     public float getEScore() {
-        return this.inputParameters.getEScore();
+        return this.predictRegulatorsParameters.getEScore();
     }
 
     public int getThresholdForVisualisation() {
-        return this.inputParameters.getThresholdForVisualisation();
+        return this.predictRegulatorsParameters.getThresholdForVisualisation();
     }
 
     public float getROCthresholdAUC() {
-        return this.inputParameters.getROCthresholdAUC();
+        return this.predictRegulatorsParameters.getROCthresholdAUC();
     }
 
     public SpeciesNomenclature getSpeciesNomenclature() {
-        return this.inputParameters.getSpeciesNomenclature();
+        return this.predictRegulatorsParameters.getSpeciesNomenclature();
     }
 
     public IRegulonType getIRegulonType() {
-        return this.inputParameters.getIRegulonType();
+        return this.predictRegulatorsParameters.getIRegulonType();
     }
 
     public String getName() {
-        return this.inputParameters.getName();
+        return this.predictRegulatorsParameters.getName();
     }
 
     public String getMotifCollection() {
-        return this.inputParameters.getMotifCollection();
+        return this.predictRegulatorsParameters.getMotifCollection();
     }
 
     public String getTrackCollection() {
-        return this.inputParameters.getTrackCollection();
+        return this.predictRegulatorsParameters.getTrackCollection();
     }
 
     public float getMinOrthologous() {
-        return this.inputParameters.getMinOrthologous();
+        return this.predictRegulatorsParameters.getMinOrthologous();
     }
 
     public float getMaxMotifSimilarityFDR() {
-        return this.inputParameters.getMaxMotifSimilarityFDR();
+        return this.predictRegulatorsParameters.getMaxMotifSimilarityFDR();
     }
 
     public boolean hasMotifCollection() {
@@ -108,58 +108,58 @@ public class Results {
     }
 
     public boolean isRegionBased() {
-        return this.inputParameters.isRegionBased();
+        return this.predictRegulatorsParameters.isRegionBased();
     }
 
     public boolean isGeneBased() {
-        return !this.inputParameters.isGeneBased();
+        return !this.predictRegulatorsParameters.isGeneBased();
     }
 
     public String getMotifRankingsDatabaseName() {
-        return this.inputParameters.getMotifRankingsDatabase().getName();
+        return this.predictRegulatorsParameters.getMotifRankingsDatabase().getName();
     }
 
     public String getMotifRankingsDatabase() {
-        return this.inputParameters.getMotifRankingsDatabase().getCode();
+        return this.predictRegulatorsParameters.getMotifRankingsDatabase().getCode();
     }
 
     public String getTrackRankingsDatabaseName() {
-        return this.inputParameters.getTrackRankingsDatabase().getName();
+        return this.predictRegulatorsParameters.getTrackRankingsDatabase().getName();
     }
 
     public String getTrackRankingsDatabase() {
-        return this.inputParameters.getTrackRankingsDatabase().getCode();
+        return this.predictRegulatorsParameters.getTrackRankingsDatabase().getCode();
     }
 
     public float getOverlap() {
-        return this.inputParameters.getOverlap();
+        return this.predictRegulatorsParameters.getOverlap();
     }
 
     public String getDelineationName() {
         if (this.isDelineationBased()) {
-            return this.inputParameters.getDelineation().getName();
+            return this.predictRegulatorsParameters.getDelineation().getName();
         }
         return null;
     }
 
     public Delineation getDelineation() {
-        return this.inputParameters.getDelineation();
+        return this.predictRegulatorsParameters.getDelineation();
     }
 
     public String getDelineationDatabase() {
-        return this.inputParameters.getDelineation().getCode();
+        return this.predictRegulatorsParameters.getDelineation().getCode();
     }
 
     public boolean isDelineationBased() {
-        return this.inputParameters.isDelineationBased();
+        return this.predictRegulatorsParameters.isDelineationBased();
     }
 
     public int getUpstream() {
-        return this.inputParameters.getUpstream();
+        return this.predictRegulatorsParameters.getUpstream();
     }
 
     public int getDownstream() {
-        return this.inputParameters.getDownstream();
+        return this.predictRegulatorsParameters.getDownstream();
     }
 
     public List<MotifAndTrackCluster> getMotifAndTrackClusters(final Set<String> geneIDs) {

@@ -20,7 +20,7 @@ public class HTTPServiceStub implements Protocol {
     }
 
     @Override
-    public int sentJob(InputParameters input) {
+    public int sentJob(PredictRegulatorsParameters predictRegulatorsParameters) {
         return 0;
     }
 

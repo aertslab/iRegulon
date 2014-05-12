@@ -1,7 +1,7 @@
 package view.parametersform;
 
-import domainmodel.InputParameters;
+import domainmodel.PredictRegulatorsParameters;
 
 public interface PredictedRegulatorsParameters {
-	public InputParameters deriveParameters();
+	public PredictRegulatorsParameters deriveParameters();
 }

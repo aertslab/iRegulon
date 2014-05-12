@@ -22,9 +22,9 @@ public class OpenParametersFormAction extends ResourceAction {
         final JDialog frame = new JDialog(Cytoscape.getDesktop(), "Predict regulators and targets", true);
         frame.setAlwaysOnTop(true);
 
-        final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);
-        frame.add(input.createForm());
-        input.refresh();
+        final PredictedRegulatorsForm predictedRegulatorsForm = new PredictedRegulatorsForm(frame);
+        frame.add(predictedRegulatorsForm.createForm());
+        predictedRegulatorsForm.refresh();
 
         frame.pack();
         frame.setLocationRelativeTo(Cytoscape.getDesktop());
@@ -35,7 +35,7 @@ public class OpenParametersFormAction extends ResourceAction {
         frame.addWindowFocusListener(new WindowFocusListener() {
             @Override
             public void windowGainedFocus(WindowEvent e) {
-                input.refresh();
+                predictedRegulatorsForm.refresh();
             }
 
             @Override

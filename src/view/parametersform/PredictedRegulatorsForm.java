@@ -2,7 +2,7 @@ package view.parametersform;
 
 import cytoscape.Cytoscape;
 import domainmodel.Delineation;
-import domainmodel.InputParameters;
+import domainmodel.PredictRegulatorsParameters;
 import domainmodel.RankingsDatabase;
 import domainmodel.SpeciesNomenclature;
 import infrastructure.CytoscapeNetworkUtilities;
@@ -440,12 +440,12 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 if (CytoscapeNetworkUtilities.hasSelectedNodes()) {
-                    final InputParameters input = deriveParameters();
-                    if (input.parametersAreValid()) {
+                    final PredictRegulatorsParameters predictRegulatorsParameters = deriveParameters();
+                    if (predictRegulatorsParameters.parametersAreValid()) {
                         if (frame != null) frame.dispose();
                         super.actionPerformed(arg0);
                     } else {
-                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), input.getErrorMessage());
+                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), predictRegulatorsParameters.getErrorMessage());
                     }
                 } else {
                     JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "No nodes are selected!");
@@ -893,8 +893,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         if (dbListener != null) dbListener.refresh();
     }
 
-    public InputParameters deriveParameters() {
-        return new InputParameters(CytoscapeNetworkUtilities.getGenes(
+    public PredictRegulatorsParameters deriveParameters() {
+        return new PredictRegulatorsParameters(CytoscapeNetworkUtilities.getGenes(
                 getAttributeName(),
                 getSpeciesNomenclature()),
                 getNESThreshold(),

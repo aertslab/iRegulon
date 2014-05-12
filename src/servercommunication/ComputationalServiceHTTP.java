@@ -29,9 +29,9 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     private final Protocol service = new HTTPProtocol();
 
     @Override
-    public List<AbstractMotifAndTrack> findPredictedRegulators(InputParameters input) throws ServerCommunicationException {
+    public List<AbstractMotifAndTrack> findPredictedRegulators(PredictRegulatorsParameters predictRegulatorsParameters) throws ServerCommunicationException {
 
-        final FindPredictedRegulatorsTask task = new FindPredictedRegulatorsTask(service, input);
+        final FindPredictedRegulatorsTask task = new FindPredictedRegulatorsTask(service, predictRegulatorsParameters);
 
         final JTaskConfig taskConfig = new JTaskConfig();
         taskConfig.setOwner(Cytoscape.getDesktop());

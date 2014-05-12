@@ -9,11 +9,14 @@ import java.util.Set;
 
 
 public interface ComputationalService {
-    public List<AbstractMotifAndTrack> findPredictedRegulators(InputParameters input) throws ServerCommunicationException;
+    public List<AbstractMotifAndTrack> findPredictedRegulators(PredictRegulatorsParameters predictRegulatorsParameters) throws ServerCommunicationException;
 
     public Set<GeneIdentifier> queryTranscriptionFactorsWithPredictedTargetome(final SpeciesNomenclature speciesNomenclature) throws ServerCommunicationException;
 
-    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor, List<TargetomeDatabase> targetomeDatabases, int occurrenceCountThreshold, int maxNodeCount)
+    public List<CandidateTargetGene> queryPredictedTargetome(GeneIdentifier factor,
+                                                             List<TargetomeDatabase> targetomeDatabases,
+                                                             int occurrenceCountThreshold,
+                                                             int maxNodeCount)
             throws ServerCommunicationException;
 
     public List<EnhancerRegion> getEnhancerRegions(final AbstractMotifAndTrack motifOrTrack) throws ServerCommunicationException;

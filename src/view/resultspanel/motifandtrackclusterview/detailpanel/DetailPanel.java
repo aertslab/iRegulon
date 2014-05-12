@@ -6,9 +6,9 @@ import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.guiwidgets.LogoThumbnail;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
-import view.resultspanel.motifandtrackview.tablemodels.BaseMotifAndTrackTableModel;
 import view.resultspanel.motifandtrackclusterview.tablemodels.ExtendedCandidateTargetGeneTableModel;
 import view.resultspanel.motifandtrackclusterview.tablemodels.ExtendedTranscriptionFactorTableModel;
+import view.resultspanel.motifandtrackview.tablemodels.BaseMotifAndTrackTableModel;
 import view.resultspanel.renderers.*;
 
 import javax.swing.*;

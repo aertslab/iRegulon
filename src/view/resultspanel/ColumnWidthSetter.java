@@ -1,19 +1,19 @@
 package view.resultspanel;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableColumn;
 import java.util.List;
 
 
 public class ColumnWidthSetter {
-	private final JTable table;
-	
-	public ColumnWidthSetter(final JTable table){
-		this.table = table;
-	}
-	
-	public void setWidth() {
-		final ColumnImportances model = (ColumnImportances) this.table.getModel();
+    private final JTable table;
+
+    public ColumnWidthSetter(final JTable table) {
+        this.table = table;
+    }
+
+    public void setWidth() {
+        final ColumnImportances model = (ColumnImportances) this.table.getModel();
 
         final List<Integer> columnImportance = model.getColumnImportances();
         for (int i = 0, columnImportanceSize = columnImportance.size(); i < columnImportanceSize; i++) {
@@ -28,7 +28,7 @@ public class ColumnWidthSetter {
                 column.setPreferredWidth(convertToWidth(curImportance));
             }
         }
-	}
+    }
 
     private int convertToWidth(int curImportance) {
         int width = 0;

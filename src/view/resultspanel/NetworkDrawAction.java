@@ -83,13 +83,13 @@ public abstract class NetworkDrawAction extends ResourceAction {
         return CytoscapeNetworkUtilities.createSourceNode(network, view, getAttributeName(), factorID, motifOrTrack);
     }
 
-    protected CyNode createSourceNode(final CyNetwork network, final CyNetworkView view, final TranscriptionFactor factor,
-                                      final AbstractMotifAndTrack motifOrTrack) {
+    protected CyNode createSourceNode(final CyNetwork network, final CyNetworkView view,
+                                      final TranscriptionFactor factor, final AbstractMotifAndTrack motifOrTrack) {
         return createSourceNode(network, view, factor.getGeneID(), motifOrTrack);
     }
 
-    protected CyNode createTargetNode(final CyNetwork network, final CyNetworkView view, final CandidateTargetGene targetGene,
-                                      final AbstractMotifAndTrack motifOrTrack) {
+    protected CyNode createTargetNode(final CyNetwork network, final CyNetworkView view,
+                                      final CandidateTargetGene targetGene, final AbstractMotifAndTrack motifOrTrack) {
         return CytoscapeNetworkUtilities.createTargetNode(network, view, getAttributeName(), targetGene, motifOrTrack);
     }
 }

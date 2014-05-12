@@ -1,12 +1,10 @@
 package view.resultspanel.renderers;
 
 import javax.swing.*;
-
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.Collections;
 import java.util.Set;
-
-import javax.swing.table.*;
 
 
 public class NetworkMembershipHighlightRenderer extends JLabel implements TableCellRenderer, CanvasUpdater {
@@ -30,8 +28,8 @@ public class NetworkMembershipHighlightRenderer extends JLabel implements TableC
         this.IDsToBeHighlighted = (IDs == null) ? Collections.<String>emptySet() : Collections.unmodifiableSet(IDs);
     }
 
-    public Component getTableCellRendererComponent(JTable table, Object value,
-                                                   boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                                                   int row, int column) {
         this.updateCanvas(table, value, this, isSelected, row);
         if (value != null) setText(value.toString());
         return this;

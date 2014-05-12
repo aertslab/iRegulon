@@ -1,25 +1,24 @@
 package view.resultspanel;
 
+import cytoscape.CyNode;
+import cytoscape.Cytoscape;
+import cytoscape.data.CyAttributes;
 import infrastructure.CytoscapeNetworkUtilities;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-import cytoscape.data.CyAttributes;
-
 
 public class NetworkMembershipSupport {
-	private static String CURRENT_NETWORK_ID = null;
+    private static String CURRENT_NETWORK_ID = null;
     private static Set<String> CURRENT_IDS = Collections.emptySet();
-	
-	public NetworkMembershipSupport() {
-		isRefreshNecessary();
-	}
 
-	public Set<String> getCurrentIDs() {
+    public NetworkMembershipSupport() {
+        isRefreshNecessary();
+    }
+
+    public Set<String> getCurrentIDs() {
         if (isRefreshNecessary()) {
             CURRENT_IDS = retrieveIDs();
             CURRENT_NETWORK_ID = getCurrentNetworkID();

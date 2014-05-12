@@ -1,18 +1,21 @@
 package view.resultspanel.motifview;
 
 
-import domainmodel.*;
+import domainmodel.AbstractMotifAndTrack;
+import domainmodel.Results;
+import domainmodel.TranscriptionFactor;
 import view.resultspanel.*;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
+import view.resultspanel.motifandtrackview.tablemodels.BaseMotifAndTrackTableModel;
+import view.resultspanel.motifandtrackview.tablemodels.FilterMotifAndTrackTableModel;
 import view.resultspanel.motifview.detailpanel.DetailPanel;
-import view.resultspanel.motifandtrackview.tablemodels.*;
 import view.resultspanel.renderers.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class EnrichedMotifsView extends JPanel implements MotifAndTrackView {
@@ -34,7 +37,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifAndTrackVie
         this.enrichedMotifs = new ArrayList<AbstractMotifAndTrack>(results.getMotifs());
         setLayout(new BorderLayout());
         initPanel();
-	}
+    }
 
     public Results getResults() {
         return results;
@@ -76,7 +79,7 @@ public final class EnrichedMotifsView extends JPanel implements MotifAndTrackVie
 
     @Override
     public void setFilterPatternListener(FilterPatternDocumentListener listener) {
-       filterPatternDocumentListener = listener;
+        filterPatternDocumentListener = listener;
     }
 
     @Override
@@ -96,30 +99,30 @@ public final class EnrichedMotifsView extends JPanel implements MotifAndTrackVie
 
     private void initPanel() {
         final JScrollPane masterPanel = createMasterPanel();
-		detailPanel = new DetailPanel(results.getParameters());
+        detailPanel = new DetailPanel(results.getParameters());
 
-		//Create a split pane with the two scroll panes in it.
+        //Create a split pane with the two scroll panes in it.
         final JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, masterPanel, detailPanel);
-		splitPane.setOneTouchExpandable(true);
-		splitPane.setDividerLocation(200);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(200);
 
-		//Provide minimum sizes for the two components in the split pane
-		final Dimension minimumSize = new Dimension(100, 50);
-		masterPanel.setMinimumSize(minimumSize);
-		detailPanel.setMinimumSize(minimumSize);
+        //Provide minimum sizes for the two components in the split pane
+        final Dimension minimumSize = new Dimension(100, 50);
+        masterPanel.setMinimumSize(minimumSize);
+        detailPanel.setMinimumSize(minimumSize);
 
         add(splitPane, BorderLayout.CENTER);
     }
 
-	private JScrollPane createMasterPanel() {
-		final BaseMotifAndTrackTableModel tableModel = new BaseMotifAndTrackTableModel(this.enrichedMotifs, AbstractMotifAndTrack.TrackType.MOTIF);
-		final FilterMotifAndTrackTableModel filteredModel = new FilterMotifAndTrackTableModel(tableModel, FilterAttribute.MOTIF_OR_TRACK, "");
-		table = new JTable(filteredModel);
+    private JScrollPane createMasterPanel() {
+        final BaseMotifAndTrackTableModel tableModel = new BaseMotifAndTrackTableModel(this.enrichedMotifs, AbstractMotifAndTrack.TrackType.MOTIF);
+        final FilterMotifAndTrackTableModel filteredModel = new FilterMotifAndTrackTableModel(tableModel, FilterAttribute.MOTIF_OR_TRACK, "");
+        table = new JTable(filteredModel);
 
-		final ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
-		header.setToolTipStrings(filteredModel.getTooltips().toArray(new String[filteredModel.getTooltips().size()]));
-	    header.setToolTipText("");
-	    table.setTableHeader(header);
+        final ToolTipHeader header = new ToolTipHeader(table.getColumnModel());
+        header.setToolTipStrings(filteredModel.getTooltips().toArray(new String[filteredModel.getTooltips().size()]));
+        header.setToolTipText("");
+        table.setTableHeader(header);
 
         final ClusterColorRenderer clusterColorRenderer = new ClusterColorRenderer("ClusterNumber");
         for (int i = 0; i < table.getModel().getColumnCount(); i++) {
@@ -137,12 +140,12 @@ public final class EnrichedMotifsView extends JPanel implements MotifAndTrackVie
         }
 
         final ColumnWidthSetter columnWidth = new ColumnWidthSetter(table);
-		columnWidth.setWidth();
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.setAutoCreateRowSorter(true);
+        columnWidth.setWidth();
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setAutoCreateRowSorter(true);
 
-		return new JScrollPane(table);
-	}
+        return new JScrollPane(table);
+    }
 
     public void registerSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorCB) {
         if (selectionListener == null) {

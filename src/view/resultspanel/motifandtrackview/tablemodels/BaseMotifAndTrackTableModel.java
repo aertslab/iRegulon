@@ -5,10 +5,13 @@ import domainmodel.*;
 import view.resultspanel.MotifAndTrackTableModel;
 
 import javax.swing.table.AbstractTableModel;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class BaseMotifAndTrackTableModel extends AbstractTableModel implements MotifAndTrackTableModel {
-    private final String[] COLUMN_NAMES_MOTIF = { "Rank", "Enriched Motif ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs", "ClusterNumber" };
+    private final String[] COLUMN_NAMES_MOTIF = {"Rank", "Enriched Motif ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs", "ClusterNumber"};
     private final List<String> COLUMN_TOOLTIPS_MOTIF = Arrays.asList(
             "<html>Rank of the motif.<br/>The motif is ranked using the NEScore.</html>",
             "<html>ID of the motif.</html>",
@@ -21,7 +24,7 @@ public class BaseMotifAndTrackTableModel extends AbstractTableModel implements M
             "<html>Number of transcription factors that can be associated by the motif2TF algorithm to the given motif.</html>",
             "<html>Cluster number for coloring the clusters.</html>");
 
-    private final String[] COLUMN_NAMES_TRACK = { "Rank", "Enriched Track ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs", "ClusterNumber" };
+    private final String[] COLUMN_NAMES_TRACK = {"Rank", "Enriched Track ID", "NES", "AUC", "ClusterCode", "#Targets", "#TFs", "ClusterNumber"};
     private final List<String> COLUMN_TOOLTIPS_TRACK = Arrays.asList(
             "<html>Rank of the track.<br/>The track is ranked using the NEScore.</html>",
             "<html>ID of the track.</html>",

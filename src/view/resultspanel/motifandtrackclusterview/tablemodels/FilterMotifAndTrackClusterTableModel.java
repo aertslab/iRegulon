@@ -10,7 +10,7 @@ import view.resultspanel.FilterAttribute;
 public final class FilterMotifAndTrackClusterTableModel extends AbstractFilterMotifAndTrackTableModel {
     public FilterMotifAndTrackClusterTableModel(final BaseMotifAndTrackClusterTableModel model,
                                                 final FilterAttribute filterOn,
-                                                final String pattern){
+                                                final String pattern) {
         super(filterOn, model, pattern);
     }
 
@@ -40,5 +40,5 @@ public final class FilterMotifAndTrackClusterTableModel extends AbstractFilterMo
         }
 
         throw new IllegalStateException();
-	}
+    }
 }

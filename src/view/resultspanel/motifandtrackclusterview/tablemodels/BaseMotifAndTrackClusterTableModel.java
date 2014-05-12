@@ -4,13 +4,12 @@ import domainmodel.MotifAndTrackCluster;
 import domainmodel.TranscriptionFactor;
 import view.resultspanel.MotifAndTrackTableModel;
 
+import javax.swing.table.AbstractTableModel;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
 public final class BaseMotifAndTrackClusterTableModel extends AbstractTableModel implements MotifAndTrackTableModel {
-    private static final String[] COLUMN_NAMES = { "ClusterCode", "TF", "NES", "#Targets", "#Motifs/Tracks", "ClusterNumber" };
+    private static final String[] COLUMN_NAMES = {"ClusterCode", "TF", "NES", "#Targets", "#Motifs/Tracks", "ClusterNumber"};
     private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 1, 1, 1, 1, 0);
     private static final List<String> COLUMN_TOOLTIPS = Arrays.asList(
             "Each cluster code contains enriched motifs that are clustered by similarity or contains enriched tracks that are clustered by transcription factor name.",

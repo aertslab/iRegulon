@@ -5,8 +5,8 @@ import cytoscape.view.cytopanels.CytoPanel;
 import cytoscape.view.cytopanels.CytoPanelState;
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
-import view.resultspanel.ResultsView;
 import view.actions.SaveLoadDialogs;
+import view.resultspanel.ResultsView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

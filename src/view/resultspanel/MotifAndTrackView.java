@@ -29,9 +29,11 @@ public interface MotifAndTrackView extends Refreshable {
 
     public TranscriptionFactor getSelectedTranscriptionFactor();
 
-    public void registerSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorCB);
+    public void registerSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack,
+                                            final TranscriptionFactorComboBox transcriptionFactorCB);
 
-    public void unregisterSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox transcriptionFactorCB);
+    public void unregisterSelectionComponents(final SelectedMotifOrTrack selectedMotifOrTrack,
+                                              final TranscriptionFactorComboBox transcriptionFactorCB);
 
     public void registerFilterComponents(final JComboBox filterAttributeTF, final JTextField filterValueTF);
 

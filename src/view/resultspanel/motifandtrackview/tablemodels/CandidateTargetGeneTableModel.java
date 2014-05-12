@@ -1,12 +1,11 @@
 package view.resultspanel.motifandtrackview.tablemodels;
 
 
-import javax.swing.table.AbstractTableModel;
-
 import domainmodel.AbstractMotifAndTrack;
 import domainmodel.CandidateTargetGene;
 import view.resultspanel.CandidateTargetGeneTableModelIF;
 
+import javax.swing.table.AbstractTableModel;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel impl
     private static final String[] COLUMN_NAMES = {"Rank", "Target Name"};
     private static final String[] COLUMN_TOOLTIPS = {"Rank of the target.",
             "Name of the predicted target."};
-        private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 2);
+    private static final List<Integer> COLUMN_IMPORTANCES = Arrays.asList(3, 2);
 
     private final AbstractMotifAndTrack motifOrTrack;
 
@@ -57,12 +56,16 @@ public final class CandidateTargetGeneTableModel extends AbstractTableModel impl
     }
 
     public Class<?> getColumnClass(int columnIndex) {
-    	switch (columnIndex){
-    	case 0 : return Integer.class;
-    	case 1 : return Integer.class;
-        case 2 : return String.class;
-        default: throw new IndexOutOfBoundsException();
-    	}
+        switch (columnIndex) {
+            case 0:
+                return Integer.class;
+            case 1:
+                return Integer.class;
+            case 2:
+                return String.class;
+            default:
+                throw new IndexOutOfBoundsException();
+        }
     }
 
     @Override

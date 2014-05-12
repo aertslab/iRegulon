@@ -77,6 +77,7 @@ public final class Track2TFDetailFrame extends JDialog {
 
         return new JScrollPane(content, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     }
+
     /*  FIXES
     private boolean isMotifSimilarityUsed(final TranscriptionFactor factor) {
         return !Float.isNaN(factor.getMaxMotifSimilarityFDR()) && factor.getSimilarMotifName() != null;

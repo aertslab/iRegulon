@@ -1,9 +1,7 @@
 package view.resultspanel.renderers;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.*;
 
 public interface CanvasUpdater {
-
-	public JLabel updateCanvas(JTable table, Object value, JLabel canvas, boolean isSelected, int row);
+    public JLabel updateCanvas(JTable table, Object value, JLabel canvas, boolean isSelected, int row);
 }

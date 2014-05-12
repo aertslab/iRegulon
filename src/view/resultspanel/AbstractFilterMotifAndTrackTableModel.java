@@ -8,6 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public abstract class AbstractFilterMotifAndTrackTableModel extends AbstractTableModel implements MotifAndTrackTableModel {
     private static final String FILTER_COLUMN_NAME = "Filtered";
     private static final String FILTER_COLUMN_TOOLTIP = "Filter result on motif/track, transcription factor or target gene provided in the search box.";
@@ -26,28 +27,28 @@ public abstract class AbstractFilterMotifAndTrackTableModel extends AbstractTabl
         return model;
     }
 
-    public FilterAttribute getFilterAttribute(){
+    public FilterAttribute getFilterAttribute() {
         return this.filterAttribute;
     }
 
-    public void setFilterAttribute(FilterAttribute filter){
+    public void setFilterAttribute(FilterAttribute filter) {
         this.filterAttribute = filter;
         this.fireTableDataChanged();
     }
 
-    public String getPattern(){
+    public String getPattern() {
         return this.pattern;
     }
 
-    public void setPattern(String pattern){
-        this.pattern = (pattern == null) ? "": pattern;
+    public void setPattern(String pattern) {
+        this.pattern = (pattern == null) ? "" : pattern;
         this.fireTableDataChanged();
     }
 
     @Override
-    public String getColumnName(int col){
+    public String getColumnName(int col) {
         if (col == 0) return FILTER_COLUMN_NAME;
-        else return model.getColumnName(col-1);
+        else return model.getColumnName(col - 1);
     }
 
     @Override
@@ -62,19 +63,23 @@ public abstract class AbstractFilterMotifAndTrackTableModel extends AbstractTabl
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        switch(columnIndex){
-        case 0 : return this.hasPattern(rowIndex);
-        default : return this.model.getValueAt(rowIndex, columnIndex-1);
+        switch (columnIndex) {
+            case 0:
+                return this.hasPattern(rowIndex);
+            default:
+                return this.model.getValueAt(rowIndex, columnIndex - 1);
         }
     }
 
     protected abstract boolean hasPattern(int rowIndex);
 
     @Override
-    public Class<?> getColumnClass(int columnIndex){
-        switch(columnIndex){
-        case 0: return Boolean.class;
-        default: return this.model.getColumnClass(columnIndex - 1);
+    public Class<?> getColumnClass(int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return Boolean.class;
+            default:
+                return this.model.getColumnClass(columnIndex - 1);
         }
     }
 

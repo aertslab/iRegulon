@@ -3,8 +3,8 @@ package view.resultspanel.actions;
 
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
-import view.resultspanel.ResultsView;
 import view.actions.SaveLoadDialogs;
+import view.resultspanel.ResultsView;
 
 import java.awt.event.ActionEvent;
 

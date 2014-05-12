@@ -41,7 +41,6 @@ public class TranscriptionFactorTooltip extends MouseMotionAdapter {
             } else {
                 table.setToolTipText(orthology);
             }
-
         } else if (column == 2) {
             String motifSimilarity = "<html>";
             if (tf.getSimilarMotifName() != null) {
@@ -56,7 +55,6 @@ public class TranscriptionFactorTooltip extends MouseMotionAdapter {
             } else {
                 table.setToolTipText(motifSimilarity);
             }
-
         }
     }
 }

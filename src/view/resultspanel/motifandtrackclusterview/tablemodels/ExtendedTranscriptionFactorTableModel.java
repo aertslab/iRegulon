@@ -15,24 +15,24 @@ public class ExtendedTranscriptionFactorTableModel extends AbstractTableModel im
             "Transcription Factor Name",
             "#Motifs",
             "Orthologous Identity",
-            "Motif Similarity (FDR)" };
+            "Motif Similarity (FDR)"};
     private static List<Integer> COLUMN_IMPORTANCES_MOTIF = Arrays.asList(3, 2, 3, 3, 3);
     private static String[] COLUMN_TOOLTIPS_MOTIF = {
             "Is the currently selected motif annotated for this factor?",
             "Gene ID of the predicted transcription factor.",
             "Number of enriched motifs annotated with this factor.",
             "Minimum identity between orthologous genes.",
-            "Maximum false discovery rate (FDR) on motif similarity." };
+            "Maximum false discovery rate (FDR) on motif similarity."};
 
     private static String[] COLUMN_NAMES_TRACK = new String[]{
             "Filter",
             "Transcription Factor Name",
-            "#Tracks" };
+            "#Tracks"};
     private static List<Integer> COLUMN_IMPORTANCES_TRACK = Arrays.asList(3, 2, 3);
     private static String[] COLUMN_TOOLTIPS_TRACK = {
             "Is the currently selected track annotated for this factor?",
             "Gene ID of the associated transcription factor.",
-            "Number of enriched tracks annotated with this factor." };
+            "Number of enriched tracks annotated with this factor."};
 
     private String[] COLUMN_NAMES;
     private List<Integer> COLUMN_IMPORTANCES;

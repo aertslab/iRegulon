@@ -27,11 +27,11 @@ public class MotifAndTrackCluster extends AbstractMotifAndTrack {
 
     public String getName() {
         final StringBuilder buffer = new StringBuilder();
-        for (AbstractMotifAndTrack motifOrTrack: getMotifsAndTracks()) {
+        for (AbstractMotifAndTrack motifOrTrack : getMotifsAndTracks()) {
             buffer.append(motifOrTrack.getName());
             buffer.append("/");
         }
-        buffer.setLength(buffer.length()-1);
+        buffer.setLength(buffer.length() - 1);
         return buffer.toString();
     }
 
@@ -44,7 +44,7 @@ public class MotifAndTrackCluster extends AbstractMotifAndTrack {
         return (motifsAndTracks != null) ? motifsAndTracks.getAUCValue() : Float.NaN;
     }
 
-    public float getNEScore(){
+    public float getNEScore() {
         final AbstractMotifAndTrack motifOrTrack = getBestMotifOrTrack();
         return (motifOrTrack != null) ? motifOrTrack.getNEScore() : Float.NaN;
     }

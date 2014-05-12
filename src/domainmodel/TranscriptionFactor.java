@@ -23,61 +23,60 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
                                final Collection<AbstractTrack> tracks) {
         this.geneID = geneID;
 
-		this.minOrthologousIdentity = orthologousGeneName == null ? Float.NaN : minOrthologousIdentity;
+        this.minOrthologousIdentity = orthologousGeneName == null ? Float.NaN : minOrthologousIdentity;
         this.orthologousGeneName = orthologousGeneName;
         this.orthologousSpecies = orthologousSpecies;
 
-		this.maxMotifSimilarityFDR = similarMotifName == null ? Float.NaN : maxMotifSimilarityFDR;
-		this.similarMotifName = similarMotifName;
-		this.similarMotifDescription = similarMotifDescription;
+        this.maxMotifSimilarityFDR = similarMotifName == null ? Float.NaN : maxMotifSimilarityFDR;
+        this.similarMotifName = similarMotifName;
+        this.similarMotifDescription = similarMotifDescription;
 
         this.motifs = new HashSet<AbstractMotif>(motifs);
         this.tracks = new HashSet<AbstractTrack>(tracks);
-	}
+    }
 
-    public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity,
-			float maxMotifSimilarityFDR, String similarMotifName, String similarMotifDescription,
-			String orthologousGeneName, String orthologousSpecies) {
-		this(geneID, minOrthologousIdentity, maxMotifSimilarityFDR, similarMotifName, similarMotifDescription,
-                orthologousGeneName, orthologousSpecies, Collections.<AbstractMotif>emptySet(),
-                Collections.<AbstractTrack>emptySet());
-	}
-	
-	public String getName(){
-		return this.geneID.getGeneName();
-	}
-	
-	public SpeciesNomenclature getSpeciesNomeclature(){
-		return this.geneID.getSpeciesNomenclature();
-	}
-	
-	public GeneIdentifier getGeneID() {
-		return this.geneID;
-	}
-	
-	public float getMinOrthologousIdentity(){
-		return this.minOrthologousIdentity;
-	}
-	
-	public float getMaxMotifSimilarityFDR(){
-		return this.maxMotifSimilarityFDR;
-	}
-	
-	public String getSimilarMotifName(){
-		return this.similarMotifName;
-	}
-	
-	public String getSimilarMotifDescription(){
-		return this.similarMotifDescription;
-	}
-	
-	public String getOrthologousGeneName(){
-		return this.orthologousGeneName;
-	}
-	
-	public String getOrthologousSpecies(){
-		return this.orthologousSpecies;
-	}
+    public TranscriptionFactor(GeneIdentifier geneID, float minOrthologousIdentity, float maxMotifSimilarityFDR,
+                               String similarMotifName, String similarMotifDescription, String orthologousGeneName,
+                               String orthologousSpecies) {
+        this(geneID, minOrthologousIdentity, maxMotifSimilarityFDR, similarMotifName, similarMotifDescription,
+                orthologousGeneName, orthologousSpecies, Collections.<AbstractMotif>emptySet(), Collections.<AbstractTrack>emptySet());
+    }
+
+    public String getName() {
+        return this.geneID.getGeneName();
+    }
+
+    public SpeciesNomenclature getSpeciesNomeclature() {
+        return this.geneID.getSpeciesNomenclature();
+    }
+
+    public GeneIdentifier getGeneID() {
+        return this.geneID;
+    }
+
+    public float getMinOrthologousIdentity() {
+        return this.minOrthologousIdentity;
+    }
+
+    public float getMaxMotifSimilarityFDR() {
+        return this.maxMotifSimilarityFDR;
+    }
+
+    public String getSimilarMotifName() {
+        return this.similarMotifName;
+    }
+
+    public String getSimilarMotifDescription() {
+        return this.similarMotifDescription;
+    }
+
+    public String getOrthologousGeneName() {
+        return this.orthologousGeneName;
+    }
+
+    public String getOrthologousSpecies() {
+        return this.orthologousSpecies;
+    }
 
     public boolean isAssociatedWith(AbstractMotif motif) {
         return this.motifs.contains(motif);
@@ -102,18 +101,18 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
     }
 
     @Override
-	public int compareTo(TranscriptionFactor other) {
+    public int compareTo(TranscriptionFactor other) {
         int r = compareFloat(this.getMaxMotifSimilarityFDR(), other.getMaxMotifSimilarityFDR(), false);
         if (r != 0) return r;
         r = compareFloat(this.getMinOrthologousIdentity(), other.getMinOrthologousIdentity(), true);
         if (r != 0) return r;
         return this.getName().toLowerCase().compareToIgnoreCase(other.getName().toLowerCase());
-	}
+    }
 
     @Override
-	public String toString() {
-		return this.getName();
-	}
+    public String toString() {
+        return this.getName();
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -6,10 +6,11 @@ import java.util.*;
 
 
 public final class SpeciesNomenclature extends IRegulonResourceBundle {
-	private static final Map<Integer,SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer,SpeciesNomenclature>();
+    private static final Map<Integer, SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer, SpeciesNomenclature>();
     private static final Map<Integer, List<RankingsDatabase>> CODE2DATABASES = new HashMap<Integer, List<RankingsDatabase>>();
+
     static {
-        for (RankingsDatabase db: RankingsDatabase.loadFromConfiguration()) {
+        for (RankingsDatabase db : RankingsDatabase.loadFromConfiguration()) {
             final List<RankingsDatabase> rankingsDatabaseList;
             if (CODE2DATABASES.containsKey(db.getSpeciesNomenclature())) {
                 rankingsDatabaseList = CODE2DATABASES.get(db.getSpeciesNomenclature());
@@ -21,53 +22,53 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         }
     }
 
-	public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols", "hg19");
-	public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI symbols", "mm9");
-	public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase names", "dm3");
-	public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature (4, "Drosophila melanogaster, CG-numbers", "dm3");
-	//public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn", "dm3");
-	public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature();
+    public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols", "hg19");
+    public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI symbols", "mm9");
+    public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase names", "dm3");
+    public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature(4, "Drosophila melanogaster, CG-numbers", "dm3");
+    //public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn", "dm3");
+    public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature();
 
     public static SpeciesNomenclature getNomenclature(final int code) {
-		return CODE2NOMENCLATURE.get(code);
-	}
-	
-	public static Collection<SpeciesNomenclature> getAllNomenclatures() {
-		return CODE2NOMENCLATURE.values(); 
-	}
-	
-	public static Collection<SpeciesNomenclature> getSelectableNomenclatures() {
+        return CODE2NOMENCLATURE.get(code);
+    }
+
+    public static Collection<SpeciesNomenclature> getAllNomenclatures() {
+        return CODE2NOMENCLATURE.values();
+    }
+
+    public static Collection<SpeciesNomenclature> getSelectableNomenclatures() {
         final List<SpeciesNomenclature> results = new ArrayList<SpeciesNomenclature>(CODE2NOMENCLATURE.values());
         results.remove(UNKNOWN);
-		return Collections.unmodifiableList(results);
-	}
-	
-	private final int code;
-	private final String name;
+        return Collections.unmodifiableList(results);
+    }
+
+    private final int code;
+    private final String name;
     private final String assembly;
     private final List<RankingsDatabase> rankingsDatabases;
 
     private SpeciesNomenclature() {
         this(-1, "?", "?");
     }
-	
-	private SpeciesNomenclature(final int code, final String name, final String assembly) {
-		this.code = code;
-		this.name = name;
+
+    private SpeciesNomenclature(final int code, final String name, final String assembly) {
+        this.code = code;
+        this.name = name;
         this.assembly = assembly;
-        this.rankingsDatabases = (this.code > 0) ? CODE2DATABASES.get(code): Collections.<RankingsDatabase>emptyList();
+        this.rankingsDatabases = (this.code > 0) ? CODE2DATABASES.get(code) : Collections.<RankingsDatabase>emptyList();
         CODE2NOMENCLATURE.put(code, this);
-	}
+    }
 
     public String getName() {
         return this.name;
     }
 
-	public int getCode(){
-		return this.code;
-	}
+    public int getCode() {
+        return this.code;
+    }
 
-    public String getAssembly(){
+    public String getAssembly() {
         return this.assembly;
     }
 
@@ -77,7 +78,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 
     public List<MotifCollection> getMotifCollections(RankingsDatabase.Type searchSpace) {
         final Set<MotifCollection> motifCollections = new HashSet<MotifCollection>();
-        for (RankingsDatabase db: getRankingsDatabases()) {
+        for (RankingsDatabase db : getRankingsDatabases()) {
             // Only add the rankings database if it has the specified search space ("gene" or "region" based).
             if (db.getType().equals(searchSpace)) {
                 // Only add the rankings database if it has a motif collection.
@@ -95,7 +96,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 
     public List<TrackCollection> getTrackCollections(RankingsDatabase.Type searchSpace) {
         final Set<TrackCollection> trackCollections = new HashSet<TrackCollection>();
-        for (RankingsDatabase db: getRankingsDatabases()) {
+        for (RankingsDatabase db : getRankingsDatabases()) {
             // Only add the rankings database if it has the specified search space ("gene" or "region" based).
             if (db.getType().equals(searchSpace)) {
                 // Only add the rankings database if it has a track collection.
@@ -113,7 +114,7 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 
     public List<RankingsDatabase.Type> getSearchSpaceTypes() {
         final Set<RankingsDatabase.Type> types = new HashSet<RankingsDatabase.Type>();
-        for (RankingsDatabase db: getRankingsDatabases()) {
+        for (RankingsDatabase db : getRankingsDatabases()) {
             types.add(db.getType());
         }
         final List<RankingsDatabase.Type> result = new ArrayList<RankingsDatabase.Type>(types);
@@ -192,9 +193,9 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
     }
 
     @Override
-	public String toString() {
-		return this.name;
-	}
+    public String toString() {
+        return this.name;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -100,11 +100,11 @@ public class Results {
     }
 
     public boolean hasMotifCollection() {
-        return ! getMotifCollection().equals(MotifCollection.NONE.getDescription());
+        return !getMotifCollection().equals(MotifCollection.NONE.getDescription());
     }
 
     public boolean hasTrackCollection() {
-        return ! getTrackCollection().equals(TrackCollection.NONE.getDescription());
+        return !getTrackCollection().equals(TrackCollection.NONE.getDescription());
     }
 
     public boolean isRegionBased() {

@@ -6,7 +6,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class GenePutativeRegulatoryRegion implements Comparable<GenePutativeRegulatoryRegion> {
     private static Map<String, GenePutativeRegulatoryRegion> CODE2COLLECTION = new LinkedHashMap<String, GenePutativeRegulatoryRegion>();
@@ -88,7 +91,7 @@ public final class GenePutativeRegulatoryRegion implements Comparable<GenePutati
 
     @Override
     public int compareTo(GenePutativeRegulatoryRegion o) {
-        return(this.indexNumber < o.getIndexNumber() ? -1: (this.indexNumber == o.getIndexNumber() ? 0 : 1));
+        return (this.indexNumber < o.getIndexNumber() ? -1 : (this.indexNumber == o.getIndexNumber() ? 0 : 1));
     }
 
     @Override

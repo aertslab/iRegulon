@@ -1,7 +1,7 @@
 package domainmodel;
 
 
-public final class EnhancerRegion implements Comparable<EnhancerRegion>{
+public final class EnhancerRegion implements Comparable<EnhancerRegion> {
     private final String chromosomeName;
     private final int startPosition;
     private final int endPosition;
@@ -9,16 +9,16 @@ public final class EnhancerRegion implements Comparable<EnhancerRegion>{
     private final float score;
 
     public static EnhancerRegion fromText(final String text) {
-        final String[] columns =  text.split("\t");
+        final String[] columns = text.split("\t");
         if (columns.length != 5) {
             return null;
         }
         try {
-        return new EnhancerRegion(columns[0],
-                Integer.parseInt(columns[1]),
-                Integer.parseInt(columns[2]),
-                columns[3],
-                Float.parseFloat(columns[4]));
+            return new EnhancerRegion(columns[0],
+                    Integer.parseInt(columns[1]),
+                    Integer.parseInt(columns[2]),
+                    columns[3],
+                    Float.parseFloat(columns[4]));
         } catch (NumberFormatException e) {
             return null;
         }

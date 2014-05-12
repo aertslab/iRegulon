@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class TargetomeDatabase {
-    private static final Map<String,TargetomeDatabase> CODE2TARGETOMEDATABASE = new HashMap<String, TargetomeDatabase>();
+    private static final Map<String, TargetomeDatabase> CODE2TARGETOMEDATABASE = new HashMap<String, TargetomeDatabase>();
 
     public static final TargetomeDatabase MSIGDB = new TargetomeDatabase("msigdb", "MSigDB");
     public static final TargetomeDatabase GENESIGDB = new TargetomeDatabase("genesigdb", "GeneSigDB");

@@ -1,31 +1,31 @@
 package domainmodel;
 
 
-public class GeneIdentifier implements Comparable<GeneIdentifier>{
-	private final String geneName;
-	private final SpeciesNomenclature speciesNomenclature;
-	
-	public GeneIdentifier(String geneName, SpeciesNomenclature speciesNomenclature) {
+public class GeneIdentifier implements Comparable<GeneIdentifier> {
+    private final String geneName;
+    private final SpeciesNomenclature speciesNomenclature;
+
+    public GeneIdentifier(String geneName, SpeciesNomenclature speciesNomenclature) {
         if (geneName == null || speciesNomenclature == null) {
             throw new IllegalArgumentException();
         }
-		this.geneName = geneName;
-		this.speciesNomenclature = speciesNomenclature;
-	}
-	
-	public String getGeneName(){
-		return this.geneName;
-	}
-	
-	public SpeciesNomenclature getSpeciesNomenclature(){
-		return this.speciesNomenclature;
-	}
-	
-	public int compareTo(GeneIdentifier o) {
+        this.geneName = geneName;
+        this.speciesNomenclature = speciesNomenclature;
+    }
+
+    public String getGeneName() {
+        return this.geneName;
+    }
+
+    public SpeciesNomenclature getSpeciesNomenclature() {
+        return this.speciesNomenclature;
+    }
+
+    public int compareTo(GeneIdentifier o) {
         final int r = speciesNomenclature.getName().compareTo(o.getSpeciesNomenclature().getName());
         if (r != 0) return r;
-		return geneName.compareTo(o.getGeneName());
-	}
+        return geneName.compareTo(o.getGeneName());
+    }
 
     public String toString() {
         return geneName;

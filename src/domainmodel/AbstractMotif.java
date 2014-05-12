@@ -19,7 +19,7 @@ public abstract class AbstractMotif extends AbstractMotifAndTrack {
 
     public abstract float getNEScore();
 
-    public String getClusterCode(){
+    public String getClusterCode() {
         return this.clusterCode;
     }
 
@@ -27,7 +27,7 @@ public abstract class AbstractMotif extends AbstractMotifAndTrack {
 
     public abstract List<Motif> getMotifs();
 
-    public List<CandidateTargetGene> getCandidateTargetGenes(){
+    public List<CandidateTargetGene> getCandidateTargetGenes() {
         return this.candidateTargetGenes;
     }
 

@@ -7,8 +7,8 @@ import java.util.List;
 public class Motif extends AbstractMotif implements Comparable<Motif> {
     final private String name;
     final private int rank;
-	final private String description;
-	final private int featureID;
+    final private String description;
+    final private int featureID;
     private final float neScore;
     private final float aucValue;
 
@@ -27,29 +27,29 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
         this.featureID = featureID;
     }
 
-    public int getRank(){
-		return this.rank;
-	}
+    public int getRank() {
+        return this.rank;
+    }
 
     public String getName() {
         return this.name;
     }
 
-    public String getDescription(){
-		return this.description;
-	}
+    public String getDescription() {
+        return this.description;
+    }
 
     public float getAUCValue() {
         return this.aucValue;
     }
 
-    public float getNEScore(){
+    public float getNEScore() {
         return this.neScore;
     }
 
-	public int getDatabaseID(){
-		return this.featureID;
-	}
+    public int getDatabaseID() {
+        return this.featureID;
+    }
 
     public Motif getBestMotif() {
         return this;

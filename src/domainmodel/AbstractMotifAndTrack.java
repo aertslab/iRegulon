@@ -36,7 +36,7 @@ public abstract class AbstractMotifAndTrack {
 
     public abstract float getNEScore();
 
-    public TrackType getTrackType(){
+    public TrackType getTrackType() {
         return this.trackType;
     }
 
@@ -44,7 +44,7 @@ public abstract class AbstractMotifAndTrack {
         this.trackType = trackType;
     }
 
-    protected void setClusterNumber(int clusterNumber){
+    protected void setClusterNumber(int clusterNumber) {
         this.clusterNumber = clusterNumber;
     }
 
@@ -64,15 +64,15 @@ public abstract class AbstractMotifAndTrack {
         return getTrackType().equals(TrackType.TRACK_CLUSTER);
     }
 
-    public String getClusterCode(){
+    public String getClusterCode() {
         return this.clusterCode;
     }
 
-    public int getClusterNumber(){
+    public int getClusterNumber() {
         return this.clusterNumber;
     }
 
-    public List<CandidateTargetGene> getCandidateTargetGenes(){
+    public List<CandidateTargetGene> getCandidateTargetGenes() {
         return this.candidateTargetGenes;
     }
 

@@ -4,9 +4,10 @@ import cytoscape.Cytoscape;
 import view.ResourceAction;
 import view.parametersform.PredictedRegulatorsForm;
 
-import java.awt.event.*;
-
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 
 
 public class OpenParametersFormAction extends ResourceAction {
@@ -15,21 +16,21 @@ public class OpenParametersFormAction extends ResourceAction {
     public OpenParametersFormAction() {
         super(NAME);
     }
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-        final JDialog frame = new JDialog(Cytoscape.getDesktop(), "Predict regulators and targets", true);
-		frame.setAlwaysOnTop(true);
 
-		final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);
-		frame.add(input.createForm());
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        final JDialog frame = new JDialog(Cytoscape.getDesktop(), "Predict regulators and targets", true);
+        frame.setAlwaysOnTop(true);
+
+        final PredictedRegulatorsForm input = new PredictedRegulatorsForm(frame);
+        frame.add(input.createForm());
         input.refresh();
-		
-		frame.pack();
+
+        frame.pack();
         frame.setLocationRelativeTo(Cytoscape.getDesktop());
         frame.setAlwaysOnTop(true);
 
-		frame.setVisible(true);
+        frame.setVisible(true);
 
         frame.addWindowFocusListener(new WindowFocusListener() {
             @Override
@@ -42,5 +43,5 @@ public class OpenParametersFormAction extends ResourceAction {
                 //Nop
             }
         });
-	}
+    }
 }

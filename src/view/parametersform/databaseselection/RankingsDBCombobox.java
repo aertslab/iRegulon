@@ -1,11 +1,10 @@
 package view.parametersform.databaseselection;
 
+import domainmodel.RankingsDatabase;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JComboBox;
-
-import domainmodel.RankingsDatabase;
 
 public class RankingsDBCombobox extends JComboBox{
 

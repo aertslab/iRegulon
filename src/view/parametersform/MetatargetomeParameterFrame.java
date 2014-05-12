@@ -4,21 +4,20 @@ package view.parametersform;
 import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
-import domainmodel.TargetomeDatabase;
 import view.actions.QueryMetatargetomeAction;
 import view.resultspanel.Refreshable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.Map;
 
 
 public final class MetatargetomeParameterFrame extends JDialog {
     private static final String TITLE = "Query TF-target database for a factor";
 
     public MetatargetomeParameterFrame(final MetatargetomeParameters parameters,
-                                       final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors,
+                                       final Map<SpeciesNomenclature, java.util.Set<GeneIdentifier>> speciesNomenclature2factors,
                                        final Refreshable view) {
         super(Cytoscape.getDesktop(), TITLE, true);
         setContentPane(new ContentPane(parameters, speciesNomenclature2factors, view));
@@ -28,7 +27,9 @@ public final class MetatargetomeParameterFrame extends JDialog {
     }
 
     private class ContentPane extends JPanel {
-        private ContentPane(final MetatargetomeParameters parameters, final Map<SpeciesNomenclature,java.util.Set<GeneIdentifier>> speciesNomenclature2factors, final Refreshable view) {
+        private ContentPane(final MetatargetomeParameters parameters,
+                            final Map<SpeciesNomenclature, java.util.Set<GeneIdentifier>> speciesNomenclature2factors,
+                            final Refreshable view) {
             super(new BorderLayout());
 
             final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(parameters, speciesNomenclature2factors);

@@ -1,7 +1,6 @@
 package view.actions;
 
 
-
 import cytoscape.CyNetwork;
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
@@ -10,7 +9,6 @@ import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
 import view.resultspanel.Refreshable;
-
 
 import java.util.Collections;
 import java.util.List;
@@ -112,7 +110,7 @@ abstract class MetatargetomeTask extends IRegulonResourceBundle implements Task 
 
     @Override
     public String getTitle() {
-        return getBundle().getString("plugin_name") + ": Add metatargetome for " +getTranscriptionFactor().getGeneName();
+        return getBundle().getString("plugin_name") + ": Add metatargetome for " + getTranscriptionFactor().getGeneName();
     }
 
     @Override

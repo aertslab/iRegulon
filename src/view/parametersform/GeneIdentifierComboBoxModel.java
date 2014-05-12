@@ -5,7 +5,10 @@ import domainmodel.GeneIdentifier;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 final class GeneIdentifierComboBoxModel implements ComboBoxModel {
     private Object selection;

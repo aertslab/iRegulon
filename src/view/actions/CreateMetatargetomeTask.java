@@ -16,9 +16,8 @@ import java.util.List;
 
 
 class CreateMetatargetomeTask extends MetatargetomeTask {
-    CreateMetatargetomeTask(CyNetwork network, CyNetworkView view,
-                      final Refreshable resultsPanel, final String attributeName,
-                      GeneIdentifier factor, List<CandidateTargetGene> targetome) {
+    CreateMetatargetomeTask(CyNetwork network, CyNetworkView view, final Refreshable resultsPanel,
+                            final String attributeName, GeneIdentifier factor, List<CandidateTargetGene> targetome) {
         super(network, view, resultsPanel, attributeName, factor, targetome);
     }
 
@@ -26,11 +25,11 @@ class CreateMetatargetomeTask extends MetatargetomeTask {
     public void run() {
         if (getMonitor() != null) getMonitor().setStatus("Adding nodes and edges");
 
-        final CyNode sourceNode =  CytoscapeNetworkUtilities.createSourceNode(getNetwork(), getView(),
+        final CyNode sourceNode = CytoscapeNetworkUtilities.createSourceNode(getNetwork(), getView(),
                 getAttributeName(), getTranscriptionFactor(), NO_MOTIF);
         for (int idx = 0; idx < getTargetome().size(); idx++) {
             if (isInterrupted()) return;
-            if (getMonitor() != null) getMonitor().setPercentCompleted((100 * idx)/getTargetome().size());
+            if (getMonitor() != null) getMonitor().setPercentCompleted((100 * idx) / getTargetome().size());
             final CandidateTargetGene targetGene = getTargetome().get(idx);
 
             final CyNode targetNode = CytoscapeNetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF);

@@ -18,9 +18,8 @@ import java.util.Map;
 
 
 final class AddMetatargetomeTask extends MetatargetomeTask {
-    AddMetatargetomeTask(CyNetwork network, CyNetworkView view,
-                      final Refreshable resultsPanel, final String attributeName,
-                      GeneIdentifier factor, List<CandidateTargetGene> targetome) {
+    AddMetatargetomeTask(CyNetwork network, CyNetworkView view, final Refreshable resultsPanel,
+                         final String attributeName, GeneIdentifier factor, List<CandidateTargetGene> targetome) {
         super(network, view, resultsPanel, attributeName, factor, targetome);
     }
 
@@ -29,25 +28,25 @@ final class AddMetatargetomeTask extends MetatargetomeTask {
         if (getMonitor() != null) getMonitor().setStatus("Adding nodes and edges");
 
         final List<CyNode> nodes = CytoscapeNetworkUtilities.getAllNodes();
-        final Map<String,List<CyNode>> name2nodes = CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), nodes);
+        final Map<String, List<CyNode>> name2nodes = CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), nodes);
 
         final List<CyNode> sourceNodes =
-                  name2nodes.containsKey(getTranscriptionFactor().getGeneName())
-                ? name2nodes.get(getTranscriptionFactor().getGeneName())
-                : Collections.singletonList(CytoscapeNetworkUtilities.createSourceNode(getNetwork(), getView(), getAttributeName(), getTranscriptionFactor(), NO_MOTIF));
+                name2nodes.containsKey(getTranscriptionFactor().getGeneName())
+                        ? name2nodes.get(getTranscriptionFactor().getGeneName())
+                        : Collections.singletonList(CytoscapeNetworkUtilities.createSourceNode(getNetwork(), getView(), getAttributeName(), getTranscriptionFactor(), NO_MOTIF));
         final int totalCount = sourceNodes.size() * getTargetome().size();
         int count = 0;
-        for(final CyNode sourceNode : sourceNodes) {
+        for (final CyNode sourceNode : sourceNodes) {
             CytoscapeNetworkUtilities.adjustSourceNode(sourceNode, getAttributeName(), getTranscriptionFactor(), NO_MOTIF);
 
             for (final CandidateTargetGene targetGene : getTargetome()) {
                 if (isInterrupted()) return;
-                if (getMonitor() != null) getMonitor().setPercentCompleted((100 * count)/totalCount);
+                if (getMonitor() != null) getMonitor().setPercentCompleted((100 * count) / totalCount);
 
                 final List<CyNode> targetNodes =
-                                name2nodes.containsKey(targetGene.getGeneName())
-                              ? name2nodes.get(targetGene.getGeneName())
-                              : Collections.singletonList(CytoscapeNetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF));
+                        name2nodes.containsKey(targetGene.getGeneName())
+                                ? name2nodes.get(targetGene.getGeneName())
+                                : Collections.singletonList(CytoscapeNetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF));
                 for (final CyNode targetNode : targetNodes) {
                     CytoscapeNetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, NO_MOTIF);
 

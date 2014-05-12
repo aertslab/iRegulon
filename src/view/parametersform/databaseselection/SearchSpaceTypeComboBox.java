@@ -2,9 +2,8 @@ package view.parametersform.databaseselection;
 
 import domainmodel.RankingsDatabase;
 
+import javax.swing.*;
 import java.util.List;
-
-import javax.swing.JComboBox;
 
 public class SearchSpaceTypeComboBox extends JComboBox {
 	public SearchSpaceTypeComboBox(final RankingsDatabase.Type[] types) {

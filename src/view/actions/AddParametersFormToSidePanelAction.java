@@ -46,10 +46,10 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         return predictedRegulatorsForm != null && metatargetomeForm != null;
     }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
         if (!alreadyAdded()) addSidePanel();
-	}
+    }
 
     @Override
     public void refresh() {
@@ -64,8 +64,8 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
     }
 
     private void addSidePanel() {
-		final CytoscapeDesktop desktop = Cytoscape.getDesktop();
-		final CytoPanel cytoPanel = desktop.getCytoPanel(SwingConstants.WEST);
+        final CytoscapeDesktop desktop = Cytoscape.getDesktop();
+        final CytoPanel cytoPanel = desktop.getCytoPanel(SwingConstants.WEST);
 
         final JPanel sidePanel = new JPanel(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
@@ -73,37 +73,43 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         final JLabel titleLabel = new JLabel(PLUGIN_NAME);
         titleLabel.setFont(new Font("Serif", 0, 45));
 
-        cc.gridx = 0; cc.gridy = 0;
-		cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
-		cc.fill = GridBagConstraints.HORIZONTAL;
+        cc.gridx = 0;
+        cc.gridy = 0;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
+        cc.fill = GridBagConstraints.HORIZONTAL;
         sidePanel.add(titleLabel, cc);
 
 
         final JTabbedPane tabbedPane = new JTabbedPane();
         predictedRegulatorsForm = new PredictedRegulatorsForm();
-        final Map<SpeciesNomenclature,Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature,Set<GeneIdentifier>>();
+        final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
         }
         metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
-		tabbedPane.addTab("Predict regulators and targets", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
+        tabbedPane.addTab("Predict regulators and targets", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
         tabbedPane.addTab("Query TF-target database", null, metatargetomeForm, null);
 
-        cc.gridx = 0; cc.gridy = 1;
-		cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 1.0;
-		cc.fill = GridBagConstraints.BOTH;
+        cc.gridx = 0;
+        cc.gridy = 1;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 1.0;
+        cc.fill = GridBagConstraints.BOTH;
         sidePanel.add(tabbedPane, cc);
 
-		if (cytoPanel.indexOfComponent(PLUGIN_NAME) == -1) {
-			cytoPanel.add(PLUGIN_NAME, sidePanel);
-		}
+        if (cytoPanel.indexOfComponent(PLUGIN_NAME) == -1) {
+            cytoPanel.add(PLUGIN_NAME, sidePanel);
+        }
 
         final int idx = cytoPanel.indexOfComponent(PLUGIN_NAME);
-		cytoPanel.setSelectedIndex(idx);
+        cytoPanel.setSelectedIndex(idx);
 
-		cytoPanel.addCytoPanelListener(new CytoPanelListener() {
+        cytoPanel.addCytoPanelListener(new CytoPanelListener() {
             @Override
             public void onStateChange(CytoPanelState newState) {
                 refresh();
@@ -155,7 +161,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         installSelectionListener(Cytoscape.getCurrentNetworkView());
 
         refresh();
-	}
+    }
 
     private final GraphViewChangeListener selectionListener = new GraphViewChangeListener() {
         @Override

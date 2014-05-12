@@ -28,7 +28,7 @@ public class ResourceAction extends AbstractAction {
     }
 
     private ImageIcon loadIcon(final String resourceName) {
-		return new ImageIcon(getClass().getResource(resourceName));
+        return new ImageIcon(getClass().getResource(resourceName));
     }
 
     public static ResourceBundle getBundle() {

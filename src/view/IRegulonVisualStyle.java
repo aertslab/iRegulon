@@ -1,11 +1,13 @@
 package view;
 
-import java.awt.Color;
 import cytoscape.Cytoscape;
 import cytoscape.visual.*;
-import cytoscape.visual.calculators.*;
+import cytoscape.visual.calculators.BasicCalculator;
+import cytoscape.visual.calculators.Calculator;
 import cytoscape.visual.mappings.*;
 import infrastructure.CytoscapeNetworkUtilities;
+
+import java.awt.*;
 
 
 public class IRegulonVisualStyle extends IRegulonResourceBundle {
@@ -13,21 +15,21 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
     private static final Color GRAY = new Color(220, 220, 220);
 
     private IRegulonVisualStyle() {
-	}
+    }
 
     public static VisualStyle getVisualStyle() {
         final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-		return manager.getCalculatorCatalog().getVisualStyle(NAME);
+        return manager.getCalculatorCatalog().getVisualStyle(NAME);
     }
-	
-	public static void installVisualStyle() {
-		final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-		final CalculatorCatalog catalog = manager.getCalculatorCatalog();
-		if (catalog.getVisualStyle(NAME) != null) catalog.removeVisualStyle(NAME);
+
+    public static void installVisualStyle() {
+        final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
+        final CalculatorCatalog catalog = manager.getCalculatorCatalog();
+        if (catalog.getVisualStyle(NAME) != null) catalog.removeVisualStyle(NAME);
         final VisualStyle vs = createVisualStyle();
         catalog.addVisualStyle(vs);
-	}
-	
+    }
+
     private static VisualStyle createVisualStyle() {
         final VisualStyle style = new VisualStyle(NAME);
         style.setGlobalAppearanceCalculator(createGlobalAppearanceCalculator());
@@ -72,9 +74,10 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
         final ContinuousMapping edgeColorMapping = new ContinuousMapping(Color.class, CytoscapeNetworkUtilities.MOTIF_ID_ATTRIBUTE_NAME);
         edgeColorMapping.setInterpolator(new LinearNumberToColorInterpolator());
         edgeColorMapping.addPoint(0, new BoundaryRangeValues(Color.BLUE, Color.BLUE, Color.BLUE));
-        edgeColorMapping.addPoint(Integer.MAX_VALUE/2, new BoundaryRangeValues(Color.RED, Color.RED, Color.RED));
+        edgeColorMapping.addPoint(Integer.MAX_VALUE / 2, new BoundaryRangeValues(Color.RED, Color.RED, Color.RED));
         edgeColorMapping.addPoint(Integer.MAX_VALUE, new BoundaryRangeValues(Color.GREEN, Color.GREEN, Color.GREEN));
-        // Costum made mapping cannot be saved to a .cys file ...
+
+        // Custom made mapping cannot be saved to a .cys file ...
         //final Motif2EdgeColorMapping edgeColorMapping = new Motif2EdgeColorMapping();
         final Calculator edgeColorCalculator = new BasicCalculator("iRegulon Visual Style Edge Color Calculator",
                 edgeColorMapping, VisualPropertyType.EDGE_COLOR);

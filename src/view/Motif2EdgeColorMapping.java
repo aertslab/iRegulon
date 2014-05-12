@@ -15,7 +15,7 @@ import java.util.*;
 final class Motif2EdgeColorMapping extends AbstractMapping {
     private final Random generator = new Random();
 
-    private final SortedMap<Integer,Color> map = new TreeMap<Integer, Color>();
+    private final SortedMap<Integer, Color> map = new TreeMap<Integer, Color>();
 
     public Motif2EdgeColorMapping() {
         super(Color.class, CytoscapeNetworkUtilities.MOTIF_ATTRIBUTE_NAME);
@@ -60,21 +60,21 @@ final class Motif2EdgeColorMapping extends AbstractMapping {
     public Properties getProperties(String baseKey) {
         final Properties result = new Properties();
 
-		final String contKey = baseKey + ".controller";
-		result.setProperty(contKey, getControllingAttributeName());
+        final String contKey = baseKey + ".controller";
+        result.setProperty(contKey, getControllingAttributeName());
 
-		final String contTypeKey = baseKey + ".controllerType";
-		result.setProperty(contTypeKey, MappingUtil.getAttributeTypeString(baseKey, getControllingAttributeName()));
+        final String contTypeKey = baseKey + ".controllerType";
+        result.setProperty(contTypeKey, MappingUtil.getAttributeTypeString(baseKey, getControllingAttributeName()));
 
-		final String mapKey = baseKey + ".map.";
-        for (final Integer code: map.keySet()) {
+        final String mapKey = baseKey + ".map.";
+        for (final Integer code : map.keySet()) {
             final Color color = map.get(code);
             if (color != null) {
-			   result.setProperty(mapKey + code.toString(), ValueToStringConverterManager.manager.toString(color));
+                result.setProperty(mapKey + code.toString(), ValueToStringConverterManager.manager.toString(color));
             }
         }
 
-		return result;
+        return result;
     }
 
     @Override
@@ -93,12 +93,12 @@ final class Motif2EdgeColorMapping extends AbstractMapping {
     public Object clone() {
         final Motif2EdgeColorMapping clone = new Motif2EdgeColorMapping();
 
-		// Copy over all listeners...
-		for (ChangeListener listener : observers) clone.addChangeListener(listener);
+        // Copy over all listeners...
+        for (ChangeListener listener : observers) clone.addChangeListener(listener);
 
-		// Copy key-value pairs
-		for (final Integer key : this.map.keySet()) clone.map.put(key, map.get(key));
+        // Copy key-value pairs
+        for (final Integer key : this.map.keySet()) clone.map.put(key, map.get(key));
 
-		return clone;
+        return clone;
     }
 }

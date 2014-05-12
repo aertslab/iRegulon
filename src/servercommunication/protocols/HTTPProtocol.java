@@ -284,7 +284,6 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     }
 
     /**
-     *
      * @param input
      * @param jobID the id of the job
      * @return a collection of Motifs
@@ -436,7 +435,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                         /* Create a motif cluster name with the original motif cluster number. */
                         String originalMotifClusterCode = "M" + motifOrTrackVariables[8];
 
-                        if (! clusterCodeToNumber.containsKey(originalMotifClusterCode)) {
+                        if (!clusterCodeToNumber.containsKey(originalMotifClusterCode)) {
                             /* Keep track of the amount of motif clusters. */
                             motifClusterCodeToNumber.put(originalMotifClusterCode, motifClusterCount + 1);
                             motifClusterCount++;
@@ -463,7 +462,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                         /* Create a track cluster name with the original motif cluster number. */
                         String originalTrackClusterCode = "T" + motifOrTrackVariables[8];
 
-                        if (! clusterCodeToNumber.containsKey(originalTrackClusterCode)) {
+                        if (!clusterCodeToNumber.containsKey(originalTrackClusterCode)) {
                             /* Keep track of the amount of track clusters. */
                             trackClusterCodeToNumber.put(originalTrackClusterCode, trackClusterCount + 1);
                             trackClusterCount++;

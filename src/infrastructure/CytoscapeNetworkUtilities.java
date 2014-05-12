@@ -1,13 +1,11 @@
 package infrastructure;
 
 
-import java.util.*;
-
-import cytoscape.Cytoscape;
+import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
+import cytoscape.CyNode;
+import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
-import cytoscape.*;
-
 import cytoscape.data.Semantics;
 import cytoscape.view.CyNetworkView;
 import cytoscape.view.cytopanels.CytoPanel;
@@ -17,6 +15,7 @@ import domainmodel.*;
 import view.IRegulonVisualStyle;
 
 import javax.swing.*;
+import java.util.*;
 
 
 public final class CytoscapeNetworkUtilities {

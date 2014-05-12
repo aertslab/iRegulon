@@ -1,8 +1,8 @@
 package servercommunication.protocols;
 
 public enum State {
-	REQUESTED,
-	RUNNING,
-	FINISHED,
-	ERROR
+    REQUESTED,
+    RUNNING,
+    FINISHED,
+    ERROR
 }

@@ -2,8 +2,8 @@ package servercommunication;
 
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
-import domainmodel.InputParameters;
 import domainmodel.AbstractMotifAndTrack;
+import domainmodel.InputParameters;
 import domainmodel.Motif;
 import domainmodel.Track;
 import infrastructure.Logger;
@@ -116,9 +116,9 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                 this.motifsAndTracks = service.getMotifsAndTracks(input, jobID);
 
                 for (AbstractMotifAndTrack motifOrTrack : this.motifsAndTracks) {
-                    if(motifOrTrack.isMotif()) {
+                    if (motifOrTrack.isMotif()) {
                         motifs.add((Motif) motifOrTrack);
-                    } else if(motifOrTrack.isTrack()) {
+                    } else if (motifOrTrack.isTrack()) {
                         tracks.add((Track) motifOrTrack);
                     }
                 }

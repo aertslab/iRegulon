@@ -19,6 +19,11 @@
     <property name="plugin.package" value="view"/>
     <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
 
+    <property name="jars.cytoscape" value="${lib.folder}/cytoscape-2.8.3-bin.jar"/>
+    <property name="jars.jarjar" value="${lib.folder}/jarjar-1.4-bin.jar"/>
+    <property name="jars.kxml2" value="${lib.folder}/kxml2-2.3.0-bin.jar"/>
+    <property name="jars.xstream" value="${lib.folder}/xstream-1.4.3-bin.jar"/>
+
     <tstamp>
         <format property="TODAY" pattern="yyyy-MM-dd" locale="us,US"/>
         <format property="TODAY_long" pattern="MMMM d, yyyy" locale="us,US"/>
@@ -35,8 +40,8 @@
     <!-- Compile the project                                                 -->
     <!-- =================================================================== -->
     <path id="project.class.path">
-        <pathelement path="${lib.folder}/xstream-1.4.3-bin.jar"/>
-        <pathelement path="${lib.folder}/cytoscape-2.8.3-bin.jar"/>
+        <pathelement path="${jars.cytoscape}"/>
+        <pathelement path="${jars.xstream}"/>
     </path>
 
     <target name="compile" depends="clean">
@@ -124,29 +129,27 @@
 
     <target name="binary_distribution_with_transfac"
             depends="copy_resources_with_transfac,generate_cytoscape_props_file,generate_java_props_file">
-        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
-                 classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
+        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${jars.jarjar}"/>
         <jarjar jarfile="${build.folder}/${plugin.bin.with_transfac.filename}">
             <manifest>
                 <attribute name="Cytoscape-Plugin" value="${plugin.main}"/>
             </manifest>
             <fileset dir="${build.folder}"/>
-            <zipfileset src="${lib.folder}/xstream-1.4.3-bin.jar"/>
-            <zipfileset src="${lib.folder}/kxml2-2.3.0-bin.jar"/>
+            <zipfileset src="${jars.kxml2}"/>
+            <zipfileset src="${jars.xstream}"/>
         </jarjar>
     </target>
 
     <target name="binary_distribution_without_transfac"
             depends="copy_resources_without_transfac,generate_cytoscape_props_file,generate_java_props_file">
-        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
-                 classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
+        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${jars.jarjar}"/>
         <jarjar jarfile="${build.folder}/${plugin.bin.without_transfac.filename}">
             <manifest>
                 <attribute name="Cytoscape-Plugin" value="${plugin.main}"/>
             </manifest>
             <fileset dir="${build.folder}"/>
-            <zipfileset src="${lib.folder}/xstream-1.4.3-bin.jar"/>
-            <zipfileset src="${lib.folder}/kxml2-2.3.0-bin.jar"/>
+            <zipfileset src="${jars.kxml2}"/>
+            <zipfileset src="${jars.xstream}"/>
         </jarjar>
     </target>
 

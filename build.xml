@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all">
-    <property file="build.properties" />
+    <property file="build.properties"/>
     <buildnumber file="build.number"/>
 
     <property name="source.folder" value="src/"/>
@@ -10,10 +10,10 @@
 
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="1.2"/>
-    <property name="plugin.bin.filename" value="iRegulon-${plugin.version}-bin-with-transfac.jar"/>
-    <property name="plugin.bin.notransfac.filename" value="iRegulon-${plugin.version}-bin-without-transfac.jar"/>
-    <property name="plugin.src.filename" value="iRegulon-${plugin.version}-src-with-transfac.zip"/>
-    <property name="plugin.src.notransfac.filename" value="iRegulon-${plugin.version}-src-without-transfac.zip"/>
+    <property name="plugin.bin.with_transfac.filename" value="iRegulon-${plugin.version}-bin-with-transfac.jar"/>
+    <property name="plugin.bin.without_transfac.filename" value="iRegulon-${plugin.version}-bin-without-transfac.jar"/>
+    <property name="plugin.src.with_transfac.filename" value="iRegulon-${plugin.version}-src-with-transfac.zip"/>
+    <property name="plugin.src.without_transfac.filename" value="iRegulon-${plugin.version}-src-without-transfac.zip"/>
     <property name="plugin.package" value="view"/>
     <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
 
@@ -48,15 +48,16 @@
     <!-- =================================================================== -->
     <!-- Copy the resources                                                  -->
     <!-- =================================================================== -->
-    <target name="copy_resources" depends="compile">
+    <target name="copy_resources_with_transfac" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml" />
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml"/>
         </copy>
     </target>
 
-    <target name="copy_resources_no_transfac" depends="compile">
+    <target name="copy_resources_without_transfac" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml" excludes="**/transfac_pro-*.png" />
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml"
+                     excludes="**/transfac_pro-*.png"/>
         </copy>
     </target>
 
@@ -64,8 +65,9 @@
     <!-- Generate plugin Cytoscape props file from template                  -->
     <!-- =================================================================== -->
     <target name="generate_cytoscape_props_file">
-        <copy file="${source.folder}/plugin.template.props" tofile="${build.folder}/${plugin.package}/plugin.props" overwrite="true">
-           <filterchain>
+        <copy file="${source.folder}/plugin.template.props" tofile="${build.folder}/${plugin.package}/plugin.props"
+              overwrite="true">
+            <filterchain>
                 <striplinecomments>
                     <comment value="!"/>
                 </striplinecomments>
@@ -85,8 +87,9 @@
     <!-- Generate plugin JAVA properties file from template                  -->
     <!-- =================================================================== -->
     <target name="generate_java_props_file">
-        <copy file="${source.folder}/iRegulon.template.properties" tofile="${build.folder}/iRegulon.properties" overwrite="true">
-           <filterchain>
+        <copy file="${source.folder}/iRegulon.template.properties" tofile="${build.folder}/iRegulon.properties"
+              overwrite="true">
+            <filterchain>
                 <striplinecomments>
                     <comment value="!"/>
                 </striplinecomments>
@@ -105,34 +108,39 @@
     <!-- =================================================================== -->
     <!-- Create the plugin jar file                                          -->
     <!-- =================================================================== -->
-    <target name="binary_distribution_without_deps" depends="copy_resources,generate_cytoscape_props_file,generate_java_props_file">
-        <jar destfile="${build.folder}/${plugin.src.filename}">
+    <target name="binary_distribution_with_transfac_without_deps"
+            depends="copy_resources_with_transfac,generate_cytoscape_props_file,generate_java_props_file">
+        <jar destfile="${build.folder}/${plugin.src.with_transfac.filename}">
             <manifest>
-                <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
+                <attribute name="Cytoscape-Plugin" value="${plugin.main}"/>
             </manifest>
-         <fileset dir="${build.folder}" />
+            <fileset dir="${build.folder}"/>
         </jar>
     </target>
 
-    <target name="binary_distribution" depends="copy_resources,generate_cytoscape_props_file,generate_java_props_file">
-        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
-        <jarjar jarfile="${build.folder}/${plugin.bin.filename}">
+    <target name="binary_distribution_with_transfac"
+            depends="copy_resources_with_transfac,generate_cytoscape_props_file,generate_java_props_file">
+        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+                 classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
+        <jarjar jarfile="${build.folder}/${plugin.bin.with_transfac.filename}">
             <manifest>
-                <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
+                <attribute name="Cytoscape-Plugin" value="${plugin.main}"/>
             </manifest>
-            <fileset dir="${build.folder}" />
+            <fileset dir="${build.folder}"/>
             <zipfileset src="${lib.folder}/xstream-1.4.3-bin.jar"/>
             <zipfileset src="${lib.folder}/kxml2-2.3.0-bin.jar"/>
         </jarjar>
     </target>
 
-    <target name="binary_distribution_no_transfac" depends="copy_resources_no_transfac,generate_cytoscape_props_file,generate_java_props_file">
-        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
-        <jarjar jarfile="${build.folder}/${plugin.bin.notransfac.filename}">
+    <target name="binary_distribution_without_transfac"
+            depends="copy_resources_without_transfac,generate_cytoscape_props_file,generate_java_props_file">
+        <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask"
+                 classpath="${lib.folder}/jarjar-1.4-bin.jar"/>
+        <jarjar jarfile="${build.folder}/${plugin.bin.without_transfac.filename}">
             <manifest>
-                <attribute name="Cytoscape-Plugin" value="${plugin.main}" />
+                <attribute name="Cytoscape-Plugin" value="${plugin.main}"/>
             </manifest>
-            <fileset dir="${build.folder}" />
+            <fileset dir="${build.folder}"/>
             <zipfileset src="${lib.folder}/xstream-1.4.3-bin.jar"/>
             <zipfileset src="${lib.folder}/kxml2-2.3.0-bin.jar"/>
         </jarjar>
@@ -141,10 +149,10 @@
     <!-- =================================================================== -->
     <!-- Create the source distribution                                      -->
     <!-- =================================================================== -->
-    <target name="source_distribution" depends="copy_resources">
-        <zip destfile="${build.folder}/${plugin.src.filename}">
+    <target name="source_distribution_with_transfac" depends="copy_resources_with_transfac">
+        <zip destfile="${build.folder}/${plugin.src.with_transfac.filename}">
             <fileset dir="${basedir}"
-                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg" />
+                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg"/>
 
             <fileset dir="${basedir}" includes="src/**/*.java"/>
 
@@ -160,10 +168,11 @@
         </zip>
     </target>
 
-    <target name="source_distribution_no_transfac" depends="copy_resources">
-        <zip destfile="${build.folder}/${plugin.src.notransfac.filename}">
+    <target name="source_distribution_without_transfac" depends="copy_resources_without_transfac">
+        <zip destfile="${build.folder}/${plugin.src.without_transfac.filename}">
             <fileset dir="${basedir}"
-                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg"  excludes="**/transfac_pro-*.png" />
+                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg"
+                     excludes="**/transfac_pro-*.png"/>
 
             <fileset dir="${basedir}" includes="src/**/*.java"/>
 
@@ -184,17 +193,21 @@
     <!-- =================================================================== -->
     <target name="all">
         <antcall target="clean"/>
-        <antcall target="binary_distribution"/>
-        <copy file="${build.folder}/${plugin.bin.filename}" tofile="${basedir}/${plugin.bin.filename}" overwrite="true"/>
+        <antcall target="binary_distribution_with_transfac"/>
+        <copy file="${build.folder}/${plugin.bin.with_transfac.filename}"
+              tofile="${basedir}/${plugin.bin.with_transfac.filename}" overwrite="true"/>
         <antcall target="clean"/>
-        <antcall target="binary_distribution_no_transfac"/>
-        <copy file="${build.folder}/${plugin.bin.notransfac.filename}" tofile="${basedir}/${plugin.bin.notransfac.filename}" overwrite="true"/>
+        <antcall target="binary_distribution_without_transfac"/>
+        <copy file="${build.folder}/${plugin.bin.without_transfac.filename}"
+              tofile="${basedir}/${plugin.bin.without_transfac.filename}" overwrite="true"/>
         <antcall target="clean"/>
-        <antcall target="source_distribution"/>
-        <copy file="${build.folder}/${plugin.src.filename}" tofile="${basedir}/${plugin.src.filename}" overwrite="true"/>
+        <antcall target="source_distribution_with_transfac"/>
+        <copy file="${build.folder}/${plugin.src.with_transfac.filename}"
+              tofile="${basedir}/${plugin.src.with_transfac.filename}" overwrite="true"/>
         <antcall target="clean"/>
-        <antcall target="source_distribution_no_transfac"/>
-        <copy file="${build.folder}/${plugin.src.notransfac.filename}" tofile="${basedir}/${plugin.src.notransfac.filename}" overwrite="true"/>
+        <antcall target="source_distribution_without_transfac"/>
+        <copy file="${build.folder}/${plugin.src.without_transfac.filename}"
+              tofile="${basedir}/${plugin.src.without_transfac.filename}" overwrite="true"/>
         <antcall target="clean"/>
     </target>
 
@@ -202,13 +215,14 @@
     <!-- Generate plugin installation XML from template                      -->
     <!-- =================================================================== -->
     <target name="generate_installation_file">
-        <copy file="${source.folder}/installation.template.xml" tofile="${build.folder}/installation.xml" overwrite="true">
-           <filterchain>
+        <copy file="${source.folder}/installation.template.xml" tofile="${build.folder}/installation.xml"
+              overwrite="true">
+            <filterchain>
                 <replacetokens>
                     <token key="pluginName" value="${plugin.name}"/>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
-                    <token key="binaryDistribution" value="${plugin.bin.notransfac.filename}"/>
+                    <token key="binaryDistributionWithTransfac" value="${plugin.bin.without_transfac.filename}"/>
                 </replacetokens>
             </filterchain>
         </copy>
@@ -218,8 +232,9 @@
     <!-- Generate PHP configuration file from template                       -->
     <!-- =================================================================== -->
     <target name="generate_php_configuration_file">
-        <copy file="${web.folder}/configuration.template.ini" tofile="${build.folder}/configuration.ini" overwrite="true">
-           <filterchain>
+        <copy file="${web.folder}/configuration.template.ini" tofile="${build.folder}/configuration.ini"
+              overwrite="true">
+            <filterchain>
                 <replacetokens>
                     <token key="serverName" value="${sql.server}"/>
                     <token key="serverPort" value="${sql.port}"/>
@@ -236,13 +251,13 @@
     <!-- =================================================================== -->
     <target name="generate_html_file">
         <copy file="${web.folder}/index.template.html" tofile="${build.folder}/index.html" overwrite="true">
-           <filterchain>
+            <filterchain>
                 <replacetokens>
                     <token key="pluginVersion" value="${plugin.version}"/>
-                    <token key="binaryDistribution" value="${plugin.bin.filename}"/>
-                    <token key="binaryDistributionNoTransfac" value="${plugin.bin.notransfac.filename}"/>
-                    <token key="sourceDistribution" value="${plugin.src.filename}"/>
-                    <token key="sourceDistributionNoTransfac" value="${plugin.src.notransfac.filename}"/>
+                    <token key="binaryDistributionWithTransfac" value="${plugin.bin.with_transfac.filename}"/>
+                    <token key="binaryDistributionWithoutTransfac" value="${plugin.bin.without_transfac.filename}"/>
+                    <token key="sourceDistributionWithTransfac" value="${plugin.src.with_transfac.filename}"/>
+                    <token key="sourceDistributionWithoutTransfac" value="${plugin.src.without_transfac.filename}"/>
                     <token key="installationXml" value="installation.xml"/>
                 </replacetokens>
             </filterchain>
@@ -252,29 +267,30 @@
     <!-- =================================================================== -->
     <!-- Deploy to web server                                                -->
     <!-- =================================================================== -->
-    <target name="deploy" depends="binary_distribution_no_transfac,binary_distribution,source_distribution_no_transfac,source_distribution,generate_installation_file,generate_php_configuration_file,generate_html_file">
+    <target name="deploy"
+            depends="binary_distribution_without_transfac,binary_distribution_with_transfac,source_distribution_without_transfac,source_distribution_with_transfac,generate_installation_file,generate_php_configuration_file,generate_html_file">
         <ftp server="${ftp.server}" port="21"
              remotedir="iRegulon/"
              userid="${ftp.username}" password="${ftp.password}"
              action="send" verbose="yes" depends="yes" binary="yes">
-            <fileset file="${build.folder}/${plugin.src.notransfac.filename}" />
-            <fileset file="${build.folder}/${plugin.src.notransfac.filename}" />
-            <fileset file="${build.folder}/${plugin.bin.filename}" />
-            <fileset file="${build.folder}/${plugin.bin.filename}" />
-            <fileset file="${build.folder}/installation.xml" />
-            <fileset file="${build.folder}/LICENSE.txt" />
-            <fileset file="${build.folder}/configuration.ini" />
-            <fileset dir="${web.folder}/"  includes="*.css,*.php,*.html,.htaccess"/>
-            <fileset dir="${web.folder}/images/"  includes="*.gif"/>
+            <fileset file="${build.folder}/${plugin.src.without_transfac.filename}"/>
+            <fileset file="${build.folder}/${plugin.src.without_transfac.filename}"/>
+            <fileset file="${build.folder}/${plugin.bin.with_transfac.filename}"/>
+            <fileset file="${build.folder}/${plugin.bin.with_transfac.filename}"/>
+            <fileset file="${build.folder}/installation.xml"/>
+            <fileset file="${build.folder}/LICENSE.txt"/>
+            <fileset file="${build.folder}/configuration.ini"/>
+            <fileset dir="${web.folder}/" includes="*.css,*.php,*.html,.htaccess"/>
+            <fileset dir="${web.folder}/images/" includes="*.gif"/>
         </ftp>
     </target>
 
     <!-- =================================================================== -->
     <!-- Deploy to local installation                                        -->
     <!-- =================================================================== -->
-    <target name="debug" depends="binary_distribution">
+    <target name="debug" depends="binary_distribution_with_transfac">
         <copy todir="${local.installation}/plugins">
-            <fileset file="${build.folder}/${plugin.bin.filename}" />
+            <fileset file="${build.folder}/${plugin.bin.with_transfac.filename}"/>
         </copy>
     </target>
 </project>

@@ -8,13 +8,13 @@ pluginName=@pluginName@
 
 # Description used to give users information about the plugin such as what it does.
 # Html tags are encouraged for formatting purposes.
-pluginDescription=A regulon consists of a transcription factor (TF) and its direct transcriptional targets, which contain common TF binding sites in their cis-regulatory control elements.<p>The iRegulon plugin allows you to identify regulons using motif discovery in an existing network or in a set of co-regulated genes.<br><ul type=disc><li>Motif discovery is performed in proximal and distal sequences, across ten vertebrate genomes, using more than six thousand candidate motifs (position weight matrices or PWMs).</li><li>The output of iRegulon is a list of enriched motifs, alongside with candidate transcription factors. The Motif2TF associations are based on PWM annotation, the use of TF homology, and of motif similarity.</li><li>New networks can be automatically generated based on the predicted TF-target interactions.</li><li>The iRegulon plugin can also be used to query high-confidence target genes predicted from the systematic analysis of thousands of cancer gene signatures.</li></ul><a href="@websiteUrl@">@websiteUrl@</a></p>
+pluginDescription=<p>A regulon consists of a transcription factor (TF) and its direct transcriptional targets, which contain common TF binding sites in their cis-regulatory control elements.</p><p>The <a href="@websiteUrl@">iRegulon plugin</a> allows you to identify regulons using motif and track discovery in an existing network or in a set of co-regulated genes.</p><ul type=disc><li>Motif discovery is performed in proximal and distal sequences, across ten vertebrate genomes, using nearly ten thousand candidate motifs (position weight matrices or PWMs).</li><li>Track discovery allows detecting TFs using gene rankings according to the highest ChIP peak within the regulatory space. This version uses more than one thousand ChIP-Seq tracks.</li><li>The output of iRegulon is a list of enriched motifs/tracks, alongside with candidate transcription factors. The Motif2TF associations are based on PWM annotation, the use of TF homology, and of motif similarity.</li><li>New networks can be automatically generated based on the predicted TF-target interactions.</li><li>The iRegulon plugin can also be used to query a TF-targets database made of high-confidence target genes predicted from the systematic analysis of thousands of cancer gene signatures.</li><li>Supported organisms are human, mouse and fly.</li></ul><p><i>A full version of the plugin including TRANSFAC Professional motifs is provided from the website </i><a href="@downloadUrl@">@downloadUrl@</a><i> (To download the TRANSFAC PRO version, the user will need to have a valid subscription to TRANSFAC Professional).</i></p>
 
 # Plugin version number, this must be two numbers separated by a decimal.  Ex. 0.2, 14.03
 pluginVersion=@pluginVersion@
 
 # Compatible Cytoscape version. If there are more than one version, separate by ",".
-cytoscapeVersion=2.8
+cytoscapeVersion=@compatibleCytoscapeVersions@
 
 # Category, use one of the categories listed on the http://chianti.ucsd.edu/cyto_web/plugins/
 pluginCategory=Network generation
@@ -26,7 +26,7 @@ projectURL=@websiteUrl@
 
 # List of authors.  Note each author and institution pair are separated by a : (colon)
 # each additional author institution pair must be separated from other pairs bye a ; (semicolon)
-pluginAuthorsInstitutions=Gert Hulselmans, Koen Herten, Bram Van de Sande, Rekin's Janky and Stein Aerts:KULeuven
+pluginAuthorsInstitutions=Gert Hulselmans, Rekin's Janky, Bram Van de Sande, Koen Herten, and Stein Aerts:KULeuven
 
 # Date this plugin/plugin version was released
 releaseDate=@releaseDateLong@

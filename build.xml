@@ -8,6 +8,8 @@
     <property name="lib.folder" value="lib/"/>
     <property name="web.folder" value="web/"/>
 
+    <property name="cytoscape.versions" value="2.8"/>
+
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="1.2"/>
     <property name="plugin.bin.with_transfac.filename" value="iRegulon-${plugin.version}-bin-with-transfac.jar"/>
@@ -72,11 +74,13 @@
                     <comment value="!"/>
                 </striplinecomments>
                 <replacetokens>
+                    <token key="compatibleCytoscapeVersions" value="${cytoscape.versions}"/>
                     <token key="pluginName" value="${plugin.name}"/>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
                     <token key="releaseDateLong" value="${TODAY_long}"/>
                     <token key="websiteUrl" value="${website.url}"/>
+                    <token key="downloadUrl" value="${website.downloadurl}"/>
                     <token key="webclientBaseUrl" value="${webclient.baseurl}"/>
                 </replacetokens>
             </filterchain>

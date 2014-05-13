@@ -212,23 +212,6 @@
     </target>
 
     <!-- =================================================================== -->
-    <!-- Generate plugin installation XML from template                      -->
-    <!-- =================================================================== -->
-    <target name="generate_installation_file">
-        <copy file="${source.folder}/installation.template.xml" tofile="${build.folder}/installation.xml"
-              overwrite="true">
-            <filterchain>
-                <replacetokens>
-                    <token key="pluginName" value="${plugin.name}"/>
-                    <token key="pluginVersion" value="${plugin.version}"/>
-                    <token key="releaseDate" value="${TODAY}"/>
-                    <token key="binaryDistributionWithTransfac" value="${plugin.bin.without_transfac.filename}"/>
-                </replacetokens>
-            </filterchain>
-        </copy>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- Generate PHP configuration file from template                       -->
     <!-- =================================================================== -->
     <target name="generate_php_configuration_file">
@@ -247,41 +230,20 @@
     </target>
 
     <!-- =================================================================== -->
-    <!-- Generate web portal from template                                   -->
-    <!-- =================================================================== -->
-    <target name="generate_html_file">
-        <copy file="${web.folder}/index.template.html" tofile="${build.folder}/index.html" overwrite="true">
-            <filterchain>
-                <replacetokens>
-                    <token key="pluginVersion" value="${plugin.version}"/>
-                    <token key="binaryDistributionWithTransfac" value="${plugin.bin.with_transfac.filename}"/>
-                    <token key="binaryDistributionWithoutTransfac" value="${plugin.bin.without_transfac.filename}"/>
-                    <token key="sourceDistributionWithTransfac" value="${plugin.src.with_transfac.filename}"/>
-                    <token key="sourceDistributionWithoutTransfac" value="${plugin.src.without_transfac.filename}"/>
-                    <token key="installationXml" value="installation.xml"/>
-                </replacetokens>
-            </filterchain>
-        </copy>
-    </target>
-
-    <!-- =================================================================== -->
     <!-- Deploy to web server                                                -->
     <!-- =================================================================== -->
     <target name="deploy"
-            depends="binary_distribution_without_transfac,binary_distribution_with_transfac,source_distribution_without_transfac,source_distribution_with_transfac,generate_installation_file,generate_php_configuration_file,generate_html_file">
+            depends="binary_distribution_without_transfac,binary_distribution_with_transfac,source_distribution_without_transfac,source_distribution_with_transfac,generate_php_configuration_file">
         <ftp server="${ftp.server}" port="21"
              remotedir="iRegulon/"
              userid="${ftp.username}" password="${ftp.password}"
              action="send" verbose="yes" depends="yes" binary="yes">
-            <fileset file="${build.folder}/${plugin.src.without_transfac.filename}"/>
+            <fileset file="${build.folder}/${plugin.src.with_transfac.filename}"/>
             <fileset file="${build.folder}/${plugin.src.without_transfac.filename}"/>
             <fileset file="${build.folder}/${plugin.bin.with_transfac.filename}"/>
-            <fileset file="${build.folder}/${plugin.bin.with_transfac.filename}"/>
-            <fileset file="${build.folder}/installation.xml"/>
-            <fileset file="${build.folder}/LICENSE.txt"/>
+            <fileset file="${build.folder}/${plugin.bin.without_transfac.filename}"/>
             <fileset file="${build.folder}/configuration.ini"/>
-            <fileset dir="${web.folder}/" includes="*.css,*.php,*.html,.htaccess"/>
-            <fileset dir="${web.folder}/images/" includes="*.gif"/>
+            <fileset dir="${web.folder}/" includes="*.php,.htaccess"/>
         </ftp>
     </target>
 

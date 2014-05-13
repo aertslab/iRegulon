@@ -1,4 +1,7 @@
-<FilesMatch "\.ini$">
-  order deny,allow
-  deny from all
+Order deny,allow
+Deny from all
+
+<FilesMatch "^(generatebed|getErrorMessage|motifBedGenerator|queryPredictedTargetome|queryTranscriptionFactorsWithPredictedTargetome|results|stateCheck|submitJob)\.php$">
+  Order allow,deny
+  Allow from all
 </FilesMatch>

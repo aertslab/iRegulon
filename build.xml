@@ -50,13 +50,13 @@
     <!-- =================================================================== -->
     <target name="copy_resources_with_transfac" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml"/>
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.xml"/>
         </copy>
     </target>
 
     <target name="copy_resources_without_transfac" depends="compile">
         <copy todir="${build.folder}">
-            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.jpeg,**/*.gif,**/*.jpg,**/*.xml"
+            <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.xml"
                      excludes="**/transfac_pro-*.png"/>
         </copy>
     </target>
@@ -152,7 +152,7 @@
     <target name="source_distribution_with_transfac" depends="copy_resources_with_transfac">
         <zip destfile="${build.folder}/${plugin.src.with_transfac.filename}">
             <fileset dir="${basedir}"
-                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg"/>
+                     includes="src/**/*.properties,src/**/*.png"/>
 
             <fileset dir="${basedir}" includes="src/**/*.java"/>
 
@@ -171,7 +171,7 @@
     <target name="source_distribution_without_transfac" depends="copy_resources_without_transfac">
         <zip destfile="${build.folder}/${plugin.src.without_transfac.filename}">
             <fileset dir="${basedir}"
-                     includes="src/**/*.properties,src/**/*.png,**/*.jpeg,src/**/*.gif,src/**/*.jpg"
+                     includes="src/**/*.properties,src/**/*.png"
                      excludes="**/transfac_pro-*.png"/>
 
             <fileset dir="${basedir}" includes="src/**/*.java"/>

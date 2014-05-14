@@ -19,7 +19,7 @@ import servercommunication.ServerCommunicationException;
 import view.ResourceAction;
 import view.parametersform.DefaultMetatargetomeParameters;
 import view.parametersform.MetatargetomeParameters;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

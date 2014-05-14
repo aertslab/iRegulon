@@ -7,7 +7,7 @@ import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import view.ResourceAction;
 import view.resultspanel.MotifAndTrackListener;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 
 import javax.swing.*;

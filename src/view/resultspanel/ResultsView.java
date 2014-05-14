@@ -8,6 +8,7 @@ import domainmodel.GeneIdentifier;
 import domainmodel.Results;
 import domainmodel.TranscriptionFactor;
 import view.IRegulonResourceBundle;
+import view.Refreshable;
 import view.actions.LoadResultsAction;
 import view.actions.OpenQueryMetatargetomeFormAction;
 import view.actions.QueryMetatargetomeAction;

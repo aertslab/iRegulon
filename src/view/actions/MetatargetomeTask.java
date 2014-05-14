@@ -8,7 +8,7 @@ import cytoscape.view.CyNetworkView;
 import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 
 import java.util.Collections;
 import java.util.List;

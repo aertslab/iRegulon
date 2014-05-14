@@ -7,7 +7,7 @@ import cytoscape.view.CyNetworkView;
 import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
 import infrastructure.CytoscapeNetworkUtilities;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;

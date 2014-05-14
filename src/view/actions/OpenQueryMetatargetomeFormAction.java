@@ -5,7 +5,7 @@ import domainmodel.SpeciesNomenclature;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterFrame;
 import view.parametersform.MetatargetomeParameters;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

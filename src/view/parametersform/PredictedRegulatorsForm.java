@@ -9,7 +9,7 @@ import infrastructure.CytoscapeNetworkUtilities;
 import view.IRegulonResourceBundle;
 import view.parametersform.actions.PredictRegulatorsAction;
 import view.parametersform.databaseselection.*;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

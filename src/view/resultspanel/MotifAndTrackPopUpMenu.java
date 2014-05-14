@@ -1,6 +1,7 @@
 package view.resultspanel;
 
 
+import view.Refreshable;
 import view.actions.BedExportAction;
 import view.actions.OpenLinkToGenomeBrowserAction;
 import view.resultspanel.actions.AddRegulatoryInteractionsAction;

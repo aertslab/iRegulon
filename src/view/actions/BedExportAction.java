@@ -10,7 +10,7 @@ import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
 import view.ResourceAction;
 import view.resultspanel.MotifAndTrackListener;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 
 import javax.swing.*;

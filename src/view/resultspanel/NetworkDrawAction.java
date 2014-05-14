@@ -9,6 +9,7 @@ import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
 import infrastructure.CytoscapeNetworkUtilities;
+import view.Refreshable;
 import view.ResourceAction;
 
 

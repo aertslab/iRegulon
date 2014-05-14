@@ -3,6 +3,7 @@ package view.resultspanel;
 
 import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
+import view.Refreshable;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 

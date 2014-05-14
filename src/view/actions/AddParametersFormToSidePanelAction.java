@@ -17,7 +17,7 @@ import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterForm;
 import view.parametersform.ParameterChangeListener;
 import view.parametersform.PredictedRegulatorsForm;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

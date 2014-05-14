@@ -5,7 +5,7 @@ import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
 import domainmodel.SpeciesNomenclature;
 import view.actions.QueryMetatargetomeAction;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 
 import javax.swing.*;
 import java.awt.*;

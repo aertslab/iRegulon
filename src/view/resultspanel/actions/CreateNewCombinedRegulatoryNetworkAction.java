@@ -9,7 +9,7 @@ import cytoscape.view.CyNetworkView;
 import giny.view.NodeView;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.resultspanel.NetworkDrawAction;
-import view.resultspanel.Refreshable;
+import view.Refreshable;
 
 import java.awt.event.ActionEvent;
 import java.util.*;

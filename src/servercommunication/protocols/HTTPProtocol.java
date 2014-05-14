@@ -286,9 +286,9 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     /**
      * @param predictRegulatorsParameters
      * @param jobID the id of the job
-     * @return a collection of Motifs
+     * @return a list of motifs and tracks
      */
-    public Collection<AbstractMotifAndTrack> getMotifsAndTracks(PredictRegulatorsParameters predictRegulatorsParameters, int jobID) throws ServerCommunicationException {
+    public List<AbstractMotifAndTrack> getMotifsAndTracks(PredictRegulatorsParameters predictRegulatorsParameters, int jobID) throws ServerCommunicationException {
         String motifRankingsDatabase;
         if (predictRegulatorsParameters.getMotifCollection().equals(MotifCollection.NONE.getDescription())) {
             motifRankingsDatabase = "none";
@@ -302,7 +302,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             trackRankingsDatabase = predictRegulatorsParameters.getTrackRankingsDatabase().getCode();
         }
 
-        Collection<AbstractMotifAndTrack> motifsAndTracks = new ArrayList<AbstractMotifAndTrack>();
+        List<AbstractMotifAndTrack> motifsAndTracks = new ArrayList<AbstractMotifAndTrack>();
 
         try {
             /* Create connection. */

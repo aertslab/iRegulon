@@ -13,11 +13,11 @@ import domainmodel.TargetomeDatabase;
 import giny.view.GraphViewChangeEvent;
 import giny.view.GraphViewChangeListener;
 import infrastructure.CytoscapeNetworkUtilities;
+import view.Refreshable;
 import view.ResourceAction;
-import view.parametersform.MetatargetomeParameterForm;
+import view.parametersform.MetaTargetomeParameterForm;
 import view.parametersform.ParameterChangeListener;
 import view.parametersform.PredictedRegulatorsForm;
-import view.Refreshable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -190,12 +190,12 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
     }
 
     private static class MetatargetomeForm extends JPanel {
-        private final MetatargetomeParameterForm parameterForm;
+        private final MetaTargetomeParameterForm parameterForm;
 
         private MetatargetomeForm(final GeneIdentifier factor, final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors) {
             super(new BorderLayout());
 
-            parameterForm = new MetatargetomeParameterForm(QueryMetatargetomeAction.DEFAULT_PARAMETERS, speciesNomenclature2factors);
+            parameterForm = new MetaTargetomeParameterForm(QueryMetatargetomeAction.DEFAULT_PARAMETERS, speciesNomenclature2factors);
             final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null);
             add(parameterForm, BorderLayout.CENTER);
             add(new JPanel(new FlowLayout()) {
@@ -222,7 +222,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
             parameterForm.setTargetomeDatabases(TargetomeDatabase.getAllTargetomeDatabases());
         }
 
-        public MetatargetomeParameterForm getForm() {
+        public MetaTargetomeParameterForm getForm() {
             return parameterForm;
         }
     }

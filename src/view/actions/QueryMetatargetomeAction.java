@@ -7,19 +7,14 @@ import cytoscape.Cytoscape;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 import cytoscape.view.CyNetworkView;
-import domainmodel.CandidateTargetGene;
-import domainmodel.GeneIdentifier;
-import domainmodel.SpeciesNomenclature;
-import domainmodel.TargetomeDatabase;
+import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
 import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
-import view.ResourceAction;
-import view.parametersform.DefaultMetatargetomeParameters;
-import view.parametersform.MetatargetomeParameters;
 import view.Refreshable;
+import view.ResourceAction;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -38,7 +33,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         DEFAULT_MAX_NODE_COUNT = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("max_node_number"));
     }
 
-    public static final MetatargetomeParameters DEFAULT_PARAMETERS = new MetatargetomeParameters() {
+    public static final MetaTargetomeParameters DEFAULT_PARAMETERS = new MetaTargetomeParameters() {
         @Override
         public String getAttributeName() {
             return null;
@@ -105,10 +100,10 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
     }
 
-    private MetatargetomeParameters parameters;
+    private MetaTargetomeParameters parameters;
     private final Refreshable resultsPanel;
 
-    public QueryMetatargetomeAction(final MetatargetomeParameters parameters, final Refreshable view) {
+    public QueryMetatargetomeAction(final MetaTargetomeParameters parameters, final Refreshable view) {
         super(NAME);
         this.parameters = parameters;
         this.resultsPanel = view;
@@ -119,11 +114,11 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         this(null, view);
     }
 
-    public MetatargetomeParameters getParameters() {
+    public MetaTargetomeParameters getParameters() {
         return parameters;
     }
 
-    public void setParameters(final MetatargetomeParameters parameters) {
+    public void setParameters(final MetaTargetomeParameters parameters) {
         this.parameters = parameters;
         refresh();
     }
@@ -139,7 +134,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
             return;
         }
 
-        final MetatargetomeParameters parameters = new DefaultMetatargetomeParameters(getParameters());
+        final MetaTargetomeParameters parameters = new DefaultMetaTargetomeParameters(getParameters());
 
         final ComputationalService service = new ComputationalServiceHTTP();
         final List<CandidateTargetGene> targetome;
@@ -187,7 +182,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
     }
 
-    private String createTitle(final MetatargetomeParameters parameters) {
+    private String createTitle(final MetaTargetomeParameters parameters) {
         return "Metatargetome for " + parameters.getTranscriptionFactor().getGeneName();
     }
 

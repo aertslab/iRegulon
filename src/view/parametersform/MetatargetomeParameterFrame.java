@@ -3,9 +3,10 @@ package view.parametersform;
 
 import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
+import domainmodel.MetaTargetomeParameters;
 import domainmodel.SpeciesNomenclature;
-import view.actions.QueryMetatargetomeAction;
 import view.Refreshable;
+import view.actions.QueryMetatargetomeAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,7 @@ import java.util.Map;
 public final class MetatargetomeParameterFrame extends JDialog {
     private static final String TITLE = "Query TF-target database for a factor";
 
-    public MetatargetomeParameterFrame(final MetatargetomeParameters parameters,
+    public MetatargetomeParameterFrame(final MetaTargetomeParameters parameters,
                                        final Map<SpeciesNomenclature, java.util.Set<GeneIdentifier>> speciesNomenclature2factors,
                                        final Refreshable view) {
         super(Cytoscape.getDesktop(), TITLE, true);
@@ -27,12 +28,12 @@ public final class MetatargetomeParameterFrame extends JDialog {
     }
 
     private class ContentPane extends JPanel {
-        private ContentPane(final MetatargetomeParameters parameters,
+        private ContentPane(final MetaTargetomeParameters parameters,
                             final Map<SpeciesNomenclature, java.util.Set<GeneIdentifier>> speciesNomenclature2factors,
                             final Refreshable view) {
             super(new BorderLayout());
 
-            final MetatargetomeParameterForm parameterForm = new MetatargetomeParameterForm(parameters, speciesNomenclature2factors);
+            final MetaTargetomeParameterForm parameterForm = new MetaTargetomeParameterForm(parameters, speciesNomenclature2factors);
             final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, view) {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {

@@ -1,12 +1,9 @@
-package view.parametersform;
-
-import domainmodel.GeneIdentifier;
-import domainmodel.TargetomeDatabase;
+package domainmodel;
 
 import java.util.List;
 
 
-public interface MetatargetomeParameters {
+public interface MetaTargetomeParameters {
     String getAttributeName();
 
     GeneIdentifier getTranscriptionFactor();

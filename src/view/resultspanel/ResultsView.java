@@ -3,16 +3,12 @@ package view.resultspanel;
 import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
-import domainmodel.AbstractMotifAndTrack;
-import domainmodel.GeneIdentifier;
-import domainmodel.Results;
-import domainmodel.TranscriptionFactor;
+import domainmodel.*;
 import view.IRegulonResourceBundle;
 import view.Refreshable;
 import view.actions.LoadResultsAction;
 import view.actions.OpenQueryMetatargetomeFormAction;
 import view.actions.QueryMetatargetomeAction;
-import view.parametersform.DefaultMetatargetomeParameters;
 import view.resultspanel.actions.*;
 import view.resultspanel.guiwidgets.SummaryLabel;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
@@ -50,7 +46,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     private MotifAndTrackView currentTabView = null;
     private MotifAndTrackView previousTabView = null;
 
-    private final DefaultMetatargetomeParameters parameters;
+    private final DefaultMetaTargetomeParameters parameters;
 
     private final PropertyChangeListener refreshListener;
     private CreateNewCombinedRegulatoryNetworkAction createNewCombinedRegulatoryNetworkAction;
@@ -61,7 +57,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
         this.results = results;
         this.isSaved = false;
 
-        this.parameters = new DefaultMetatargetomeParameters(QueryMetatargetomeAction.DEFAULT_PARAMETERS);
+        this.parameters = new DefaultMetaTargetomeParameters(QueryMetatargetomeAction.DEFAULT_PARAMETERS);
         this.selectedMotifOrTrack = new SelectedMotifOrTrack(results.getParameters().getAttributeName());
 
         refreshListener = new PropertyChangeListener() {
@@ -413,11 +409,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     private static class QueryMetatargetomeActionListener implements ActionListener {
         private final OpenQueryMetatargetomeFormAction queryMetatargetomeAction;
-        private final DefaultMetatargetomeParameters parameters;
+        private final DefaultMetaTargetomeParameters parameters;
         private final TranscriptionFactorComboBox transcriptionFactorComboBox;
 
         public QueryMetatargetomeActionListener(final OpenQueryMetatargetomeFormAction queryMetatargetomeAction,
-                                                final DefaultMetatargetomeParameters parameters, TranscriptionFactorComboBox transcriptionFactorComboBox) {
+                                                final DefaultMetaTargetomeParameters parameters, TranscriptionFactorComboBox transcriptionFactorComboBox) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
             this.parameters = parameters;
             this.transcriptionFactorComboBox = transcriptionFactorComboBox;
@@ -437,11 +433,11 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
 
     private static class QueryMetatargetomeDocumentListener implements DocumentListener {
         private final OpenQueryMetatargetomeFormAction queryMetatargetomeAction;
-        private final DefaultMetatargetomeParameters parameters;
+        private final DefaultMetaTargetomeParameters parameters;
         private final TranscriptionFactorComboBox transcriptionFactorComboBox;
 
         public QueryMetatargetomeDocumentListener(final OpenQueryMetatargetomeFormAction queryMetatargetomeAction,
-                                                  final DefaultMetatargetomeParameters parameters,
+                                                  final DefaultMetaTargetomeParameters parameters,
                                                   TranscriptionFactorComboBox transcriptionFactorComboBox) {
             this.queryMetatargetomeAction = queryMetatargetomeAction;
             this.parameters = parameters;

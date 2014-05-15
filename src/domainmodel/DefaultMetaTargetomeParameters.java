@@ -1,13 +1,10 @@
-package view.parametersform;
-
-import domainmodel.GeneIdentifier;
-import domainmodel.TargetomeDatabase;
+package domainmodel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
+public class DefaultMetaTargetomeParameters implements MetaTargetomeParameters {
     private String attributeName;
     private GeneIdentifier transcriptionFactor;
     private List<TargetomeDatabase> targetomeDatabases;
@@ -15,7 +12,7 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
     private int maxNumberOfNodes;
     private boolean createNewNetwork;
 
-    public DefaultMetatargetomeParameters(final MetatargetomeParameters parameters) {
+    public DefaultMetaTargetomeParameters(final MetaTargetomeParameters parameters) {
         this.attributeName = parameters.getAttributeName();
         this.transcriptionFactor = parameters.getTranscriptionFactor();
         this.targetomeDatabases = new ArrayList<TargetomeDatabase>(parameters.getTargetomeDatabases());
@@ -24,7 +21,7 @@ public class DefaultMetatargetomeParameters implements MetatargetomeParameters {
         this.createNewNetwork = parameters.createNewNetwork();
     }
 
-    public DefaultMetatargetomeParameters() {
+    public DefaultMetaTargetomeParameters() {
     }
 
     @Override

@@ -1,11 +1,11 @@
 package view.actions;
 
 import domainmodel.GeneIdentifier;
+import domainmodel.MetaTargetomeParameters;
 import domainmodel.SpeciesNomenclature;
+import view.Refreshable;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterFrame;
-import view.parametersform.MetatargetomeParameters;
-import view.Refreshable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,23 +14,23 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class OpenQueryMetatargetomeFormAction extends ResourceAction implements Refreshable {
+public final class OpenQueryMetatargetomeFormAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_open_query_metatargetome_frame";
 
-    private MetatargetomeParameters parameters;
+    private MetaTargetomeParameters parameters;
     private final Refreshable view;
 
-    public OpenQueryMetatargetomeFormAction(final MetatargetomeParameters parameters, final Refreshable view) {
+    public OpenQueryMetatargetomeFormAction(final MetaTargetomeParameters parameters, final Refreshable view) {
         super(NAME);
         this.parameters = parameters;
         this.view = view;
     }
 
-    public MetatargetomeParameters getParameters() {
+    public MetaTargetomeParameters getParameters() {
         return parameters;
     }
 
-    public void setParameters(MetatargetomeParameters parameters) {
+    public void setParameters(MetaTargetomeParameters parameters) {
         this.parameters = parameters;
         refresh();
     }

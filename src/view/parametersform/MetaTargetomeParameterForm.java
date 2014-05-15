@@ -2,11 +2,12 @@ package view.parametersform;
 
 
 import domainmodel.GeneIdentifier;
+import domainmodel.MetaTargetomeParameters;
 import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 import infrastructure.CytoscapeNetworkUtilities;
-import view.actions.QueryMetatargetomeAction;
 import view.Refreshable;
+import view.actions.QueryMetatargetomeAction;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -23,7 +24,7 @@ import java.util.*;
 import java.util.List;
 
 
-public final class MetatargetomeParameterForm extends JPanel implements MetatargetomeParameters, Refreshable {
+public final class MetaTargetomeParameterForm extends JPanel implements MetaTargetomeParameters, Refreshable {
     private static final int MARGIN_IN_PIXELS = 5;
 
     private final Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors;
@@ -45,8 +46,8 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
     private final DocumentListener documentListener;
 
 
-    public MetatargetomeParameterForm(final MetatargetomeParameters parameters,
-                                      final Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors) {
+    public MetaTargetomeParameterForm(final MetaTargetomeParameters parameters,
+                                      final Map<SpeciesNomenclature, Set<GeneIdentifier>> nomenclature2factors) {
         super();
         this.nomenclature2factors = nomenclature2factors;
         initPanel();
@@ -98,7 +99,7 @@ public final class MetatargetomeParameterForm extends JPanel implements Metatarg
         refresh();
     }
 
-    private void initParameters(final MetatargetomeParameters parameters) {
+    private void initParameters(final MetaTargetomeParameters parameters) {
         setMaxNumberOfNodes(parameters.getMaxNumberOfNodes());
         setOccurrenceCountThreshold(parameters.getOccurrenceCountThreshold());
         final GeneIdentifier factor = parameters.getTranscriptionFactor();

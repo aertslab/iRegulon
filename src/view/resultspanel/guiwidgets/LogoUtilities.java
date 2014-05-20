@@ -1,5 +1,6 @@
 package view.resultspanel.guiwidgets;
 
+import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 
 import javax.swing.*;
@@ -7,11 +8,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ResourceBundle;
 
-public final class LogoUtilities {
-    private static final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
 
-    private static final String LOGO_FOLDERNAME = bundle.getString("logo_folder");
-    private static final String LOGO_EXTENSION = bundle.getString("logo_extension");
+public final class LogoUtilities {
+    private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
+
+    private static final String LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("logo_folder");
+    private static final String LOGO_EXTENSION = RESOURCE_BUNDLE.getString("logo_extension");
 
     private LogoUtilities() {
     }

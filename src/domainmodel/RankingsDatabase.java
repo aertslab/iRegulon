@@ -1,11 +1,11 @@
 package domainmodel;
 
 import infrastructure.Configuration;
+import infrastructure.IRegulonResourceBundle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import view.IRegulonResourceBundle;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,9 +31,9 @@ public class RankingsDatabase extends IRegulonResourceBundle {
     private static final String DEFAULT_ATTRIBUTE_NAME = "default";
     private static final String TYPE_ATTRIBUTE_NAME = "type";
 
-    private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_escore"));
-    private static final float DEFAULT_AUC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
-    private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
+    private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(RESOURCE_BUNDLE.getString("standard_escore"));
+    private static final float DEFAULT_AUC_THRESHOLD = Float.parseFloat(RESOURCE_BUNDLE.getString("standard_ROC"));
+    private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(RESOURCE_BUNDLE.getString("standard_visualisation"));
 
     public static List<RankingsDatabase> loadFromConfiguration() {
         final Document document = Configuration.getDocument();

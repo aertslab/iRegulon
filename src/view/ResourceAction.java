@@ -1,16 +1,17 @@
 package view;
 
+
+import infrastructure.IRegulonResourceBundle;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
 
-public class ResourceAction extends AbstractAction {
+public abstract class ResourceAction extends AbstractAction {
     public static final String NAME_SUFFIX = "_name";
     public static final String DESCRIPTION_SUFFIX = "_description";
     public static final String ICON_SUFFIX = "_icon";
-
-    private static final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
 
     public ResourceAction(final String actionName) {
         super();
@@ -32,7 +33,7 @@ public class ResourceAction extends AbstractAction {
     }
 
     public static ResourceBundle getBundle() {
-        return ResourceAction.bundle;
+        return IRegulonResourceBundle.getBundle();
     }
 
     @Override

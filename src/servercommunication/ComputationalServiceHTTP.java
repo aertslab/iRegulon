@@ -5,11 +5,11 @@ import cytoscape.CytoscapeVersion;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 import domainmodel.*;
+import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 import servercommunication.protocols.HTTPProtocol;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
-import view.IRegulonResourceBundle;
 
 import java.io.*;
 import java.net.*;
@@ -20,7 +20,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     private static final boolean DEBUG = false;
     private static final String PARAMETER_NAME = "featureIDandTarget=";
 
-    private final String userAgent = this.getBundle().getString("User_Agent")
+    private final String userAgent = RESOURCE_BUNDLE.getString("User_Agent")
             + " Cytoscape: " + CytoscapeVersion.version
             + "; " + System.getProperty("os.name")
             + "; " + System.getProperty("os.version")
@@ -69,7 +69,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
             /* Check if the requested page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new ServerCommunicationException("Retrieving '" + this.getBundle().getString("URL_metatargetomes_query_factors") + "' failed.");
+                throw new ServerCommunicationException("Retrieving '" + RESOURCE_BUNDLE.getString("URL_metatargetomes_query_factors") + "' failed.");
             }
 
             /* Get the response. */
@@ -134,7 +134,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
             /* Check if the requested page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                throw new ServerCommunicationException("Retrieving '" + this.getBundle().getString("URL_metatargetomes_query_targetome") + "' failed.");
+                throw new ServerCommunicationException("Retrieving '" + RESOURCE_BUNDLE.getString("URL_metatargetomes_query_targetome") + "' failed.");
             }
 
             /* Get the response. */
@@ -199,7 +199,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     }
 
     private HttpURLConnection createConnection4BundleKey(String bundleKey) throws IOException {
-        return createConnection(getBundle().getString(bundleKey));
+        return createConnection(RESOURCE_BUNDLE.getString(bundleKey));
     }
 
     private HttpURLConnection createConnection(String resource) throws IOException {
@@ -237,7 +237,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     public List<EnhancerRegion> getEnhancerRegions(final AbstractMotifAndTrack motifOrTrack) throws ServerCommunicationException {
         final HttpURLConnection connection;
         try {
-            final String uri = getBundle().getString("URL_motifBedGenerator") + "?" + generateParameters(motifOrTrack);
+            final String uri = RESOURCE_BUNDLE.getString("URL_motifBedGenerator") + "?" + generateParameters(motifOrTrack);
             connection = createConnection(uri);
         } catch (IOException e) {
             throw new ServerCommunicationException("Unable to get enhancer regions. Server is not available.");
@@ -272,10 +272,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     @Override
     public URI getLink2GenomeBrowser4EnhancerRegions(AbstractMotifAndTrack motifOrTrack) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(getBundle().getString("URL_UCSC_Regions_part1"));
+        builder.append(RESOURCE_BUNDLE.getString("URL_UCSC_Regions_part1"));
         builder.append(motifOrTrack.getCandidateTargetGenes().get(0).getSpeciesNomenclature().getAssembly());
-        builder.append(getBundle().getString("URL_UCSC_Regions_part2"));
-        builder.append(getBundle().getString("URL_motifBedGenerator"));
+        builder.append(RESOURCE_BUNDLE.getString("URL_UCSC_Regions_part2"));
+        builder.append(RESOURCE_BUNDLE.getString("URL_motifBedGenerator"));
         builder.append("?");
         builder.append(generateParameters(motifOrTrack));
         try {

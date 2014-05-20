@@ -1,10 +1,11 @@
 package servercommunication.protocols;
 
+
 import cytoscape.CytoscapeVersion;
 import domainmodel.*;
+import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 import servercommunication.ServerCommunicationException;
-import view.IRegulonResourceBundle;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.*;
 
 
 public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
-    private final String userAgent = this.getBundle().getString("User_Agent")
+    private final String userAgent = RESOURCE_BUNDLE.getString("User_Agent")
             + " Cytoscape: " + CytoscapeVersion.version
             + "; " + System.getProperty("os.name")
             + "; " + System.getProperty("os.version")
@@ -26,7 +27,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     }
 
     private HttpURLConnection createConnection(String bundleKey) throws IOException {
-        final URL url = new URL(getBundle().getString(bundleKey));
+        final URL url = new URL(RESOURCE_BUNDLE.getString(bundleKey));
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("User-Agent", userAgent);
         connection.setRequestMethod("POST");
@@ -125,8 +126,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
             /* Check if the requested web page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Logger.getInstance().error("Unable to submit job to iRegulon server. Unable to access '" + this.getBundle().getString("URL_submit") + "'.");
-                throw new ServerCommunicationException("Unable to submit job to iRegulon server. Unable to access '" + this.getBundle().getString("URL_submit") + "'.");
+                Logger.getInstance().error("Unable to submit job to iRegulon server. Unable to access '" + RESOURCE_BUNDLE.getString("URL_submit") + "'.");
+                throw new ServerCommunicationException("Unable to submit job to iRegulon server. Unable to access '" + RESOURCE_BUNDLE.getString("URL_submit") + "'.");
             }
 
             /* Get the job ID from the reply. */
@@ -185,8 +186,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
             /* Check if the requested page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Logger.getInstance().error("Unable to check state of iRegulon job. Unable to access '" + this.getBundle().getString("URL_stateCheck") + "'.");
-                throw new ServerCommunicationException("Unable to check state of iRegulon job. Unable to access '" + this.getBundle().getString("URL_stateCheck") + "'.");
+                Logger.getInstance().error("Unable to check state of iRegulon job. Unable to access '" + RESOURCE_BUNDLE.getString("URL_stateCheck") + "'.");
+                throw new ServerCommunicationException("Unable to check state of iRegulon job. Unable to access '" + RESOURCE_BUNDLE.getString("URL_stateCheck") + "'.");
             }
 
             /* Get the job state from the reply. */
@@ -247,8 +248,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
             /* Check if the requested page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Logger.getInstance().error("Unable to check number of jobs to wait for. Unable to access '" + this.getBundle().getString("URL_stateCheck") + "'.");
-                throw new ServerCommunicationException("Unable to check number of jobs to wait for. Unable to access '" + this.getBundle().getString("URL_stateCheck") + "'.");
+                Logger.getInstance().error("Unable to check number of jobs to wait for. Unable to access '" + RESOURCE_BUNDLE.getString("URL_stateCheck") + "'.");
+                throw new ServerCommunicationException("Unable to check number of jobs to wait for. Unable to access '" + RESOURCE_BUNDLE.getString("URL_stateCheck") + "'.");
             }
 
             /* Get the job state from the reply. */
@@ -323,8 +324,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
             /* Check if the requested page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Logger.getInstance().error("Unable to get motifs and/or tracks from iRegulon server. Unable to access '" + this.getBundle().getString("URL_results") + "'.");
-                throw new ServerCommunicationException("Unable to get motifs and/or tracks from iRegulon server. Unable to access '" + this.getBundle().getString("URL_results") + "'.");
+                Logger.getInstance().error("Unable to get motifs and/or tracks from iRegulon server. Unable to access '" + RESOURCE_BUNDLE.getString("URL_results") + "'.");
+                throw new ServerCommunicationException("Unable to get motifs and/or tracks from iRegulon server. Unable to access '" + RESOURCE_BUNDLE.getString("URL_results") + "'.");
             }
 
             /* Get and parse the reply. */
@@ -528,8 +529,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
             /* Check if the requested page exists. */
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                Logger.getInstance().error("Unable to get job error message from iRegulon server. Unable to access '" + this.getBundle().getString("URL_error") + "'.");
-                throw new ServerCommunicationException("Unable to get job error message from iRegulon server. Unable to access '" + this.getBundle().getString("URL_error") + "'.");
+                Logger.getInstance().error("Unable to get job error message from iRegulon server. Unable to access '" + RESOURCE_BUNDLE.getString("URL_error") + "'.");
+                throw new ServerCommunicationException("Unable to get job error message from iRegulon server. Unable to access '" + RESOURCE_BUNDLE.getString("URL_error") + "'.");
             }
 
             /* Get the job state from the reply. */

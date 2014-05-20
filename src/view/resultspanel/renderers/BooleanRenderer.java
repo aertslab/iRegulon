@@ -1,5 +1,6 @@
 package view.resultspanel.renderers;
 
+import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 
 import javax.swing.*;
@@ -9,13 +10,13 @@ import java.util.ResourceBundle;
 
 
 public class BooleanRenderer extends JLabel implements TableCellRenderer, CanvasUpdater {
-    private static final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
+    private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
 
     private static final ImageIcon TRUE_ICON;
     private static final ImageIcon FALSE_ICON;
 
     private static final ImageIcon loadIcon(final String resourceName) {
-        final String resource = bundle.getString(resourceName);
+        final String resource = RESOURCE_BUNDLE.getString(resourceName);
         final java.net.URL imageURL = BooleanRenderer.class.getResource(resource);
         if (imageURL != null) {
             return new ImageIcon(imageURL);

@@ -1,6 +1,5 @@
 package view.parametersform;
 
-
 import domainmodel.GeneIdentifier;
 import domainmodel.MetaTargetomeParameters;
 import domainmodel.SpeciesNomenclature;
@@ -279,7 +278,7 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         DBpanel.add(DBscroll, DBcc);
 
         final JLabel occurrenceCountLimitLB = new JLabel("Occurrence count threshold:");
-        occurrenceCountLimitTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_THRESHOLD));
+        occurrenceCountLimitTF = new JTextField(Integer.toString(MetaTargetomeParameters.DEFAULT_THRESHOLD));
 
         DBcc.gridx = 0; DBcc.gridy = 1;
         DBcc.gridwidth = 1; DBcc.gridheight = 1;
@@ -309,7 +308,7 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         NWpanel.setBorder(NWborder);
 
         final JLabel maxNodeCountLB = new JLabel("Number nodes (approx.):");
-        maxNodeCountTF = new JTextField(Integer.toString(QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT));
+        maxNodeCountTF = new JTextField(Integer.toString(MetaTargetomeParameters.DEFAULT_MAX_NODE_COUNT));
 
         NWcc.gridx = 0; NWcc.gridy = 0;
         NWcc.gridwidth = 1; NWcc.gridheight = 1;

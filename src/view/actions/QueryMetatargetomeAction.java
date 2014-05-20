@@ -25,14 +25,6 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
     private static final String NAME = "action_query_metatargetome";
     private static final int NODE_COUNT_LIMIT_FOR_TASK = 50;
 
-    public static final int DEFAULT_THRESHOLD;
-    public static final int DEFAULT_MAX_NODE_COUNT;
-
-    static {
-        DEFAULT_THRESHOLD = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("occurrence_count_threshold"));
-        DEFAULT_MAX_NODE_COUNT = Integer.parseInt(ResourceBundle.getBundle("iRegulon").getString("max_node_number"));
-    }
-
     public static final MetaTargetomeParameters DEFAULT_PARAMETERS = new MetaTargetomeParameters() {
         @Override
         public String getAttributeName() {
@@ -51,12 +43,12 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
 
         @Override
         public int getOccurrenceCountThreshold() {
-            return QueryMetatargetomeAction.DEFAULT_THRESHOLD;
+            return MetaTargetomeParameters.DEFAULT_THRESHOLD;
         }
 
         @Override
         public int getMaxNumberOfNodes() {
-            return QueryMetatargetomeAction.DEFAULT_MAX_NODE_COUNT;
+            return MetaTargetomeParameters.DEFAULT_MAX_NODE_COUNT;
         }
 
         @Override

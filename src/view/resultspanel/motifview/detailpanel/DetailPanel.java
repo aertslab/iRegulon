@@ -1,7 +1,7 @@
 package view.resultspanel.motifview.detailpanel;
 
-
 import domainmodel.*;
+import infrastructure.IRegulonResourceBundle;
 import view.resultspanel.*;
 import view.resultspanel.guiwidgets.LinkLabel;
 import view.resultspanel.guiwidgets.LogoThumbnail;
@@ -20,12 +20,11 @@ import java.awt.*;
 import java.awt.event.MouseListener;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ResourceBundle;
+
 
 public class DetailPanel extends JPanel implements DetailPanelIF {
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle("iRegulon");
     private static final String TRANSFAC_PREFIX = "transfac_";
-    private static final String TRANSFAC_URL = BUNDLE.getString("transfac_url");
+    private static final String TRANSFAC_URL = IRegulonResourceBundle.getBundle().getString("transfac_url");
 
     private JTable targetGeneTable;
     private LinkLabel jlbMotif;

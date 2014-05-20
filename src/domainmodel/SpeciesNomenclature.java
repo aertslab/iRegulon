@@ -1,6 +1,6 @@
 package domainmodel;
 
-import view.IRegulonResourceBundle;
+import infrastructure.IRegulonResourceBundle;
 
 import java.util.*;
 

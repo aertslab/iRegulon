@@ -1,15 +1,16 @@
 package view.parametersform;
 
+
 import cytoscape.Cytoscape;
 import domainmodel.Delineation;
 import domainmodel.PredictRegulatorsParameters;
 import domainmodel.RankingsDatabase;
 import domainmodel.SpeciesNomenclature;
 import infrastructure.CytoscapeNetworkUtilities;
-import view.IRegulonResourceBundle;
+import infrastructure.IRegulonResourceBundle;
+import view.Refreshable;
 import view.parametersform.actions.PredictRegulatorsAction;
 import view.parametersform.databaseselection.*;
-import view.Refreshable;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -20,11 +21,11 @@ import java.awt.event.ActionListener;
 
 public class PredictedRegulatorsForm extends IRegulonResourceBundle
         implements PredictedRegulatorsParameters, Refreshable {
-    private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_escore"));
-    private static final float DEFAULT_ROC_THRESHOLD = Float.parseFloat(BUNDLE.getString("standard_ROC"));
-    private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(BUNDLE.getString("standard_visualisation"));
-    private static final float DEFAULT_MIN_ORTHOLOGOUS_IDENTITY = Float.parseFloat(BUNDLE.getString("standard_minOrthologous"));
-    private static final float DEFAULT_MAX_MOTIF_SIMILARITY_FDR = Float.parseFloat(BUNDLE.getString("standard_maxMotifSimilarityFDR"));
+    private static final float DEFAULT_NES_THRESHOLD = Float.parseFloat(RESOURCE_BUNDLE.getString("standard_escore"));
+    private static final float DEFAULT_ROC_THRESHOLD = Float.parseFloat(RESOURCE_BUNDLE.getString("standard_ROC"));
+    private static final int DEFAULT_RANK_THRESHOLD = Integer.parseInt(RESOURCE_BUNDLE.getString("standard_visualisation"));
+    private static final float DEFAULT_MIN_ORTHOLOGOUS_IDENTITY = Float.parseFloat(RESOURCE_BUNDLE.getString("standard_minOrthologous"));
+    private static final float DEFAULT_MAX_MOTIF_SIMILARITY_FDR = Float.parseFloat(RESOURCE_BUNDLE.getString("standard_maxMotifSimilarityFDR"));
     private static final int MAX_NAME_LENGTH = 50;
 
     private JTextField jobNameTF;
@@ -212,7 +213,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panelRegion.add(overlapJtl, cRegion);
 
         this.txtOverlap = new JTextField();
-        this.txtOverlap.setText(this.getBundle().getString("standard_overlap"));
+        this.txtOverlap.setText(RESOURCE_BUNDLE.getString("standard_overlap"));
         cRegion.gridx = 2;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 3;
@@ -266,7 +267,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panelRegion.add(labelUp, cRegion);
 
         this.txtUpStream = new JTextField();
-        this.txtUpStream.setText(this.getBundle().getString("standard_upstream"));
+        this.txtUpStream.setText(RESOURCE_BUNDLE.getString("standard_upstream"));
         cRegion.gridx = 3;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
@@ -285,7 +286,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panelRegion.add(labelDown, cRegion);
 
         this.txtDownStream = new JTextField();
-        this.txtDownStream.setText(this.getBundle().getString("standard_downstream"));
+        this.txtDownStream.setText(RESOURCE_BUNDLE.getString("standard_downstream"));
         cRegion.gridx = 3;
         cRegion.gridy = lineY;
         cRegion.gridwidth = 2;
@@ -785,7 +786,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     public static String deriveDefaultJobName() {
         final String name = Cytoscape.getCurrentNetwork().getTitle();
         if (name == null || name.equals("0")) {
-            return BUNDLE.getString("plugin_name") + " name";
+            return PLUGIN_NAME + " name";
         } else if (name.length() > MAX_NAME_LENGTH) {
             return name.substring(0, MAX_NAME_LENGTH - 3) + "...";
         } else {

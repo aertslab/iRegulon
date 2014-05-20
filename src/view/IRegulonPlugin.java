@@ -3,6 +3,7 @@ package view;
 import cytoscape.Cytoscape;
 import cytoscape.CytoscapeInit;
 import cytoscape.plugin.CytoscapePlugin;
+import infrastructure.IRegulonResourceBundle;
 import view.actions.*;
 
 import javax.imageio.ImageIO;
@@ -20,7 +21,7 @@ import java.util.ResourceBundle;
 public class IRegulonPlugin extends CytoscapePlugin {
     private static final String IREGULON_LINK_OUT = "edgelinkouturl.iRegulon";
 
-    private final ResourceBundle bundle = ResourceBundle.getBundle("iRegulon");
+    private final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
 
     /*
     * Start the plugin.
@@ -31,15 +32,15 @@ public class IRegulonPlugin extends CytoscapePlugin {
         menu.add(createMenu());
 
         /* 2. Add linkOut item ... */
-        CytoscapeInit.getProperties().put(IREGULON_LINK_OUT, bundle.getString("URL_UCSC_LinkOut"));
+        CytoscapeInit.getProperties().put(IREGULON_LINK_OUT, RESOURCE_BUNDLE.getString("URL_UCSC_LinkOut"));
 
         /* 3. Install visual style ... */
         IRegulonVisualStyle.installVisualStyle();
     }
 
     private JMenu createMenu() {
-        final JMenu menu = new JMenu(bundle.getString("plugin_name"));
-        menu.setToolTipText(bundle.getString("plugin_description"));
+        final JMenu menu = new JMenu(IRegulonResourceBundle.PLUGIN_NAME);
+        menu.setToolTipText(RESOURCE_BUNDLE.getString("plugin_description"));
 
         menu.add(new JMenuItem(new OpenParametersFormAction()));
         final JMenuItem menuItem = new JMenuItem(new OpenQueryMetatargetomeFormAction(QueryMetatargetomeAction.DEFAULT_PARAMETERS, null));
@@ -71,7 +72,7 @@ public class IRegulonPlugin extends CytoscapePlugin {
 
         public void actionPerformed(ActionEvent e) {
             try {
-                Desktop.getDesktop().browse(URI.create(bundle.getString("help_page")));
+                Desktop.getDesktop().browse(URI.create(RESOURCE_BUNDLE.getString("help_page")));
             } catch (IOException e1) {
                 e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
@@ -90,7 +91,7 @@ public class IRegulonPlugin extends CytoscapePlugin {
             BufferedImage wPic = null;
 
             try {
-                wPic = ImageIO.read(this.getClass().getResource(bundle.getString("logo_iregulon")));
+                wPic = ImageIO.read(this.getClass().getResource(RESOURCE_BUNDLE.getString("logo_iregulon")));
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -124,23 +125,23 @@ public class IRegulonPlugin extends CytoscapePlugin {
             aboutText.setContentType("text/html");
             aboutText.setText(
                     "<html>" +
-                            "<h1>" + bundle.getString("plugin_name") + "</h1>" +
-                            "<p><b>Version:</b> " + bundle.getString("version") + "<br/>" +
-                            "<b>Build ID:</b> " + bundle.getString("build_ID") + "<br/>" +
-                            "<b>Released:</b> " + bundle.getString("release_date") + "<br/>" +
+                            "<h1>" + IRegulonResourceBundle.PLUGIN_VISUAL_NAME + "</h1>" +
+                            "<p><b>Version:</b> " + RESOURCE_BUNDLE.getString("version") + "<br/>" +
+                            "<b>Build ID:</b> " + RESOURCE_BUNDLE.getString("build_ID") + "<br/>" +
+                            "<b>Released:</b> " + RESOURCE_BUNDLE.getString("release_date") + "<br/>" +
                             "<b>Developers:</b> Gert Hulselmans &amp; Rekin's Janky (&ge;0.97); Bram Van de Sande (&le;0.96); Koen Herten (&le;0.2)." + "<br/>" +
                             "<b>Copyright:</b> 2012-2014 KU Leuven." + "<br/>" +
-                            "<b>Website:</b> " + bundle.getString("website") + "<br/>" +
-                            "<b>Download:</b> " + bundle.getString("download_page") + "<br/>" +
-                            "<b>Contact:</b> " + bundle.getString("contact") + "<br/>" +
+                            "<b>Website:</b> " + RESOURCE_BUNDLE.getString("website") + "<br/>" +
+                            "<b>Download:</b> " + RESOURCE_BUNDLE.getString("download_page") + "<br/>" +
+                            "<b>Contact:</b> " + RESOURCE_BUNDLE.getString("contact") + "<br/>" +
                             "<b>Citation:</b> Rekin’s Janky, Annelien Verfaillie, Bram Van de Sande, Laura Standaert, Valerie Christiaens, Gert Hulselmans, Koen Herten, Marina Naval Sanchez, Delphine Potier, Dmitry Svetlichnyy, Hana Imrichová, Zeynep Kalender Atak, Mark Fiers, Jean-Christophe Marine, and Stein Aerts. <u>iRegulon: from a gene list to a gene regulatory network using large motif and track collections.</u> <i>Manuscript under revision.</i>" + "<br/>" +
-                            "<b>Comment:</b> A full version of the plugin including TRANSFAC Professional motifs (<a href=\"http://www.gene-regulation.com/pub/databases.html\">http://www.gene-regulation.com/pub/databases.html</a>) is provided from the website  " + bundle.getString("download_page") + ". To download the TRANSFAC PRO version, the user will need to have a valid subscription to TRANSFAC Professional." +
+                            "<b>Comment:</b> A full version of the plugin including TRANSFAC Professional motifs (<a href=\"http://www.gene-regulation.com/pub/databases.html\">http://www.gene-regulation.com/pub/databases.html</a>) is provided from the website  " + RESOURCE_BUNDLE.getString("download_page") + ". To download the TRANSFAC PRO version, the user will need to have a valid subscription to TRANSFAC Professional." +
                             "</p>" +
                             "<h2>Software License Agreement (hereinafter \"Agreement\")</h2>" +
                             "<p>This Software is developed by and on behalf of the Laboratory of Computational Biology of the KU Leuven and is owned by the Katholieke Universiteit Leuven (hereinafter referred to as \"KU LEUVEN\"). By downloading or installing the Software you agree with the terms and conditions below.</p>" +
                             "<h3>Article 1 - Definitions</h3>" +
-                            "<p><b>1.1</b> \"Software\" shall mean the iRegulon Cytoscape plugin as available on the website " + bundle.getString("website") + " and via the Cytoscape App Store as jar file. The software that you install is the client of a client-server system whereby the client sends a request to a web server (for example, running at the KU Leuven). The request consists of a list of genes (i.e., a list of nodes in a Cytoscape network), along with parameters. The client receives the results of the motif/track discovery and motif2TF mapping as a table with motifs, tracks, candidate transcription factors, and predicted target genes. These results can be used to 'annotate' the active Cytoscape networks, and can be saved as text or irf format.</p>" +
-                            "<p><b>1.2</b> \"Effective Date\" shall mean the date on which you download or install the iRegulon Cytoscape plugin (as available on " + bundle.getString("website") + " and via the Cytoscape App store) on your system and which provide you access to the iRegulon webapplication.</p>" +
+                            "<p><b>1.1</b> \"Software\" shall mean the iRegulon Cytoscape plugin as available on the website " + RESOURCE_BUNDLE.getString("website") + " and via the Cytoscape App Store as jar file. The software that you install is the client of a client-server system whereby the client sends a request to a web server (for example, running at the KU Leuven). The request consists of a list of genes (i.e., a list of nodes in a Cytoscape network), along with parameters. The client receives the results of the motif/track discovery and motif2TF mapping as a table with motifs, tracks, candidate transcription factors, and predicted target genes. These results can be used to 'annotate' the active Cytoscape networks, and can be saved as text or irf format.</p>" +
+                            "<p><b>1.2</b> \"Effective Date\" shall mean the date on which you download or install the iRegulon Cytoscape plugin (as available on " + RESOURCE_BUNDLE.getString("website") + " and via the Cytoscape App store) on your system and which provide you access to the iRegulon webapplication.</p>" +
                             "<p><b>1.3</b> \"Non-commercial User\" shall mean a person using the Software for non-commercial research purposes on its own behalf or on behalf of a legal entity. In case the Non-commercial User is acting on behalf of an entity, use of the Software is only permitted by the Non-Commercial User in the event the Software License Agreement is approved and signed by the authorized signatories of such legal entity and returned to KU LEUVEN.</p>" +
                             "<h3>Article 2 - License</h3>" +
                             "<p><b>2.1</b> As long as you qualify as a Non-commercial User, KU LEUVEN hereby grants you a royalty-free, non-exclusive, non-transferable license to the Software supplied by KU LEUVEN for strictly internal, non-commercial research use only.\n</p>" +

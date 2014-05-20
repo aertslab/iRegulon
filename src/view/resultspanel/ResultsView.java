@@ -4,7 +4,7 @@ import cytoscape.Cytoscape;
 import cytoscape.view.CytoscapeDesktop;
 import cytoscape.view.cytopanels.CytoPanel;
 import domainmodel.*;
-import view.IRegulonResourceBundle;
+import infrastructure.IRegulonResourceBundle;
 import view.Refreshable;
 import view.actions.LoadResultsAction;
 import view.actions.OpenQueryMetatargetomeFormAction;
@@ -90,7 +90,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     }
 
     public String getPanelName() {
-        return getBundle().getString("plugin_visual_name") + " " + getRunName();
+        return "<html>" + PLUGIN_VISUAL_NAME + " " + getRunName() + "</html>";
     }
 
     public Results getResults() {
@@ -403,7 +403,7 @@ public class ResultsView extends IRegulonResourceBundle implements Refreshable {
     }
 
     private ImageIcon loadIcon(final String keyName) {
-        final String resourceName = getBundle().getString(keyName);
+        final String resourceName = RESOURCE_BUNDLE.getString(keyName);
         return new ImageIcon(getClass().getResource(resourceName));
     }
 

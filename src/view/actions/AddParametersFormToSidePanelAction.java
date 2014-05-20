@@ -13,6 +13,7 @@ import domainmodel.TargetomeDatabase;
 import giny.view.GraphViewChangeEvent;
 import giny.view.GraphViewChangeListener;
 import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.IRegulonResourceBundle;
 import view.Refreshable;
 import view.ResourceAction;
 import view.parametersform.MetaTargetomeParameterForm;
@@ -32,8 +33,6 @@ import java.util.Set;
 
 public class AddParametersFormToSidePanelAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_open_parameters_side_panel";
-
-    private static final String PLUGIN_NAME = getBundle().getString("plugin_visual_name");
 
     private PredictedRegulatorsForm predictedRegulatorsForm;
     private MetatargetomeForm metatargetomeForm;
@@ -70,7 +69,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         final JPanel sidePanel = new JPanel(new GridBagLayout());
         final GridBagConstraints cc = new GridBagConstraints();
 
-        final JLabel titleLabel = new JLabel(PLUGIN_NAME);
+        final JLabel titleLabel = new JLabel(IRegulonResourceBundle.PLUGIN_NAME);
         titleLabel.setFont(new Font("Serif", 0, 45));
 
         cc.gridx = 0;
@@ -102,11 +101,11 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         cc.fill = GridBagConstraints.BOTH;
         sidePanel.add(tabbedPane, cc);
 
-        if (cytoPanel.indexOfComponent(PLUGIN_NAME) == -1) {
-            cytoPanel.add(PLUGIN_NAME, sidePanel);
+        if (cytoPanel.indexOfComponent(IRegulonResourceBundle.PLUGIN_NAME) == -1) {
+            cytoPanel.add(IRegulonResourceBundle.PLUGIN_NAME, sidePanel);
         }
 
-        final int idx = cytoPanel.indexOfComponent(PLUGIN_NAME);
+        final int idx = cytoPanel.indexOfComponent(IRegulonResourceBundle.PLUGIN_NAME);
         cytoPanel.setSelectedIndex(idx);
 
         cytoPanel.addCytoPanelListener(new CytoPanelListener() {

@@ -3,17 +3,18 @@ package servercommunication;
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import domainmodel.AbstractMotifAndTrack;
-import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Motif;
+import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Track;
+import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
-import view.IRegulonResourceBundle;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+
 
 public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implements Task {
     private static final int WAITING_TIME_IN_MS = 3000;
@@ -41,7 +42,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
     }
 
     public String getTitle() {
-        return getBundle().getString("plugin_name") + ": Prediction of transcription factors";
+        return PLUGIN_NAME + ": Prediction of transcription factors";
     }
 
     private void interrupt(final String msg) {

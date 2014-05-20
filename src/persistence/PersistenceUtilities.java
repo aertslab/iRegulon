@@ -2,12 +2,11 @@ package persistence;
 
 import com.thoughtworks.xstream.XStream;
 import domainmodel.*;
+import infrastructure.IRegulonResourceBundle;
 import view.parametersform.IRegulonType;
 
 import java.util.Collection;
 import java.util.Iterator;
-
-import static view.ResourceAction.getBundle;
 
 
 public class PersistenceUtilities {
@@ -108,7 +107,7 @@ public class PersistenceUtilities {
         }
 
         results_tsv_builder.append("; Number of valid nodes\t" + results.getGenes().size() + "\n"
-                + "; iRegulon version\t" + getBundle().getString("plugin_name_version_release") + "\n");
+                + "; iRegulon version\t" + IRegulonResourceBundle.getBundle().getString("plugin_name_version_release") + "\n");
 
         if (results.isRegionBased()) {
             results_tsv_builder.append("; Overlap fraction\t" + results.getOverlap() + "\n");

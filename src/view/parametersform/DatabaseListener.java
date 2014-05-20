@@ -3,7 +3,7 @@ package view.parametersform;
 import cytoscape.Cytoscape;
 import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
-import view.IRegulonResourceBundle;
+import infrastructure.IRegulonResourceBundle;
 import view.parametersform.databaseselection.*;
 
 import javax.swing.*;
@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
 
 final class DatabaseListener extends IRegulonResourceBundle implements ActionListener, DocumentListener {
 

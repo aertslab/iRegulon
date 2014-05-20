@@ -6,12 +6,13 @@ import cytoscape.visual.calculators.BasicCalculator;
 import cytoscape.visual.calculators.Calculator;
 import cytoscape.visual.mappings.*;
 import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.IRegulonResourceBundle;
 
 import java.awt.*;
 
 
 public class IRegulonVisualStyle extends IRegulonResourceBundle {
-    public static final String NAME = BUNDLE.getString("vizmap_name");
+    public static final String NAME = RESOURCE_BUNDLE.getString("vizmap_name");
     private static final Color GRAY = new Color(220, 220, 220);
 
     private IRegulonVisualStyle() {

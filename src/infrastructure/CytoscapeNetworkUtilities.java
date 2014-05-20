@@ -1,6 +1,5 @@
 package infrastructure;
 
-
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
 import cytoscape.CyNode;
@@ -19,7 +18,7 @@ import java.util.*;
 
 
 public final class CytoscapeNetworkUtilities {
-    public static final String PLUGIN_VISUAL_NAME = ResourceBundle.getBundle("iRegulon").getString("plugin_visual_name");
+    public static final String PLUGIN_VISUAL_NAME = IRegulonResourceBundle.PLUGIN_VISUAL_NAME_HTML;
 
     public static final String ASSEMBLY_ATTRIBUTE_NAME = "Assembly";
     public static final String FEATURE_ID_ATTRIBUTE_NAME = "featureID";

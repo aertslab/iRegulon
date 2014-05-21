@@ -3,6 +3,7 @@ package view.actions;
 import domainmodel.GeneIdentifier;
 import domainmodel.MetaTargetomeParameters;
 import domainmodel.SpeciesNomenclature;
+import servercommunication.MetaTargetomes;
 import view.Refreshable;
 import view.ResourceAction;
 import view.parametersform.MetatargetomeParameterFrame;
@@ -39,7 +40,7 @@ public final class OpenQueryMetatargetomeFormAction extends ResourceAction imple
     public void actionPerformed(ActionEvent event) {
         final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
-            speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
+            speciesNomenclature2factors.put(speciesNomenclature, MetaTargetomes.getAvailableFactors(speciesNomenclature));
         }
 
         final JDialog frame = new MetatargetomeParameterFrame(getParameters(), speciesNomenclature2factors, view);
@@ -58,6 +59,6 @@ public final class OpenQueryMetatargetomeFormAction extends ResourceAction imple
         if (factor == null) return false;
         if (getParameters().getOccurrenceCountThreshold() < 0) return false;
         if (getParameters().getMaxNumberOfNodes() < 0) return false;
-        return QueryMetatargetomeAction.getAvailableFactors(factor.getSpeciesNomenclature()).contains(factor);
+        return MetaTargetomes.getAvailableFactors(factor.getSpeciesNomenclature()).contains(factor);
     }
 }

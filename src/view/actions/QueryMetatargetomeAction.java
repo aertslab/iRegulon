@@ -9,16 +9,16 @@ import cytoscape.task.util.TaskManager;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
 import infrastructure.CytoscapeNetworkUtilities;
-import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
+import servercommunication.MetaTargetomes;
 import servercommunication.ServerCommunicationException;
 import view.Refreshable;
 import view.ResourceAction;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.*;
+import java.util.List;
 
 
 public class QueryMetatargetomeAction extends ResourceAction implements Refreshable {
@@ -64,34 +64,6 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
     };
 
-    private static Map<SpeciesNomenclature, Set<GeneIdentifier>> SPECIES_NOMENCLATURE2FACTORS;
-
-    static {
-        try {
-            SPECIES_NOMENCLATURE2FACTORS = queryForFactors();
-        } catch (ServerCommunicationException e) {
-            Logger.getInstance().error(e);
-            SPECIES_NOMENCLATURE2FACTORS = Collections.emptyMap();
-        }
-    }
-
-    private static Map<SpeciesNomenclature, Set<GeneIdentifier>> queryForFactors() throws ServerCommunicationException {
-        final ComputationalService service = new ComputationalServiceHTTP();
-        final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
-        for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
-            speciesNomenclature2factors.put(speciesNomenclature, service.queryTranscriptionFactorsWithPredictedTargetome(speciesNomenclature));
-        }
-        return speciesNomenclature2factors;
-    }
-
-    public static Set<GeneIdentifier> getAvailableFactors(final SpeciesNomenclature speciesNomenclature) {
-        if (SPECIES_NOMENCLATURE2FACTORS.containsKey(speciesNomenclature)) {
-            return SPECIES_NOMENCLATURE2FACTORS.get(speciesNomenclature);
-        } else {
-            return Collections.emptySet();
-        }
-    }
-
     private MetaTargetomeParameters parameters;
     private final Refreshable resultsPanel;
 
@@ -121,8 +93,10 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (SPECIES_NOMENCLATURE2FACTORS.isEmpty()) {
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "Problem while communicating with server.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (!MetaTargetomes.hasAvailableFactors()) {
+            JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+                    "Problem while communicating with server.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -190,7 +164,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         if (factor == null) return false;
         if (getParameters().getOccurrenceCountThreshold() < 0) return false;
         if (getParameters().getMaxNumberOfNodes() < 0) return false;
-        if (!SPECIES_NOMENCLATURE2FACTORS.containsKey(factor.getSpeciesNomenclature())) return false;
-        return SPECIES_NOMENCLATURE2FACTORS.get(factor.getSpeciesNomenclature()).contains(factor);
+        return (MetaTargetomes.hasAvailableFactors(factor.getSpeciesNomenclature()) &&
+                MetaTargetomes.getAvailableFactors(factor.getSpeciesNomenclature()).contains(factor));
     }
 }

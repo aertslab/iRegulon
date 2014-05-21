@@ -14,6 +14,7 @@ import giny.view.GraphViewChangeEvent;
 import giny.view.GraphViewChangeListener;
 import infrastructure.CytoscapeNetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
+import servercommunication.MetaTargetomes;
 import view.Refreshable;
 import view.ResourceAction;
 import view.parametersform.MetaTargetomeParameterForm;
@@ -86,7 +87,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
         predictedRegulatorsForm = new PredictedRegulatorsForm();
         final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
-            speciesNomenclature2factors.put(speciesNomenclature, QueryMetatargetomeAction.getAvailableFactors(speciesNomenclature));
+            speciesNomenclature2factors.put(speciesNomenclature, MetaTargetomes.getAvailableFactors(speciesNomenclature));
         }
         metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
         tabbedPane.addTab("Predict regulators and targets", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);

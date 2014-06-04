@@ -25,8 +25,6 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
     public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols", "hg19");
     public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI symbols", "mm9");
     public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase names", "dm3");
-    public static SpeciesNomenclature DROSOPHILA_CG_numbers = new SpeciesNomenclature(4, "Drosophila melanogaster, CG-numbers", "dm3");
-    //public static SpeciesNomenclature DROSOPHILA_FBgn_numbers = new SpeciesNomenclature (5, "Drosophila melanogaster, FBgn", "dm3");
     public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature();
 
     public static SpeciesNomenclature getNomenclature(final int code) {

@@ -1,6 +1,6 @@
 package view.resultspanel.trackview.detailpanel;
 
-import view.resultspanel.trackview.actions.ShowTrack2TFDetailAction;
+import view.actions.ShowTrack2TFDetailAction;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

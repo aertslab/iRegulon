@@ -1,9 +1,9 @@
-package view.resultspanel.trackview.actions;
+package view.actions;
 
 import cytoscape.Cytoscape;
 import view.ResourceAction;
-import view.resultspanel.trackview.Track2TFDetailFrame;
-import view.resultspanel.trackview.detailpanel.TFandTrackSelected;
+import view.resultspanel.motifview.Motif2TFDetailFrame;
+import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -11,20 +11,20 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 
 
-public class ShowTrack2TFDetailAction extends ResourceAction implements ListSelectionListener {
+public class ShowMotif2TFDetailAction extends ResourceAction implements ListSelectionListener {
     private static final String NAME = "action_detail_frame";
 
-    private TFandTrackSelected tfTrack;
+    private TFandMotifSelected tfMotif;
 
-    public ShowTrack2TFDetailAction(final TFandTrackSelected tfTrack) {
+    public ShowMotif2TFDetailAction(final TFandMotifSelected tfMotif) {
         super(NAME);
         setEnabled(false);
-        this.tfTrack = tfTrack;
+        this.tfMotif = tfMotif;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        final JDialog frame = new Track2TFDetailFrame(tfTrack);
+        final JDialog frame = new Motif2TFDetailFrame(tfMotif);
         frame.setLocationRelativeTo(Cytoscape.getDesktop());
         frame.setAlwaysOnTop(true);
         frame.setVisible(true);

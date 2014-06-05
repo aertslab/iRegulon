@@ -1,6 +1,6 @@
 package view.resultspanel.motifview.detailpanel;
 
-import view.resultspanel.motifview.actions.ShowMotif2TFDetailAction;
+import view.actions.ShowMotif2TFDetailAction;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;

@@ -10,10 +10,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 
-public class OpenParametersFormAction extends ResourceAction {
+public class OpenPredictRegulatorsFormAction extends ResourceAction {
     private static final String NAME = "action_open_parameters_form";
 
-    public OpenParametersFormAction() {
+    public OpenPredictRegulatorsFormAction() {
         super(NAME);
     }
 

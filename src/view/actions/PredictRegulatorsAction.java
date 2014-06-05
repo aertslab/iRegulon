@@ -1,4 +1,4 @@
-package view.parametersform.actions;
+package view.actions;
 
 import cytoscape.Cytoscape;
 import cytoscape.view.cytopanels.CytoPanel;

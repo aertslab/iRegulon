@@ -2,11 +2,7 @@ package view.resultspanel;
 
 
 import view.Refreshable;
-import view.actions.BedExportAction;
-import view.actions.OpenLinkToGenomeBrowserAction;
-import view.resultspanel.actions.AddRegulatoryInteractionsAction;
-import view.resultspanel.actions.AddRegulatoryNetworkAction;
-import view.resultspanel.actions.CreateNewRegulatoryNetworkAction;
+import view.actions.*;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 import javax.swing.*;

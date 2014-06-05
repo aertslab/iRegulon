@@ -1,9 +1,8 @@
-package view.resultspanel.actions;
+package view.actions;
 
 
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
-import view.actions.SaveLoadDialogs;
 import view.resultspanel.ResultsView;
 
 import java.awt.event.ActionEvent;

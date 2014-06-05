@@ -1,4 +1,4 @@
-package view.resultspanel.actions;
+package view.actions;
 
 import cytoscape.CyNetwork;
 import cytoscape.Cytoscape;

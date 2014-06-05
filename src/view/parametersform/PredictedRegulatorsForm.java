@@ -9,7 +9,7 @@ import domainmodel.SpeciesNomenclature;
 import infrastructure.CytoscapeNetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
 import view.Refreshable;
-import view.parametersform.actions.PredictRegulatorsAction;
+import view.actions.PredictRegulatorsAction;
 import view.parametersform.databaseselection.*;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package view.resultspanel.actions;
+package view.actions;
 
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
@@ -8,8 +8,8 @@ import cytoscape.data.CyAttributes;
 import cytoscape.view.CyNetworkView;
 import giny.view.NodeView;
 import infrastructure.CytoscapeNetworkUtilities;
-import view.resultspanel.NetworkDrawAction;
 import view.Refreshable;
+import view.resultspanel.NetworkDrawAction;
 
 import java.awt.event.ActionEvent;
 import java.util.*;

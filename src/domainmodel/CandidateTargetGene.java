@@ -4,17 +4,17 @@ package domainmodel;
 public class CandidateTargetGene implements Comparable<CandidateTargetGene> {
     private final GeneIdentifier geneID;
     private final int rank;
-    private final int numberOfMotifs;
+    private final int numberOfMotifsOrTracks;
 
     public CandidateTargetGene(final GeneIdentifier geneID, final int rank) {
         this(geneID, rank, 1);
     }
 
-    public CandidateTargetGene(final GeneIdentifier geneID, final int rank, final int numberOfMotifs) {
+    public CandidateTargetGene(final GeneIdentifier geneID, final int rank, final int numberOfMotifsOrTracks) {
         if (geneID == null) throw new IllegalArgumentException();
         this.geneID = geneID;
         this.rank = rank;
-        this.numberOfMotifs = numberOfMotifs;
+        this.numberOfMotifsOrTracks = numberOfMotifsOrTracks;
     }
 
     public GeneIdentifier getGeneID() {
@@ -33,8 +33,8 @@ public class CandidateTargetGene implements Comparable<CandidateTargetGene> {
         return this.rank;
     }
 
-    public int getNumberOfMotifs() {
-        return numberOfMotifs;
+    public int getNumberOfMotifsOrTracks() {
+        return numberOfMotifsOrTracks;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class CandidateTargetGene implements Comparable<CandidateTargetGene> {
 
         CandidateTargetGene that = (CandidateTargetGene) o;
 
-        if (numberOfMotifs != that.numberOfMotifs) return false;
+        if (numberOfMotifsOrTracks != that.numberOfMotifsOrTracks) return false;
         if (rank != that.rank) return false;
         if (!geneID.equals(that.geneID)) return false;
 
@@ -62,7 +62,7 @@ public class CandidateTargetGene implements Comparable<CandidateTargetGene> {
     public int hashCode() {
         int result = geneID.hashCode();
         result = 31 * result + rank;
-        result = 31 * result + numberOfMotifs;
+        result = 31 * result + numberOfMotifsOrTracks;
         return result;
     }
 }

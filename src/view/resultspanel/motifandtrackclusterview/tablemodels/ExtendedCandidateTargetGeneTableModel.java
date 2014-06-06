@@ -51,7 +51,7 @@ public final class ExtendedCandidateTargetGeneTableModel extends AbstractTableMo
             case 0:
                 return gene.getRank();
             case 1:
-                return gene.getNumberOfMotifs();
+                return gene.getNumberOfMotifsOrTracks();
             case 2:
                 return gene.getGeneName();
             default:

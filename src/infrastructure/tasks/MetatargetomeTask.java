@@ -1,4 +1,4 @@
-package view.actions;
+package infrastructure.tasks;
 
 import cytoscape.CyNetwork;
 import cytoscape.task.Task;
@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-abstract class MetatargetomeTask extends IRegulonResourceBundle implements Task {
+public abstract class MetatargetomeTask extends IRegulonResourceBundle implements Task {
     protected static final AbstractMotif NO_MOTIF = new AbstractMotif("NaN",
             Collections.<CandidateTargetGene>emptyList(),
             Collections.<TranscriptionFactor>emptyList()) {
@@ -64,7 +64,7 @@ abstract class MetatargetomeTask extends IRegulonResourceBundle implements Task 
     private boolean interrupted = false;
 
 
-    MetatargetomeTask(CyNetwork network, CyNetworkView view,
+    public MetatargetomeTask(CyNetwork network, CyNetworkView view,
                       final Refreshable resultsPanel, final String attributeName,
                       GeneIdentifier factor, List<CandidateTargetGene> targetome) {
         this.transcriptionFactor = factor;

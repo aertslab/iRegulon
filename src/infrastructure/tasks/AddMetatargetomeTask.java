@@ -1,4 +1,4 @@
-package view.actions;
+package infrastructure.tasks;
 
 
 import cytoscape.CyEdge;
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 
-final class AddMetatargetomeTask extends MetatargetomeTask {
-    AddMetatargetomeTask(CyNetwork network, CyNetworkView view, final Refreshable resultsPanel,
+public final class AddMetatargetomeTask extends MetatargetomeTask {
+    public AddMetatargetomeTask(CyNetwork network, CyNetworkView view, final Refreshable resultsPanel,
                          final String attributeName, GeneIdentifier factor, List<CandidateTargetGene> targetome) {
         super(network, view, resultsPanel, attributeName, factor, targetome);
     }

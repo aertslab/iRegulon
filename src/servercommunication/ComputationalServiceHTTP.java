@@ -10,6 +10,7 @@ import infrastructure.Logger;
 import servercommunication.protocols.HTTPProtocol;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
+import servercommunication.tasks.FindPredictedRegulatorsTask;
 
 import java.io.*;
 import java.net.*;

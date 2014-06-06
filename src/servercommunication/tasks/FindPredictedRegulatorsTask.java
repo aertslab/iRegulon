@@ -1,4 +1,4 @@
-package servercommunication;
+package servercommunication.tasks;
 
 import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
@@ -8,6 +8,7 @@ import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Track;
 import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
+import servercommunication.ServerCommunicationException;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
 

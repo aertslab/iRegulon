@@ -43,7 +43,7 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
     }
 
     public String getTitle() {
-        return PLUGIN_NAME + ": Prediction of transcription factors";
+        return PLUGIN_NAME + " analysis: " + predictRegulatorsParameters.getName();
     }
 
     private void interrupt(final String msg) {

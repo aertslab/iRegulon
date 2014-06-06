@@ -19,16 +19,19 @@ public class PersistenceUtilities {
     public static String convertResultsToXML(final Results result) {
         final XStream xstream = new XStream();
         xstream.alias("motif", Motif.class);
+        xstream.alias("track", Track.class);
         xstream.alias("candidateTargetGene", CandidateTargetGene.class);
         xstream.alias("geneIdentifier", GeneIdentifier.class);
         xstream.alias("transcriptionFactor", TranscriptionFactor.class);
         xstream.alias("predictRegulatorsParameters", PredictRegulatorsParameters.class);
         xstream.alias("iRegulonType", IRegulonType.class);
-        xstream.omitField(CandidateTargetGene.class, "numberOfMotifs");
+        xstream.omitField(CandidateTargetGene.class, "numberOfMotifsOrTracks");
         xstream.omitField(TranscriptionFactor.class, "motifs");
+        xstream.omitField(TranscriptionFactor.class, "tracks");
         xstream.omitField(RankingsDatabase.class, "type");
         xstream.omitField(RankingsDatabase.class, "speciesNomenclature");
         xstream.omitField(RankingsDatabase.class, "motifCollection");
+        xstream.omitField(RankingsDatabase.class, "trackCollection");
         xstream.omitField(RankingsDatabase.class, "speciesCount");
         xstream.omitField(RankingsDatabase.class, "putativeRegulatoryRegion");
         xstream.omitField(RankingsDatabase.class, "gene2regionDelineations");
@@ -42,6 +45,7 @@ public class PersistenceUtilities {
     public static Results loadResultsFromXML(final String xml) throws LoadException {
         final XStream xstream = new XStream();
         xstream.alias("motif", Motif.class);
+        xstream.alias("track", Track.class);
         xstream.alias("candidateTargetGene", CandidateTargetGene.class);
         xstream.alias("geneIdentifier", GeneIdentifier.class);
         xstream.alias("transcriptionFactor", TranscriptionFactor.class);
@@ -49,18 +53,15 @@ public class PersistenceUtilities {
         xstream.alias("iRegulonType", IRegulonType.class);
         xstream.registerConverter(new SpeciesNomenclatureConverter());
 
-        xstream.aliasField("cisCisTargetType", PredictRegulatorsParameters.class, "iRegulonType");
-
         xstream.omitField(Motif.class, "jobID");
-        xstream.omitField(CandidateTargetGene.class, "numberOfMotifs");
+        xstream.omitField(CandidateTargetGene.class, "numberOfMotifsOrTracks");
         xstream.omitField(TranscriptionFactor.class, "motifs");
-        xstream.aliasField("parameters", Results.class, "predictRegulatorsParameters");
-        xstream.aliasField("enrichedMotifID", Motif.class, "name");
-        xstream.aliasField("minOrthologous", TranscriptionFactor.class, "minOrthologousIdentity");
+        xstream.omitField(TranscriptionFactor.class, "tracks");
 
         xstream.omitField(RankingsDatabase.class, "type");
         xstream.omitField(RankingsDatabase.class, "speciesNomenclature");
         xstream.omitField(RankingsDatabase.class, "motifCollection");
+        xstream.omitField(RankingsDatabase.class, "trackCollection");
         xstream.omitField(RankingsDatabase.class, "speciesCount");
         xstream.omitField(RankingsDatabase.class, "putativeRegulatoryRegion");
         xstream.omitField(RankingsDatabase.class, "gene2regionDelineations");

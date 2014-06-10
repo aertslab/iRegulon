@@ -15,6 +15,7 @@ import view.parametersform.PredictedRegulatorsParameters;
 import view.resultspanel.ResultsView;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,56 @@ public class PredictRegulatorsAction extends ResourceAction {
         try {
             motifsAndTracks = service.findPredictedRegulators(predictRegulatorsParameters);
         } catch (ServerCommunicationException e) {
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
+            String errorMessage = deriveMessage(e);
+
+            String lostGenesError = "The following genes were lost:<br>";
+            int lostGenesErrorLength = lostGenesError.length();
+            int lostGenesErrorFoundIndex = errorMessage.indexOf(lostGenesError);
+            if (lostGenesErrorFoundIndex >= 0) {
+                // When the error message contains the string "The following genes were lost:<br>", separate the error
+                // message from the list of lost genes.
+                String errorMessageLostGenes = errorMessage.substring(0, lostGenesErrorFoundIndex + lostGenesErrorLength - 1) + "</html>";
+
+                // Get lost genes from the error message, so they can be displayed in a textarea.
+                String lostGenes = errorMessage.substring(lostGenesErrorFoundIndex + lostGenesErrorLength);
+                // Replace breaks by newlines.
+                lostGenes = lostGenes.replaceAll("<br>", " ");
+                // Remove "</html>" from the end of the lost genes string.
+                lostGenes = lostGenes.substring(0, lostGenes.length() - 7);
+
+                JPanel panel = new JPanel();
+                panel.setLayout(new GridBagLayout());
+
+                GridBagConstraints c = new GridBagConstraints();
+                c.fill = GridBagConstraints.HORIZONTAL;
+                c.gridx = 0;
+                c.gridy = 0;
+
+                JLabel errorMessageLabel = new JLabel(errorMessageLostGenes);
+                panel.add(errorMessageLabel, c);
+
+                // Create a textarea for displaying the lost genes.
+                JTextArea textArea = new JTextArea(10, 20);
+                textArea.setText(lostGenes);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                textArea.setCaretPosition(0);
+                textArea.setEditable(false);
+
+
+                c.gridwidth = 3;
+                c.gridx = 0;
+                c.gridy = 1;
+
+                // Put textarea in a scrollpane.
+                JScrollPane scrollPane = new JScrollPane(textArea);
+
+                panel.add(scrollPane, c);
+
+                JOptionPane.showMessageDialog(Cytoscape.getDesktop(), panel, "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(Cytoscape.getDesktop(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
+            }
             return;
         }
         if (! motifsAndTracks.isEmpty()) {

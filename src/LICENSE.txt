@@ -150,21 +150,20 @@ Publication
 ===========
 
 The Academic User shall acknowledge KU Leuven as the provider of software and
-shall include a reference to Rekin’s Janky, Annelien Verfaillie, Bram Van de
-Sande, Laura Standaert, Valerie Christiaens, Gert Hulselmans, Koen Herten,
-Marina Naval Sanchez, Delphine Potier, Dmitry Svetlichnyy, Hana Imrichová,
-Zeynep Kalender Atak, Mark Fiers, Jean-Christophe Marine, and Stein Aerts.
-iRegulon: from a gene list to a gene regulatory network using large motif and
-track collections. Manuscript under revision; in any manuscript describing data
-obtained using Licensed Software.
+shall include a reference to Rekin’s Janky, Annelien Verfaillie, Hana
+Imrichová, Bram Van de Sande, Laura Standaert, Valerie Christiaens, Gert
+Hulselmans, Koen Herten, Marina Naval Sanchez, Delphine Potier, Dmitry
+Svetlichnyy, Zeynep Kalender Atak, Mark Fiers, Jean-Christophe Marine, and
+Stein Aerts. iRegulon: from a gene list to a gene regulatory network using
+large motif and track collections. Accepted in PLOS Computational Biology;
+in any manuscript describing data obtained using Licensed Software.
 
 Citation
 ========
 
-Rekin’s Janky, Annelien Verfaillie, Bram Van de Sande, Laura Standaert, Valerie
-Christiaens, Gert Hulselmans, Koen Herten, Marina Naval Sanchez, Delphine
-Potier, Dmitry Svetlichnyy, Hana Imrichová, Zeynep Kalender Atak, Mark Fiers,
+Rekin’s Janky, Annelien Verfaillie, Hana Imrichová, Bram Van de Sande, Laura
+Standaert, Valerie Christiaens, Gert Hulselmans, Koen Herten, Marina Naval
+Sanchez, Delphine Potier, Dmitry Svetlichnyy, Zeynep Kalender Atak, Mark Fiers,
 Jean-Christophe Marine, and Stein Aerts. iRegulon: from a gene list to a gene
 regulatory network using large motif and track collections.
-Manuscript under revision.
-
+Accepted in PLOS Computational Biology.

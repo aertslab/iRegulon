@@ -1,7 +1,6 @@
 package view.resultspanel.trackview.detailpanel;
 
 import domainmodel.*;
-import infrastructure.IRegulonResourceBundle;
 import view.resultspanel.*;
 import view.resultspanel.guiwidgets.LinkTextField;
 import view.resultspanel.guiwidgets.LogoThumbnail;
@@ -18,18 +17,12 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseListener;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 
 public class DetailPanel extends JPanel implements DetailPanelIF {
-    private static final String TRANSFAC_PREFIX = "transfac_pro-";
-    private static final String TRANSFAC_URL = IRegulonResourceBundle.getBundle().getString("transfac_url");
-
     private JTable targetGeneTable;
     private LinkTextField jtfTrack;
     private JTextField jtfDescription;
-    private LogoThumbnail jlbLogo;
     private JTable transcriptionFactorTable;
     private NetworkMembershipHighlightRenderer hlcrtf;
     private NetworkMembershipHighlightRenderer hlcrtg;
@@ -57,6 +50,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 15);
 
 
+        /* Track name with eventually link to a website. */
         this.jtfTrack = new LinkTextField();
         this.jtfTrack.setBorder(null);
         this.jtfTrack.setEditable(false);
@@ -78,6 +72,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         this.add(this.jtfTrack, c);
 
 
+        /* Track description. */
         this.jtfDescription = new JTextField();
         this.jtfDescription.setBorder(null);
         this.jtfDescription.setEditable(false);
@@ -98,22 +93,23 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         c.ipady = 1;
         this.add(this.jtfDescription, c);
 
-        this.targetGeneTable = new JTable(new CandidateTargetGeneTableModel(null));
-        this.targetGeneTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        this.hlcrtg = new NetworkMembershipHighlightRenderer("Target Name");
-        this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 
-        c.gridx = 2;
-        c.gridy = 0;
+        /* Space filler so track name and description are shown close enough together. */
+        JLabel jlbSpaceFiller = new JLabel();
+
+        c.gridx = 0;
+        c.gridy = 2;
         c.weightx = 0.3;
+        c.weighty = 0.8;
         c.gridwidth = 1;
-        c.gridheight = 3;
-        c.ipadx = ipadx;
-        c.ipady = ipady;
+        c.gridheight = 1;
+        c.ipadx = 0;
+        c.ipady = 0;
 
-        this.add(new JScrollPane(targetGeneTable), c);
+        this.add(jlbSpaceFiller, c);
 
 
+        /* List of transcription factors associated with the current selected track. */
         this.transcriptionFactorTable = new JTable(new TranscriptionFactorTableModel(null, AbstractMotifAndTrack.TrackType.TRACK));
         this.transcriptionFactorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -129,39 +125,39 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
         this.add(new JScrollPane(transcriptionFactorTable), c);
 
-
-        this.jlbLogo = new LogoThumbnail();
-
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 0.3;
-        c.weighty = 0.8;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        c.ipadx = 0;
-        c.ipady = 0;
-
-        this.add(jlbLogo, c);
-
-
-        //tooltips in the headers of the tables
-
+        /* Set tooltips in the header of the table with associated transcription factors. */
         ToolTipHeader header = new ToolTipHeader(this.transcriptionFactorTable.getColumnModel());
         TranscriptionFactorTableModelIF modelTable = (TranscriptionFactorTableModelIF) this.transcriptionFactorTable.getModel();
         header.setToolTipStrings(modelTable.getTooltips());
         header.setToolTipText("");
         this.transcriptionFactorTable.setTableHeader(header);
 
+
+        /* Set tooltips in the header of the target gene list table. */
+        this.targetGeneTable = new JTable(new CandidateTargetGeneTableModel(null));
+        this.targetGeneTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        this.hlcrtg = new NetworkMembershipHighlightRenderer("Target Name");
+        this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
+
+        c.gridx = 2;
+        c.gridy = 0;
+        c.weightx = 0.3;
+        c.gridwidth = 1;
+        c.gridheight = 3;
+        c.ipadx = ipadx;
+        c.ipady = ipady;
+
+        this.add(new JScrollPane(targetGeneTable), c);
+
+        /* Set tooltips in the header of the target gene list table. */
         header = new ToolTipHeader(this.targetGeneTable.getColumnModel());
         CandidateTargetGeneTableModelIF TGmodelTable = (CandidateTargetGeneTableModelIF) this.targetGeneTable.getModel();
         header.setToolTipStrings(TGmodelTable.getTooltips());
         header.setToolTipText("");
         this.targetGeneTable.setTableHeader(header);
 
-        //Sorting on the table
-        //this.transcriptionFactorTable.setAutoCreateRowSorter(true);
+        /* Sort the target genes table on rank. */
         this.targetGeneTable.setAutoCreateRowSorter(true);
-
     }
 
     @Override
@@ -224,56 +220,41 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         refresh(getSelectedMotifOrTrack());
     }
 
-    private URI composeURI(final AbstractMotifAndTrack motifOrTrack) {
-        try {
-            final String ID = motifOrTrack.getName().split("-")[1];
-            return new URI(TRANSFAC_URL + ID);
-        } catch (URISyntaxException e) {
-            return null;
-        }
-    }
-
     private void refresh(AbstractMotifAndTrack motifOrTrack) {
         this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motifOrTrack));
         this.transcriptionFactorTable.setModel(new TranscriptionFactorTableModel(motifOrTrack, AbstractMotifAndTrack.TrackType.TRACK));
         this.tfTrack.setTrack((Track) motifOrTrack);
 
         if (motifOrTrack == null) {
-            motifOrTrack = null;
             this.jtfTrack.disableLink("");
             this.jtfDescription.setText("");
             this.jtfDescription.setToolTipText("");
-            this.jlbLogo.setMotif(null);
         } else {
-            if (motifOrTrack.getName().startsWith(TRANSFAC_PREFIX)) {
-                this.jtfTrack.enableLink(motifOrTrack.getName(), composeURI(motifOrTrack));
-            } else {
-                this.jtfTrack.disableLink(motifOrTrack.getName());
-            }
+            this.jtfTrack.disableLink(motifOrTrack.getName());
+
             this.jtfDescription.setText(motifOrTrack.getDescription());
             this.jtfDescription.setToolTipText("Description: " + motifOrTrack.getDescription());
 
-            //this.jlbLogo.set((Track) motifOrTrack);
-
-            //colors of the table
+            /* Refresh highlighting. */
             refreshHighlighting();
         }
 
-        //setting the table renderer
+        /* Set table renderer */
         for (int i = 0; i < this.transcriptionFactorTable.getModel().getColumnCount(); i++) {
             CombinedRenderer renderer = new CombinedRenderer();
-            // the float renderer
+            /* Float renderer. */
             switch (i) {
                 case 1:
-                    renderer.addRenderer(new FloatRenderer("0.###E0", "N/A")); //float renderer
+                    renderer.addRenderer(new FloatRenderer("0.###E0", "N/A"));
                     break;
                 case 2:
-                    renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
+                    renderer.addRenderer(new FloatRenderer("0.###E0", "Direct"));
                     break;
                 default:
                     renderer.addRenderer(new DefaultRenderer());
             }
-            //the column renderer
+
+            /* Column renderer. */
             renderer.addRenderer(this.hlcrtf);
             TableColumn col = this.transcriptionFactorTable.getColumnModel().getColumn(i);
             col.setCellRenderer(renderer);

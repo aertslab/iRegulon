@@ -56,7 +56,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
         Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 15);
 
-
+        /* Motif name with eventually link to a website. */
         this.jtfMotif = new LinkTextField();
         this.jtfMotif.setBorder(null);
         this.jtfMotif.setEditable(false);
@@ -78,6 +78,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         this.add(this.jtfMotif, c);
 
 
+        /* Motif description. */
         this.jtfDescription = new JTextField();
         this.jtfDescription.setBorder(null);
         this.jtfDescription.setEditable(false);
@@ -98,22 +99,23 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         c.ipady = 1;
         this.add(this.jtfDescription, c);
 
-        this.targetGeneTable = new JTable(new CandidateTargetGeneTableModel(null));
-        this.targetGeneTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        this.hlcrtg = new NetworkMembershipHighlightRenderer("Target Name");
-        this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
 
-        c.gridx = 2;
-        c.gridy = 0;
+        /* Logo */
+        this.jlbLogo = new LogoThumbnail();
+
+        c.gridx = 0;
+        c.gridy = 2;
         c.weightx = 0.3;
+        c.weighty = 0.8;
         c.gridwidth = 1;
-        c.gridheight = 3;
-        c.ipadx = ipadx;
-        c.ipady = ipady;
+        c.gridheight = 1;
+        c.ipadx = 0;
+        c.ipady = 0;
 
-        this.add(new JScrollPane(targetGeneTable), c);
+        this.add(jlbLogo, c);
 
 
+        /* List of transcription factors associated with the current selected motif. */
         this.transcriptionFactorTable = new JTable(new TranscriptionFactorTableModel(null, AbstractMotifAndTrack.TrackType.MOTIF));
         this.transcriptionFactorTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -129,39 +131,39 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
         this.add(new JScrollPane(transcriptionFactorTable), c);
 
-
-        this.jlbLogo = new LogoThumbnail();
-
-        c.gridx = 0;
-        c.gridy = 2;
-        c.weightx = 0.3;
-        c.weighty = 0.8;
-        c.gridwidth = 1;
-        c.gridheight = 1;
-        c.ipadx = 0;
-        c.ipady = 0;
-
-        this.add(jlbLogo, c);
-
-
-        //tooltips in the headers of the tables
-
+        /* Set tooltips in the header of the table with associated transcription factors. */
         ToolTipHeader header = new ToolTipHeader(this.transcriptionFactorTable.getColumnModel());
         TranscriptionFactorTableModelIF modelTable = (TranscriptionFactorTableModelIF) this.transcriptionFactorTable.getModel();
         header.setToolTipStrings(modelTable.getTooltips());
         header.setToolTipText("");
         this.transcriptionFactorTable.setTableHeader(header);
 
+
+        /* Target gene list for the current selected motif. */
+        this.targetGeneTable = new JTable(new CandidateTargetGeneTableModel(null));
+        this.targetGeneTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        this.hlcrtg = new NetworkMembershipHighlightRenderer("Target Name");
+        this.hlcrtg.setIDsToBeHighlighted(this.updateHLCR.getCurrentIDs());
+
+        c.gridx = 2;
+        c.gridy = 0;
+        c.weightx = 0.3;
+        c.gridwidth = 1;
+        c.gridheight = 3;
+        c.ipadx = ipadx;
+        c.ipady = ipady;
+
+        this.add(new JScrollPane(targetGeneTable), c);
+
+        /* Set tooltips in the header of the target gene list table. */
         header = new ToolTipHeader(this.targetGeneTable.getColumnModel());
         CandidateTargetGeneTableModelIF TGmodelTable = (CandidateTargetGeneTableModelIF) this.targetGeneTable.getModel();
         header.setToolTipStrings(TGmodelTable.getTooltips());
         header.setToolTipText("");
         this.targetGeneTable.setTableHeader(header);
 
-        //Sorting on the table
-        //this.transcriptionFactorTable.setAutoCreateRowSorter(true);
+        /* Sort the target genes table on rank. */
         this.targetGeneTable.setAutoCreateRowSorter(true);
-
     }
 
     @Override
@@ -239,7 +241,6 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         this.tfMotif.setMotif((Motif) motifOrTrack);
 
         if (motifOrTrack == null) {
-            motifOrTrack = null;
             this.jtfMotif.disableLink("");
             this.jtfDescription.setText("");
             this.jtfDescription.setToolTipText("");
@@ -250,34 +251,38 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             } else {
                 this.jtfMotif.disableLink(motifOrTrack.getName());
             }
+
             this.jtfDescription.setText(motifOrTrack.getDescription());
             this.jtfDescription.setToolTipText("Description: " + motifOrTrack.getDescription());
 
             this.jlbLogo.setMotif((Motif) motifOrTrack);
 
-            //colors of the table
+            /* Refresh highlighting. */
             refreshHighlighting();
         }
 
-        //setting the table renderer
+        /* Set table renderer. */
         for (int i = 0; i < this.transcriptionFactorTable.getModel().getColumnCount(); i++) {
             CombinedRenderer renderer = new CombinedRenderer();
-            // the float renderer
+
+            /* Float renderer. */
             switch (i) {
                 case 1:
-                    renderer.addRenderer(new FloatRenderer("0.###E0", "N/A")); //float renderer
+                    renderer.addRenderer(new FloatRenderer("0.###E0", "N/A"));
                     break;
                 case 2:
-                    renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
+                    renderer.addRenderer(new FloatRenderer("0.###E0", "Direct"));
                     break;
                 default:
                     renderer.addRenderer(new DefaultRenderer());
             }
-            //the column renderer
+
+            /* Column renderer. */
             renderer.addRenderer(this.hlcrtf);
             TableColumn col = this.transcriptionFactorTable.getColumnModel().getColumn(i);
             col.setCellRenderer(renderer);
         }
+
         for (int i = 0; i < this.targetGeneTable.getModel().getColumnCount(); i++) {
             this.targetGeneTable.getColumn(this.targetGeneTable.getColumnName(i)).setCellRenderer(this.hlcrtg);
         }

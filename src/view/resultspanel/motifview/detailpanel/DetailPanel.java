@@ -3,7 +3,7 @@ package view.resultspanel.motifview.detailpanel;
 import domainmodel.*;
 import infrastructure.IRegulonResourceBundle;
 import view.resultspanel.*;
-import view.resultspanel.guiwidgets.LinkLabel;
+import view.resultspanel.guiwidgets.LinkTextField;
 import view.resultspanel.guiwidgets.LogoThumbnail;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifandtrackview.tablemodels.CandidateTargetGeneTableModel;
@@ -27,8 +27,8 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     private static final String TRANSFAC_URL = IRegulonResourceBundle.getBundle().getString("transfac_url");
 
     private JTable targetGeneTable;
-    private LinkLabel jlbMotif;
-    private JLabel jlbDescription;
+    private LinkTextField jtfMotif;
+    private JTextField jtfDescription;
     private LogoThumbnail jlbLogo;
     private JTable transcriptionFactorTable;
     private NetworkMembershipHighlightRenderer hlcrtf;
@@ -53,13 +53,21 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
 
-        this.jlbMotif = new LinkLabel();
-        this.jlbMotif.setEnabled(true);
-        this.jlbMotif.setText("");
-        Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 1);
-        this.jlbMotif.setHorizontalAlignment(JLabel.CENTER);
-        this.jlbMotif.setMaximumSize(maximumSize);
-        this.jlbMotif.setMinimumSize(maximumSize);
+
+        Dimension maximumSize = new Dimension(LogoThumbnail.THUMBNAIL_WIDTH, 15);
+
+
+        this.jtfMotif = new LinkTextField();
+        this.jtfMotif.setBorder(null);
+        this.jtfMotif.setEditable(false);
+        this.jtfMotif.setEnabled(true);
+        this.jtfMotif.setOpaque(false);
+        this.jtfMotif.setBackground(new Color(0, 0, 0, 0));
+        this.jtfMotif.setForeground(Color.BLACK);
+        this.jtfMotif.setHorizontalAlignment(JLabel.CENTER);
+        this.jtfMotif.setMaximumSize(maximumSize);
+        this.jtfMotif.setMinimumSize(maximumSize);
+        this.jtfMotif.setText("");
 
         c.gridx = 0;
         c.gridy = 0;
@@ -67,15 +75,20 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         c.weighty = 0.1;
         c.ipadx = 1;
         c.ipady = 1;
-        this.add(this.jlbMotif, c);
+        this.add(this.jtfMotif, c);
 
 
-        this.jlbDescription = new JLabel();
-        this.jlbDescription.setEnabled(true);
-        this.jlbDescription.setText("");
-        this.jlbDescription.setHorizontalAlignment(JLabel.CENTER);
-        this.jlbDescription.setMaximumSize(maximumSize);
-        this.jlbDescription.setMinimumSize(maximumSize);
+        this.jtfDescription = new JTextField();
+        this.jtfDescription.setBorder(null);
+        this.jtfDescription.setEditable(false);
+        this.jtfDescription.setEnabled(true);
+        this.jtfDescription.setOpaque(false);
+        this.jtfDescription.setBackground(new Color(0, 0, 0, 0));
+        this.jtfDescription.setForeground(Color.BLACK);
+        this.jtfDescription.setHorizontalAlignment(JLabel.CENTER);
+        this.jtfDescription.setMaximumSize(maximumSize);
+        this.jtfDescription.setMinimumSize(maximumSize);
+        this.jtfDescription.setText("");
 
         c.gridx = 0;
         c.gridy = 1;
@@ -83,7 +96,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         c.weighty = 0.1;
         c.ipadx = 1;
         c.ipady = 1;
-        this.add(this.jlbDescription, c);
+        this.add(this.jtfDescription, c);
 
         this.targetGeneTable = new JTable(new CandidateTargetGeneTableModel(null));
         this.targetGeneTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -227,18 +240,18 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
 
         if (motifOrTrack == null) {
             motifOrTrack = null;
-            this.jlbMotif.disableLink("");
-            this.jlbDescription.setText("");
-            this.jlbDescription.setToolTipText("");
+            this.jtfMotif.disableLink("");
+            this.jtfDescription.setText("");
+            this.jtfDescription.setToolTipText("");
             this.jlbLogo.setMotif(null);
         } else {
             if (motifOrTrack.getName().startsWith(TRANSFAC_PREFIX)) {
-                this.jlbMotif.enableLink(motifOrTrack.getName(), composeURI(motifOrTrack));
+                this.jtfMotif.enableLink(motifOrTrack.getName(), composeURI(motifOrTrack));
             } else {
-                this.jlbMotif.disableLink(motifOrTrack.getName());
+                this.jtfMotif.disableLink(motifOrTrack.getName());
             }
-            this.jlbDescription.setText(motifOrTrack.getDescription());
-            this.jlbDescription.setToolTipText("Description: " + motifOrTrack.getDescription());
+            this.jtfDescription.setText(motifOrTrack.getDescription());
+            this.jtfDescription.setToolTipText("Description: " + motifOrTrack.getDescription());
 
             this.jlbLogo.setMotif((Motif) motifOrTrack);
 

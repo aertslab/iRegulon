@@ -9,28 +9,35 @@ import java.io.IOException;
 import java.net.URI;
 
 
-public final class LinkLabel extends JLabel {
+public final class LinkTextField extends JTextField {
     private final MouseListener mouseListener;
 
-    private String originalText;
+    private Boolean hasLink;
     private URI uri;
 
-    public LinkLabel() {
+    public LinkTextField() {
         super();
 
         mouseListener = new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
-                    open(uri);
+                    if (hasLink == true) {
+                        open(uri);
+                    }
                 }
             }
 
             public void mouseEntered(MouseEvent e) {
-                setText(originalText, false);
+                if (hasLink == true) {
+                    // Change link color to Dodger blue on hover.
+                    setForeground(new Color(30,144,255));
+                }
             }
 
             public void mouseExited(MouseEvent e) {
-                setText(originalText, true);
+                if (hasLink == true) {
+                    setForeground(Color.BLUE);
+                }
             }
         };
     }
@@ -43,14 +50,6 @@ public final class LinkLabel extends JLabel {
         removeMouseListener(mouseListener);
     }
 
-    public String getOriginalText() {
-        return originalText;
-    }
-
-    private void setOriginalText(final String text) {
-        this.originalText = text;
-    }
-
     public URI getUri() {
         return uri;
     }
@@ -60,29 +59,22 @@ public final class LinkLabel extends JLabel {
     }
 
     public void disableLink(final String text) {
+        this.hasLink = false;
         unregisterListener();
-        setOriginalText(text);
         setUri(null);
+        setForeground(Color.BLACK);
         setText(text);
         setToolTipText("");
     }
 
     public void enableLink(final String text, final URI link) {
-        setOriginalText(text);
+        this.hasLink = true;
         setUri(link);
-        setText(text, true);
+        setForeground(Color.BLUE);
+        setText(text);
         setToolTipText(link.toString());
         unregisterListener();
         registerListener();
-    }
-
-    private void setText(String text, boolean ul) {
-        if (text == null) {
-            super.setText("");
-        } else {
-            final String link = ul ? "<u>" + text + "</u>" : text;
-            super.setText("<html><span style=\"color: #000099;\">" + link + "</span></html>");
-        }
     }
 
     private static void open(final URI uri) {

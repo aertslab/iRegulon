@@ -226,7 +226,10 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         add(transcriptionFactorCB, cc);
 
         final JLabel speciesNomenclatureLB = new JLabel("Species and Gene nomenclature:");
-        speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(nomenclature2factors.keySet()));
+        /* Homo sapiens is the only species for now for which we have a meta targetome. */
+        ArrayList supportedNomenclaturesForMetaTargetome = new ArrayList<SpeciesNomenclature>();
+        supportedNomenclaturesForMetaTargetome.add(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(supportedNomenclaturesForMetaTargetome));
         speciesNomenclatureLB.setLabelFor(speciesNomenclatureCB);
 
         cc.gridx = 0; cc.gridy = 1;

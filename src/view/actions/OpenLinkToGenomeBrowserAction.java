@@ -5,9 +5,9 @@ import domainmodel.AbstractMotifAndTrack;
 import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
+import view.Refreshable;
 import view.ResourceAction;
 import view.resultspanel.MotifAndTrackListener;
-import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 
 import javax.swing.*;

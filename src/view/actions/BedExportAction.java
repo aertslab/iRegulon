@@ -8,9 +8,9 @@ import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import servercommunication.ServerCommunicationException;
+import view.Refreshable;
 import view.ResourceAction;
 import view.resultspanel.MotifAndTrackListener;
-import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 
 import javax.swing.*;

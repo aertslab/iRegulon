@@ -6,7 +6,6 @@ import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.Refreshable;
-import view.actions.QueryMetatargetomeAction;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

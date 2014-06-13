@@ -1,7 +1,7 @@
 package view.resultspanel.motifview.detailpanel;
 
-import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Motif;
+import domainmodel.PredictRegulatorsParameters;
 import domainmodel.TranscriptionFactor;
 
 public class TFandMotifSelected {

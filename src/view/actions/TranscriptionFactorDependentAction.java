@@ -1,4 +1,4 @@
-package view.resultspanel;
+package view.actions;
 
 import cytoscape.CyEdge;
 import cytoscape.CyNetwork;
@@ -10,6 +10,9 @@ import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.Refreshable;
+import view.resultspanel.MotifAndTrackListener;
+import view.resultspanel.NetworkDrawAction;
+import view.resultspanel.SelectedMotifOrTrack;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.guiwidgets.TranscriptionFactorListener;
 

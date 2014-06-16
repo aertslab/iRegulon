@@ -13,7 +13,6 @@ import domainmodel.TranscriptionFactor;
 import infrastructure.CytoscapeNetworkUtilities;
 import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
-import view.resultspanel.TranscriptionFactorDependentAction;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 import java.awt.event.ActionEvent;

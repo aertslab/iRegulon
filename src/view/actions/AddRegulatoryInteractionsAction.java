@@ -6,7 +6,7 @@ import cytoscape.Cytoscape;
 import cytoscape.view.CyNetworkView;
 import domainmodel.AbstractMotifAndTrack;
 import domainmodel.TranscriptionFactor;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
@@ -44,12 +44,12 @@ public class AddRegulatoryInteractionsAction extends TranscriptionFactorDependen
 
         if (!addEdges(network, view, factor, motifOrTrack, false)) return;
 
-        Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
+        Cytoscape.getEdgeAttributes().setUserVisible(NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
 
         view.redrawGraph(true, true);
 
         getView().refresh();
 
-        CytoscapeNetworkUtilities.activeSidePanel();
+        NetworkUtilities.activeSidePanel();
     }
 }

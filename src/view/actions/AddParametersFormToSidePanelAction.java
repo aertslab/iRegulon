@@ -12,7 +12,7 @@ import domainmodel.SpeciesNomenclature;
 import domainmodel.TargetomeDatabase;
 import giny.view.GraphViewChangeEvent;
 import giny.view.GraphViewChangeListener;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
 import servercommunication.MetaTargetomes;
 import view.Refreshable;
@@ -182,7 +182,7 @@ public class AddParametersFormToSidePanelAction extends ResourceAction implement
 
     private GeneIdentifier getSelectedFactor() {
         if (!alreadyAdded()) return null;
-        final java.util.List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
+        final java.util.List<CyNode> nodes = NetworkUtilities.getSelectedNodes();
         if (nodes == null || nodes.isEmpty()) return null;
         final CyNode node = nodes.iterator().next();
         final SpeciesNomenclature species = metatargetomeForm.getForm().getSpeciesNomenclature();

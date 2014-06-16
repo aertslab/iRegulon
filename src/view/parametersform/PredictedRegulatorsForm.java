@@ -6,7 +6,7 @@ import domainmodel.Delineation;
 import domainmodel.PredictRegulatorsParameters;
 import domainmodel.RankingsDatabase;
 import domainmodel.SpeciesNomenclature;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
 import view.Refreshable;
 import view.actions.PredictRegulatorsAction;
@@ -440,7 +440,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         final JButton submitButton = new JButton(new PredictRegulatorsAction(PredictedRegulatorsForm.this) {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                if (CytoscapeNetworkUtilities.hasSelectedNodes()) {
+                if (NetworkUtilities.hasSelectedNodes()) {
                     final PredictRegulatorsParameters predictRegulatorsParameters = deriveParameters();
                     if (predictRegulatorsParameters.parametersAreValid()) {
                         if (frame != null) frame.dispose();
@@ -875,7 +875,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     private int getNumberOfSelectedNodes() {
-        return CytoscapeNetworkUtilities.getGenes(getAttributeName(), getSpeciesNomenclature()).size();
+        return NetworkUtilities.getGenes(getAttributeName(), getSpeciesNomenclature()).size();
     }
 
     @Override
@@ -886,7 +886,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
                 : Cytoscape.getCurrentNetwork().getTitle());
         final String selectedAttributeName = getAttributeName();
         attributeNameCB.removeAllItems();
-        final java.util.List<String> attributeNames = CytoscapeNetworkUtilities.getPossibleGeneIDAttributesWithDefault();
+        final java.util.List<String> attributeNames = NetworkUtilities.getPossibleGeneIDAttributesWithDefault();
         for (String name : attributeNames) attributeNameCB.addItem(name);
         if (attributeNames.contains(selectedAttributeName)) attributeNameCB.setSelectedItem(selectedAttributeName);
         numberOfNodesTF.setText(Integer.toString(getNumberOfSelectedNodes()));
@@ -895,7 +895,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     public PredictRegulatorsParameters deriveParameters() {
-        return new PredictRegulatorsParameters(CytoscapeNetworkUtilities.getGenes(
+        return new PredictRegulatorsParameters(NetworkUtilities.getGenes(
                 getAttributeName(),
                 getSpeciesNomenclature()),
                 getNESThreshold(),

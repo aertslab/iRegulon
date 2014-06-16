@@ -8,7 +8,7 @@ import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import infrastructure.tasks.AddMetatargetomeTask;
 import infrastructure.tasks.CreateMetatargetomeTask;
 import infrastructure.tasks.MetatargetomeTask;
@@ -60,7 +60,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
 
         private GeneIdentifier getSelectedFactor() {
-            final List<CyNode> nodes = CytoscapeNetworkUtilities.getSelectedNodes();
+            final List<CyNode> nodes = NetworkUtilities.getSelectedNodes();
             if (nodes == null || nodes.isEmpty()) return null;
             final CyNode node = nodes.iterator().next();
             return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);

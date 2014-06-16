@@ -8,7 +8,7 @@ import domainmodel.AbstractMotifAndTrack;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import view.Refreshable;
 import view.ResourceAction;
 
@@ -27,7 +27,7 @@ public abstract class NetworkDrawAction extends ResourceAction {
     public NetworkDrawAction(final String actionName, final Refreshable view, final String attributeName) {
         super(actionName);
         this.view = view == null ? NO_VIEW : view;
-        this.attributeName = attributeName == null ? CytoscapeNetworkUtilities.ID_ATTRIBUTE_NAME : attributeName;
+        this.attributeName = attributeName == null ? NetworkUtilities.ID_ATTRIBUTE_NAME : attributeName;
 
         //TODO: Implementation of undo functionality can be done via cytoscape.util.undo.CyUndo: a tiny class
         // for supporting undo in the Cytoscape context. If you want to post an edit, use
@@ -47,41 +47,41 @@ public abstract class NetworkDrawAction extends ResourceAction {
     }
 
     protected CyNode addNode(String nodeID, CyNetwork network, CyNetworkView view) {
-        return CytoscapeNetworkUtilities.addNode(nodeID, network, view);
+        return NetworkUtilities.addNode(nodeID, network, view);
     }
 
     protected void addNodeAttribute(CyNode node, String attributeName, String attributeValue) {
-        CytoscapeNetworkUtilities.addNodeAttribute(node, attributeName, attributeValue);
+        NetworkUtilities.addNodeAttribute(node, attributeName, attributeValue);
     }
 
     protected void setNodeAttribute(CyNode node, String attributeName, String attributeValue) {
-        CytoscapeNetworkUtilities.setNodeAttribute(node, attributeName, attributeValue);
+        NetworkUtilities.setNodeAttribute(node, attributeName, attributeValue);
     }
 
     protected CyEdge addEdge(CyNode node1, CyNode node2, CyNetwork network, CyNetworkView view, String motif) {
-        return CytoscapeNetworkUtilities.addEdge(node1, node2, network, view, motif);
+        return NetworkUtilities.addEdge(node1, node2, network, view, motif);
     }
 
     protected void setEdgeAttribute(CyEdge edge, String attributeName, String attributeValue) {
-        CytoscapeNetworkUtilities.setEdgeAttribute(edge, attributeName, attributeValue);
+        NetworkUtilities.setEdgeAttribute(edge, attributeName, attributeValue);
     }
 
     protected void setEdgeAttribute(CyEdge edge, String attributeName, int attributeValue) {
-        CytoscapeNetworkUtilities.setEdgeAttribute(edge, attributeName, attributeValue);
+        NetworkUtilities.setEdgeAttribute(edge, attributeName, attributeValue);
     }
 
     protected void addEdgeAttribute(CyEdge edge, String attributeName, String attributeValue) {
-        CytoscapeNetworkUtilities.addEdgeAttribute(edge, attributeName, attributeValue);
+        NetworkUtilities.addEdgeAttribute(edge, attributeName, attributeValue);
     }
 
     protected CyEdge createEdge(final CyNode sourceNode, final CyNode targetNode, final TranscriptionFactor factor,
                                 final AbstractMotifAndTrack motifOrTrack, final GeneIdentifier targetGene) {
-        return CytoscapeNetworkUtilities.createEdge(sourceNode, targetNode, factor, motifOrTrack, targetGene);
+        return NetworkUtilities.createEdge(sourceNode, targetNode, factor, motifOrTrack, targetGene);
     }
 
     protected CyNode createSourceNode(final CyNetwork network, final CyNetworkView view, final GeneIdentifier factorID,
                                       final AbstractMotifAndTrack motifOrTrack) {
-        return CytoscapeNetworkUtilities.createSourceNode(network, view, getAttributeName(), factorID, motifOrTrack);
+        return NetworkUtilities.createSourceNode(network, view, getAttributeName(), factorID, motifOrTrack);
     }
 
     protected CyNode createSourceNode(final CyNetwork network, final CyNetworkView view,
@@ -91,6 +91,6 @@ public abstract class NetworkDrawAction extends ResourceAction {
 
     protected CyNode createTargetNode(final CyNetwork network, final CyNetworkView view,
                                       final CandidateTargetGene targetGene, final AbstractMotifAndTrack motifOrTrack) {
-        return CytoscapeNetworkUtilities.createTargetNode(network, view, getAttributeName(), targetGene, motifOrTrack);
+        return NetworkUtilities.createTargetNode(network, view, getAttributeName(), targetGene, motifOrTrack);
     }
 }

@@ -5,7 +5,7 @@ import cytoscape.visual.*;
 import cytoscape.visual.calculators.BasicCalculator;
 import cytoscape.visual.calculators.Calculator;
 import cytoscape.visual.mappings.*;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
 
 import java.awt.*;
@@ -38,24 +38,24 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
         final NodeAppearanceCalculator nodeAppCalc = style.getNodeAppearanceCalculator();
         // Node label = ID
         final Calculator nodeLabelCalculator = new BasicCalculator("iRegulon Visual Style Node Label Calculator",
-                new PassThroughMapping(String.class, CytoscapeNetworkUtilities.ID_ATTRIBUTE_NAME),
+                new PassThroughMapping(String.class, NetworkUtilities.ID_ATTRIBUTE_NAME),
                 VisualPropertyType.NODE_LABEL);
         nodeAppCalc.setCalculator(nodeLabelCalculator);
 
         // Node shape =
         // 1. Ellipse when regulator
         // 2. Rectangle when target gene
-        final DiscreteMapping nodeShapeMapper = new DiscreteMapping(NodeShape.class, CytoscapeNetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
-        nodeShapeMapper.putMapValue(CytoscapeNetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, NodeShape.RECT);
-        nodeShapeMapper.putMapValue(CytoscapeNetworkUtilities.REGULATORY_FUNCTION_REGULATOR, NodeShape.ELLIPSE);
+        final DiscreteMapping nodeShapeMapper = new DiscreteMapping(NodeShape.class, NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
+        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, NodeShape.RECT);
+        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, NodeShape.ELLIPSE);
         final Calculator nodeShapeCalculator = new BasicCalculator("iRegulon Visual Style Node Shape Calculator",
                 nodeShapeMapper,
                 VisualPropertyType.NODE_SHAPE);
         nodeAppCalc.setCalculator(nodeShapeCalculator);
 
         // Node color =
-        final DiscreteMapping nodeColorMapper = new DiscreteMapping(Color.class, CytoscapeNetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
-        nodeColorMapper.putMapValue(CytoscapeNetworkUtilities.REGULATORY_FUNCTION_REGULATOR, Color.GREEN);
+        final DiscreteMapping nodeColorMapper = new DiscreteMapping(Color.class, NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
+        nodeColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, Color.GREEN);
         nodeColorMapper.putMapValue("", Color.BLUE);
         final Calculator nodeColorCalculator = new BasicCalculator("iRegulon Visual Style Node Shape Calculator",
                 nodeColorMapper, VisualPropertyType.NODE_FILL_COLOR);
@@ -63,16 +63,16 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
 
         final EdgeAppearanceCalculator edgeAppCalc = style.getEdgeAppearanceCalculator();
         // Edge target arrow shape =
-        final DiscreteMapping edgeArrowShapeMapper = new DiscreteMapping(ArrowShape.class, CytoscapeNetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
-        edgeArrowShapeMapper.putMapValue(CytoscapeNetworkUtilities.REGULATORY_FUNCTION_PREDICTED, ArrowShape.ARROW);
-        edgeArrowShapeMapper.putMapValue(CytoscapeNetworkUtilities.REGULATORY_FUNCTION_METATARGETOME, ArrowShape.ARROW);
+        final DiscreteMapping edgeArrowShapeMapper = new DiscreteMapping(ArrowShape.class, NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
+        edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_PREDICTED, ArrowShape.ARROW);
+        edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_METATARGETOME, ArrowShape.ARROW);
 
         final Calculator edgeArrowCalculator = new BasicCalculator("iRegulon Visual Style Edge Arrow Shape Calculator",
                 edgeArrowShapeMapper, VisualPropertyType.EDGE_TGTARROW_SHAPE);
         edgeAppCalc.setCalculator(edgeArrowCalculator);
 
         // Edge color =
-        final ContinuousMapping edgeColorMapping = new ContinuousMapping(Color.class, CytoscapeNetworkUtilities.MOTIF_ID_ATTRIBUTE_NAME);
+        final ContinuousMapping edgeColorMapping = new ContinuousMapping(Color.class, NetworkUtilities.MOTIF_ID_ATTRIBUTE_NAME);
         edgeColorMapping.setInterpolator(new LinearNumberToColorInterpolator());
         edgeColorMapping.addPoint(0, new BoundaryRangeValues(Color.BLUE, Color.BLUE, Color.BLUE));
         edgeColorMapping.addPoint(Integer.MAX_VALUE / 2, new BoundaryRangeValues(Color.RED, Color.RED, Color.RED));

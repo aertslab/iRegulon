@@ -7,7 +7,7 @@ import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
 import cytoscape.view.CyNetworkView;
 import giny.view.NodeView;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import view.Refreshable;
 import view.resultspanel.NetworkDrawAction;
 
@@ -35,8 +35,8 @@ public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction 
 
         // Create a new network ...
         final CyNetwork network = Cytoscape.createNetwork(
-                CytoscapeNetworkUtilities.getAllNodes(),
-                CytoscapeNetworkUtilities.getAllEdges(),
+                NetworkUtilities.getAllNodes(),
+                NetworkUtilities.getAllEdges(),
                 "Merged iRegulon network",
                 Cytoscape.getCurrentNetwork());
         Cytoscape.setCurrentNetwork(network.getIdentifier());
@@ -61,11 +61,11 @@ public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction 
         while (edgesIterator.hasNext()) {
             final CyEdge edge = (CyEdge) edgesIterator.next();
             if (isRegulatoryEdge(edge)) {
-                final String TF = attributes.getStringAttribute(edge.getIdentifier(), CytoscapeNetworkUtilities.REGULATOR_GENE_ATTRIBUTE_NAME);
-                final String TG = attributes.getStringAttribute(edge.getIdentifier(), CytoscapeNetworkUtilities.TARGET_GENE_ATTRIBUTE_NAME);
+                final String TF = attributes.getStringAttribute(edge.getIdentifier(), NetworkUtilities.REGULATOR_GENE_ATTRIBUTE_NAME);
+                final String TG = attributes.getStringAttribute(edge.getIdentifier(), NetworkUtilities.TARGET_GENE_ATTRIBUTE_NAME);
                 final String name = TF + " regulates " + TG;
                 @SuppressWarnings("unchecked")
-                final List<String> motifs = (List<String>) attributes.getListAttribute(edge.getIdentifier(), CytoscapeNetworkUtilities.MOTIF_ATTRIBUTE_NAME);
+                final List<String> motifs = (List<String>) attributes.getListAttribute(edge.getIdentifier(), NetworkUtilities.MOTIF_ATTRIBUTE_NAME);
 
                 if (name2edgeAttributes.containsKey(name)) {
                     name2edgeAttributes.get(name).addMotifNames(motifs);
@@ -79,7 +79,7 @@ public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction 
 
         // Draw all edges ...
         @SuppressWarnings("unchecked")
-        final Map<String, List<CyNode>> name2nodes = CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), network.nodesList());
+        final Map<String, List<CyNode>> name2nodes = NetworkUtilities.getNodeMap(getAttributeName(), network.nodesList());
         for (String key : name2edgeAttributes.keySet()) {
             final EdgeAttributes edgeAttributes = name2edgeAttributes.get(key);
             if (!name2nodes.containsKey(edgeAttributes.getFactorName()) || !name2nodes.containsKey(edgeAttributes.getTargetName()))
@@ -87,11 +87,11 @@ public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction 
             for (final CyNode sourceNode : name2nodes.get(edgeAttributes.getFactorName())) {
                 for (final CyNode targetNode : name2nodes.get(edgeAttributes.getTargetName())) {
                     final CyEdge edge = addEdge(sourceNode, targetNode, network, view, "");
-                    setEdgeAttribute(edge, CytoscapeNetworkUtilities.REGULATOR_GENE_ATTRIBUTE_NAME, edgeAttributes.getFactorName());
-                    setEdgeAttribute(edge, CytoscapeNetworkUtilities.TARGET_GENE_ATTRIBUTE_NAME, edgeAttributes.getTargetName());
-                    setEdgeAttribute(edge, CytoscapeNetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME, CytoscapeNetworkUtilities.REGULATORY_FUNCTION_PREDICTED);
+                    setEdgeAttribute(edge, NetworkUtilities.REGULATOR_GENE_ATTRIBUTE_NAME, edgeAttributes.getFactorName());
+                    setEdgeAttribute(edge, NetworkUtilities.TARGET_GENE_ATTRIBUTE_NAME, edgeAttributes.getTargetName());
+                    setEdgeAttribute(edge, NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME, NetworkUtilities.REGULATORY_FUNCTION_PREDICTED);
                     for (final String motifName : edgeAttributes.getMotifNames()) {
-                        addEdgeAttribute(edge, CytoscapeNetworkUtilities.MOTIF_ATTRIBUTE_NAME, motifName);
+                        addEdgeAttribute(edge, NetworkUtilities.MOTIF_ATTRIBUTE_NAME, motifName);
                     }
                 }
             }
@@ -101,14 +101,14 @@ public class CreateNewCombinedRegulatoryNetworkAction extends NetworkDrawAction 
 
         getView().refresh();
 
-        CytoscapeNetworkUtilities.activeSidePanel();
+        NetworkUtilities.activeSidePanel();
     }
 
     private boolean isRegulatoryEdge(CyEdge edge) {
         final CyAttributes attributes = Cytoscape.getEdgeAttributes();
         return attributes.getAttribute(edge.getIdentifier(), "interaction").toString().contains("regulates")
-                && attributes.getStringAttribute(edge.getIdentifier(), CytoscapeNetworkUtilities.REGULATOR_GENE_ATTRIBUTE_NAME) != null
-                && attributes.getStringAttribute(edge.getIdentifier(), CytoscapeNetworkUtilities.TARGET_GENE_ATTRIBUTE_NAME) != null;
+                && attributes.getStringAttribute(edge.getIdentifier(), NetworkUtilities.REGULATOR_GENE_ATTRIBUTE_NAME) != null
+                && attributes.getStringAttribute(edge.getIdentifier(), NetworkUtilities.TARGET_GENE_ATTRIBUTE_NAME) != null;
     }
 
     private static class EdgeAttributes {

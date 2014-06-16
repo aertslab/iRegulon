@@ -9,7 +9,7 @@ import cytoscape.layout.CyLayouts;
 import cytoscape.view.CyNetworkView;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import view.Refreshable;
 
 import java.util.List;
@@ -25,23 +25,23 @@ public class CreateMetatargetomeTask extends MetatargetomeTask {
     public void run() {
         if (getMonitor() != null) getMonitor().setStatus("Adding nodes and edges");
 
-        final CyNode sourceNode = CytoscapeNetworkUtilities.createSourceNode(getNetwork(), getView(),
+        final CyNode sourceNode = NetworkUtilities.createSourceNode(getNetwork(), getView(),
                 getAttributeName(), getTranscriptionFactor(), NO_MOTIF);
         for (int idx = 0; idx < getTargetome().size(); idx++) {
             if (isInterrupted()) return;
             if (getMonitor() != null) getMonitor().setPercentCompleted((100 * idx) / getTargetome().size());
             final CandidateTargetGene targetGene = getTargetome().get(idx);
 
-            final CyNode targetNode = CytoscapeNetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF);
-            final CyEdge edge = CytoscapeNetworkUtilities.createEdge(getNetwork(), getView(), sourceNode, targetNode, getTranscriptionFactor(), null, getTargetome().get(idx).getGeneID(), CytoscapeNetworkUtilities.REGULATORY_FUNCTION_METATARGETOME);
-            CytoscapeNetworkUtilities.setEdgeAttribute(edge, CytoscapeNetworkUtilities.STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
+            final CyNode targetNode = NetworkUtilities.createTargetNode(getNetwork(), getView(), getAttributeName(), targetGene, NO_MOTIF);
+            final CyEdge edge = NetworkUtilities.createEdge(getNetwork(), getView(), sourceNode, targetNode, getTranscriptionFactor(), null, getTargetome().get(idx).getGeneID(), NetworkUtilities.REGULATORY_FUNCTION_METATARGETOME);
+            NetworkUtilities.setEdgeAttribute(edge, NetworkUtilities.STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
         }
 
-        Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
+        Cytoscape.getEdgeAttributes().setUserVisible(NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
         getView().applyLayout(CyLayouts.getDefaultLayout());
-        CytoscapeNetworkUtilities.applyVisualStyle();
+        NetworkUtilities.applyVisualStyle();
         getView().redrawGraph(true, true);
         if (getResultsPanel() != null) getResultsPanel().refresh();
-        CytoscapeNetworkUtilities.activeSidePanel();
+        NetworkUtilities.activeSidePanel();
     }
 }

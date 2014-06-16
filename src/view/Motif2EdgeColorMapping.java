@@ -5,7 +5,7 @@ import cytoscape.visual.converter.ValueToStringConverterManager;
 import cytoscape.visual.mappings.AbstractMapping;
 import cytoscape.visual.mappings.MappingUtil;
 import cytoscape.visual.parsers.ValueParser;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -18,7 +18,7 @@ final class Motif2EdgeColorMapping extends AbstractMapping {
     private final SortedMap<Integer, Color> map = new TreeMap<Integer, Color>();
 
     public Motif2EdgeColorMapping() {
-        super(Color.class, CytoscapeNetworkUtilities.MOTIF_ATTRIBUTE_NAME);
+        super(Color.class, NetworkUtilities.MOTIF_ATTRIBUTE_NAME);
     }
 
     private Color generateRandomColor() {

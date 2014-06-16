@@ -5,7 +5,7 @@ import cytoscape.task.Task;
 import cytoscape.task.TaskMonitor;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
 import view.Refreshable;
 
@@ -70,7 +70,7 @@ public abstract class MetatargetomeTask extends IRegulonResourceBundle implement
         this.transcriptionFactor = factor;
         this.targetome = targetome;
         this.resultsPanel = resultsPanel;
-        this.attributeName = attributeName == null ? CytoscapeNetworkUtilities.ID_ATTRIBUTE_NAME : attributeName;
+        this.attributeName = attributeName == null ? NetworkUtilities.ID_ATTRIBUTE_NAME : attributeName;
         this.network = network;
         this.view = view;
     }

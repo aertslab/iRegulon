@@ -2,7 +2,7 @@ package view.parametersform;
 
 import cytoscape.Cytoscape;
 import domainmodel.*;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
 import view.parametersform.databaseselection.*;
 
@@ -483,7 +483,7 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
     private void refreshAmountOfNodes() {
         this.txtAmountNodes.setBackground(Color.WHITE);
         if (this.jcbGeneNameAttr.getSelectedItem() != null) {
-            int amountNodes = CytoscapeNetworkUtilities.getGenes((String) this.jcbGeneNameAttr.getSelectedItem(),
+            int amountNodes = NetworkUtilities.getGenes((String) this.jcbGeneNameAttr.getSelectedItem(),
                     (SpeciesNomenclature) this.speciesNomenclatureCB.getSelectedItem()).size();
             if (amountNodes == 0) {
                 this.txtAmountNodes.setBackground(Color.RED);

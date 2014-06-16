@@ -3,7 +3,7 @@ package view.resultspanel;
 import cytoscape.CyNode;
 import cytoscape.Cytoscape;
 import cytoscape.data.CyAttributes;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,7 +42,7 @@ public class NetworkMembershipSupport {
         final Set<String> IDs = new HashSet<String>();
 
         final CyAttributes cyNodeAttrs = Cytoscape.getNodeAttributes();
-        for (CyNode node : CytoscapeNetworkUtilities.getAllNodes()) {
+        for (CyNode node : NetworkUtilities.getAllNodes()) {
             for (String attributeName : cyNodeAttrs.getAttributeNames()) {
                 if (cyNodeAttrs.getType(attributeName) == CyAttributes.TYPE_STRING) {
                     final String possibleGeneName = cyNodeAttrs.getStringAttribute(node.getIdentifier(), attributeName);

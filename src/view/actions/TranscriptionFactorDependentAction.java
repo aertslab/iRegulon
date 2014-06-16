@@ -8,7 +8,7 @@ import domainmodel.AbstractMotifAndTrack;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import view.Refreshable;
 import view.resultspanel.MotifAndTrackListener;
 import view.resultspanel.NetworkDrawAction;
@@ -69,7 +69,7 @@ public abstract class TranscriptionFactorDependentAction extends NetworkDrawActi
                                final TranscriptionFactor factor, final AbstractMotifAndTrack motifOrTrack,
                                final boolean createNodesIfNecessary) {
         final Map<String, List<CyNode>> name2nodes = !createNodesIfNecessary
-                ? CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), CytoscapeNetworkUtilities.getAllNodes())
+                ? NetworkUtilities.getNodeMap(getAttributeName(), NetworkUtilities.getAllNodes())
                 : Collections.<String, List<CyNode>>emptyMap();
 
         final List<CyNode> sourceNodes = createNodesIfNecessary

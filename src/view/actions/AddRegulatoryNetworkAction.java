@@ -10,7 +10,7 @@ import domainmodel.AbstractMotifAndTrack;
 import domainmodel.CandidateTargetGene;
 import domainmodel.GeneIdentifier;
 import domainmodel.TranscriptionFactor;
-import infrastructure.CytoscapeNetworkUtilities;
+import infrastructure.NetworkUtilities;
 import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
@@ -48,31 +48,31 @@ public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentActi
         final CyNetwork network = Cytoscape.getCurrentNetwork();
         final CyNetworkView view = Cytoscape.getCurrentNetworkView();
 
-        final Map<String, List<CyNode>> name2nodes = CytoscapeNetworkUtilities.getNodeMap(getAttributeName(), CytoscapeNetworkUtilities.getAllNodes());
+        final Map<String, List<CyNode>> name2nodes = NetworkUtilities.getNodeMap(getAttributeName(), NetworkUtilities.getAllNodes());
 
         final List<CyNode> sourceNodes = name2nodes.containsKey(factor.getName())
                 ? name2nodes.get(factor.getName())
-                : Collections.singletonList(CytoscapeNetworkUtilities.createSourceNode(network, view, getAttributeName(), factor.getGeneID(), motifOrTrack));
+                : Collections.singletonList(NetworkUtilities.createSourceNode(network, view, getAttributeName(), factor.getGeneID(), motifOrTrack));
         if (sourceNodes.isEmpty()) return;
 
         for (final CyNode sourceNode : sourceNodes) {
-            CytoscapeNetworkUtilities.adjustSourceNode(sourceNode, getAttributeName(), factor.getGeneID(), motifOrTrack);
+            NetworkUtilities.adjustSourceNode(sourceNode, getAttributeName(), factor.getGeneID(), motifOrTrack);
 
             for (CandidateTargetGene targetGene : motifOrTrack.getCandidateTargetGenes()) {
                 final GeneIdentifier geneID = targetGene.getGeneID();
 
                 final List<CyNode> targetNodes = name2nodes.containsKey(targetGene.getGeneName())
                         ? name2nodes.get(targetGene.getGeneName())
-                        : Collections.singletonList(CytoscapeNetworkUtilities.createTargetNode(network, view, getAttributeName(), targetGene, motifOrTrack));
+                        : Collections.singletonList(NetworkUtilities.createTargetNode(network, view, getAttributeName(), targetGene, motifOrTrack));
                 for (final CyNode targetNode : targetNodes) {
-                    CytoscapeNetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, motifOrTrack);
+                    NetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, motifOrTrack);
                     final CyEdge edge = createEdge(sourceNode, targetNode, factor, motifOrTrack, geneID);
-                    setEdgeAttribute(edge, CytoscapeNetworkUtilities.RANK_ATTRIBUTE_NAME, targetGene.getRank());
+                    setEdgeAttribute(edge, NetworkUtilities.RANK_ATTRIBUTE_NAME, targetGene.getRank());
                 }
             }
         }
 
-        Cytoscape.getEdgeAttributes().setUserVisible(CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
+        Cytoscape.getEdgeAttributes().setUserVisible(NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
 
         view.applyLayout(CyLayouts.getDefaultLayout());
 
@@ -80,6 +80,6 @@ public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentActi
 
         getView().refresh();
 
-        CytoscapeNetworkUtilities.activeSidePanel();
+        NetworkUtilities.activeSidePanel();
     }
 }

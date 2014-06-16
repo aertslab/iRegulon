@@ -8,7 +8,7 @@
     <property name="lib.folder" value="lib/"/>
     <property name="web.folder" value="web/"/>
 
-    <property name="cytoscape.versions" value="2.8"/>
+    <property name="cytoscape.versions" value="3.1"/>
 
     <property name="plugin.name" value="iRegulon"/>
     <property name="plugin.version" value="1.2"/>
@@ -17,12 +17,12 @@
     <property name="plugin.src.with_transfac.filename" value="iRegulon-${plugin.version}-src-with-transfac.zip"/>
     <property name="plugin.src.without_transfac.filename" value="iRegulon-${plugin.version}-src-without-transfac.zip"/>
     <property name="plugin.package" value="view"/>
-    <property name="plugin.main" value="${plugin.package}.IRegulonPlugin"/>
+    <property name="plugin.main" value="${plugin.package}.IRegulonApp"/>
 
-    <property name="jars.cytoscape" value="${lib.folder}/cytoscape-2.8.3-bin.jar"/>
+    <property name="jars.cytoscape" value="${lib.folder}/cytoscape-swing-app-api-3.1.1-jar-with-dependencies.jar"/>
     <property name="jars.jarjar" value="${lib.folder}/jarjar-1.4-bin.jar"/>
-    <property name="jars.kxml2" value="${lib.folder}/kxml2-2.3.0-bin.jar"/>
-    <property name="jars.xstream" value="${lib.folder}/xstream-1.4.3-bin.jar"/>
+    <property name="jars.kxml2" value="${lib.folder}/kxml2-2.3.0.jar"/>
+    <property name="jars.xstream" value="${lib.folder}/xstream-1.4.7.jar"/>
 
     <tstamp>
         <format property="TODAY" pattern="yyyy-MM-dd" locale="us,US"/>
@@ -132,7 +132,10 @@
         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${jars.jarjar}"/>
         <jarjar jarfile="${build.folder}/${plugin.bin.with_transfac.filename}">
             <manifest>
-                <attribute name="Cytoscape-Plugin" value="${plugin.main}"/>
+                <attribute name="Cytoscape-App" value="${plugin.main}"/>
+                <attribute name="Cytoscape-App-Name" value="${plugin.name}"/>
+                <attribute name="Cytoscape-App-Version" value="${plugin.version}"/>
+                <attribute name="Cytoscape-API-Compatibility" value="${cytoscape.versions}"/>
             </manifest>
             <fileset dir="${build.folder}"/>
             <zipfileset src="${jars.kxml2}"/>
@@ -145,7 +148,10 @@
         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="${jars.jarjar}"/>
         <jarjar jarfile="${build.folder}/${plugin.bin.without_transfac.filename}">
             <manifest>
-                <attribute name="Cytoscape-Plugin" value="${plugin.main}"/>
+                <attribute name="Cytoscape-App" value="${plugin.main}"/>
+                <attribute name="Cytoscape-App-Name" value="${plugin.name}"/>
+                <attribute name="Cytoscape-App-Version" value="${plugin.version}"/>
+                <attribute name="Cytoscape-API-Compatibility" value="${cytoscape.versions}"/>
             </manifest>
             <fileset dir="${build.folder}"/>
             <zipfileset src="${jars.kxml2}"/>

@@ -1,6 +1,6 @@
 package view.actions;
 
-import cytoscape.Cytoscape;
+import infrastructure.CytoscapeEnvironment;
 import view.ResourceAction;
 import view.resultspanel.motifview.Motif2TFDetailFrame;
 import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
@@ -11,7 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 
 
-public class ShowMotif2TFDetailAction extends ResourceAction implements ListSelectionListener {
+public final class ShowMotif2TFDetailAction extends ResourceAction implements ListSelectionListener {
     private static final String NAME = "action_detail_frame";
 
     private TFandMotifSelected tfMotif;
@@ -25,7 +25,7 @@ public class ShowMotif2TFDetailAction extends ResourceAction implements ListSele
     @Override
     public void actionPerformed(ActionEvent e) {
         final JDialog frame = new Motif2TFDetailFrame(tfMotif);
-        frame.setLocationRelativeTo(Cytoscape.getDesktop());
+        frame.setLocationRelativeTo(CytoscapeEnvironment.getInstance().getJFrame());
         frame.setAlwaysOnTop(true);
         frame.setVisible(true);
     }

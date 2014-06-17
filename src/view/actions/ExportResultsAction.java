@@ -3,20 +3,20 @@ package view.actions;
 
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
-import view.resultspanel.ResultsView;
+import view.resultspanel.ResultsCytoPanelComponent;
 
 import java.awt.event.ActionEvent;
 
-public class ExportResultsAction extends ResourceAction {
+public final class ExportResultsAction extends ResourceAction {
     private static final String NAME = "action_export_results_view";
-    private ResultsView view;
+    private ResultsCytoPanelComponent view;
 
-    public ExportResultsAction(final ResultsView view) {
+    public ExportResultsAction(final ResultsCytoPanelComponent view) {
         super(NAME);
         this.view = view;
     }
 
-    public ResultsView getView() {
+    public ResultsCytoPanelComponent getView() {
         return view;
     }
 

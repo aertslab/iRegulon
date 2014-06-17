@@ -1,20 +1,23 @@
 package view.actions;
 
-import cytoscape.Cytoscape;
-import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.Results;
+import infrastructure.CytoscapeEnvironment;
 import infrastructure.Logger;
+import org.cytoscape.application.swing.CytoPanel;
+import org.cytoscape.application.swing.CytoPanelComponent;
+import org.cytoscape.application.swing.CytoPanelName;
+import org.cytoscape.application.swing.CytoPanelState;
 import persistence.LoadException;
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
-import view.resultspanel.ResultsView;
+import view.resultspanel.ResultsCytoPanelComponent;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.Properties;
 
 
-public class LoadResultsAction extends ResourceAction {
+public final class LoadResultsAction extends ResourceAction {
     private static final String NAME = "action_load_results";
 
     public LoadResultsAction() {
@@ -28,13 +31,14 @@ public class LoadResultsAction extends ResourceAction {
         if (xml != null) {
             try {
                 final Results result = PersistenceUtilities.loadResultsFromXML(xml);
-                final ResultsView output = new ResultsView(dia.getSaveName(), result);
-                final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
-                panel.setState(CytoPanelState.DOCK);
-                output.addToPanel(panel);
+                final ResultsCytoPanelComponent output = new ResultsCytoPanelComponent(dia.getSaveName(), result);
+                CytoscapeEnvironment.getInstance().getServiceRegistrar().registerService(output, CytoPanelComponent.class, new Properties());
+                final CytoPanel cytoPanel = CytoscapeEnvironment.getInstance().getCytoPanel(CytoPanelName.EAST);
+                cytoPanel.setState(CytoPanelState.DOCK);
+                cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(output));
             } catch (LoadException exception) {
                 Logger.getInstance().error(exception);
-                JOptionPane.showMessageDialog(Cytoscape.getDesktop(), exception.getMessage());
+                JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(), exception.getMessage());
             }
         }
     }

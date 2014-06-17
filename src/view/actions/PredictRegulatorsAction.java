@@ -12,7 +12,7 @@ import servercommunication.ServerCommunicationException;
 import view.ResourceAction;
 import view.parametersform.IRegulonType;
 import view.parametersform.PredictedRegulatorsParameters;
-import view.resultspanel.ResultsView;
+import view.resultspanel.ResultsCytoPanelComponent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -101,7 +101,7 @@ public class PredictRegulatorsAction extends ResourceAction {
             return;
         }
         if (! motifsAndTracks.isEmpty()) {
-            final ResultsView outputView = new ResultsView(predictRegulatorsParameters.getName(), new Results(motifsAndTracks, predictRegulatorsParameters));
+            final ResultsCytoPanelComponent outputView = new ResultsCytoPanelComponent(predictRegulatorsParameters.getName(), new Results(motifsAndTracks, predictRegulatorsParameters));
             final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
             panel.setState(CytoPanelState.DOCK);
             outputView.addToPanel(panel);

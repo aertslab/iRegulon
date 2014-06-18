@@ -4,7 +4,8 @@ import cytoscape.Cytoscape;
 import cytoscape.visual.*;
 import cytoscape.visual.calculators.BasicCalculator;
 import cytoscape.visual.calculators.Calculator;
-import cytoscape.visual.mappings.*;
+import cytoscape.visual.mappings.DiscreteMapping;
+import cytoscape.visual.mappings.PassThroughMapping;
 import infrastructure.CytoscapeNetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
 
@@ -72,18 +73,14 @@ public class IRegulonVisualStyle extends IRegulonResourceBundle {
         edgeAppCalc.setCalculator(edgeArrowCalculator);
 
         // Edge color =
-        final ContinuousMapping edgeColorMapping = new ContinuousMapping(Color.class, CytoscapeNetworkUtilities.MOTIF_ID_ATTRIBUTE_NAME);
-        edgeColorMapping.setInterpolator(new LinearNumberToColorInterpolator());
-        edgeColorMapping.addPoint(0, new BoundaryRangeValues(Color.BLUE, Color.BLUE, Color.BLUE));
-        edgeColorMapping.addPoint(Integer.MAX_VALUE / 2, new BoundaryRangeValues(Color.RED, Color.RED, Color.RED));
-        edgeColorMapping.addPoint(Integer.MAX_VALUE, new BoundaryRangeValues(Color.GREEN, Color.GREEN, Color.GREEN));
+        final PassThroughMapping edgeColorMapping = new PassThroughMapping(Color.class, CytoscapeNetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME);
 
         // Custom made mapping cannot be saved to a .cys file ...
-        //final Motif2EdgeColorMapping edgeColorMapping = new Motif2EdgeColorMapping();
         final Calculator edgeColorCalculator = new BasicCalculator("iRegulon Visual Style Edge Color Calculator",
                 edgeColorMapping, VisualPropertyType.EDGE_COLOR);
         final Calculator arrowColorCalculator = new BasicCalculator("iRegulon Visual Style Edge Color Calculator",
                 edgeColorMapping, VisualPropertyType.EDGE_TGTARROW_COLOR);
+
         edgeAppCalc.setCalculator(edgeColorCalculator);
         edgeAppCalc.setCalculator(arrowColorCalculator);
 

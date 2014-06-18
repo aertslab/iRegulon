@@ -31,8 +31,6 @@ public final class CytoscapeNetworkUtilities {
     public static final String STRENGTH_ATTRIBUTE_NAME = "Strength";
     public static final String RANK_ATTRIBUTE_NAME = "Rank";
     private static final String HIDDEN_LABEL_ATTRIBUTE_NAME = "hiddenLabel";
-    public static final String MOTIF_ID_ATTRIBUTE_NAME = "MotifID";
-    public static final String TRACK_ID_ATTRIBUTE_NAME = "TrackID";
 
     public static final String REGULATORY_FUNCTION_REGULATOR = "Regulator";
     public static final String REGULATORY_FUNCTION_TARGET_GENE = "Regulated";
@@ -248,23 +246,31 @@ public final class CytoscapeNetworkUtilities {
         setEdgeAttribute(edge, REGULATOR_GENE_ATTRIBUTE_NAME, factor.getGeneName());
         setEdgeAttribute(edge, TARGET_GENE_ATTRIBUTE_NAME, targetGene.getGeneName());
         setEdgeAttribute(edge, REGULATORY_FUNCTION_ATTRIBUTE_NAME, regulatoryFunction);
+
         if (motifOrTrack != null) {
             if (motifOrTrack.isMotif()) {
                 AbstractMotif motif = (AbstractMotif) motifOrTrack;
                 for (AbstractMotif curMotif : motif.getMotifs()) {
                     addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
                 }
-                setEdgeAttribute(edge, MOTIF_ID_ATTRIBUTE_NAME, getListOfStringsAttributeForEdge(edge, MOTIF_ATTRIBUTE_NAME, Cytoscape.getEdgeAttributes()).hashCode());
+            } else if (motifOrTrack.isMotifCluster()) {
+                MotifAndTrackCluster motifCluster = (MotifAndTrackCluster) motifOrTrack;
+                for (AbstractMotifAndTrack curMotif : motifCluster.getMotifsAndTracks()) {
+                    addEdgeAttribute(edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
+                }
             } else if (motifOrTrack.isTrack()) {
                 AbstractTrack track = (AbstractTrack) motifOrTrack;
                 for (AbstractTrack curTrack : track.getTracks()) {
                     addEdgeAttribute(edge, TRACK_ATTRIBUTE_NAME, curTrack.getName());
                 }
-                setEdgeAttribute(edge, TRACK_ID_ATTRIBUTE_NAME, getListOfStringsAttributeForEdge(edge, TRACK_ATTRIBUTE_NAME, Cytoscape.getEdgeAttributes()).hashCode());
+            } else if (motifOrTrack.isTrackCluster()) {
+                MotifAndTrackCluster trackCluster = (MotifAndTrackCluster) motifOrTrack;
+                for (AbstractMotifAndTrack curTrack : trackCluster.getMotifsAndTracks()) {
+                    addEdgeAttribute(edge, TRACK_ATTRIBUTE_NAME, curTrack.getName());
+                }
             }
-            setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, motifOrTrack.getDatabaseID());
-        } else {
-            setEdgeAttribute(edge, MOTIF_ID_ATTRIBUTE_NAME, factor.hashCode());
+
+            setEdgeAttribute(edge, FEATURE_ID_ATTRIBUTE_NAME, motifOrTrack.hashCode());
         }
         return edge;
     }

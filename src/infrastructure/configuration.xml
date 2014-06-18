@@ -1,7 +1,7 @@
 <configuration>
     <motif-collections>
-        <motif-collection id="v3">6383 PWMs</motif-collection>
-        <motif-collection id="v6" default="true">9713 PWMs</motif-collection>
+        <motif-collection id="v3">6K (6383 PWMs)</motif-collection>
+        <motif-collection id="v6" default="true">10K (9713 PWMs)</motif-collection>
     </motif-collections>
 
     <track-collections>

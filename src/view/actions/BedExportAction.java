@@ -1,9 +1,8 @@
 package view.actions;
 
-import cytoscape.Cytoscape;
-import cytoscape.CytoscapeInit;
 import domainmodel.AbstractMotifAndTrack;
 import domainmodel.EnhancerRegion;
+import infrastructure.CytoscapeEnvironment;
 import infrastructure.Logger;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
@@ -29,8 +28,6 @@ public class BedExportAction extends ResourceAction implements Refreshable {
     private final ComputationalService service = new ComputationalServiceHTTP();
     private final SelectedMotifOrTrack selectedMotifOrTrack;
 
-    private static final String BED_FILE_EXTENSION = "bed";
-
     public BedExportAction(final SelectedMotifOrTrack selectedMotifOrTrack) {
         super(NAME);
         this.selectedMotifOrTrack = selectedMotifOrTrack;
@@ -55,16 +52,6 @@ public class BedExportAction extends ResourceAction implements Refreshable {
         return selectedMotifOrTrack;
     }
 
-    private String getPathSuggestion() {
-        final File location = CytoscapeInit.getMRUD();
-        return (location == null) ? "user.home" : location.getPath();
-    }
-
-    private String getFilenameSuggestion() {
-        final AbstractMotifAndTrack motifOrTrack = getSelectedMotifOrTrack().getMotifOrTrack();
-        return motifOrTrack != null ? motifOrTrack.getName() + "." + BED_FILE_EXTENSION : "";
-    }
-
     @Override
     public void actionPerformed(ActionEvent event) {
         final JFileChooser fc = new JFileChooser(new File(getPathSuggestion()));
@@ -79,7 +66,7 @@ public class BedExportAction extends ResourceAction implements Refreshable {
 
         final File selectedFile = ff.accept(fc.getSelectedFile())
                 ? fc.getSelectedFile()
-                : new File(fc.getSelectedFile().getAbsoluteFile() + "." + BED_FILE_EXTENSION);
+                : new File(fc.getSelectedFile().getAbsoluteFile() + "." + FileTypes.BED.getExtensions()[0]);
 
         BufferedWriter output = null;
         try {

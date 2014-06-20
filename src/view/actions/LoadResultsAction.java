@@ -26,12 +26,13 @@ public final class LoadResultsAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        SaveLoadDialogs dia = new SaveLoadDialogs();
-        String xml = dia.openDialogue();
+        final PersistenceViewUtilities persistenceViewUtilities = new PersistenceViewUtilities();
+        final String xml = persistenceViewUtilities.selectIRegulonFile();
+
         if (xml != null) {
             try {
                 final Results result = PersistenceUtilities.loadResultsFromXML(xml);
-                final ResultsCytoPanelComponent output = new ResultsCytoPanelComponent(dia.getSaveName(), result);
+                final ResultsCytoPanelComponent output = new ResultsCytoPanelComponent(persistenceViewUtilities.getIregulonJobName(), result);
                 CytoscapeEnvironment.getInstance().getServiceRegistrar().registerService(output, CytoPanelComponent.class, new Properties());
                 final CytoPanel cytoPanel = CytoscapeEnvironment.getInstance().getCytoPanel(CytoPanelName.EAST);
                 cytoPanel.setState(CytoPanelState.DOCK);

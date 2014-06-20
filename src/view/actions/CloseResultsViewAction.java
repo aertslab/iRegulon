@@ -5,7 +5,6 @@ import org.cytoscape.application.swing.CytoPanel;
 import org.cytoscape.application.swing.CytoPanelComponent;
 import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.application.swing.CytoPanelState;
-import persistence.PersistenceUtilities;
 import view.ResourceAction;
 import view.resultspanel.ResultsCytoPanelComponent;
 
@@ -31,9 +30,9 @@ public final class CloseResultsViewAction extends ResourceAction {
                     "Save?",
                     JOptionPane.YES_NO_OPTION);
             if (result == 0) {
-                SaveLoadDialogs.showDialog(PersistenceUtilities.convertResultsToXML(view.getResults()),
-                        view.getRunName(),
-                        PersistenceUtilities.NATIVE_FILE_EXTENSION);
+                PersistenceViewUtilities.saveToSelectedFile(
+                        persistence.PersistenceUtilities.convertResultsToXML(view.getResults()),
+                        FileTypes.IRF);
             }
         }
         view.unregisterRefreshListeners();

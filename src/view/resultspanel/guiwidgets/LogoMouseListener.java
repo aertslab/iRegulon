@@ -25,7 +25,7 @@ public class LogoMouseListener implements MouseListener {
                 final CopyLogoAction copyLogoAction = new CopyLogoAction(motifName);
                 menu.addAction(copyLogoAction);
 
-                final SaveLogoAction saveLogoAction = new SaveLogoAction(fullSizedLogoFileURL, motifName);
+                final SaveLogoAction saveLogoAction = new SaveLogoAction(fullSizedLogoFileURL);
                 menu.addAction(saveLogoAction);
 
                 menu.show(e.getComponent(), e.getX(), e.getY());

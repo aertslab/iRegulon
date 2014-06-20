@@ -1,11 +1,11 @@
 package view.actions;
 
-
 import persistence.PersistenceUtilities;
 import view.ResourceAction;
 import view.resultspanel.ResultsCytoPanelComponent;
 
 import java.awt.event.ActionEvent;
+
 
 public final class ExportResultsAction extends ResourceAction {
     private static final String NAME = "action_export_results_view";
@@ -23,6 +23,6 @@ public final class ExportResultsAction extends ResourceAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         final String data = PersistenceUtilities.convertResultsToTSV(getView().getResults());
-        SaveLoadDialogs.showDialog(data, getView().getRunName(), PersistenceUtilities.TSV_FILE_EXTENSION);
+        PersistenceViewUtilities.saveToSelectedFile(data, FileTypes.TSV);
     }
 }

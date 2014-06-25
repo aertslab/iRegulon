@@ -1,13 +1,13 @@
 package servercommunication.tasks;
 
-import cytoscape.task.Task;
-import cytoscape.task.TaskMonitor;
 import domainmodel.AbstractMotifAndTrack;
 import domainmodel.Motif;
 import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Track;
 import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
+import org.cytoscape.work.Task;
+import org.cytoscape.work.TaskMonitor;
 import servercommunication.ServerCommunicationException;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
@@ -15,16 +15,16 @@ import servercommunication.protocols.State;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 
-public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implements Task {
+public final class FindPredictedRegulatorsTask extends IRegulonResourceBundle implements Task, EnrichedMotifsAndTracksResults {
     private static final int WAITING_TIME_IN_MS = 3000;
+    private static final String lostGenesError = "The following genes were lost:<br>";
 
-    private cytoscape.task.TaskMonitor taskMonitor;
-
-    private Collection<AbstractMotifAndTrack> motifsAndTracks = Collections.emptyList();
-    private Collection<Motif> motifs = new ArrayList<Motif>();
-    private Collection<Track> tracks = new ArrayList<Track>();
+    private List<AbstractMotifAndTrack> motifsAndTracks = Collections.emptyList();
+    private List<Motif> motifs = new ArrayList<Motif>();
+    private List<Track> tracks = new ArrayList<Track>();
 
     private State state = State.ERROR;
     private boolean interrupted = false;
@@ -38,10 +38,6 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
         this.predictRegulatorsParameters = predictRegulatorsParameters;
     }
 
-    public void halt() {
-        this.interrupted = true;
-    }
-
     public String getTitle() {
         return PLUGIN_NAME + " analysis: " + predictRegulatorsParameters.getName();
     }
@@ -53,10 +49,12 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
         this.state = State.ERROR;
     }
 
-    public void run() {
+    public void run(final TaskMonitor taskMonitor) {
         try {
-            taskMonitor.setStatus("Starting request.");
-            taskMonitor.setPercentCompleted(0);
+            taskMonitor.setTitle(getTitle());
+
+            taskMonitor.setStatusMessage("Starting request");
+            taskMonitor.setProgress(0.0);
 
             final int jobID = service.sentJob(predictRegulatorsParameters);
 
@@ -70,8 +68,8 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                 return;
             }
 
-            taskMonitor.setStatus("Requesting server...");
-            taskMonitor.setPercentCompleted(10);
+            taskMonitor.setStatusMessage("Requesting server...");
+            taskMonitor.setProgress(0.10);
 
             while (service.getState(jobID).equals(State.REQUESTED)) {
                 if (interrupted) {
@@ -80,12 +78,12 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                 }
 
                 final int numberOfJobsInQueue = service.getJobsBeforeThis(jobID);
-                taskMonitor.setStatus(numberOfJobsInQueue == 0
+                taskMonitor.setStatusMessage(numberOfJobsInQueue == 0
                         ? "Requesting server..."
                         : "Waiting until other jobs are finished...");
 
-                final int progressJobs = (numberOfJobsInQueue != 0) ? 70 / numberOfJobsInQueue : 70;
-                taskMonitor.setPercentCompleted(10 + progressJobs);
+                final double progressJobs = (numberOfJobsInQueue != 0) ? 0.70 / numberOfJobsInQueue : 0.70;
+                taskMonitor.setProgress(0.10 + progressJobs);
 
                 try {
                     Thread.sleep(WAITING_TIME_IN_MS);
@@ -94,8 +92,8 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                 }
             }
 
-            taskMonitor.setStatus("Running your analysis...");
-            taskMonitor.setPercentCompleted(90);
+            taskMonitor.setStatusMessage("Running your analysis...");
+            taskMonitor.setProgress(0.90);
 
             while (this.service.getState(jobID).equals(State.RUNNING)) {
                 if (interrupted) {
@@ -111,9 +109,9 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
             }
 
             this.state = service.getState(jobID);
-            taskMonitor.setPercentCompleted(100);
+            taskMonitor.setProgress(1.00);
             if (State.FINISHED.equals(this.state)) {
-                taskMonitor.setStatus("Receiving analysis results.");
+                taskMonitor.setStatusMessage("Receiving analysis results.");
                 this.errorMessage = "";
                 this.motifsAndTracks = service.getMotifsAndTracks(predictRegulatorsParameters, jobID);
 
@@ -125,32 +123,30 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
                     }
                 }
             } else if (State.ERROR.equals(this.state)) {
-                taskMonitor.setStatus("Error.");
+                taskMonitor.setStatusMessage("Error.");
                 this.motifsAndTracks = Collections.emptyList();
                 this.errorMessage = service.getErrorMessage(jobID);
             }
         } catch (ServerCommunicationException e) {
             Logger.getInstance().error(e.getMessage());
             interrupt(e.getMessage());
-            this.interrupted = false;
-            return;
         }
     }
 
     @Override
-    public void setTaskMonitor(TaskMonitor monitor) throws IllegalThreadStateException {
-        taskMonitor = monitor;
+    public void cancel() {
+        this.interrupted = true;
     }
 
-    public Collection<AbstractMotifAndTrack> getMotifsAndTracks() {
+    public List<AbstractMotifAndTrack> getMotifsAndTracks() {
         return this.motifsAndTracks;
     }
 
-    public Collection<Motif> getMotifs() {
+    public List<Motif> getMotifs() {
         return this.motifs;
     }
 
-    public Collection<Track> getTracks() {
+    public List<Track> getTracks() {
         return this.tracks;
     }
 
@@ -164,5 +160,36 @@ public class FindPredictedRegulatorsTask extends IRegulonResourceBundle implemen
 
     public String getErrorMessage() {
         return this.errorMessage;
+    }
+
+    public boolean hasLostGenesError() {
+        return (this.errorMessage.indexOf(lostGenesError) >= 0);
+    }
+
+    public List<String> getLostGenesError() {
+        List<String> lostGenesErrorMessages = new ArrayList<String>();
+        final int lostGenesErrorLength = lostGenesError.length();
+        final int lostGenesErrorFoundIndex = this.errorMessage.indexOf(lostGenesError);
+        if (lostGenesErrorFoundIndex >= 0) {
+            // When the error message contains the string "The following genes were lost:<br>", separate the error
+            // message from the list of lost genes.
+            String errorMessageLostGenes = this.errorMessage.substring(0, lostGenesErrorFoundIndex + lostGenesErrorLength - 1) + "</html>";
+
+            // Get lost genes from the error message, so they can be displayed in a textarea.
+            String lostGenes = this.errorMessage.substring(lostGenesErrorFoundIndex + lostGenesErrorLength);
+            // Replace breaks by newlines.
+            lostGenes = lostGenes.replaceAll("<br>", " ");
+            // Remove "</html>" from the end of the lost genes string.
+            lostGenes = lostGenes.substring(0, lostGenes.length() - 7);
+
+            lostGenesErrorMessages.add(errorMessageLostGenes);
+            lostGenesErrorMessages.add(lostGenes);
+
+            return lostGenesErrorMessages;
+        } else {
+            lostGenesErrorMessages.add(getErrorMessage());
+            lostGenesErrorMessages.add("");
+        }
+        return lostGenesErrorMessages;
     }
 }

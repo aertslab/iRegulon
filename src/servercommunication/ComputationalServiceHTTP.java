@@ -10,6 +10,7 @@ import infrastructure.Logger;
 import servercommunication.protocols.HTTPProtocol;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
+import servercommunication.tasks.EnrichedMotifsAndTracksResults;
 import servercommunication.tasks.FindPredictedRegulatorsTask;
 
 import java.io.*;
@@ -28,6 +29,11 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             + "; " + System.getProperty("os.arch") + ')';
 
     private final Protocol service = new HTTPProtocol();
+
+    @Override
+    public EnrichedMotifsAndTracksResults createPredictRegulatorsTask(PredictRegulatorsParameters predictRegulatorsParameters) {
+        return new FindPredictedRegulatorsTask(service, predictRegulatorsParameters);
+    }
 
     @Override
     public List<AbstractMotifAndTrack> findPredictedRegulators(PredictRegulatorsParameters predictRegulatorsParameters) throws ServerCommunicationException {

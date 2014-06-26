@@ -33,7 +33,7 @@ public class IRegulonApp extends AbstractCySwingApp {
         /* 1. Configure environment ... */
         //Logger.install(adapter.getCyServiceRegistrar());
         //ComputationalServiceFactory.install(adapter.getCyServiceRegistrar());
-        CytoscapeEnvironment.install(adapter.getCySwingApplication(), adapter.getCyServiceRegistrar());
+        CytoscapeEnvironment.install(adapter.getCySwingApplication(), adapter.getCyServiceRegistrar(), adapter.getCyVersion().getVersion());
         //NetworkUtilities.install(adapter);
 
         /* 2. Add menu item ... */

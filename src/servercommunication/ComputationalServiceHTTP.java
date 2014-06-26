@@ -1,10 +1,10 @@
 package servercommunication;
 
 import cytoscape.Cytoscape;
-import cytoscape.CytoscapeVersion;
 import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 import domainmodel.*;
+import infrastructure.CytoscapeEnvironment;
 import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 import servercommunication.protocols.HTTPProtocol;
@@ -23,7 +23,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
     private static final String PARAMETER_NAME = "featureIDandTarget=";
 
     private final String userAgent = RESOURCE_BUNDLE.getString("User_Agent")
-            + " Cytoscape: " + CytoscapeVersion.version
+            + " Cytoscape: " + CytoscapeEnvironment.getInstance().getCytoscapeVersion()
             + "; " + System.getProperty("os.name")
             + "; " + System.getProperty("os.version")
             + "; " + System.getProperty("os.arch") + ')';

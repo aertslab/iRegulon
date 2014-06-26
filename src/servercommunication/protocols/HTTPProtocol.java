@@ -1,8 +1,7 @@
 package servercommunication.protocols;
 
-
-import cytoscape.CytoscapeVersion;
 import domainmodel.*;
+import infrastructure.CytoscapeEnvironment;
 import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 import servercommunication.ServerCommunicationException;
@@ -18,7 +17,7 @@ import java.util.*;
 
 public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     private final String userAgent = RESOURCE_BUNDLE.getString("User_Agent")
-            + " Cytoscape: " + CytoscapeVersion.version
+            + " Cytoscape: " + CytoscapeEnvironment.getInstance().getCytoscapeVersion()
             + "; " + System.getProperty("os.name")
             + "; " + System.getProperty("os.version")
             + "; " + System.getProperty("os.arch") + ')';

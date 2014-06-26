@@ -73,7 +73,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         JLabel jtl;
 
-        // Name of the analysis ...
+
         jtl = new JLabel("Name for analysis:");
         jtl.setToolTipText("Choose a name for your analysis.");
         cc.gridx = 0;
@@ -99,7 +99,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
 
         yPos += 1;
 
-        // Species and nomenclature
+
         jtl = new JLabel("Species and gene nomenclature:");
         jtl.setToolTipText("Choose the species and the nomenclature of the genes.");
 
@@ -186,13 +186,14 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panel.add(panelNode, cc);
         yPos += 1;
 
-        //Choose the database system
+
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 5;
         cc.fill = GridBagConstraints.HORIZONTAL;
         panel.add(createDatabaseSubPanel(), cc);
         yPos += 1;
+
 
         GridBagLayout layoutRegion = new GridBagLayout();
         GridBagConstraints cRegion = new GridBagConstraints();
@@ -311,16 +312,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         borderRecovery.setTitlePosition(TitledBorder.CENTER);
         panelRecovery.setBorder(borderRecovery);
         lineY = 0;
-        // Escore
-        /*
-         * EEEEEEE
-         * EE
-         * EE
-         * EEEEE
-         * EE
-         * EE
-         * EEEEEEE
-         */
+
 
         jtl = new JLabel("Enrichment score threshold:");
         cRecovery.gridx = 0;
@@ -343,15 +335,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panelRecovery.add(this.jtfEscore, cRecovery);
         lineY += 1;
 
-        // ROCthresholdAUC
-        /* RRRRRRR
-         * RR	RR
-         * RRRRRRR	OOOOOO	  ccc
-         * RRRR		OO	OO	 cc
-         * RR RR	OO	OO	cc
-         * RR  RR	OO	OO	 cc
-         * RR   RR	OOOOOO	  ccc
-         */
+
         jtl = new JLabel("ROC threshold for AUC calculation:");
         jtl.setToolTipText("<html>The x-axis (region rank) cut-off at which to calculate the Area Under the Curve. This <br/>" +
                 "measure is used to compare and rank all motifs. </html>");
@@ -376,15 +360,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panelRecovery.add(this.jtfROC, cRecovery);
         lineY += 1;
 
-        // threshold for visualisation
-        /*
-         * v       v
-         *  v     v
-         *   v   v
-         *    v v
-         *     v
-         * 
-         */
+
         jtl = new JLabel("Rank threshold:");
         jtl.setToolTipText("<html>The x-axis cut-off for calculation of the ROC.</html>");
 
@@ -415,13 +391,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panel.add(panelRecovery, cc);
         yPos += 1;
 
-        //Minimal Orthologous id
-        /* OOOOOOO
-		 * OO	OO
-		 * OO	OO
-		 * OO	OO
-		 * OOOOOOO
-		 */
+
         cc.gridx = 0;
         cc.gridy = yPos;
         cc.gridwidth = 5;
@@ -736,13 +706,7 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         panelMotif2TF.add(this.jtfMinOrthologous, cMotif2TF);
         lineY += 1;
 
-        //max motif similarity FDR
-		/* SSSSSSS
-		 * SS
-		 * SSSSSSS
-		 * 		SS
-		 * SSSSSSS
-		 */
+
         this.labelMaxMotifSimilarityFDR = new JLabel("Maximum false discovery rate (FDR) on motif similarity:");
         this.labelMaxMotifSimilarityFDR.setToolTipText("<html>Choose the Maximum false discovery rate (FDR) on motif similarity.<br/>" +
                 "How closer to 0, how similar the motif annotated for a displayed TF will be to the enriched motif.<br/>" +

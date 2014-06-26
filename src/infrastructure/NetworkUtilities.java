@@ -285,8 +285,8 @@ public final class NetworkUtilities {
     }
 
     public CyEdge createPredictedEdge(final CyNetwork network, final CyNode sourceNode, final CyNode targetNode,
-                                      final GeneIdentifier factor, final AbstractMotif motif, final CandidateTargetGene targetGene) {
-        final CyEdge edge = createEdge(network, sourceNode, targetNode, factor, motif, targetGene.getGeneID(), REGULATORY_FUNCTION_PREDICTED);
+                                      final GeneIdentifier factor, final AbstractMotifAndTrack motifOrTrack, final CandidateTargetGene targetGene) {
+        final CyEdge edge = createEdge(network, sourceNode, targetNode, factor, motifOrTrack, targetGene.getGeneID(), REGULATORY_FUNCTION_PREDICTED);
         setEdgeAttribute(network, edge, RANK_ATTRIBUTE_NAME, targetGene.getRank());
         return edge;
     }

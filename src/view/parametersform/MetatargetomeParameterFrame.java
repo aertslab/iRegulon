@@ -5,6 +5,8 @@ import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
 import domainmodel.MetaTargetomeParameters;
 import domainmodel.SpeciesNomenclature;
+import infrastructure.CytoscapeEnvironment;
+import org.cytoscape.application.swing.AbstractCyAction;
 import view.Refreshable;
 import view.actions.QueryMetatargetomeAction;
 
@@ -60,7 +62,7 @@ public final class MetatargetomeParameterFrame extends JDialog {
         }
     }
 
-    private class CancelAction extends AbstractAction {
+    private class CancelAction extends AbstractCyAction {
         private CancelAction() {
             super("Cancel");
         }

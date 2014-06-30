@@ -3,6 +3,8 @@ package view.resultspanel.motifview;
 import cytoscape.Cytoscape;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
+import infrastructure.CytoscapeEnvironment;
+import org.cytoscape.application.swing.AbstractCyAction;
 import view.resultspanel.guiwidgets.LogoMouseListener;
 import view.resultspanel.guiwidgets.LogoUtilities;
 import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
@@ -245,7 +247,7 @@ public final class Motif2TFDetailFrame extends JDialog {
         container.add(Box.createGlue(), cc);
     }
 
-    private class CloseAction extends AbstractAction {
+    private class CloseAction extends AbstractCyAction {
         private CloseAction() {
             super("Close");
         }

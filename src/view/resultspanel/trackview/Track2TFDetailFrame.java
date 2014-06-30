@@ -3,6 +3,8 @@ package view.resultspanel.trackview;
 import cytoscape.Cytoscape;
 import domainmodel.AbstractTrack;
 import domainmodel.TranscriptionFactor;
+import infrastructure.CytoscapeEnvironment;
+import org.cytoscape.application.swing.AbstractCyAction;
 import view.resultspanel.trackview.detailpanel.TFandTrackSelected;
 
 import javax.swing.*;
@@ -249,7 +251,7 @@ public final class Track2TFDetailFrame extends JDialog {
     }
     */
 
-    private class CloseAction extends AbstractAction {
+    private class CloseAction extends AbstractCyAction {
         private CloseAction() {
             super("Close");
         }

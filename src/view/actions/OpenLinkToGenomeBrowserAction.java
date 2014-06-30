@@ -1,8 +1,9 @@
 package view.actions;
 
-import cytoscape.Cytoscape;
 import domainmodel.AbstractMotifAndTrack;
+import infrastructure.CytoscapeEnvironment;
 import infrastructure.Logger;
+import org.cytoscape.util.swing.OpenBrowser;
 import servercommunication.ComputationalService;
 import servercommunication.ComputationalServiceHTTP;
 import view.Refreshable;
@@ -12,8 +13,10 @@ import view.resultspanel.SelectedMotifOrTrack;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.net.URI;
 
-public class OpenLinkToGenomeBrowserAction extends ResourceAction implements Refreshable {
+
+public final class OpenLinkToGenomeBrowserAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_link_to_UCSC";
 
     private final ComputationalService service = new ComputationalServiceHTTP();
@@ -51,14 +54,24 @@ public class OpenLinkToGenomeBrowserAction extends ResourceAction implements Ref
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        final java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+        final URI link = service.getLink2GenomeBrowser4EnhancerRegions(getSelectedMotifOrTrack().getMotifOrTrack());
         try {
-            desktop.browse(service.getLink2GenomeBrowser4EnhancerRegions(getSelectedMotifOrTrack().getMotifOrTrack()));
-        } catch (Exception e) {
-            Logger.getInstance().error(e);
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
-                    "An error has occurred while opening the UCSC browser.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            final OpenBrowser openBrowser = CytoscapeEnvironment.getInstance().getServiceRegistrar().getService(OpenBrowser.class);
+            if (!openBrowser.openURL(link.toString())) {
+                JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                        "An error has occurred while opening the UCSC browser.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (RuntimeException e) {
+            final java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+            try {
+                desktop.browse(link);
+            } catch (Exception e2) {
+                Logger.getInstance().error(e2);
+                JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                        "An error has occurred while opening the UCSC browser.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

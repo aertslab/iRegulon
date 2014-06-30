@@ -1,11 +1,13 @@
 package view.resultspanel.guiwidgets;
 
+import infrastructure.CytoscapeEnvironment;
+import org.cytoscape.util.swing.OpenBrowser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.net.URI;
 
 
@@ -78,19 +80,22 @@ public final class LinkTextField extends JTextField {
     }
 
     private static void open(final URI uri) {
-        if (Desktop.isDesktopSupported()) {
-            final Desktop desktop = Desktop.getDesktop();
+        try {
+            final OpenBrowser openBrowser = CytoscapeEnvironment.getInstance().getServiceRegistrar().getService(OpenBrowser.class);
+            if (!openBrowser.openURL(uri.toString())) {
+                JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                        "Failed to open " + uri.toString() + " in a web browser.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (RuntimeException e) {
+            final java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
             try {
                 desktop.browse(uri);
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(null,
-                        "Failed to open the requested URL in a web browser.",
-                        "Launching web browser failed", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception e2) {
+                JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                        "Failed to open " + uri.toString() + " in a web browser.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Opening a web browser on this platform is not supported.",
-                    "Launching web browser not supported", JOptionPane.WARNING_MESSAGE);
         }
     }
 }

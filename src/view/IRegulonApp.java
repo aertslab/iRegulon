@@ -4,6 +4,7 @@ import org.cytoscape.app.swing.AbstractCySwingApp;
 import org.cytoscape.app.swing.CySwingAppAdapter;
 import infrastructure.CytoscapeEnvironment;
 import infrastructure.IRegulonResourceBundle;
+import org.cytoscape.util.swing.OpenBrowser;
 import view.actions.*;
 
 import javax.imageio.ImageIO;
@@ -81,10 +82,23 @@ public class IRegulonApp extends AbstractCySwingApp {
         }
 
         public void actionPerformed(ActionEvent e) {
+            final URI link = URI.create(RESOURCE_BUNDLE.getString("help_page"));
             try {
-                Desktop.getDesktop().browse(URI.create(RESOURCE_BUNDLE.getString("help_page")));
-            } catch (IOException e1) {
-                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                final OpenBrowser openBrowser = CytoscapeEnvironment.getInstance().getServiceRegistrar().getService(OpenBrowser.class);
+                if (!openBrowser.openURL(link.toString())) {
+                    JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                            "An error has occurred while opening the iRegulon help page in the browser.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (RuntimeException e2) {
+                final java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+                try {
+                    desktop.browse(link);
+                } catch (Exception e3) {
+                    JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                            "An error has occurred while opening the iRegulon help page in the browser.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }

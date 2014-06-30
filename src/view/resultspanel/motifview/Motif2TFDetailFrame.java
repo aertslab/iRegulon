@@ -142,28 +142,6 @@ public final class Motif2TFDetailFrame extends JDialog {
         addLabel("Name", factor.getName(), cc, panel);
         addLabel("Species and nomenclature", factor.getSpeciesNomeclature().toString(), cc, panel);
 
-//        cc.anchor = GridBagConstraints.LINE_START;
-//        cc.fill = GridBagConstraints.NONE;
-//        cc.weightx = 0.0; cc.weighty = 0.0;
-//        cc.gridwidth = 2; cc.gridheight = 1;
-//        cc.gridx = 0;
-
-//        final JLabel labelLB = new JLabel("Target genes:");
-//        panel.add(labelLB, cc);
-//
-//        cc.gridy++;
-//
-//        cc.anchor = GridBagConstraints.CENTER;
-//        cc.fill = GridBagConstraints.BOTH;
-//        cc.weightx = 1.0; cc.weighty = 1.0;
-//        cc.gridwidth = 2; cc.gridheight = 1;
-//        cc.gridx = 0;
-//
-//        final JScrollPane pane = new JScrollPane(new JTable(new CandidateTargetGeneTableModel(motif)));
-//        final ImageIcon icon = LogoUtilities.createImageIcon(motif.getName());
-//        pane.setMaximumSize(new Dimension(icon.getIconWidth(), icon.getIconHeight()));
-//		panel.add(pane, cc);
-
         return panel;
     }
 

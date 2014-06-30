@@ -23,7 +23,7 @@ public final class MetaTargetomes {
     }
 
     private static Map<SpeciesNomenclature, Set<GeneIdentifier>> queryForFactors() throws ServerCommunicationException {
-        final ComputationalService service = new ComputationalServiceHTTP();
+        final ComputationalService service = ComputationalServiceFactory.getInstance().getService();
         final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
         for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
             speciesNomenclature2factors.put(speciesNomenclature, service.queryTranscriptionFactorsWithPredictedTargetome(speciesNomenclature));

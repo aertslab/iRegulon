@@ -1,12 +1,12 @@
 package servercommunication;
 
-import cytoscape.Cytoscape;
-import cytoscape.task.ui.JTaskConfig;
-import cytoscape.task.util.TaskManager;
 import domainmodel.*;
 import infrastructure.CytoscapeEnvironment;
 import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
+import org.cytoscape.service.util.CyServiceRegistrar;
+import org.cytoscape.work.TaskIterator;
+import org.cytoscape.work.swing.DialogTaskManager;
 import servercommunication.protocols.HTTPProtocol;
 import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
@@ -29,6 +29,11 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             + "; " + System.getProperty("os.arch") + ')';
 
     private final Protocol service = new HTTPProtocol();
+    private final CyServiceRegistrar services;
+
+    public ComputationalServiceHTTP(final CyServiceRegistrar services) {
+        this.services = services;
+    }
 
     @Override
     public EnrichedMotifsAndTracksResults createPredictRegulatorsTask(PredictRegulatorsParameters predictRegulatorsParameters) {
@@ -37,17 +42,10 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
 
     @Override
     public List<AbstractMotifAndTrack> findPredictedRegulators(PredictRegulatorsParameters predictRegulatorsParameters) throws ServerCommunicationException {
-
         final FindPredictedRegulatorsTask task = new FindPredictedRegulatorsTask(service, predictRegulatorsParameters);
 
-        final JTaskConfig taskConfig = new JTaskConfig();
-        taskConfig.setOwner(Cytoscape.getDesktop());
-        taskConfig.displayCloseButton(true);
-        taskConfig.displayCancelButton(true);
-        taskConfig.displayStatus(true);
-        taskConfig.setAutoDispose(true);
-
-        TaskManager.executeTask(task, taskConfig);
+        final DialogTaskManager dialogTaskManager = services.getService(DialogTaskManager.class);
+        dialogTaskManager.execute(new TaskIterator(task));
 
         if (task.getFinishedState().equals(State.ERROR) && !task.getIsInterupted()) {
             throw new ServerCommunicationException(task.getErrorMessage());

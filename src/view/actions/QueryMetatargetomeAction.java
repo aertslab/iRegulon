@@ -31,7 +31,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
     public static final MetaTargetomeParameters DEFAULT_PARAMETERS = new MetaTargetomeParameters() {
         @Override
         public String getAttributeName() {
-            return null;
+            return NetworkUtilities.ID_ATTRIBUTE_NAME;
         }
 
         @Override
@@ -60,10 +60,12 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
         }
 
         private GeneIdentifier getSelectedFactor() {
-            final List<CyNode> nodes = NetworkUtilities.getSelectedNodes();
-            if (nodes == null || nodes.isEmpty()) return null;
-            final CyNode node = nodes.iterator().next();
-            return new GeneIdentifier(node.getIdentifier(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+            final CyNetwork network = NetworkUtilities.getInstance().getCurrentNetwork();
+            if (network == null) return null;
+            final List<GeneIdentifier> ids = NetworkUtilities.getInstance().getSelectedNodesAsGeneIDs(
+                    network, getAttributeName(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+            if (ids == null || ids.isEmpty()) return null;
+            else return ids.get(0);
         }
     };
 

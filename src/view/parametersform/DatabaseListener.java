@@ -1,9 +1,9 @@
 package view.parametersform;
 
-import cytoscape.Cytoscape;
 import domainmodel.*;
-import infrastructure.NetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
+import infrastructure.NetworkUtilities;
+import org.cytoscape.model.CyNetwork;
 import view.parametersform.databaseselection.*;
 
 import javax.swing.*;
@@ -175,7 +175,8 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
             this.txtName.setBackground(Color.RED);
         }
         if (this.txtName.getText().toLowerCase().equalsIgnoreCase(PredictedRegulatorsForm.deriveDefaultJobName())) {
-            if (!(Cytoscape.getCurrentNetwork().getTitle() == null || Cytoscape.getCurrentNetwork().getTitle().equals("0"))) {
+            final String name = NetworkUtilities.getInstance().getCurrentNetworkName();
+            if (!(name == null || "".equals(name.trim()) || name.equals("0"))) {
                 this.txtName.setBackground(Color.WHITE);
                 this.canSubmit = true;
             }
@@ -483,7 +484,8 @@ final class DatabaseListener extends IRegulonResourceBundle implements ActionLis
     private void refreshAmountOfNodes() {
         this.txtAmountNodes.setBackground(Color.WHITE);
         if (this.jcbGeneNameAttr.getSelectedItem() != null) {
-            int amountNodes = NetworkUtilities.getGenes((String) this.jcbGeneNameAttr.getSelectedItem(),
+            final CyNetwork network = NetworkUtilities.getInstance().getCurrentNetwork();
+            int amountNodes = NetworkUtilities.getInstance().getSelectedNodesAsGeneIDs(network, (String) this.jcbGeneNameAttr.getSelectedItem(),
                     (SpeciesNomenclature) this.speciesNomenclatureCB.getSelectedItem()).size();
             if (amountNodes == 0) {
                 this.txtAmountNodes.setBackground(Color.RED);

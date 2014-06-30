@@ -6,8 +6,10 @@ import domainmodel.Delineation;
 import domainmodel.PredictRegulatorsParameters;
 import domainmodel.RankingsDatabase;
 import domainmodel.SpeciesNomenclature;
-import infrastructure.NetworkUtilities;
+import infrastructure.CytoscapeEnvironment;
 import infrastructure.IRegulonResourceBundle;
+import infrastructure.NetworkUtilities;
+import org.cytoscape.model.CyNetwork;
 import view.Refreshable;
 import view.actions.PredictRegulatorsAction;
 import view.parametersform.databaseselection.*;
@@ -410,7 +412,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
         final JButton submitButton = new JButton(new PredictRegulatorsAction(PredictedRegulatorsForm.this) {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                if (NetworkUtilities.hasSelectedNodes()) {
+                final CyNetwork network = NetworkUtilities.getInstance().getCurrentNetwork();
+                if (NetworkUtilities.getInstance().hasSelectedNodes(network)) {
                     final PredictRegulatorsParameters predictRegulatorsParameters = deriveParameters();
                     if (predictRegulatorsParameters.parametersAreValid()) {
                         if (frame != null) frame.dispose();
@@ -748,8 +751,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     public static String deriveDefaultJobName() {
-        final String name = Cytoscape.getCurrentNetwork().getTitle();
-        if (name == null || name.equals("0")) {
+        final String name = NetworkUtilities.getInstance().getCurrentNetworkName();
+        if (name == null || "".equals(name.trim()) || name.equals("0")) {
             return PLUGIN_NAME + " name";
         } else if (name.length() > MAX_NAME_LENGTH) {
             return name.substring(0, MAX_NAME_LENGTH - 3) + "...";
@@ -839,18 +842,21 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     private int getNumberOfSelectedNodes() {
-        return NetworkUtilities.getGenes(getAttributeName(), getSpeciesNomenclature()).size();
+        final CyNetwork network = NetworkUtilities.getInstance().getCurrentNetwork();
+        return NetworkUtilities.getInstance().getSelectedNodesAsGeneIDs(network, getAttributeName(), getSpeciesNomenclature()).size();
     }
 
     @Override
     public void refresh() {
+        final CyNetwork network = NetworkUtilities.getInstance().getCurrentNetwork();
+        final String netName = NetworkUtilities.getInstance().getCurrentNetworkName();
         unregisterListeners();
-        setJobName(Cytoscape.getNullNetwork().equals(Cytoscape.getCurrentNetwork())
+        setJobName(network == null || network.getNodeCount() == 0
                 ? deriveDefaultJobName()
-                : Cytoscape.getCurrentNetwork().getTitle());
+                : netName);
         final String selectedAttributeName = getAttributeName();
         attributeNameCB.removeAllItems();
-        final java.util.List<String> attributeNames = NetworkUtilities.getPossibleGeneIDAttributesWithDefault();
+        final java.util.List<String> attributeNames = NetworkUtilities.getInstance().getPossibleIDAttributes(network);
         for (String name : attributeNames) attributeNameCB.addItem(name);
         if (attributeNames.contains(selectedAttributeName)) attributeNameCB.setSelectedItem(selectedAttributeName);
         numberOfNodesTF.setText(Integer.toString(getNumberOfSelectedNodes()));
@@ -859,7 +865,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     public PredictRegulatorsParameters deriveParameters() {
-        return new PredictRegulatorsParameters(NetworkUtilities.getGenes(
+        final CyNetwork network = NetworkUtilities.getInstance().getCurrentNetwork();
+        return new PredictRegulatorsParameters(NetworkUtilities.getInstance().getSelectedNodesAsGeneIDs(network,
                 getAttributeName(),
                 getSpeciesNomenclature()),
                 getNESThreshold(),

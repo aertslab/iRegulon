@@ -1,7 +1,5 @@
 package view.parametersform;
 
-
-import cytoscape.Cytoscape;
 import domainmodel.Delineation;
 import domainmodel.PredictRegulatorsParameters;
 import domainmodel.RankingsDatabase;
@@ -419,10 +417,10 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
                         if (frame != null) frame.dispose();
                         super.actionPerformed(arg0);
                     } else {
-                        JOptionPane.showMessageDialog(Cytoscape.getDesktop(), predictRegulatorsParameters.getErrorMessage());
+                        JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(), predictRegulatorsParameters.getErrorMessage());
                     }
                 } else {
-                    JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "No nodes are selected!");
+                    JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(), "No nodes are selected!");
                 }
             }
         });

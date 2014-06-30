@@ -8,6 +8,7 @@ import cytoscape.task.ui.JTaskConfig;
 import cytoscape.task.util.TaskManager;
 import cytoscape.view.CyNetworkView;
 import domainmodel.*;
+import infrastructure.CytoscapeEnvironment;
 import infrastructure.NetworkUtilities;
 import infrastructure.tasks.AddMetatargetomeTask;
 import infrastructure.tasks.CreateMetatargetomeTask;
@@ -99,7 +100,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (!MetaTargetomes.hasAvailableFactors()) {
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+            JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
                     "Problem while communicating with server.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;

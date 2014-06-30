@@ -1,6 +1,5 @@
 package view.resultspanel.trackview;
 
-import cytoscape.Cytoscape;
 import domainmodel.AbstractTrack;
 import domainmodel.TranscriptionFactor;
 import infrastructure.CytoscapeEnvironment;
@@ -18,7 +17,7 @@ public final class Track2TFDetailFrame extends JDialog {
     private static final String[] PREFIXES = new String[]{"A", "B", "C", "D"};
 
     public Track2TFDetailFrame(final TFandTrackSelected information) {
-        super(Cytoscape.getDesktop(), true);
+        super(CytoscapeEnvironment.getInstance().getJFrame(), true);
 
         this.information = information;
 

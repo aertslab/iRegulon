@@ -1,7 +1,5 @@
 package view.parametersform;
 
-
-import cytoscape.Cytoscape;
 import domainmodel.GeneIdentifier;
 import domainmodel.MetaTargetomeParameters;
 import domainmodel.SpeciesNomenclature;
@@ -22,10 +20,10 @@ public final class MetatargetomeParameterFrame extends JDialog {
     public MetatargetomeParameterFrame(final MetaTargetomeParameters parameters,
                                        final Map<SpeciesNomenclature, java.util.Set<GeneIdentifier>> speciesNomenclature2factors,
                                        final Refreshable view) {
-        super(Cytoscape.getDesktop(), TITLE, true);
+        super(CytoscapeEnvironment.getInstance().getJFrame(), TITLE, true);
         setContentPane(new ContentPane(parameters, speciesNomenclature2factors, view));
         pack();
-        setLocationRelativeTo(Cytoscape.getDesktop());
+        setLocationRelativeTo(CytoscapeEnvironment.getInstance().getJFrame());
         setAlwaysOnTop(true);
     }
 

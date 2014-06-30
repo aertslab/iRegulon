@@ -1,6 +1,5 @@
 package view.resultspanel.motifview;
 
-import cytoscape.Cytoscape;
 import domainmodel.AbstractMotif;
 import domainmodel.TranscriptionFactor;
 import infrastructure.CytoscapeEnvironment;
@@ -20,7 +19,7 @@ public final class Motif2TFDetailFrame extends JDialog {
     private static final String[] PREFIXES = new String[]{"A", "B", "C", "D"};
 
     public Motif2TFDetailFrame(final TFandMotifSelected information) {
-        super(Cytoscape.getDesktop(), true);
+        super(CytoscapeEnvironment.getInstance().getJFrame(), true);
 
         this.information = information;
 

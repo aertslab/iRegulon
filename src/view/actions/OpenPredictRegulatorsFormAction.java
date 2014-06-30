@@ -1,6 +1,6 @@
 package view.actions;
 
-import cytoscape.Cytoscape;
+import infrastructure.CytoscapeEnvironment;
 import view.ResourceAction;
 import view.parametersform.PredictedRegulatorsForm;
 
@@ -19,7 +19,7 @@ public class OpenPredictRegulatorsFormAction extends ResourceAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        final JDialog frame = new JDialog(Cytoscape.getDesktop(), "Predict regulators and targets", true);
+        final JDialog frame = new JDialog(CytoscapeEnvironment.getInstance().getJFrame(), "Predict regulators and targets", true);
         frame.setAlwaysOnTop(true);
 
         final PredictedRegulatorsForm predictedRegulatorsForm = new PredictedRegulatorsForm(frame);
@@ -27,7 +27,7 @@ public class OpenPredictRegulatorsFormAction extends ResourceAction {
         predictedRegulatorsForm.refresh();
 
         frame.pack();
-        frame.setLocationRelativeTo(Cytoscape.getDesktop());
+        frame.setLocationRelativeTo(CytoscapeEnvironment.getInstance().getJFrame());
         frame.setAlwaysOnTop(true);
 
         frame.setVisible(true);

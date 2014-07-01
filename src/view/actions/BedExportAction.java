@@ -5,7 +5,7 @@ import domainmodel.EnhancerRegion;
 import infrastructure.CytoscapeEnvironment;
 import infrastructure.Logger;
 import servercommunication.ComputationalService;
-import servercommunication.ComputationalServiceHTTP;
+import servercommunication.ComputationalServiceFactory;
 import servercommunication.ServerCommunicationException;
 import view.Refreshable;
 import view.ResourceAction;
@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 public final class BedExportAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_save_bed";
 
-    private final ComputationalService service = new ComputationalServiceHTTP();
+    private final ComputationalService service = ComputationalServiceFactory.getInstance().getService();
     private final SelectedMotifOrTrack selectedMotifOrTrack;
 
     public BedExportAction(final SelectedMotifOrTrack selectedMotifOrTrack) {

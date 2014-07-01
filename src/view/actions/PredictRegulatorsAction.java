@@ -1,69 +1,74 @@
 package view.actions;
 
-import cytoscape.Cytoscape;
-import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.view.cytopanels.CytoPanelState;
 import domainmodel.AbstractMotifAndTrack;
 import domainmodel.PredictRegulatorsParameters;
 import domainmodel.Results;
+import infrastructure.CytoscapeEnvironment;
+import org.cytoscape.application.swing.CytoPanel;
+import org.cytoscape.application.swing.CytoPanelComponent;
+import org.cytoscape.application.swing.CytoPanelName;
+import org.cytoscape.application.swing.CytoPanelState;
+import org.cytoscape.work.AbstractTask;
+import org.cytoscape.work.TaskIterator;
+import org.cytoscape.work.TaskManager;
+import org.cytoscape.work.TaskMonitor;
+import org.cytoscape.work.swing.DialogTaskManager;
 import servercommunication.ComputationalService;
-import servercommunication.ComputationalServiceHTTP;
-import servercommunication.ServerCommunicationException;
+import servercommunication.ComputationalServiceFactory;
+import servercommunication.tasks.EnrichedMotifsAndTracksResults;
 import view.ResourceAction;
-import view.parametersform.IRegulonType;
 import view.parametersform.PredictedRegulatorsParameters;
 import view.resultspanel.ResultsCytoPanelComponent;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 
 public class PredictRegulatorsAction extends ResourceAction {
     private static final String NAME = "action_submit_analysis";
 
-    private final ComputationalService service = new ComputationalServiceHTTP();
-	private final PredictedRegulatorsParameters parameters;
-	
-	public PredictRegulatorsAction(final PredictedRegulatorsParameters parameters) {
-		super(NAME);
-		this.parameters = parameters;
-	}
+    private final ComputationalService service = ComputationalServiceFactory.getInstance().getService();
+    private final PredictedRegulatorsParameters parameters;
+
+    public PredictRegulatorsAction(final PredictedRegulatorsParameters parameters) {
+        super(NAME);
+        this.parameters = parameters;
+    }
 
     public PredictedRegulatorsParameters getParameters() {
         return parameters;
     }
 
     @Override
-	public void actionPerformed(ActionEvent event) {
+    public void actionPerformed(ActionEvent event) {
         final PredictRegulatorsParameters predictRegulatorsParameters = this.parameters.deriveParameters();
-        if (!predictRegulatorsParameters.getIRegulonType().equals(IRegulonType.PREDICTED_REGULATORS)) {
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(), "This option is not yet implemented.");
-            return;
-        }
 
-        final List<AbstractMotifAndTrack> motifsAndTracks;
-        try {
-            motifsAndTracks = service.findPredictedRegulators(predictRegulatorsParameters);
-        } catch (ServerCommunicationException e) {
-            String errorMessage = deriveMessage(e);
+        final TaskIterator tasks = new TaskIterator();
 
-            String lostGenesError = "The following genes were lost:<br>";
-            int lostGenesErrorLength = lostGenesError.length();
-            int lostGenesErrorFoundIndex = errorMessage.indexOf(lostGenesError);
-            if (lostGenesErrorFoundIndex >= 0) {
-                // When the error message contains the string "The following genes were lost:<br>", separate the error
-                // message from the list of lost genes.
-                String errorMessageLostGenes = errorMessage.substring(0, lostGenesErrorFoundIndex + lostGenesErrorLength - 1) + "</html>";
+        final EnrichedMotifsAndTracksResults predictRegulatorsTask = service.createPredictRegulatorsTask(predictRegulatorsParameters);
+        tasks.append(predictRegulatorsTask);
+        tasks.append(new AbstractTask() {
+            @Override
+            public void run(TaskMonitor taskMonitor) throws IllegalStateException {
+                final List<AbstractMotifAndTrack> motifsAndTracks = predictRegulatorsTask.getMotifsAndTracks();
+                if (motifsAndTracks.isEmpty()) {
+                    throw new IllegalStateException("Not a single motif or track is enriched for your input gene signature.");
+                }
+                final ResultsCytoPanelComponent outputView = new ResultsCytoPanelComponent(predictRegulatorsParameters.getName(), new Results(motifsAndTracks, predictRegulatorsParameters));
+                CytoscapeEnvironment.getInstance().getServiceRegistrar().registerService(outputView, CytoPanelComponent.class, new Properties());
+                final CytoPanel cytoPanel = CytoscapeEnvironment.getInstance().getCytoPanel(CytoPanelName.EAST);
+                cytoPanel.setState(CytoPanelState.DOCK);
+                cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(outputView));
+            }
+        });
 
-                // Get lost genes from the error message, so they can be displayed in a textarea.
-                String lostGenes = errorMessage.substring(lostGenesErrorFoundIndex + lostGenesErrorLength);
-                // Replace breaks by newlines.
-                lostGenes = lostGenes.replaceAll("<br>", " ");
-                // Remove "</html>" from the end of the lost genes string.
-                lostGenes = lostGenes.substring(0, lostGenes.length() - 7);
+        final TaskManager taskManager = CytoscapeEnvironment.getInstance().getServiceRegistrar().getService(DialogTaskManager.class);
+        taskManager.execute(tasks);
+    }
+}
+
+/*
 
                 JPanel panel = new JPanel();
                 panel.setLayout(new GridBagLayout());
@@ -94,66 +99,23 @@ public class PredictRegulatorsAction extends ResourceAction {
 
                 panel.add(scrollPane, c);
 
-                JOptionPane.showMessageDialog(Cytoscape.getDesktop(), panel, "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(), panel, "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(Cytoscape.getDesktop(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(), deriveMessage(e), "Error", JOptionPane.ERROR_MESSAGE);
             }
             return;
         }
         if (! motifsAndTracks.isEmpty()) {
             final ResultsCytoPanelComponent outputView = new ResultsCytoPanelComponent(predictRegulatorsParameters.getName(), new Results(motifsAndTracks, predictRegulatorsParameters));
-            final CytoPanel panel = Cytoscape.getDesktop().getCytoPanel(SwingConstants.EAST);
+            final CytoPanel panel = CytoscapeEnvironment.getInstance().getJFrame().getCytoPanel(SwingConstants.EAST);
             panel.setState(CytoPanelState.DOCK);
             outputView.addToPanel(panel);
         } else {
-            JOptionPane.showMessageDialog(Cytoscape.getDesktop(),
+            JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame)(),
                     "Not a single motif or track is enriched for your input gene signature.");
         }
     }
 
-    private String deriveMessage(ServerCommunicationException e) {
-        if (e.getMessage().contains("The following genes\nwere lost:")) {
-            final StringBuilder builder = new StringBuilder();
-            builder.append("<html>");
 
-            final String[] components = e.getMessage().split(":");
-            builder.append(components[0].replace('\n', ' '));
-            builder.append(":<br>");
-
-            final List<String> IDs = extractIDs(components[1]);
-            if (IDs.size() < 10) {
-                builder.append(IDs.get(0));
-                for (String ID : IDs.subList(1, IDs.size())) {
-                    builder.append(" ");
-                    builder.append(ID);
-                }
-            } else {
-                builder.append(IDs.get(0));
-                for (String ID : IDs.subList(1, 5)) {
-                    builder.append(" ");
-                    builder.append(ID);
-                }
-                builder.append(" ...");
-                final int size = IDs.size();
-                for (String ID : IDs.subList(size-5, size)) {
-                    builder.append(" ");
-                    builder.append(ID);
-                }
-            }
-
-            builder.append("</html>");
-            return builder.toString();
-        } else {
-            return e.getMessage();
-        }
-    }
-
-    private List<String> extractIDs(final String text) {
-        final String[] IDs = text.split(";");
-        final List<String> result = new ArrayList<String>();
-        for (String ID : IDs) {
-            result.add(ID.replace("\n", "").trim());
-        }
-        return result;
-    }
 }
+*/

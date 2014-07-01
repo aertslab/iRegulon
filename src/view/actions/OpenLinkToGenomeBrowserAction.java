@@ -5,7 +5,7 @@ import infrastructure.CytoscapeEnvironment;
 import infrastructure.Logger;
 import org.cytoscape.util.swing.OpenBrowser;
 import servercommunication.ComputationalService;
-import servercommunication.ComputationalServiceHTTP;
+import servercommunication.ComputationalServiceFactory;
 import view.Refreshable;
 import view.ResourceAction;
 import view.resultspanel.MotifAndTrackListener;
@@ -19,7 +19,7 @@ import java.net.URI;
 public final class OpenLinkToGenomeBrowserAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_link_to_UCSC";
 
-    private final ComputationalService service = new ComputationalServiceHTTP();
+    private final ComputationalService service = ComputationalServiceFactory.getInstance().getService();
     private final SelectedMotifOrTrack selectedMotifOrTrack;
 
     public OpenLinkToGenomeBrowserAction(SelectedMotifOrTrack selectedMotifOrTrack) {

@@ -23,6 +23,7 @@
     <property name="jars.jarjar" value="${lib.folder}/jarjar-1.4-bin.jar"/>
     <property name="jars.kxml2" value="${lib.folder}/kxml2-2.3.0.jar"/>
     <property name="jars.xstream" value="${lib.folder}/xstream-1.4.7.jar"/>
+    <property name="jars.paxlogging" value="${lib.folder}/pax-logging-api-1.7.2.jar"/>
 
     <tstamp>
         <format property="TODAY" pattern="yyyy-MM-dd" locale="us,US"/>
@@ -41,6 +42,7 @@
     <!-- =================================================================== -->
     <path id="project.class.path">
         <pathelement path="${jars.cytoscape}"/>
+        <pathelement path="${jars.paxlogging}"/>
         <pathelement path="${jars.xstream}"/>
     </path>
 
@@ -139,6 +141,7 @@
             </manifest>
             <fileset dir="${build.folder}"/>
             <zipfileset src="${jars.kxml2}"/>
+            <zipfileset src="${jars.paxlogging}"/>
             <zipfileset src="${jars.xstream}"/>
         </jarjar>
     </target>
@@ -155,6 +158,7 @@
             </manifest>
             <fileset dir="${build.folder}"/>
             <zipfileset src="${jars.kxml2}"/>
+            <zipfileset src="${jars.paxlogging}"/>
             <zipfileset src="${jars.xstream}"/>
         </jarjar>
     </target>

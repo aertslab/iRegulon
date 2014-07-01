@@ -1,31 +1,36 @@
 package infrastructure;
 
-import cytoscape.logger.ConsoleLogger;
-import cytoscape.logger.CyLogHandler;
-import cytoscape.logger.LogLevel;
+import org.cytoscape.service.util.CyServiceRegistrar;
+import org.slf4j.LoggerFactory;
 
 
 public final class Logger {
-    private static final Logger INSTANCE = new Logger();
+    private static Logger INSTANCE;
 
-    private final CyLogHandler logger = ConsoleLogger.getLogger();
+    private final org.slf4j.Logger logger;
 
-    private Logger() {
+    private Logger(final org.slf4j.Logger logger) {
+        this.logger = logger;
+    }
+
+    public static void install(final CyServiceRegistrar registrar) {
+        INSTANCE = new Logger(LoggerFactory.getLogger(Logger.class));
     }
 
     public static Logger getInstance() {
+        if (INSTANCE == null) throw new IllegalStateException();
         return INSTANCE;
     }
 
     public void error(final String msg) {
-        logger.handleLog(LogLevel.LOG_ERROR, msg);
+        logger.error(msg);
     }
 
     public void error(final Exception e) {
-        logger.handleLog(LogLevel.LOG_ERROR, e.getMessage());
+        logger.error(e.getMessage());
     }
 
     public void warning(final String msg) {
-        logger.handleLog(LogLevel.LOG_WARN, msg);
+        logger.warn(msg);
     }
 }

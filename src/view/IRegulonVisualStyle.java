@@ -1,98 +1,130 @@
 package view;
 
-import cytoscape.Cytoscape;
-import cytoscape.visual.*;
-import cytoscape.visual.calculators.BasicCalculator;
-import cytoscape.visual.calculators.Calculator;
-import cytoscape.visual.mappings.*;
-import infrastructure.NetworkUtilities;
 import infrastructure.IRegulonResourceBundle;
+import infrastructure.NetworkUtilities;
+import org.cytoscape.service.util.CyServiceRegistrar;
+import org.cytoscape.view.model.CyNetworkView;
+import org.cytoscape.view.presentation.property.ArrowShapeVisualProperty;
+import org.cytoscape.view.presentation.property.BasicVisualLexicon;
+import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
+import org.cytoscape.view.presentation.property.values.ArrowShape;
+import org.cytoscape.view.presentation.property.values.NodeShape;
+import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
+import org.cytoscape.view.vizmap.VisualMappingManager;
+import org.cytoscape.view.vizmap.VisualStyle;
+import org.cytoscape.view.vizmap.VisualStyleFactory;
+import org.cytoscape.view.vizmap.mappings.BoundaryRangeValues;
+import org.cytoscape.view.vizmap.mappings.ContinuousMapping;
+import org.cytoscape.view.vizmap.mappings.DiscreteMapping;
+import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 
 import java.awt.*;
 
 
-public class IRegulonVisualStyle extends IRegulonResourceBundle {
+public final class IRegulonVisualStyle extends IRegulonResourceBundle {
     public static final String NAME = RESOURCE_BUNDLE.getString("vizmap_name");
-    private static final Color GRAY = new Color(220, 220, 220);
+    //private static final Color GRAY = new Color(220, 220, 220);
+
+    private static VisualStyle STYLE;
 
     private IRegulonVisualStyle() {
     }
 
     public static VisualStyle getVisualStyle() {
-        final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-        return manager.getCalculatorCatalog().getVisualStyle(NAME);
+        if (STYLE == null) throw new IllegalStateException();
+        return STYLE;
     }
 
-    public static void installVisualStyle() {
-        final VisualMappingManager manager = Cytoscape.getVisualMappingManager();
-        final CalculatorCatalog catalog = manager.getCalculatorCatalog();
-        if (catalog.getVisualStyle(NAME) != null) catalog.removeVisualStyle(NAME);
-        final VisualStyle vs = createVisualStyle();
-        catalog.addVisualStyle(vs);
+    public static void applyVisualStyle(final CyNetworkView view) {
+        getVisualStyle().apply(view);
     }
 
-    private static VisualStyle createVisualStyle() {
-        final VisualStyle style = new VisualStyle(NAME);
-        style.setGlobalAppearanceCalculator(createGlobalAppearanceCalculator());
+    public static void install(final CyServiceRegistrar serviceRegistrar) {
+        if (STYLE != null) throw new IllegalStateException();
 
-        final NodeAppearanceCalculator nodeAppCalc = style.getNodeAppearanceCalculator();
-        // Node label = ID
-        final Calculator nodeLabelCalculator = new BasicCalculator("iRegulon Visual Style Node Label Calculator",
-                new PassThroughMapping(String.class, NetworkUtilities.ID_ATTRIBUTE_NAME),
-                VisualPropertyType.NODE_LABEL);
-        nodeAppCalc.setCalculator(nodeLabelCalculator);
+        final VisualMappingManager manager = serviceRegistrar.getService(VisualMappingManager.class);
+        final VisualStyle oldStyle = findStyle(manager, NAME);
+        if (oldStyle != null) manager.removeVisualStyle(oldStyle);
+        STYLE = createVisualStyle(serviceRegistrar);
+        manager.addVisualStyle(STYLE);
+    }
+
+    private static VisualStyle findStyle(final VisualMappingManager manager, final String name) {
+        for (VisualStyle style : manager.getAllVisualStyles()) {
+            if (name.equals(style.getTitle())) return style;
+        }
+        return null;
+    }
+
+    private static VisualStyle createVisualStyle(final CyServiceRegistrar serviceRegistrar) {
+        final VisualStyleFactory factory = serviceRegistrar.getService(VisualStyleFactory.class);
+        //TODO: This doesn't seem to work ...
+        final VisualMappingFunctionFactory continuousMappingFactory = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
+        final VisualMappingFunctionFactory discreteMappingFactory = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
+        final VisualMappingFunctionFactory passthroughMappingFactory = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
+
+        final VisualStyle style = factory.createVisualStyle(NAME);
+        style.setDefaultValue(BasicVisualLexicon.NETWORK_BACKGROUND_PAINT, Color.GRAY);
+
+        // Node label = name
+        style.addVisualMappingFunction(passthroughMappingFactory.createVisualMappingFunction(
+                NetworkUtilities.ID_ATTRIBUTE_NAME,
+                String.class,
+                BasicVisualLexicon.NODE_LABEL));
 
         // Node shape =
         // 1. Ellipse when regulator
         // 2. Rectangle when target gene
-        final DiscreteMapping nodeShapeMapper = new DiscreteMapping(NodeShape.class, NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
-        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, NodeShape.RECT);
-        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, NodeShape.ELLIPSE);
-        final Calculator nodeShapeCalculator = new BasicCalculator("iRegulon Visual Style Node Shape Calculator",
-                nodeShapeMapper,
-                VisualPropertyType.NODE_SHAPE);
-        nodeAppCalc.setCalculator(nodeShapeCalculator);
+        final DiscreteMapping<String, NodeShape> nodeShapeMapper = (DiscreteMapping) discreteMappingFactory.createVisualMappingFunction(
+                NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
+                String.class,
+                BasicVisualLexicon.NODE_SHAPE);
+        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, NodeShapeVisualProperty.RECTANGLE);
+        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, NodeShapeVisualProperty.ELLIPSE);
+        style.addVisualMappingFunction(nodeShapeMapper);
 
         // Node color =
-        final DiscreteMapping nodeColorMapper = new DiscreteMapping(Color.class, NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
+        final DiscreteMapping<String, Color> nodeColorMapper = (DiscreteMapping) discreteMappingFactory.createVisualMappingFunction(
+                NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
+                String.class,
+                BasicVisualLexicon.NODE_FILL_COLOR);
         nodeColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, Color.GREEN);
+        nodeColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, Color.WHITE);
         nodeColorMapper.putMapValue("", Color.BLUE);
-        final Calculator nodeColorCalculator = new BasicCalculator("iRegulon Visual Style Node Shape Calculator",
-                nodeColorMapper, VisualPropertyType.NODE_FILL_COLOR);
-        nodeAppCalc.setCalculator(nodeColorCalculator);
+        style.addVisualMappingFunction(nodeColorMapper);
 
-        final EdgeAppearanceCalculator edgeAppCalc = style.getEdgeAppearanceCalculator();
+        //final EdgeAppearanceCalculator edgeAppCalc = style.getEdgeAppearanceCalculator();
         // Edge target arrow shape =
-        final DiscreteMapping edgeArrowShapeMapper = new DiscreteMapping(ArrowShape.class, NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME);
-        edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_PREDICTED, ArrowShape.ARROW);
-        edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_METATARGETOME, ArrowShape.ARROW);
-
-        final Calculator edgeArrowCalculator = new BasicCalculator("iRegulon Visual Style Edge Arrow Shape Calculator",
-                edgeArrowShapeMapper, VisualPropertyType.EDGE_TGTARROW_SHAPE);
-        edgeAppCalc.setCalculator(edgeArrowCalculator);
+        final DiscreteMapping<String, ArrowShape> edgeArrowShapeMapper = (DiscreteMapping) discreteMappingFactory.createVisualMappingFunction(
+                NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
+                String.class,
+                BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE);
+        edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_PREDICTED, ArrowShapeVisualProperty.ARROW);
+        edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_METATARGETOME, ArrowShapeVisualProperty.ARROW);
+        style.addVisualMappingFunction(edgeArrowShapeMapper);
 
         // Edge color =
-        final ContinuousMapping edgeColorMapping = new ContinuousMapping(Color.class, NetworkUtilities.MOTIF_ID_ATTRIBUTE_NAME);
-        edgeColorMapping.setInterpolator(new LinearNumberToColorInterpolator());
-        edgeColorMapping.addPoint(0, new BoundaryRangeValues(Color.BLUE, Color.BLUE, Color.BLUE));
-        edgeColorMapping.addPoint(Integer.MAX_VALUE / 2, new BoundaryRangeValues(Color.RED, Color.RED, Color.RED));
-        edgeColorMapping.addPoint(Integer.MAX_VALUE, new BoundaryRangeValues(Color.GREEN, Color.GREEN, Color.GREEN));
+        /*final ContinuousMapping<Integer, Color> edgeColorMapping =
+                (ContinuousMapping) continuousMappingFactory.createVisualMappingFunction(
+                        NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME,
+                        Integer.class,
+                        BasicVisualLexicon.EDGE_PAINT);
+        edgeColorMapping.addPoint(0, new BoundaryRangeValues<Color>(Color.BLUE, Color.BLUE, Color.BLUE));
+        edgeColorMapping.addPoint(Integer.MAX_VALUE / 2, new BoundaryRangeValues<Color>(Color.RED, Color.RED, Color.RED));
+        edgeColorMapping.addPoint(Integer.MAX_VALUE, new BoundaryRangeValues<Color>(Color.GREEN, Color.GREEN, Color.GREEN)); */
+        final PassthroughMapping<Integer, Color> edgeColorMapping = (PassthroughMapping) passthroughMappingFactory.createVisualMappingFunction(
+                NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME,
+                Integer.class,
+                BasicVisualLexicon.EDGE_PAINT);
 
-        // Custom made mapping cannot be saved to a .cys file ...
-        //final Motif2EdgeColorMapping edgeColorMapping = new Motif2EdgeColorMapping();
-        final Calculator edgeColorCalculator = new BasicCalculator("iRegulon Visual Style Edge Color Calculator",
-                edgeColorMapping, VisualPropertyType.EDGE_COLOR);
-        final Calculator arrowColorCalculator = new BasicCalculator("iRegulon Visual Style Edge Color Calculator",
-                edgeColorMapping, VisualPropertyType.EDGE_TGTARROW_COLOR);
-        edgeAppCalc.setCalculator(edgeColorCalculator);
-        edgeAppCalc.setCalculator(arrowColorCalculator);
+        style.addVisualMappingFunction(edgeColorMapping);
 
         return style;
     }
-
+/*
     private static GlobalAppearanceCalculator createGlobalAppearanceCalculator() {
         final GlobalAppearanceCalculator globalAppCalc = new GlobalAppearanceCalculator();
         globalAppCalc.setDefaultBackgroundColor(GRAY);
         return globalAppCalc;
-    }
+    }*/
 }

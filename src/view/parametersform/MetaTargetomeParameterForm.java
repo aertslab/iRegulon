@@ -395,7 +395,8 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         if (IDs.contains(curID)) setTranscriptionFactor(curID);
         else if (!IDs.isEmpty()) setTranscriptionFactor(IDs.iterator().next());
 
-        attributeNameCB.setModel(new DefaultComboBoxModel(NetworkUtilities.getPossibleGeneIDAttributesWithDefault().toArray()));
+        final List<String> names = NetworkUtilities.getInstance().getPossibleIDAttributes(NetworkUtilities.getInstance().getCurrentNetwork());
+        attributeNameCB.setModel(new DefaultComboBoxModel(names.toArray()));
 
         registerListeners();
     }

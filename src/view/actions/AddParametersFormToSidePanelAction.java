@@ -1,229 +1,125 @@
 package view.actions;
 
-import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-import cytoscape.view.CyNetworkView;
-import cytoscape.view.CytoscapeDesktop;
-import cytoscape.view.cytopanels.CytoPanel;
-import cytoscape.view.cytopanels.CytoPanelListener;
-import cytoscape.view.cytopanels.CytoPanelState;
-import domainmodel.GeneIdentifier;
-import domainmodel.SpeciesNomenclature;
-import domainmodel.TargetomeDatabase;
-import giny.view.GraphViewChangeEvent;
-import giny.view.GraphViewChangeListener;
-import infrastructure.NetworkUtilities;
-import infrastructure.IRegulonResourceBundle;
-import servercommunication.MetaTargetomes;
+import infrastructure.CytoscapeEnvironment;
+import org.cytoscape.application.events.SetCurrentNetworkViewEvent;
+import org.cytoscape.application.events.SetCurrentNetworkViewListener;
+import org.cytoscape.application.swing.CytoPanel;
+import org.cytoscape.application.swing.CytoPanelComponent;
+import org.cytoscape.application.swing.CytoPanelName;
+import org.cytoscape.application.swing.CytoPanelState;
+import org.cytoscape.application.swing.events.CytoPanelStateChangedEvent;
+import org.cytoscape.application.swing.events.CytoPanelStateChangedListener;
+import org.cytoscape.model.CyNetwork;
+import org.cytoscape.model.events.RowSetRecord;
+import org.cytoscape.model.events.RowsSetEvent;
+import org.cytoscape.model.events.RowsSetListener;
+import org.cytoscape.service.util.CyServiceRegistrar;
+import org.cytoscape.view.model.events.NetworkViewAddedEvent;
+import org.cytoscape.view.model.events.NetworkViewAddedListener;
+import org.cytoscape.view.model.events.NetworkViewDestroyedEvent;
+import org.cytoscape.view.model.events.NetworkViewDestroyedListener;
 import view.Refreshable;
 import view.ResourceAction;
-import view.parametersform.MetaTargetomeParameterForm;
-import view.parametersform.ParameterChangeListener;
-import view.parametersform.PredictedRegulatorsForm;
+import view.parametersform.ParametersCytoPanelComponent;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Properties;
 
-public class AddParametersFormToSidePanelAction extends ResourceAction implements Refreshable {
+
+public final class AddParametersFormToSidePanelAction extends ResourceAction implements Refreshable {
     private static final String NAME = "action_open_parameters_side_panel";
 
-    private PredictedRegulatorsForm predictedRegulatorsForm;
-    private MetatargetomeForm metatargetomeForm;
+    private ParametersCytoPanelComponent sidePanel;
 
     public AddParametersFormToSidePanelAction() {
         super(NAME);
     }
 
     public boolean alreadyAdded() {
-        return predictedRegulatorsForm != null && metatargetomeForm != null;
+        return sidePanel != null;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (!alreadyAdded()) addSidePanel();
+        addSidePanel();
     }
 
     @Override
     public void refresh() {
-        if (alreadyAdded()) {
-            predictedRegulatorsForm.refresh();
-            metatargetomeForm.getForm().refresh();
-            if (getSelectedFactor() != null) {
-                metatargetomeForm.getForm().setSpeciesNomenclature(getSelectedFactor().getSpeciesNomenclature());
-                metatargetomeForm.getForm().setTranscriptionFactor(getSelectedFactor());
-            }
-        }
+        if (alreadyAdded()) sidePanel.refresh();
     }
 
     private void addSidePanel() {
-        final CytoscapeDesktop desktop = Cytoscape.getDesktop();
-        final CytoPanel cytoPanel = desktop.getCytoPanel(SwingConstants.WEST);
+        final CytoPanel cytoPanel = CytoscapeEnvironment.getInstance().getCytoPanel(CytoPanelName.WEST);
+        final int idx = findComponent(cytoPanel, ParametersCytoPanelComponent.NAME);
+        if (idx < 0) {
+            sidePanel = new ParametersCytoPanelComponent();
+            final CyServiceRegistrar serviceRegistrar = CytoscapeEnvironment.getInstance().getServiceRegistrar();
+            serviceRegistrar.registerService(sidePanel, CytoPanelComponent.class, new Properties());
 
-        final JPanel sidePanel = new JPanel(new GridBagLayout());
-        final GridBagConstraints cc = new GridBagConstraints();
+            // Update when cytopanel is selected ...
+            serviceRegistrar.registerService(new CytoPanelStateChangedListener() {
+                @Override
+                public void handleEvent(CytoPanelStateChangedEvent event) {
+                    if (CytoPanelName.WEST.equals(event.getCytoPanel().getCytoPanelName()))
+                        refresh();
+                }
+            }, CytoPanelStateChangedListener.class, new Properties());
 
-        final JLabel titleLabel = new JLabel(IRegulonResourceBundle.PLUGIN_NAME);
-        titleLabel.setFont(new Font("Serif", 0, 45));
+            // Update when nodes are selected ...
+            serviceRegistrar.registerService(new RowsSetListener() {
+                @Override
+                public void handleEvent(RowsSetEvent event) {
+                    if (event.getPayloadCollection().isEmpty()) return;
+                    if (payloadContains(event.getPayloadCollection(), CyNetwork.SELECTED)) refresh();
+                }
 
-        cc.gridx = 0;
-        cc.gridy = 0;
-        cc.gridwidth = 1;
-        cc.gridheight = 1;
-        cc.weightx = 1.0;
-        cc.weighty = 0.0;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-        sidePanel.add(titleLabel, cc);
+                private boolean payloadContains(final Collection<RowSetRecord> records, final String columnName) {
+                    for (RowSetRecord record : records) {
+                        if (columnName.equals(record.getColumn())) return true;
+                    }
+                    return false;
+                }
+            }, RowsSetListener.class, new Properties());
+
+            //Update when views are removed or created ...
+            //TODO: No refresh of suggested analysis name and number of selected genes when last network is destroyed?
+            serviceRegistrar.registerService(new NetworkViewDestroyedListener() {
+                @Override
+                public void handleEvent(NetworkViewDestroyedEvent networkViewDestroyedEvent) {
+                    refresh();
+                }
+            }, NetworkViewDestroyedListener.class, new Properties());
+            serviceRegistrar.registerService(new NetworkViewAddedListener() {
+                @Override
+                public void handleEvent(NetworkViewAddedEvent networkViewAddedEvent) {
+                    refresh();
+                }
+            }, NetworkViewAddedListener.class, new Properties());
+            serviceRegistrar.registerService(new SetCurrentNetworkViewListener() {
+                @Override
+                public void handleEvent(SetCurrentNetworkViewEvent setCurrentNetworkViewEvent) {
+                    refresh();
+                }
+            }, SetCurrentNetworkViewListener.class, new Properties());
 
 
-        final JTabbedPane tabbedPane = new JTabbedPane();
-        predictedRegulatorsForm = new PredictedRegulatorsForm();
-        final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors = new HashMap<SpeciesNomenclature, Set<GeneIdentifier>>();
-        for (SpeciesNomenclature speciesNomenclature : SpeciesNomenclature.getAllNomenclatures()) {
-            speciesNomenclature2factors.put(speciesNomenclature, MetaTargetomes.getAvailableFactors(speciesNomenclature));
+            cytoPanel.setState(CytoPanelState.DOCK);
+            cytoPanel.setSelectedIndex(cytoPanel.indexOfComponent(sidePanel));
+        } else {
+            cytoPanel.setSelectedIndex(idx);
         }
-        metatargetomeForm = new MetatargetomeForm(getSelectedFactor(), speciesNomenclature2factors);
-        tabbedPane.addTab("Predict regulators and targets", null, new JScrollPane(predictedRegulatorsForm.createForm()), null);
-        tabbedPane.addTab("Query TF-target database", null, metatargetomeForm, null);
-
-        cc.gridx = 0;
-        cc.gridy = 1;
-        cc.gridwidth = 1;
-        cc.gridheight = 1;
-        cc.weightx = 1.0;
-        cc.weighty = 1.0;
-        cc.fill = GridBagConstraints.BOTH;
-        sidePanel.add(tabbedPane, cc);
-
-        if (cytoPanel.indexOfComponent(IRegulonResourceBundle.PLUGIN_NAME) == -1) {
-            cytoPanel.add(IRegulonResourceBundle.PLUGIN_NAME, sidePanel);
-        }
-
-        final int idx = cytoPanel.indexOfComponent(IRegulonResourceBundle.PLUGIN_NAME);
-        cytoPanel.setSelectedIndex(idx);
-
-        cytoPanel.addCytoPanelListener(new CytoPanelListener() {
-            @Override
-            public void onStateChange(CytoPanelState newState) {
-                refresh();
-            }
-
-            @Override
-            public void onComponentSelected(int componentIndex) {
-                // nothing to do
-            }
-
-            @Override
-            public void onComponentRemoved(int count) {
-                // nothing to do
-            }
-
-            @Override
-            public void onComponentAdded(int count) {
-                // nothing to do
-            }
-        });
-        tabbedPane.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                refresh();
-            }
-        });
-
-        final PropertyChangeListener viewCreatedListener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                installSelectionListener((CyNetworkView) evt.getNewValue());
-            }
-        };
-        final PropertyChangeListener viewDestroyedListener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                uninstallSelectionListener((CyNetworkView) evt.getNewValue());
-            }
-        };
-        final PropertyChangeListener viewFocusedListener = new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                refresh();
-            }
-        };
-        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_CREATED, viewCreatedListener);
-        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_DESTROYED, viewDestroyedListener);
-        Cytoscape.getDesktop().getSwingPropertyChangeSupport().addPropertyChangeListener(CytoscapeDesktop.NETWORK_VIEW_FOCUSED, viewFocusedListener);
-        installSelectionListener(Cytoscape.getCurrentNetworkView());
 
         refresh();
     }
 
-    private final GraphViewChangeListener selectionListener = new GraphViewChangeListener() {
-        @Override
-        public void graphViewChanged(GraphViewChangeEvent graphViewChangeEvent) {
-            if (graphViewChangeEvent.isNodesSelectedType() || graphViewChangeEvent.isNodesUnselectedType()) {
-                refresh();
-            }
+    private int findComponent(final CytoPanel panel, final String name) {
+        for (int idx = 0; idx < panel.getCytoPanelComponentCount(); idx++) {
+            final Component component = panel.getComponentAt(idx);
+            if (name.equals(component.getName())) return idx;
         }
-    };
-
-    public void installSelectionListener(final CyNetworkView view) {
-        view.addGraphViewChangeListener(selectionListener);
-    }
-
-    public void uninstallSelectionListener(final CyNetworkView view) {
-        view.removeGraphViewChangeListener(selectionListener);
-    }
-
-    private GeneIdentifier getSelectedFactor() {
-        if (!alreadyAdded()) return null;
-        final java.util.List<CyNode> nodes = NetworkUtilities.getSelectedNodes();
-        if (nodes == null || nodes.isEmpty()) return null;
-        final CyNode node = nodes.iterator().next();
-        final SpeciesNomenclature species = metatargetomeForm.getForm().getSpeciesNomenclature();
-        return new GeneIdentifier(node.getIdentifier(), species == null ? SpeciesNomenclature.HOMO_SAPIENS_HGNC : species);
-    }
-
-    private static class MetatargetomeForm extends JPanel {
-        private final MetaTargetomeParameterForm parameterForm;
-
-        private MetatargetomeForm(final GeneIdentifier factor, final Map<SpeciesNomenclature, Set<GeneIdentifier>> speciesNomenclature2factors) {
-            super(new BorderLayout());
-
-            parameterForm = new MetaTargetomeParameterForm(QueryMetatargetomeAction.DEFAULT_PARAMETERS, speciesNomenclature2factors);
-            final QueryMetatargetomeAction submitAction = new QueryMetatargetomeAction(parameterForm, null);
-            add(parameterForm, BorderLayout.CENTER);
-            add(new JPanel(new FlowLayout()) {
-                {
-                    final JButton submitButton = new JButton(submitAction);
-                    submitButton.setText("Submit");
-                    submitButton.setIcon(null);
-                    add(submitButton);
-                }
-            }, BorderLayout.SOUTH);
-
-            parameterForm.addParameterChangeListener(new ParameterChangeListener() {
-                public void parametersChanged() {
-                    submitAction.refresh();
-                }
-            });
-
-            if (factor != null) {
-                parameterForm.setSpeciesNomenclature(factor.getSpeciesNomenclature());
-                parameterForm.setTranscriptionFactor(factor);
-            } else {
-                parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-            }
-            parameterForm.setTargetomeDatabases(TargetomeDatabase.getAllTargetomeDatabases());
-        }
-
-        public MetaTargetomeParameterForm getForm() {
-            return parameterForm;
-        }
+        return -1;
     }
 }

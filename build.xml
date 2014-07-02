@@ -268,7 +268,7 @@
     <!-- Deploy to local installation                                        -->
     <!-- =================================================================== -->
     <target name="debug" depends="binary_distribution_with_transfac">
-        <copy todir="${local.installation}/plugins">
+        <copy todir="${cytoscape3.configuration.dir}/3/apps/installed/">
             <fileset file="${build.folder}/${plugin.bin.with_transfac.filename}"/>
         </copy>
     </target>

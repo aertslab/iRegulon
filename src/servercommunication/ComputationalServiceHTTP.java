@@ -1,7 +1,6 @@
 package servercommunication;
 
 import domainmodel.*;
-import infrastructure.CytoscapeEnvironment;
 import infrastructure.IRegulonResourceBundle;
 import infrastructure.Logger;
 import org.cytoscape.service.util.CyServiceRegistrar;
@@ -14,19 +13,16 @@ import servercommunication.tasks.EnrichedMotifsAndTracksResults;
 import servercommunication.tasks.FindPredictedRegulatorsTask;
 
 import java.io.*;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLConnection;
 import java.util.*;
 
 
 public class ComputationalServiceHTTP extends IRegulonResourceBundle implements ComputationalService {
     private static final boolean DEBUG = false;
     private static final String PARAMETER_NAME = "featureIDandTarget=";
-
-    private final String userAgent = RESOURCE_BUNDLE.getString("User_Agent")
-            + " Cytoscape: " + CytoscapeEnvironment.getInstance().getCytoscapeVersion()
-            + "; " + System.getProperty("os.name")
-            + "; " + System.getProperty("os.version")
-            + "; " + System.getProperty("os.arch") + ')';
 
     private final Protocol service = new HTTPProtocol();
     private final CyServiceRegistrar services;
@@ -60,7 +56,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         if (speciesNomenclature == null) throw new IllegalArgumentException();
         final HttpURLConnection connection;
         try {
-            connection = createConnection4BundleKey("URL_metatargetomes_query_factors");
+            connection = service.createConnection4ResourceBundleKey("URL_metatargetomes_query_factors");
         } catch (IOException e) {
             throw new ServerCommunicationException("Getting transcription factors with predicted targetome failed. Server is not available.");
         }
@@ -112,7 +108,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         }
         final HttpURLConnection connection;
         try {
-            connection = createConnection4BundleKey("URL_metatargetomes_query_targetome");
+            connection = service.createConnection4ResourceBundleKey("URL_metatargetomes_query_targetome");
         } catch (IOException e) {
             throw new ServerCommunicationException("Getting predicted targetome failed. Server is not available.");
         }
@@ -203,21 +199,6 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         return results;
     }
 
-    private HttpURLConnection createConnection4BundleKey(String bundleKey) throws IOException {
-        return createConnection(RESOURCE_BUNDLE.getString(bundleKey));
-    }
-
-    private HttpURLConnection createConnection(String resource) throws IOException {
-        final URL url = new URL(resource);
-        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("User-Agent", userAgent);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        connection.setDoInput(true);
-        connection.setDoOutput(true);
-        return connection;
-    }
-
     private void send(final URLConnection connection, String message) throws IOException {
         final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         writer.write(message);
@@ -243,7 +224,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
         final HttpURLConnection connection;
         try {
             final String uri = RESOURCE_BUNDLE.getString("URL_motifBedGenerator") + "?" + generateParameters(motifOrTrack);
-            connection = createConnection(uri);
+            connection = service.createConnection(uri);
         } catch (IOException e) {
             throw new ServerCommunicationException("Unable to get enhancer regions. Server is not available.");
         }

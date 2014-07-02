@@ -25,15 +25,21 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     public HTTPProtocol() {
     }
 
-    private HttpURLConnection createConnection(String bundleKey) throws IOException {
-        final URL url = new URL(RESOURCE_BUNDLE.getString(bundleKey));
+    public HttpURLConnection createConnection(String urlString) throws IOException {
+        final URL url = new URL(urlString);
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setConnectTimeout(5000);
+        connection.setReadTimeout(5000);
         connection.setRequestProperty("User-Agent", userAgent);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         connection.setDoInput(true);
         connection.setDoOutput(true);
         return connection;
+    }
+
+    public HttpURLConnection createConnection4ResourceBundleKey(String resourceBundleKey) throws IOException {
+        return createConnection(RESOURCE_BUNDLE.getString(resourceBundleKey));
     }
 
     /**
@@ -110,7 +116,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             /* Create connection. */
             final HttpURLConnection connection;
             try {
-                connection = createConnection("URL_submit");
+                connection = createConnection4ResourceBundleKey("URL_submit");
 
                 /* Send POST request with all data fields to the server. */
                 OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
@@ -170,7 +176,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             /* Create connection. */
             final HttpURLConnection connection;
             try {
-                connection = createConnection("URL_stateCheck");
+                connection = createConnection4ResourceBundleKey("URL_stateCheck");
 
                 /* Send POST request with jobID to server. */
                 OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
@@ -232,7 +238,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             /* Create connection. */
             final HttpURLConnection connection;
             try {
-                connection = createConnection("URL_stateCheck");
+                connection = createConnection4ResourceBundleKey("URL_stateCheck");
 
                 /* Send POST request with jobID to server. */
                 OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
@@ -308,7 +314,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             /* Create connection. */
             final HttpURLConnection connection;
             try {
-                connection = createConnection("URL_results");
+                connection = createConnection4ResourceBundleKey("URL_results");
 
                 /* Send POST request with jobID to server. */
                 OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());
@@ -513,7 +519,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             /* Create connection. */
             final HttpURLConnection connection;
             try {
-                connection = createConnection("URL_error");
+                connection = createConnection4ResourceBundleKey("URL_error");
 
                 /* Send POST request with jobID to server. */
                 OutputStreamWriter wr = new OutputStreamWriter(connection.getOutputStream());

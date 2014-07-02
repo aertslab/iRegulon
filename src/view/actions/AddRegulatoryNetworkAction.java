@@ -1,85 +1,53 @@
 package view.actions;
 
-import cytoscape.CyEdge;
-import cytoscape.CyNetwork;
-import cytoscape.CyNode;
-import cytoscape.Cytoscape;
-import cytoscape.layout.CyLayouts;
-import cytoscape.view.CyNetworkView;
-import domainmodel.AbstractMotifAndTrack;
-import domainmodel.CandidateTargetGene;
-import domainmodel.GeneIdentifier;
-import domainmodel.TranscriptionFactor;
-import infrastructure.NetworkUtilities;
 import view.Refreshable;
 import view.resultspanel.SelectedMotifOrTrack;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 import java.awt.event.ActionEvent;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 
-public class AddRegulatoryNetworkAction extends TranscriptionFactorDependentAction implements Refreshable {
-    private static final String NAME = "action_draw_nodes_and_edges";
+public final class AddRegulatoryNetworkAction extends TranscriptionFactorDependentAction {
+    private static final String ADD_NAME = "action_draw_nodes_and_edges";
+    private static final String CREATE_NAME = "action_create_new_network";
 
-    public AddRegulatoryNetworkAction(SelectedMotifOrTrack selectedMotifOrTrack, final TranscriptionFactorComboBox selectedTranscriptionFactor, final Refreshable view, final String attributeName) {
-        super(NAME, selectedMotifOrTrack, selectedTranscriptionFactor, view, attributeName);
-        if (selectedMotifOrTrack == null) throw new IllegalArgumentException();
-        refresh();
+    public static AddRegulatoryNetworkAction createAddRegulatoryNetworkAction(final String attributeName,
+                                                                              final SelectedMotifOrTrack selectedMotifOrTrack,
+                                                                              final TranscriptionFactorComboBox selectedTranscriptionFactor,
+                                                                              final Refreshable view) {
+        return new AddRegulatoryNetworkAction(ADD_NAME, attributeName, selectedMotifOrTrack, selectedTranscriptionFactor, view, false);
     }
 
-    @Override
-    public void refresh() {
-        setEnabled(checkEnabled());
+    public static AddRegulatoryNetworkAction createCreateNewRegulatoryNetworkAction(final String attributeName,
+                                                                                    final SelectedMotifOrTrack selectedMotifOrTrack,
+                                                                                    final TranscriptionFactorComboBox selectedTranscriptionFactor,
+                                                                                    final Refreshable view) {
+        return new AddRegulatoryNetworkAction(CREATE_NAME, attributeName, selectedMotifOrTrack, selectedTranscriptionFactor, view, true);
     }
 
-    @Override
-    protected boolean checkEnabled() {
-        return super.checkEnabled() && !Cytoscape.getCurrentNetworkView().equals(Cytoscape.getNullNetworkView());
+    private AddRegulatoryNetworkAction(final String name, final String attributeName,
+                                       final SelectedMotifOrTrack selectedMotifOrTrack,
+                                       final TranscriptionFactorComboBox selectedTranscriptionFactor,
+                                       final Refreshable view,
+                                       final boolean createNewNetwork) {
+        super(name, attributeName, selectedMotifOrTrack, selectedTranscriptionFactor, view, createNewNetwork);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        final AbstractMotifAndTrack motifOrTrack = this.getSelectedMotifOrTrack().getMotifOrTrack();
-        final TranscriptionFactor factor = this.getTranscriptionFactor();
+        draw(false);
+    }
 
-        final CyNetwork network = Cytoscape.getCurrentNetwork();
-        final CyNetworkView view = Cytoscape.getCurrentNetworkView();
-
-        final Map<String, List<CyNode>> name2nodes = NetworkUtilities.getNodeMap(getAttributeName(), NetworkUtilities.getAllNodes());
-
-        final List<CyNode> sourceNodes = name2nodes.containsKey(factor.getName())
-                ? name2nodes.get(factor.getName())
-                : Collections.singletonList(NetworkUtilities.createSourceNode(network, view, getAttributeName(), factor.getGeneID(), motifOrTrack));
-        if (sourceNodes.isEmpty()) return;
-
-        for (final CyNode sourceNode : sourceNodes) {
-            NetworkUtilities.adjustSourceNode(sourceNode, getAttributeName(), factor.getGeneID(), motifOrTrack);
-
-            for (CandidateTargetGene targetGene : motifOrTrack.getCandidateTargetGenes()) {
-                final GeneIdentifier geneID = targetGene.getGeneID();
-
-                final List<CyNode> targetNodes = name2nodes.containsKey(targetGene.getGeneName())
-                        ? name2nodes.get(targetGene.getGeneName())
-                        : Collections.singletonList(NetworkUtilities.createTargetNode(network, view, getAttributeName(), targetGene, motifOrTrack));
-                for (final CyNode targetNode : targetNodes) {
-                    NetworkUtilities.adjustTargetNode(targetNode, getAttributeName(), targetGene, motifOrTrack);
-                    final CyEdge edge = createEdge(sourceNode, targetNode, factor, motifOrTrack, geneID);
-                    setEdgeAttribute(edge, NetworkUtilities.RANK_ATTRIBUTE_NAME, targetGene.getRank());
-                }
-            }
+    protected String createTitle() {
+        if (getMotifOrTrack().isMotif() || getMotifOrTrack().isMotifCluster()) {
+            return getTranscriptionFactor().getGeneName() + " with motif " + getMotifOrTrack().getName();
+        } else {
+            return getTranscriptionFactor().getGeneName() + " with track " + getMotifOrTrack().getName();
         }
+    }
 
-        Cytoscape.getEdgeAttributes().setUserVisible(NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME, false);
-
-        view.applyLayout(CyLayouts.getDefaultLayout());
-
-        view.redrawGraph(true, true);
-
-        getView().refresh();
-
-        NetworkUtilities.activeSidePanel();
+    @Override
+    protected String getTaskDescription() {
+        return "Add regulatory interactions to network";
     }
 }

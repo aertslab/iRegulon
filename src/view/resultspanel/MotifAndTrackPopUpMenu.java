@@ -2,7 +2,10 @@ package view.resultspanel;
 
 
 import view.Refreshable;
-import view.actions.*;
+import view.actions.AddRegulatoryInteractionsAction;
+import view.actions.AddRegulatoryNetworkAction;
+import view.actions.BedExportAction;
+import view.actions.OpenLinkToGenomeBrowserAction;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 
 import javax.swing.*;
@@ -26,16 +29,15 @@ public class MotifAndTrackPopUpMenu extends MouseAdapter implements Refreshable 
 
         menu = new PopupMenu();
 
-        final CreateNewRegulatoryNetworkAction networkAction = new CreateNewRegulatoryNetworkAction(
-                selectedMotifOrTrack, transcriptionFactorComboBox, view, attributeName);
+        final AddRegulatoryNetworkAction networkAction = AddRegulatoryNetworkAction.createCreateNewRegulatoryNetworkAction(
+                attributeName, selectedMotifOrTrack, transcriptionFactorComboBox, view);
         menu.addAction(networkAction);
 
-        final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = new AddRegulatoryNetworkAction(
-                selectedMotifOrTrack, transcriptionFactorComboBox, view, attributeName);
+        final AddRegulatoryNetworkAction drawRegulonsAndEdgesAction = AddRegulatoryNetworkAction.createAddRegulatoryNetworkAction(
+                attributeName, selectedMotifOrTrack, transcriptionFactorComboBox, view);
         menu.addAction(drawRegulonsAndEdgesAction);
 
-        drawEdgesAction = new AddRegulatoryInteractionsAction(
-                selectedMotifOrTrack, transcriptionFactorComboBox, view, attributeName);
+        drawEdgesAction = new AddRegulatoryInteractionsAction(selectedMotifOrTrack, transcriptionFactorComboBox, view, attributeName);
         menu.addAction(drawEdgesAction);
 
         if (isRegionBased) {

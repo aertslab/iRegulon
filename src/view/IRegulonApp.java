@@ -1,10 +1,13 @@
 package view;
 
-import org.cytoscape.app.swing.AbstractCySwingApp;
-import org.cytoscape.app.swing.CySwingAppAdapter;
 import infrastructure.CytoscapeEnvironment;
 import infrastructure.IRegulonResourceBundle;
+import infrastructure.Logger;
+import infrastructure.NetworkUtilities;
+import org.cytoscape.app.swing.AbstractCySwingApp;
+import org.cytoscape.app.swing.CySwingAppAdapter;
 import org.cytoscape.util.swing.OpenBrowser;
+import servercommunication.ComputationalServiceFactory;
 import view.actions.*;
 
 import javax.imageio.ImageIO;
@@ -32,10 +35,11 @@ public class IRegulonApp extends AbstractCySwingApp {
         super(adapter);
 
         /* 1. Configure environment ... */
-        //Logger.install(adapter.getCyServiceRegistrar());
-        //ComputationalServiceFactory.install(adapter.getCyServiceRegistrar());
+        Logger.install(adapter.getCyServiceRegistrar());
+
         CytoscapeEnvironment.install(adapter.getCySwingApplication(), adapter.getCyServiceRegistrar(), adapter.getCyVersion().getVersion());
-        //NetworkUtilities.install(adapter);
+        ComputationalServiceFactory.install(adapter.getCyServiceRegistrar());
+        NetworkUtilities.install(adapter);
 
         /* 2. Add menu item ... */
         final JMenu menu = CytoscapeEnvironment.getInstance().getJMenu(APPS_MENU);
@@ -45,8 +49,7 @@ public class IRegulonApp extends AbstractCySwingApp {
         adapter.getCoreProperties().getProperties().put(IREGULON_LINK_OUT, RESOURCE_BUNDLE.getString("URL_UCSC_LinkOut"));
 
         /* 4. Install visual style ... */
-        //IRegulonVisualStyle.installVisualStyle();
-        //IRegulonVisualStyle.install(adapter.getCyServiceRegistrar());
+        IRegulonVisualStyle.install(adapter.getCyServiceRegistrar());
     }
 
     private JMenu createMenu() {

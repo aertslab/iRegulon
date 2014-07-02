@@ -13,7 +13,6 @@ import servercommunication.protocols.Protocol;
 import servercommunication.protocols.State;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -121,6 +120,10 @@ public final class FindPredictedRegulatorsTask extends IRegulonResourceBundle im
                     } else if (motifOrTrack.isTrack()) {
                         tracks.add((Track) motifOrTrack);
                     }
+                }
+
+                if (this.motifsAndTracks.isEmpty()) {
+                    this.errorMessage = "<html>Not a single motif or track is enriched for your input gene signature.<br>Please change your input parameters.</html>";
                 }
             } else if (State.ERROR.equals(this.state)) {
                 taskMonitor.setStatusMessage("Error.");

@@ -51,10 +51,11 @@ public class PredictRegulatorsAction extends ResourceAction {
         tasks.append(new AbstractTask() {
             @Override
             public void run(TaskMonitor taskMonitor) throws IllegalStateException {
-                final List<AbstractMotifAndTrack> motifsAndTracks = predictRegulatorsTask.getMotifsAndTracks();
-                if (motifsAndTracks.isEmpty()) {
-                    throw new IllegalStateException("Not a single motif or track is enriched for your input gene signature.");
+                final String predictRegulatorsTaskError = predictRegulatorsTask.getErrorMessage();
+                if (!predictRegulatorsTaskError.equals("")) {
+                    throw new IllegalStateException(predictRegulatorsTaskError);
                 }
+                final List<AbstractMotifAndTrack> motifsAndTracks = predictRegulatorsTask.getMotifsAndTracks();
                 final ResultsCytoPanelComponent outputView = new ResultsCytoPanelComponent(predictRegulatorsParameters.getName(), new Results(motifsAndTracks, predictRegulatorsParameters));
                 CytoscapeEnvironment.getInstance().getServiceRegistrar().registerService(outputView, CytoPanelComponent.class, new Properties());
                 final CytoPanel cytoPanel = CytoscapeEnvironment.getInstance().getCytoPanel(CytoPanelName.EAST);

@@ -1,5 +1,6 @@
 package domainmodel;
 
+import java.awt.*;
 import java.util.List;
 
 
@@ -9,6 +10,8 @@ public abstract class AbstractMotifAndTrack {
     protected int clusterNumber = 0;
     protected final List<CandidateTargetGene> candidateTargetGenes;
     protected final List<TranscriptionFactor> transcriptionFactors;
+
+    private static final ClusterColors clusterColors = new ClusterColors();
 
 
     public AbstractMotifAndTrack(TrackType trackType, String clusterCode, List<CandidateTargetGene> candidateTargetGenes, List<TranscriptionFactor> transcriptionFactors) {
@@ -70,6 +73,14 @@ public abstract class AbstractMotifAndTrack {
 
     public int getClusterNumber() {
         return this.clusterNumber;
+    }
+
+    public Color getClusterColor() {
+        return clusterColors.getClusterColor(getClusterNumber());
+    }
+
+    public int getClusterColorInt() {
+        return clusterColors.getClusterColorInt(getClusterNumber());
     }
 
     public List<CandidateTargetGene> getCandidateTargetGenes() {

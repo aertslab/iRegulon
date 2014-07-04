@@ -19,7 +19,6 @@ public final class NetworkUtilities {
     public static final String PLUGIN_VISUAL_NAME = IRegulonResourceBundle.PLUGIN_VISUAL_NAME_HTML;
 
     public static final String ASSEMBLY_ATTRIBUTE_NAME = "Assembly";
-    public static final String FEATURE_ID_ATTRIBUTE_NAME = "featureID";
     public static final String MOTIF_ATTRIBUTE_NAME = "Motif";
     public static final String MOTIF_ID_ATTRIBUTE_NAME = "MotifID";
     public static final String TRACK_ATTRIBUTE_NAME = "Track";
@@ -27,6 +26,7 @@ public final class NetworkUtilities {
     public static final String REGULATORY_FUNCTION_ATTRIBUTE_NAME = "Regulatory function";
     public static final String TARGET_GENE_ATTRIBUTE_NAME = "Target Gene";
     public static final String REGULATOR_GENE_ATTRIBUTE_NAME = "Regulator Gene";
+    public static final String CLUSTER_COLOR_ATTRIBUTE_NAME = "Cluster Color";
     public static final String STRENGTH_ATTRIBUTE_NAME = "Strength";
     public static final String RANK_ATTRIBUTE_NAME = "Rank";
     public static final String INTERACTION_ATTRIBUTE_NAME = "interaction";
@@ -46,7 +46,6 @@ public final class NetworkUtilities {
 
     static {
         EXCLUDED_ATTRIBUTE_NAMES.add(HIDDEN_LABEL_ATTRIBUTE_NAME);
-        EXCLUDED_ATTRIBUTE_NAMES.add(FEATURE_ID_ATTRIBUTE_NAME);
         EXCLUDED_ATTRIBUTE_NAMES.add(REGULATORY_FUNCTION_ATTRIBUTE_NAME);
         EXCLUDED_ATTRIBUTE_NAMES.add(SELECTED_ATTRIBUTE_NAME);
         EXCLUDED_ATTRIBUTE_NAMES.add(STRENGTH_ATTRIBUTE_NAME);
@@ -329,7 +328,7 @@ public final class NetworkUtilities {
                 final long trackID = getListOfStringsAttribute(edge, TRACK_ATTRIBUTE_NAME, network.getDefaultEdgeTable()).hashCode();
                 setEdgeAttribute(network, edge, TRACK_ID_ATTRIBUTE_NAME, trackID);
             }
-            setEdgeAttribute(network, edge, FEATURE_ID_ATTRIBUTE_NAME, motifOrTrack.getDatabaseID());
+            setEdgeAttribute(network, edge, CLUSTER_COLOR_ATTRIBUTE_NAME, motifOrTrack.getClusterColorInt());
         } else {
             setEdgeAttribute(network, edge, MOTIF_ID_ATTRIBUTE_NAME, factor.hashCode());
         }

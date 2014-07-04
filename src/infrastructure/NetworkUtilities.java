@@ -20,9 +20,7 @@ public final class NetworkUtilities {
 
     public static final String ASSEMBLY_ATTRIBUTE_NAME = "Assembly";
     public static final String MOTIF_ATTRIBUTE_NAME = "Motif";
-    public static final String MOTIF_ID_ATTRIBUTE_NAME = "MotifID";
     public static final String TRACK_ATTRIBUTE_NAME = "Track";
-    public static final String TRACK_ID_ATTRIBUTE_NAME = "TrackID";
     public static final String REGULATORY_FUNCTION_ATTRIBUTE_NAME = "Regulatory function";
     public static final String TARGET_GENE_ATTRIBUTE_NAME = "Target Gene";
     public static final String REGULATOR_GENE_ATTRIBUTE_NAME = "Regulator Gene";
@@ -318,19 +316,13 @@ public final class NetworkUtilities {
                 for (AbstractMotif curMotif : motif.getMotifs()) {
                     addEdgeAttribute(network, edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
                 }
-                final long motifID = getListOfStringsAttribute(edge, MOTIF_ATTRIBUTE_NAME, network.getDefaultEdgeTable()).hashCode();
-                setEdgeAttribute(network, edge, MOTIF_ID_ATTRIBUTE_NAME, motifID);
             } else if (motifOrTrack.isTrack()) {
                 AbstractTrack track = (AbstractTrack) motifOrTrack;
                 for (AbstractTrack curTrack : track.getTracks()) {
                     addEdgeAttribute(network, edge, TRACK_ATTRIBUTE_NAME, curTrack.getName());
                 }
-                final long trackID = getListOfStringsAttribute(edge, TRACK_ATTRIBUTE_NAME, network.getDefaultEdgeTable()).hashCode();
-                setEdgeAttribute(network, edge, TRACK_ID_ATTRIBUTE_NAME, trackID);
             }
             setEdgeAttribute(network, edge, CLUSTER_COLOR_ATTRIBUTE_NAME, motifOrTrack.getClusterColorInt());
-        } else {
-            setEdgeAttribute(network, edge, MOTIF_ID_ATTRIBUTE_NAME, factor.hashCode());
         }
 
         return edge;

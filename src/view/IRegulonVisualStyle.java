@@ -1,5 +1,6 @@
 package view;
 
+import domainmodel.ClusterColors;
 import infrastructure.IRegulonResourceBundle;
 import infrastructure.NetworkUtilities;
 import org.cytoscape.service.util.CyServiceRegistrar;
@@ -9,30 +10,65 @@ import org.cytoscape.view.presentation.property.BasicVisualLexicon;
 import org.cytoscape.view.presentation.property.NodeShapeVisualProperty;
 import org.cytoscape.view.presentation.property.values.ArrowShape;
 import org.cytoscape.view.presentation.property.values.NodeShape;
-import org.cytoscape.view.vizmap.VisualMappingFunctionFactory;
-import org.cytoscape.view.vizmap.VisualMappingManager;
-import org.cytoscape.view.vizmap.VisualStyle;
-import org.cytoscape.view.vizmap.VisualStyleFactory;
-import org.cytoscape.view.vizmap.mappings.BoundaryRangeValues;
-import org.cytoscape.view.vizmap.mappings.ContinuousMapping;
+import org.cytoscape.view.vizmap.*;
 import org.cytoscape.view.vizmap.mappings.DiscreteMapping;
-import org.cytoscape.view.vizmap.mappings.PassthroughMapping;
 
 import java.awt.*;
 
 
 public final class IRegulonVisualStyle extends IRegulonResourceBundle {
-    public static final String NAME = RESOURCE_BUNDLE.getString("vizmap_name");
-    //private static final Color GRAY = new Color(220, 220, 220);
+    public static final String VISUAL_STYLE_NAME = RESOURCE_BUNDLE.getString("vizmap_name");
 
-    private static VisualStyle STYLE;
+    private static VisualStyle VISUAL_STYLE;
+
+    /* Default network background color: light gray. */
+    private static final Color DEFAULT_NETWORK_BACKGROUND_PAINT = new Color(0xCED7D7);
+
+    /* Default node size */
+    private static final double DEFAULT_NODE_HEIGHT = 40.0;
+    private static final double DEFAULT_NODE_WIDTH = 80.0;
+    /* Default transparency of a node: 0 - 255 */
+    private static final int DEFAULT_NODE_TRANSPARENCY = 200;
+
+    /* Default node border size. */
+    private static final double DEFAULT_NODE_BORDER_WIDTH = 6.0;
+    /* Default transparency of the border of a node: 0 - 255 */
+    private static final int DEFAULT_NODE_BORDER_TRANSPARENCY = 200;
+
+    /* Default node color: light blue. */
+    private static final Color DEFAULT_NODE_FILL_COLOR = new Color(0x99FFFF);
+    /* Default node border color: darker blue. */
+    private static final Color DEFAULT_NODE_BORDER_PAINT_COLOR = new Color(0x0099CC);
+
+    /* Regulator node color: green. */
+    private static final Color REGULATOR_NODE_FILL_COLOR = new Color(0x00FF00);
+    /* Regulator border node color: dark green. */
+    private static final Color REGULATOR_NODE_BORDER_PAINT_COLOR = new Color(0x009900);
+
+    /* Target gene node color: pink. */
+    private static final Color TARGET_GENE_NODE_FILL_COLOR = new Color(0xFF33FF);
+    /* Target gene border node color: purple. */
+    private static final Color TARGET_GENE_BORDER_PAINT_COLOR = new Color(0x993399);
+
+    /* Node label text size */
+    private static final int DEFAULT_NODE_LABEL_FONT_SIZE = 15;
+    /* Node label text color for a default node: blue. */
+    private static final Color DEFAULT_NODE_LABEL_COLOR = new Color(0x0066CC);
+    /* Node label text color when node is a regulator: black. */
+    private static final Color REGULATOR_NODE_LABEL_COLOR = new Color(0x000000);
+    /* Node label text color when node is target: black. */
+    private static final Color TARGET_NODE_LABEL_COLOR = new Color(0x000000);
+
+    /* Default edge width. */
+    private static final double DEFAULT_EDGE_WIDTH = 3.0;
+
 
     private IRegulonVisualStyle() {
     }
 
     public static VisualStyle getVisualStyle() {
-        if (STYLE == null) throw new IllegalStateException();
-        return STYLE;
+        if (VISUAL_STYLE == null) throw new IllegalStateException();
+        return VISUAL_STYLE;
     }
 
     public static void applyVisualStyle(final CyNetworkView view) {
@@ -40,13 +76,16 @@ public final class IRegulonVisualStyle extends IRegulonResourceBundle {
     }
 
     public static void install(final CyServiceRegistrar serviceRegistrar) {
-        if (STYLE != null) throw new IllegalStateException();
+        if (VISUAL_STYLE != null) throw new IllegalStateException();
 
-        final VisualMappingManager manager = serviceRegistrar.getService(VisualMappingManager.class);
-        final VisualStyle oldStyle = findStyle(manager, NAME);
-        if (oldStyle != null) manager.removeVisualStyle(oldStyle);
-        STYLE = createVisualStyle(serviceRegistrar);
-        manager.addVisualStyle(STYLE);
+        final VisualMappingManager vmmServiceRef = serviceRegistrar.getService(VisualMappingManager.class);
+        final VisualStyle oldStyle = findStyle(vmmServiceRef, VISUAL_STYLE_NAME);
+        if (oldStyle != null) vmmServiceRef.removeVisualStyle(oldStyle);
+
+        VISUAL_STYLE = createVisualStyle(serviceRegistrar);
+
+        /* Add the new style to the VisualMappingManager. */
+        vmmServiceRef.addVisualStyle(VISUAL_STYLE);
     }
 
     private static VisualStyle findStyle(final VisualMappingManager manager, final String name) {
@@ -57,74 +96,113 @@ public final class IRegulonVisualStyle extends IRegulonResourceBundle {
     }
 
     private static VisualStyle createVisualStyle(final CyServiceRegistrar serviceRegistrar) {
-        final VisualStyleFactory factory = serviceRegistrar.getService(VisualStyleFactory.class);
-        //TODO: This doesn't seem to work ...
-        final VisualMappingFunctionFactory continuousMappingFactory = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=continuous)");
-        final VisualMappingFunctionFactory discreteMappingFactory = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
-        final VisualMappingFunctionFactory passthroughMappingFactory = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
+        final VisualStyleFactory visualStyleFactoryServiceRef = serviceRegistrar.getService(VisualStyleFactory.class);
 
-        final VisualStyle style = factory.createVisualStyle(NAME);
-        style.setDefaultValue(BasicVisualLexicon.NETWORK_BACKGROUND_PAINT, Color.GRAY);
+        final VisualMappingFunctionFactory vmfFactoryDiscrete = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=discrete)");
+        final VisualMappingFunctionFactory vmfFactoryPassthrough = serviceRegistrar.getService(VisualMappingFunctionFactory.class, "(mapping.type=passthrough)");
 
-        // Node label = name
-        style.addVisualMappingFunction(passthroughMappingFactory.createVisualMappingFunction(
+        /* Create a new visual style. */
+        final VisualStyle visualStyle = visualStyleFactoryServiceRef.createVisualStyle(VISUAL_STYLE_NAME);
+
+
+        /* Disable "Lock node width and height", so we can set a custom width and height. */
+        for (VisualPropertyDependency<?> visualPropertyDependency : visualStyle.getAllVisualPropertyDependencies()) {
+            if (visualPropertyDependency.getIdString().equals("nodeSizeLocked")) {
+                visualPropertyDependency.setDependency(false);
+                break;
+            }
+        }
+
+
+        /* Set default network background color. */
+        visualStyle.setDefaultValue(BasicVisualLexicon.NETWORK_BACKGROUND_PAINT, DEFAULT_NETWORK_BACKGROUND_PAINT);
+
+        /* Set default height, width, color, transparency and shape of the nodes. */
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_HEIGHT, DEFAULT_NODE_HEIGHT);
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_WIDTH, DEFAULT_NODE_WIDTH);
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_FILL_COLOR, DEFAULT_NODE_FILL_COLOR);
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_TRANSPARENCY, DEFAULT_NODE_TRANSPARENCY);
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_SHAPE, NodeShapeVisualProperty.ELLIPSE);
+
+        /* Set default node border width, color and transparency. */
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_BORDER_WIDTH, DEFAULT_NODE_BORDER_WIDTH);
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_BORDER_PAINT, DEFAULT_NODE_BORDER_PAINT_COLOR);
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_BORDER_TRANSPARENCY, DEFAULT_NODE_BORDER_TRANSPARENCY);
+
+        /* Set default font size and color for the node labels. */
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_LABEL_FONT_SIZE, DEFAULT_NODE_LABEL_FONT_SIZE);
+        visualStyle.setDefaultValue(BasicVisualLexicon.NODE_LABEL_COLOR, DEFAULT_NODE_LABEL_COLOR);
+
+        /* Set default width for an edge. */
+        visualStyle.setDefaultValue(BasicVisualLexicon.EDGE_WIDTH, DEFAULT_EDGE_WIDTH);
+
+        /* Set node label to gene name. */
+        visualStyle.addVisualMappingFunction(vmfFactoryPassthrough.createVisualMappingFunction(
                 NetworkUtilities.ID_ATTRIBUTE_NAME,
                 String.class,
                 BasicVisualLexicon.NODE_LABEL));
 
-        // Node shape =
-        // 1. Ellipse when regulator
-        // 2. Rectangle when target gene
-        final DiscreteMapping<String, NodeShape> nodeShapeMapper = (DiscreteMapping) discreteMappingFactory.createVisualMappingFunction(
+        /* Set node shape based on the gene regulatory function. */
+        final DiscreteMapping<String, NodeShape> nodeShapeMapper = (DiscreteMapping) vmfFactoryDiscrete.createVisualMappingFunction(
                 NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
                 String.class,
                 BasicVisualLexicon.NODE_SHAPE);
-        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, NodeShapeVisualProperty.RECTANGLE);
-        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, NodeShapeVisualProperty.ELLIPSE);
-        style.addVisualMappingFunction(nodeShapeMapper);
+        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, NodeShapeVisualProperty.ELLIPSE);
+        nodeShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, NodeShapeVisualProperty.OCTAGON);
+        visualStyle.addVisualMappingFunction(nodeShapeMapper);
 
-        // Node color =
-        final DiscreteMapping<String, Color> nodeColorMapper = (DiscreteMapping) discreteMappingFactory.createVisualMappingFunction(
+        /* Set node color based on the gene regulatory function. */
+        final DiscreteMapping<String, Color> nodeColorMapper = (DiscreteMapping) vmfFactoryDiscrete.createVisualMappingFunction(
                 NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
                 String.class,
                 BasicVisualLexicon.NODE_FILL_COLOR);
-        nodeColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, Color.GREEN);
-        nodeColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, Color.WHITE);
-        nodeColorMapper.putMapValue("", Color.BLUE);
-        style.addVisualMappingFunction(nodeColorMapper);
+        nodeColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, REGULATOR_NODE_FILL_COLOR);
+        nodeColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, TARGET_GENE_NODE_FILL_COLOR);
 
-        //final EdgeAppearanceCalculator edgeAppCalc = style.getEdgeAppearanceCalculator();
-        // Edge target arrow shape =
-        final DiscreteMapping<String, ArrowShape> edgeArrowShapeMapper = (DiscreteMapping) discreteMappingFactory.createVisualMappingFunction(
+        visualStyle.addVisualMappingFunction(nodeColorMapper);
+
+        /* Set node border color based on the gene regulatory function. */
+        final DiscreteMapping<String, Color> nodeBorderColorMapper = (DiscreteMapping) vmfFactoryDiscrete.createVisualMappingFunction(
+                NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
+                String.class,
+                BasicVisualLexicon.NODE_BORDER_PAINT);
+        nodeBorderColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, REGULATOR_NODE_BORDER_PAINT_COLOR);
+        nodeBorderColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, TARGET_GENE_BORDER_PAINT_COLOR);
+
+        visualStyle.addVisualMappingFunction(nodeBorderColorMapper);
+
+        /* Set different node label color when a node is selected or unselected. */
+        final DiscreteMapping<String, Color> nodeLabelColorMapper = (DiscreteMapping) vmfFactoryDiscrete.createVisualMappingFunction(
+                NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
+                String.class,
+                BasicVisualLexicon.NODE_LABEL_COLOR);
+        nodeLabelColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_REGULATOR, REGULATOR_NODE_LABEL_COLOR);
+        nodeLabelColorMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_TARGET_GENE, TARGET_NODE_LABEL_COLOR);
+
+        visualStyle.addVisualMappingFunction(nodeLabelColorMapper);
+
+        /* Set edge target arrow shape. */
+        final DiscreteMapping<String, ArrowShape> edgeArrowShapeMapper = (DiscreteMapping) vmfFactoryDiscrete.createVisualMappingFunction(
                 NetworkUtilities.REGULATORY_FUNCTION_ATTRIBUTE_NAME,
                 String.class,
                 BasicVisualLexicon.EDGE_TARGET_ARROW_SHAPE);
         edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_PREDICTED, ArrowShapeVisualProperty.ARROW);
         edgeArrowShapeMapper.putMapValue(NetworkUtilities.REGULATORY_FUNCTION_METATARGETOME, ArrowShapeVisualProperty.ARROW);
-        style.addVisualMappingFunction(edgeArrowShapeMapper);
+        visualStyle.addVisualMappingFunction(edgeArrowShapeMapper);
 
-        // Edge color =
-        /*final ContinuousMapping<Integer, Color> edgeColorMapping =
-                (ContinuousMapping) continuousMappingFactory.createVisualMappingFunction(
-                        NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME,
-                        Integer.class,
-                        BasicVisualLexicon.EDGE_PAINT);
-        edgeColorMapping.addPoint(0, new BoundaryRangeValues<Color>(Color.BLUE, Color.BLUE, Color.BLUE));
-        edgeColorMapping.addPoint(Integer.MAX_VALUE / 2, new BoundaryRangeValues<Color>(Color.RED, Color.RED, Color.RED));
-        edgeColorMapping.addPoint(Integer.MAX_VALUE, new BoundaryRangeValues<Color>(Color.GREEN, Color.GREEN, Color.GREEN)); */
-        final PassthroughMapping<Integer, Color> edgeColorMapping = (PassthroughMapping) passthroughMappingFactory.createVisualMappingFunction(
-                NetworkUtilities.FEATURE_ID_ATTRIBUTE_NAME,
+        /* Set edge color */
+        final DiscreteMapping<Integer, Color> edgeStrokeUnselectedColorMapping = (DiscreteMapping) vmfFactoryDiscrete.createVisualMappingFunction(
+                NetworkUtilities.CLUSTER_COLOR_ATTRIBUTE_NAME,
                 Integer.class,
-                BasicVisualLexicon.EDGE_PAINT);
+                BasicVisualLexicon.EDGE_STROKE_UNSELECTED_PAINT);
 
-        style.addVisualMappingFunction(edgeColorMapping);
+        final ClusterColors clusterColors = new ClusterColors();
+        for (int clusterColor : clusterColors.getAllClusterColors()) {
+            edgeStrokeUnselectedColorMapping.putMapValue(clusterColor, new Color(clusterColor));
+        }
 
-        return style;
+        visualStyle.addVisualMappingFunction(edgeStrokeUnselectedColorMapping);
+
+        return visualStyle;
     }
-/*
-    private static GlobalAppearanceCalculator createGlobalAppearanceCalculator() {
-        final GlobalAppearanceCalculator globalAppCalc = new GlobalAppearanceCalculator();
-        globalAppCalc.setDefaultBackgroundColor(GRAY);
-        return globalAppCalc;
-    }*/
 }

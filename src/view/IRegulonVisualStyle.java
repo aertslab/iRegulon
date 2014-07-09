@@ -20,6 +20,7 @@ public final class IRegulonVisualStyle extends IRegulonResourceBundle {
     public static final String VISUAL_STYLE_NAME = RESOURCE_BUNDLE.getString("vizmap_name");
 
     private static VisualStyle VISUAL_STYLE;
+    private static VisualMappingManager vmmServiceRef;
 
     /* Default network background color: light gray. */
     private static final Color DEFAULT_NETWORK_BACKGROUND_PAINT = new Color(0xCED7D7);
@@ -72,13 +73,19 @@ public final class IRegulonVisualStyle extends IRegulonResourceBundle {
     }
 
     public static void applyVisualStyle(final CyNetworkView view) {
+        if (vmmServiceRef == null) throw new IllegalStateException();
+
+        /* Set iRegulon visual style as default visual style for the current network. */
+        vmmServiceRef.setVisualStyle(getVisualStyle(), view);
+
+        /* Apply iRegulon visual to current network view. */
         getVisualStyle().apply(view);
     }
 
     public static void install(final CyServiceRegistrar serviceRegistrar) {
         if (VISUAL_STYLE != null) throw new IllegalStateException();
 
-        final VisualMappingManager vmmServiceRef = serviceRegistrar.getService(VisualMappingManager.class);
+        vmmServiceRef = serviceRegistrar.getService(VisualMappingManager.class);
         final VisualStyle oldStyle = findStyle(vmmServiceRef, VISUAL_STYLE_NAME);
         if (oldStyle != null) vmmServiceRef.removeVisualStyle(oldStyle);
 

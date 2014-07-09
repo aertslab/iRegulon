@@ -7,6 +7,7 @@ import org.cytoscape.model.*;
 import org.cytoscape.service.util.CyServiceRegistrar;
 import org.cytoscape.session.CyNetworkNaming;
 import org.cytoscape.view.layout.CyLayoutAlgorithm;
+import org.cytoscape.view.layout.CyLayoutAlgorithmManager;
 import org.cytoscape.view.model.CyNetworkView;
 import org.cytoscape.view.model.CyNetworkViewFactory;
 import org.cytoscape.view.model.CyNetworkViewManager;
@@ -54,12 +55,20 @@ public final class NetworkUtilities {
 
     private final CyApplicationManager applicationManager;
     private final CyServiceRegistrar serviceRegistrar;
+    private final CyLayoutAlgorithmManager layoutAlgorithmManager;
 
-    private NetworkUtilities(final CyApplicationManager manager, final CyServiceRegistrar serviceRegistrar) {
+    private static final String LAYOUT_ALGORITHM_NAME = "circular";
+
+
+    private NetworkUtilities(final CyApplicationManager manager,
+                             final CyServiceRegistrar serviceRegistrar,
+                             final CyLayoutAlgorithmManager layoutAlgorithmManager) {
         if (manager == null) throw new IllegalArgumentException();
         if (serviceRegistrar == null) throw new IllegalArgumentException();
-        applicationManager = manager;
+        if (layoutAlgorithmManager == null) throw new IllegalArgumentException();
+        this.applicationManager = manager;
         this.serviceRegistrar = serviceRegistrar;
+        this.layoutAlgorithmManager = layoutAlgorithmManager;
     }
 
     public static NetworkUtilities getInstance() {
@@ -69,7 +78,7 @@ public final class NetworkUtilities {
 
     public static void install(final CySwingAppAdapter adapter) {
         if (INSTANCE != null) throw new IllegalStateException();
-        INSTANCE = new NetworkUtilities(adapter.getCyApplicationManager(), adapter.getCyServiceRegistrar());
+        INSTANCE = new NetworkUtilities(adapter.getCyApplicationManager(), adapter.getCyServiceRegistrar(), adapter.getCyLayoutAlgorithmManager());
     }
 
     private <S> S getService(Class<S> clazz) {
@@ -124,8 +133,11 @@ public final class NetworkUtilities {
     }
 
     public TaskIterator applyLayout(final CyNetworkView view) {
-        final CyLayoutAlgorithm layout = getService(CyLayoutAlgorithm.class);
-        return layout.createTaskIterator(view, layout.createLayoutContext(), CyLayoutAlgorithm.ALL_NODE_VIEWS, null);
+        view.fitContent();
+
+        final CyLayoutAlgorithm layoutAlgorithm = layoutAlgorithmManager.getLayout(LAYOUT_ALGORITHM_NAME);
+
+        return layoutAlgorithm.createTaskIterator(view, layoutAlgorithm.createLayoutContext(), CyLayoutAlgorithm.ALL_NODE_VIEWS, null);
     }
 
     /**
@@ -266,6 +278,7 @@ public final class NetworkUtilities {
             final Long SUID = rows.iterator().next().get(CyNetwork.SUID, Long.class);
             return network.getNode(SUID);
         } else {
+            Logger.getInstance().error(attributeName + "\t" + id + "\t" + rows.size());
             throw new IllegalStateException();
         }
     }

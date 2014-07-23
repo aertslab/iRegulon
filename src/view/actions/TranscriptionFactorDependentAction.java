@@ -121,12 +121,16 @@ abstract class TranscriptionFactorDependentAction extends ResourceAction impleme
         });
 
         final NetworkResult network;
+        final boolean oldNetworkHasEdges;
+
         if (createNewNetwork) {
             final CreateNewNetworkTask createNetworkTask = new CreateNewNetworkTask(createTitle());
             tasks.append(createNetworkTask);
             network = createNetworkTask;
+            oldNetworkHasEdges = false;
         } else {
             network = NetworkResult.CURRENT;
+            oldNetworkHasEdges = network.getNetwork().getEdgeCount() > 0 ? true : false;
         }
 
         final String attributeName = getAttributeName();
@@ -140,7 +144,8 @@ abstract class TranscriptionFactorDependentAction extends ResourceAction impleme
                 !onlyInteractions);
         tasks.append(addPredictedRegulatoryNetworkTask);
 
-        if (createNewNetwork) {
+        if (! oldNetworkHasEdges) {
+            /* Apply layout when the old network didn't have any edges yet (or when we have created a new network). */
             tasks.append(new ApplyDefaultLayoutTask(network));
         }
 

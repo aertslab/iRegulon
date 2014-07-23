@@ -113,12 +113,16 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
 
         final NetworkResult network;
         final boolean useCurrentNetwork = useCurrentNetwork();
-        if (!useCurrentNetwork) {
+        final boolean oldNetworkHasEdges;
+
+        if (! useCurrentNetwork) {
             final CreateNewNetworkTask createNetworkTask = new CreateNewNetworkTask(createTitle(parameters));
             tasks.append(createNetworkTask);
             network = createNetworkTask;
+            oldNetworkHasEdges = false;
         } else {
             network = NetworkResult.CURRENT;
+            oldNetworkHasEdges = network.getNetwork().getEdgeCount() > 0 ? true : false;
         }
 
         final QueryMetaTargetomeTask queryMetaTargetomeTask = new QueryMetaTargetomeTask(parameters);
@@ -132,7 +136,8 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
                 queryMetaTargetomeTask);
         tasks.append(addMetaTargetomeNetworkTask);
 
-        if (!useCurrentNetwork) {
+        if (! oldNetworkHasEdges) {
+            /* Apply layout when the old network didn't have any edges yet (or when we have created a new network). */
             tasks.append(new ApplyDefaultLayoutTask(network));
         }
 

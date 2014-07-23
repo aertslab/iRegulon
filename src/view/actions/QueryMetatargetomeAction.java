@@ -141,7 +141,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
             tasks.append(new ApplyDefaultLayoutTask(network));
         }
 
-        tasks.append(new FinalizeTask(network, resultsPanel, !useCurrentNetwork));
+        tasks.append(new FinalizeTask(network, resultsPanel));
 
         final TaskManager taskManager = CytoscapeEnvironment.getInstance().getServiceRegistrar().getService(DialogTaskManager.class);
         taskManager.execute(tasks);

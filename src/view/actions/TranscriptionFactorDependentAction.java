@@ -149,7 +149,7 @@ abstract class TranscriptionFactorDependentAction extends ResourceAction impleme
             tasks.append(new ApplyDefaultLayoutTask(network));
         }
 
-        tasks.append(new FinalizeTask(network, getResultsPanel(), createNewNetwork));
+        tasks.append(new FinalizeTask(network, getResultsPanel()));
 
         final TaskManager taskManager = CytoscapeEnvironment.getInstance().getServiceRegistrar().getService(DialogTaskManager.class);
         taskManager.execute(tasks);

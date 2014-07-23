@@ -6,6 +6,7 @@ import org.cytoscape.application.swing.CytoPanel;
 import org.cytoscape.application.swing.CytoPanelName;
 import org.cytoscape.work.AbstractTask;
 import org.cytoscape.work.TaskMonitor;
+import view.IRegulonVisualStyle;
 import view.Refreshable;
 
 import java.awt.*;
@@ -14,27 +15,22 @@ import java.awt.*;
 public final class FinalizeTask extends AbstractTask {
     private final NetworkResult network;
     private final Refreshable resultsPanel;
-    private final boolean applyStyle;
 
-    public FinalizeTask(NetworkResult network, Refreshable resultsPanel, boolean applyStyle) {
+    public FinalizeTask(NetworkResult network, Refreshable resultsPanel) {
         this.network = network;
         this.resultsPanel = resultsPanel;
-        this.applyStyle = applyStyle;
     }
 
     public Refreshable getResultsPanel() {
         return resultsPanel;
     }
 
-    public boolean isApplyStyle() {
-        return applyStyle;
-    }
 
     @Override
     public void run(TaskMonitor taskMonitor) {
         network.getView().updateView();
-        //TODO: Active this when Visual Style really works ...
-        //if (isApplyStyle()) IRegulonVisualStyle.applyVisualStyle(network.getView());
+        IRegulonVisualStyle.applyVisualStyle(network.getView());
+
         if (getResultsPanel() != null) getResultsPanel().refresh();
         activeSidePanel();
     }

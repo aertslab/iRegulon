@@ -66,7 +66,10 @@ public final class AddPredictedRegulatoryNetworkTask extends NetworkTask {
                     }
                     NetworkUtilities.getInstance().createPredictedEdge(getNetwork(), sourceNode, targetNode, transcriptionFactor, motifOrTrack, targetGene);
                 }
+
                 count++;
+
+                taskMonitor.setProgress(count / totalCount);
             }
         }
 

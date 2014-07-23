@@ -102,9 +102,11 @@ public final class AddMetatargetomeNetworkTask extends NetworkTask {
                     }
                     NetworkUtilities.getInstance().createMetatargetomeEdge(getNetwork(), sourceNode, targetNode, transcriptionFactor, targetGene);
                 }
-                count++;
-            }
 
+                count++;
+
+                taskMonitor.setProgress(count / totalCount);
+            }
         }
 
         taskMonitor.setProgress(1.0);

@@ -290,33 +290,62 @@ public final class NetworkUtilities {
     public CyEdge createMetatargetomeEdge(final CyNetwork network, final CyNode sourceNode, final CyNode targetNode,
                                           final GeneIdentifier factor, final CandidateTargetGene targetGene) {
         final CyEdge edge = createEdge(network, sourceNode, targetNode, factor, null, targetGene.getGeneID(), REGULATORY_FUNCTION_METATARGETOME);
-        setEdgeAttribute(network, edge, STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
+
+        if (edge != null) {
+            setEdgeAttribute(network, edge, STRENGTH_ATTRIBUTE_NAME, targetGene.getRank());
+        }
+
         return edge;
     }
 
     public CyEdge createPredictedEdge(final CyNetwork network, final CyNode sourceNode, final CyNode targetNode,
                                       final GeneIdentifier factor, final AbstractMotifAndTrack motifOrTrack, final CandidateTargetGene targetGene) {
         final CyEdge edge = createEdge(network, sourceNode, targetNode, factor, motifOrTrack, targetGene.getGeneID(), REGULATORY_FUNCTION_PREDICTED);
-        setEdgeAttribute(network, edge, RANK_ATTRIBUTE_NAME, targetGene.getRank());
+
+        if (edge != null) {
+            setEdgeAttribute(network, edge, RANK_ATTRIBUTE_NAME, targetGene.getRank());
+        }
+
         return edge;
     }
 
-    public CyEdge createEdge(final CyNetwork network, final CyNode node1, final CyNode node2, final String motifOrTrack) {
+    public CyEdge createEdge(final CyNetwork network, final CyNode node1, final CyNode node2, final String motifOrTrackName) {
         if (network == null) throw new IllegalArgumentException();
         if (network.getNode(node1.getSUID()) == null || network.getNode(node2.getSUID()) == null) return null;
 
-        final String interaction = (motifOrTrack == null) ? "regulates" : "regulates via " + motifOrTrack;
-        final CyEdge edge = network.addEdge(node1, node2, true);
-        final CyRow row = network.getDefaultEdgeTable().getRow(edge.getSUID());
-        row.set(ID_ATTRIBUTE_NAME, getID(node1, network.getDefaultNodeTable()) + " " + interaction + " " + getID(node2, network.getDefaultNodeTable()));
-        row.set(INTERACTION_ATTRIBUTE_NAME, interaction);
-        return edge;
+        final CyTable nodeTable = network.getDefaultNodeTable();
+        final CyTable edgeTable = network.getDefaultEdgeTable();
+
+        final String interaction = (motifOrTrackName == null) ? "regulates" : "regulates via " + motifOrTrackName;
+        final String edgeID = getID(node1, nodeTable) + " " + interaction + " " + getID(node2, nodeTable);
+
+        if (network.containsEdge(node1, node2)) {
+            for (CyEdge existingEdge : network. getConnectingEdgeList(node1, node2, CyEdge.Type.DIRECTED)) {
+                final CyRow existingEdgeRow = edgeTable.getRow(existingEdge.getSUID());
+                final String existingEdgeID = existingEdgeRow.get(ID_ATTRIBUTE_NAME, String.class);
+                if (existingEdgeID.equals(edgeID)) {
+                    return existingEdge;
+                }
+            }
+        }
+
+        final CyEdge newEdge = network.addEdge(node1, node2, true);
+
+        final CyRow newEdgeRow = network.getDefaultEdgeTable().getRow(newEdge.getSUID());
+
+        newEdgeRow.set(ID_ATTRIBUTE_NAME, edgeID);
+        newEdgeRow.set(INTERACTION_ATTRIBUTE_NAME, interaction);
+        return newEdge;
     }
 
     private CyEdge createEdge(final CyNetwork network, final CyNode sourceNode, final CyNode targetNode,
                               final GeneIdentifier factor, final AbstractMotifAndTrack motifOrTrack, final GeneIdentifier targetGene,
                               final String regulatoryFunction) {
         final CyEdge edge = createEdge(network, sourceNode, targetNode, motifOrTrack == null ? null : motifOrTrack.getName());
+
+        if (edge == null) {
+            return null;
+        }
 
         setEdgeAttribute(network, edge, ASSEMBLY_ATTRIBUTE_NAME, targetGene.getSpeciesNomenclature().getAssembly());
         setEdgeAttribute(network, edge, REGULATOR_GENE_ATTRIBUTE_NAME, factor.getGeneName());
@@ -329,10 +358,20 @@ public final class NetworkUtilities {
                 for (AbstractMotif curMotif : motif.getMotifs()) {
                     addEdgeAttribute(network, edge, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
                 }
+            } else if (motifOrTrack.isMotifCluster()) {
+                MotifAndTrackCluster motifCluster = (MotifAndTrackCluster) motifOrTrack;
+                for (AbstractMotifAndTrack curMotifCluster : motifCluster.getMotifsAndTracks()) {
+                    addEdgeAttribute(network, edge, MOTIF_ATTRIBUTE_NAME, curMotifCluster.getName());
+                }
             } else if (motifOrTrack.isTrack()) {
                 AbstractTrack track = (AbstractTrack) motifOrTrack;
                 for (AbstractTrack curTrack : track.getTracks()) {
                     addEdgeAttribute(network, edge, TRACK_ATTRIBUTE_NAME, curTrack.getName());
+                }
+            } else if (motifOrTrack.isTrackCluster()) {
+                MotifAndTrackCluster trackCluster = (MotifAndTrackCluster) motifOrTrack;
+                for (AbstractMotifAndTrack curTrackCluster : trackCluster.getMotifsAndTracks()) {
+                    addEdgeAttribute(network, edge, TRACK_ATTRIBUTE_NAME, curTrackCluster.getName());
                 }
             }
             setEdgeAttribute(network, edge, CLUSTER_COLOR_ATTRIBUTE_NAME, motifOrTrack.getClusterColorInt());
@@ -360,10 +399,20 @@ public final class NetworkUtilities {
             for (AbstractMotif curMotif : motif.getMotifs()) {
                 addNodeAttribute(network, node, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
             }
+        } else if (motifOrTrack.isMotifCluster()) {
+            MotifAndTrackCluster motifCluster = (MotifAndTrackCluster) motifOrTrack;
+            for (AbstractMotifAndTrack curMotifCluster : motifCluster.getMotifsAndTracks()) {
+                addNodeAttribute(network, node, MOTIF_ATTRIBUTE_NAME, curMotifCluster.getName());
+            }
         } else if (motifOrTrack.isTrack()) {
             AbstractTrack track = (AbstractTrack) motifOrTrack;
             for (AbstractTrack curTrack : track.getTracks()) {
                 addNodeAttribute(network, node, TRACK_ATTRIBUTE_NAME, curTrack.getName());
+            }
+        } else if (motifOrTrack.isTrackCluster()) {
+            MotifAndTrackCluster trackCluster = (MotifAndTrackCluster) motifOrTrack;
+            for (AbstractMotifAndTrack curTrackCluster : trackCluster.getMotifsAndTracks()) {
+                addNodeAttribute(network, node, TRACK_ATTRIBUTE_NAME, curTrackCluster.getName());
             }
         }
     }
@@ -390,10 +439,20 @@ public final class NetworkUtilities {
             for (AbstractMotif curMotif : motif.getMotifs()) {
                 addNodeAttribute(network, node, MOTIF_ATTRIBUTE_NAME, curMotif.getName());
             }
+        } else if (motifOrTrack.isMotifCluster()) {
+            MotifAndTrackCluster motifCluster = (MotifAndTrackCluster) motifOrTrack;
+            for (AbstractMotifAndTrack curMotifCluster : motifCluster.getMotifsAndTracks()) {
+                addNodeAttribute(network, node, MOTIF_ATTRIBUTE_NAME, curMotifCluster.getName());
+            }
         } else if (motifOrTrack.isTrack()) {
             AbstractTrack track = (AbstractTrack) motifOrTrack;
             for (AbstractTrack curTrack : track.getTracks()) {
                 addNodeAttribute(network, node, TRACK_ATTRIBUTE_NAME, curTrack.getName());
+            }
+        } else if (motifOrTrack.isTrackCluster()) {
+            MotifAndTrackCluster trackCluster = (MotifAndTrackCluster) motifOrTrack;
+            for (AbstractMotifAndTrack curTrackCluster : trackCluster.getMotifsAndTracks()) {
+                addNodeAttribute(network, node, TRACK_ATTRIBUTE_NAME, curTrackCluster.getName());
             }
         }
     }

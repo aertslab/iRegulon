@@ -191,7 +191,7 @@ public final class NetworkUtilities {
 
     public void addNodeAttribute(final CyNetwork network, final CyNode node, final String attributeName, final String attributeValue) {
         if (network == null) throw new IllegalArgumentException();
-        addAttribute(network.getDefaultEdgeTable(), node, attributeName, attributeValue);
+        addAttribute(network.getDefaultNodeTable(), node, attributeName, attributeValue);
     }
 
     public void addEdgeAttribute(final CyNetwork network, final CyEdge edge, final String attributeName, final String attributeValue) {

@@ -14,7 +14,7 @@ import java.net.URI;
 public final class LinkTextField extends JTextField {
     private final MouseListener mouseListener;
 
-    private Boolean hasLink;
+    private boolean hasLink;
     private URI uri;
 
     public LinkTextField() {

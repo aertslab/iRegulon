@@ -42,8 +42,8 @@ public class PersistenceViewUtilities {
         }
 
         if (!fileChooserFilter.accept(selectedFile)) {
-            /* Add the right extension to the output filename, if if was not provided by the user. */
-            selectedFile = new File(selectedFile.getAbsolutePath() + extension);
+            /* Add the right extension to the output filename, if it was not provided by the user. */
+            selectedFile = new File(selectedFile.getAbsolutePath() + "." + extension);
         }
 
         if (selectedFile.exists()) {
@@ -178,8 +178,8 @@ public class PersistenceViewUtilities {
         }
 
         if (!FileTypes.PNG.accept(selectedFile)) {
-            /* Add the right extension to the output filename, if if was not provided by the user. */
-            selectedFile = new File(selectedFile.getAbsolutePath() + extension);
+            /* Add the right extension to the output filename, if it was not provided by the user. */
+            selectedFile = new File(selectedFile.getAbsolutePath() + "." + extension);
         }
 
         if (selectedFile.exists()) {

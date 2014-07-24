@@ -344,9 +344,12 @@ public final class ResultsCytoPanelComponent extends JPanel implements CytoPanel
         c.weighty = 0.0;
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.WEST;
-        final Action createNewCombinedRegulatoryNetworkAction = new CreateNewCombinedRegulatoryNetworkAction(results.getParameters().getAttributeName(), this);
-        JButton drawMergedButton = new JButton(createNewCombinedRegulatoryNetworkAction);
+        //final Action createNewCombinedRegulatoryNetworkAction = new CreateNewCombinedRegulatoryNetworkAction(results.getParameters().getAttributeName(), this);
+        //JButton drawMergedButton = new JButton(createNewCombinedRegulatoryNetworkAction);
+        // Hide merge button until we have implemented the merging of networks.
+        JButton drawMergedButton = new JButton();
         drawMergedButton.setText("");
+        drawMergedButton.setVisible(false);
         toolBar.add(drawMergedButton, c);
 
         c.gridx = 4;

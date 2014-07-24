@@ -32,7 +32,7 @@ public final class LinkTextField extends JTextField {
             public void mouseEntered(MouseEvent e) {
                 if (hasLink == true) {
                     // Change link color to Dodger blue on hover.
-                    setForeground(new Color(30,144,255));
+                    setForeground(new Color(30, 144, 255));
                 }
             }
 

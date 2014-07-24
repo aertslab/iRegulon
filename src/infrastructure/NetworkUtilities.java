@@ -320,7 +320,7 @@ public final class NetworkUtilities {
         final String edgeID = getID(node1, nodeTable) + " " + interaction + " " + getID(node2, nodeTable);
 
         if (network.containsEdge(node1, node2)) {
-            for (CyEdge existingEdge : network. getConnectingEdgeList(node1, node2, CyEdge.Type.DIRECTED)) {
+            for (CyEdge existingEdge : network.getConnectingEdgeList(node1, node2, CyEdge.Type.DIRECTED)) {
                 final CyRow existingEdgeRow = edgeTable.getRow(existingEdge.getSUID());
                 final String existingEdgeID = existingEdgeRow.get(ID_ATTRIBUTE_NAME, String.class);
                 if (existingEdgeID.equals(edgeID)) {

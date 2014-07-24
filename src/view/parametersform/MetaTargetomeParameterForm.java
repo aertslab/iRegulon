@@ -25,7 +25,7 @@ import java.util.List;
 public final class MetaTargetomeParameterForm extends JPanel implements MetaTargetomeParameters, Refreshable {
     private static final int MARGIN_IN_PIXELS = 5;
 
-    private final Map<SpeciesNomenclature,Set<GeneIdentifier>> nomenclature2factors;
+    private final Map<SpeciesNomenclature, Set<GeneIdentifier>> nomenclature2factors;
 
     private JComboBox transcriptionFactorCB;
     private JComboBox speciesNomenclatureCB;
@@ -131,7 +131,7 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
 
     public void setTargetomeDatabases(List<TargetomeDatabase> targetomeDatabases) {
         targetomeDatabaseList.clearSelection();
-        for (TargetomeDatabase targetomeDatabase: targetomeDatabases) {
+        for (TargetomeDatabase targetomeDatabase : targetomeDatabases) {
             final int idx = findTargetomeDatabase(targetomeDatabase);
             if (idx >= 0) {
                 targetomeDatabaseList.getSelectionModel().addSelectionInterval(idx, idx);
@@ -141,9 +141,9 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
 
     private int findTargetomeDatabase(TargetomeDatabase targetomeDatabase) {
         for (int idx = 0; idx < targetomeDatabaseList.getModel().getSize(); idx++) {
-             if (targetomeDatabaseList.getModel().getElementAt(idx).equals(targetomeDatabase)) {
-                 return idx;
-             }
+            if (targetomeDatabaseList.getModel().getElementAt(idx).equals(targetomeDatabase)) {
+                return idx;
+            }
         }
         return -1;
     }
@@ -210,17 +210,23 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         transcriptionFactorCB = new JComboBox();
         transcriptionFactorLB.setLabelFor(transcriptionFactorCB);
 
-        cc.gridx = 0; cc.gridy = 0;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.gridx = 0;
+        cc.gridy = 0;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.insets = new Insets(MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0, 0);
         add(transcriptionFactorLB, cc);
 
-        cc.gridx++; cc.gridy = 0;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.gridx++;
+        cc.gridy = 0;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
         cc.insets = new Insets(MARGIN_IN_PIXELS, 0, 0, MARGIN_IN_PIXELS);
         add(transcriptionFactorCB, cc);
@@ -232,24 +238,31 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(supportedNomenclaturesForMetaTargetome));
         speciesNomenclatureLB.setLabelFor(speciesNomenclatureCB);
 
-        cc.gridx = 0; cc.gridy = 1;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 0.0; cc.weighty = 0.0;
+        cc.gridx = 0;
+        cc.gridy = 1;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 0.0;
+        cc.weighty = 0.0;
         cc.fill = GridBagConstraints.NONE;
         cc.anchor = GridBagConstraints.LINE_START;
         cc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
         add(speciesNomenclatureLB, cc);
 
-        cc.gridx++; cc.gridy = 1;
-        cc.gridwidth = 1; cc.gridheight = 1;
-        cc.weightx = 1.0; cc.weighty = 0.0;
+        cc.gridx++;
+        cc.gridy = 1;
+        cc.gridwidth = 1;
+        cc.gridheight = 1;
+        cc.weightx = 1.0;
+        cc.weighty = 0.0;
         cc.fill = GridBagConstraints.HORIZONTAL;
         cc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
         add(speciesNomenclatureCB, cc);
 
-        cc.gridx = 0; cc.gridy = 2;
+        cc.gridx = 0;
+        cc.gridy = 2;
         cc.gridwidth = 2;
-        cc.fill=GridBagConstraints.HORIZONTAL;
+        cc.fill = GridBagConstraints.HORIZONTAL;
         final GridBagConstraints DBcc = new GridBagConstraints();
         final JPanel DBpanel = new JPanel(new GridBagLayout());
         final TitledBorder DBborder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Database");
@@ -262,46 +275,59 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         targetomeDatabasesLB.setLabelFor(targetomeDatabaseList);
         targetomeDatabaseList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        DBcc.gridx = 0; DBcc.gridy = 0;
-        DBcc.gridwidth = 1; DBcc.gridheight = 1;
-        DBcc.weightx = 0.0; DBcc.weighty = 0.0;
+        DBcc.gridx = 0;
+        DBcc.gridy = 0;
+        DBcc.gridwidth = 1;
+        DBcc.gridheight = 1;
+        DBcc.weightx = 0.0;
+        DBcc.weighty = 0.0;
         DBcc.fill = GridBagConstraints.NONE;
         DBcc.anchor = GridBagConstraints.LINE_START;
         DBcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
         DBpanel.add(targetomeDatabasesLB, DBcc);
 
-        DBcc.gridx++; DBcc.gridy = 0;
-        DBcc.gridwidth = 1; DBcc.gridheight = 1;
-        DBcc.weightx = 1.0; DBcc.weighty = 1.0;
+        DBcc.gridx++;
+        DBcc.gridy = 0;
+        DBcc.gridwidth = 1;
+        DBcc.gridheight = 1;
+        DBcc.weightx = 1.0;
+        DBcc.weighty = 1.0;
         DBcc.fill = GridBagConstraints.BOTH;
         DBcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
         JScrollPane DBscroll = new JScrollPane(targetomeDatabaseList);
-        DBscroll.setPreferredSize(new Dimension(DBscroll.getWidth() , 70));
+        DBscroll.setPreferredSize(new Dimension(DBscroll.getWidth(), 70));
         DBpanel.add(DBscroll, DBcc);
 
         final JLabel occurrenceCountLimitLB = new JLabel("Occurrence count threshold:");
         occurrenceCountLimitTF = new JTextField(Integer.toString(MetaTargetomeParameters.DEFAULT_THRESHOLD));
 
-        DBcc.gridx = 0; DBcc.gridy = 1;
-        DBcc.gridwidth = 1; DBcc.gridheight = 1;
-        DBcc.weightx = 0.0; DBcc.weighty = 0.0;
+        DBcc.gridx = 0;
+        DBcc.gridy = 1;
+        DBcc.gridwidth = 1;
+        DBcc.gridheight = 1;
+        DBcc.weightx = 0.0;
+        DBcc.weighty = 0.0;
         DBcc.fill = GridBagConstraints.NONE;
         DBcc.anchor = GridBagConstraints.LINE_START;
         DBcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
         DBpanel.add(occurrenceCountLimitLB, DBcc);
 
-        DBcc.gridx++; DBcc.gridy = 1;
-        DBcc.gridwidth = 1; DBcc.gridheight = 1;
-        DBcc.weightx = 1.0; DBcc.weighty = 0.0;
+        DBcc.gridx++;
+        DBcc.gridy = 1;
+        DBcc.gridwidth = 1;
+        DBcc.gridheight = 1;
+        DBcc.weightx = 1.0;
+        DBcc.weighty = 0.0;
         DBcc.fill = GridBagConstraints.HORIZONTAL;
         DBcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
         DBpanel.add(occurrenceCountLimitTF, DBcc);
 
         add(DBpanel, cc);
 
-        cc.gridx = 0; cc.gridy = 3;
+        cc.gridx = 0;
+        cc.gridy = 3;
         cc.gridwidth = 2;
-        cc.fill=GridBagConstraints.HORIZONTAL;
+        cc.fill = GridBagConstraints.HORIZONTAL;
         final GridBagConstraints NWcc = new GridBagConstraints();
         final JPanel NWpanel = new JPanel(new GridBagLayout());
         final TitledBorder NWborder = BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), "Network");
@@ -312,26 +338,35 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         final JLabel maxNodeCountLB = new JLabel("Number nodes (approx.):");
         maxNodeCountTF = new JTextField(Integer.toString(MetaTargetomeParameters.DEFAULT_MAX_NODE_COUNT));
 
-        NWcc.gridx = 0; NWcc.gridy = 0;
-        NWcc.gridwidth = 1; NWcc.gridheight = 1;
-        NWcc.weightx = 0.0; NWcc.weighty = 0.0;
+        NWcc.gridx = 0;
+        NWcc.gridy = 0;
+        NWcc.gridwidth = 1;
+        NWcc.gridheight = 1;
+        NWcc.weightx = 0.0;
+        NWcc.weighty = 0.0;
         NWcc.fill = GridBagConstraints.NONE;
         NWcc.anchor = GridBagConstraints.LINE_START;
         NWcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, 0);
         NWpanel.add(maxNodeCountLB, NWcc);
 
-        NWcc.gridx++; NWcc.gridy = 0;
-        NWcc.gridwidth = 1; NWcc.gridheight = 1;
-        NWcc.weightx = 1.0; NWcc.weighty = 0.0;
+        NWcc.gridx++;
+        NWcc.gridy = 0;
+        NWcc.gridwidth = 1;
+        NWcc.gridheight = 1;
+        NWcc.weightx = 1.0;
+        NWcc.weighty = 0.0;
         NWcc.fill = GridBagConstraints.HORIZONTAL;
         NWcc.insets = new Insets(0, 0, 0, MARGIN_IN_PIXELS);
         NWpanel.add(maxNodeCountTF, NWcc);
 
         createNewNetworkCB = new JCheckBox("Create new network", true);
 
-        NWcc.gridx = 0; NWcc.gridy = 1;
-        NWcc.gridwidth = 2; NWcc.gridheight = 1;
-        NWcc.weightx = 0.0; NWcc.weighty = 0.0;
+        NWcc.gridx = 0;
+        NWcc.gridy = 1;
+        NWcc.gridwidth = 2;
+        NWcc.gridheight = 1;
+        NWcc.weightx = 0.0;
+        NWcc.weighty = 0.0;
         NWcc.fill = GridBagConstraints.NONE;
         NWcc.anchor = GridBagConstraints.LINE_START;
         NWcc.insets = new Insets(0, MARGIN_IN_PIXELS, 0, MARGIN_IN_PIXELS);
@@ -340,17 +375,23 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         final JLabel attributeNameLB = new JLabel("Attribute name:");
         attributeNameCB = new JComboBox();
 
-        NWcc.gridx = 0; NWcc.gridy = 2;
-        NWcc.gridwidth = 1; NWcc.gridheight = 1;
-        NWcc.weightx = 0.0; NWcc.weighty = 0.0;
+        NWcc.gridx = 0;
+        NWcc.gridy = 2;
+        NWcc.gridwidth = 1;
+        NWcc.gridheight = 1;
+        NWcc.weightx = 0.0;
+        NWcc.weighty = 0.0;
         NWcc.fill = GridBagConstraints.NONE;
         NWcc.anchor = GridBagConstraints.LINE_START;
         NWcc.insets = new Insets(0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS, 0);
         NWpanel.add(attributeNameLB, NWcc);
 
-        NWcc.gridx++; NWcc.gridy = 2;
-        NWcc.gridwidth = 1; NWcc.gridheight = 1;
-        NWcc.weightx = 1.0; NWcc.weighty = 0.0;
+        NWcc.gridx++;
+        NWcc.gridy = 2;
+        NWcc.gridwidth = 1;
+        NWcc.gridheight = 1;
+        NWcc.weightx = 1.0;
+        NWcc.weighty = 0.0;
         NWcc.fill = GridBagConstraints.HORIZONTAL;
         NWcc.insets = new Insets(0, 0, MARGIN_IN_PIXELS, MARGIN_IN_PIXELS);
         NWpanel.add(attributeNameCB, NWcc);
@@ -406,7 +447,7 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
     }
 
     private void fireParametersChanged() {
-        for (ParameterChangeListener listener: new ArrayList<ParameterChangeListener>(listeners)) {
+        for (ParameterChangeListener listener : new ArrayList<ParameterChangeListener>(listeners)) {
             listener.parametersChanged();
         }
     }

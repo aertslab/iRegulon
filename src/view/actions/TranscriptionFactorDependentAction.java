@@ -144,7 +144,7 @@ abstract class TranscriptionFactorDependentAction extends ResourceAction impleme
                 !onlyInteractions);
         tasks.append(addPredictedRegulatoryNetworkTask);
 
-        if (! oldNetworkHasEdges) {
+        if (!oldNetworkHasEdges) {
             /* Apply layout when the old network didn't have any edges yet (or when we have created a new network). */
             tasks.append(new ApplyDefaultLayoutTask(network));
         }

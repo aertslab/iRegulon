@@ -14,7 +14,7 @@ public class TrackCollectionComboBox extends JComboBox {
     public void setTrackCollections(final List<TrackCollection> types) {
         final TrackCollection curSelection = (TrackCollection) getSelectedItem();
         removeAllItems();
-        for (TrackCollection type: types) {
+        for (TrackCollection type : types) {
             addItem(type);
         }
 

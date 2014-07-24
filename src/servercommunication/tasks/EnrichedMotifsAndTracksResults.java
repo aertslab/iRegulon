@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface EnrichedMotifsAndTracksResults extends Task {
     String getErrorMessage();
+
     List<AbstractMotifAndTrack> getMotifsAndTracks();
 }

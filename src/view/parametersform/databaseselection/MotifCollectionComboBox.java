@@ -14,7 +14,7 @@ public class MotifCollectionComboBox extends JComboBox {
     public void setMotifCollections(final List<MotifCollection> types) {
         final MotifCollection curSelection = (MotifCollection) getSelectedItem();
         removeAllItems();
-        for (MotifCollection type: types) {
+        for (MotifCollection type : types) {
             addItem(type);
         }
 

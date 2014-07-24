@@ -6,13 +6,13 @@ import javax.swing.*;
 import java.util.List;
 
 public class SearchSpaceTypeComboBox extends JComboBox {
-	public SearchSpaceTypeComboBox(final RankingsDatabase.Type[] types) {
-		super();
-        for (RankingsDatabase.Type type: types) {
+    public SearchSpaceTypeComboBox(final RankingsDatabase.Type[] types) {
+        super();
+        for (RankingsDatabase.Type type : types) {
             this.addItem(type);
         }
-		this.setSelectedIndex(0);
-	}
+        this.setSelectedIndex(0);
+    }
 
     public SearchSpaceTypeComboBox() {
         this(RankingsDatabase.Type.values());
@@ -20,16 +20,16 @@ public class SearchSpaceTypeComboBox extends JComboBox {
 
     public boolean isRegionBased() {
         return RankingsDatabase.Type.REGION.equals(getSelectedItem());
-	}
-	
-	public boolean isGeneBased(){
-		return RankingsDatabase.Type.GENE.equals(getSelectedItem());
-	}
+    }
+
+    public boolean isGeneBased() {
+        return RankingsDatabase.Type.GENE.equals(getSelectedItem());
+    }
 
     public void setTypes(final List<RankingsDatabase.Type> types) {
         final RankingsDatabase.Type curSelection = (RankingsDatabase.Type) getSelectedItem();
         removeAllItems();
-        for (RankingsDatabase.Type type: types) {
+        for (RankingsDatabase.Type type : types) {
             addItem(type);
         }
 

@@ -94,7 +94,9 @@ public final class TranscriptionFactor implements Comparable<TranscriptionFactor
         if (Double.isNaN(f1) && Double.isNaN(f2)) {
             return 0;
         } else if (Double.isNaN(f1)) {
-            return -1;
+            return reverse ? 1 : -1;
+        } else if (Double.isNaN(f2)) {
+            return reverse ? -1 : 1;
         } else {
             return reverse ? Float.compare(f2, f1) : Float.compare(f1, f2);
         }

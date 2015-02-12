@@ -11,7 +11,7 @@
     <property name="cytoscape.versions" value="3.2"/>
 
     <property name="plugin.name" value="iRegulon"/>
-    <property name="plugin.version" value="1.2"/>
+    <property name="plugin.version" value="1.3"/>
     <property name="plugin.bin.with_transfac.filename" value="iRegulon-${plugin.version}-bin-with-transfac.jar"/>
     <property name="plugin.bin.without_transfac.filename" value="iRegulon-${plugin.version}-bin-without-transfac.jar"/>
     <property name="plugin.src.with_transfac.filename" value="iRegulon-${plugin.version}-src-with-transfac.zip"/>

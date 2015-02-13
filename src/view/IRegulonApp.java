@@ -156,8 +156,8 @@ public class IRegulonApp extends AbstractCySwingApp {
                             "<p><b>Version:</b> " + RESOURCE_BUNDLE.getString("version") + "<br/>" +
                             "<b>Build ID:</b> " + RESOURCE_BUNDLE.getString("build_ID") + "<br/>" +
                             "<b>Released:</b> " + RESOURCE_BUNDLE.getString("release_date") + "<br/>" +
-                            "<b>Developers:</b> Gert Hulselmans &amp; Rekin's Janky (&ge;0.97); Bram Van de Sande (&le;0.96); Koen Herten (&le;0.2)." + "<br/>" +
-                            "<b>Copyright:</b> 2012-2014 KU Leuven." + "<br/>" +
+                            "<b>Developers:</b> Gert Hulselmans (&ge;0.97); Rekin's Janky (0.97&le;1.2); Bram Van de Sande (&le;0.96); Koen Herten (&le;0.2)." + "<br/>" +
+                            "<b>Copyright:</b> 2012-2015 KU Leuven." + "<br/>" +
                             "<b>Website:</b> " + RESOURCE_BUNDLE.getString("website") + "<br/>" +
                             "<b>Download:</b> " + RESOURCE_BUNDLE.getString("download_page") + "<br/>" +
                             "<b>Contact:</b> " + RESOURCE_BUNDLE.getString("contact") + "<br/>" +
@@ -200,14 +200,14 @@ public class IRegulonApp extends AbstractCySwingApp {
             aboutText.setBackground(null);
             aboutText.setBorder(null);
             aboutText.setCaretPosition(0);
-            aboutText.setPreferredSize(new Dimension(550, 1600));
+            aboutText.setPreferredSize(new Dimension(610, 1600));
 
             JScrollPane scrollPane = new JScrollPane(aboutText);
-            scrollPane.setPreferredSize(new Dimension(700, 580));
+            scrollPane.setPreferredSize(new Dimension(760, 580));
             scrollPane.getVerticalScrollBar().setValue(0);
 
             JPanel panel = new JPanel();
-            panel.setPreferredSize(new Dimension(710, 710));
+            panel.setPreferredSize(new Dimension(770, 710));
             panel.add(wIcon, BorderLayout.NORTH);
             panel.add(scrollPane, BorderLayout.CENTER);
 

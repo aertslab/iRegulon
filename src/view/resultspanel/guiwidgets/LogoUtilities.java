@@ -20,8 +20,23 @@ public final class LogoUtilities {
     }
 
     private static String getImagePath(String motifName) {
-        if (motifName.indexOf("__") < motifName.indexOf('-')) {
-            return MC_V7_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+        final boolean motifNameMotifCouldBeCollection7 = motifName.contains("__");
+        final boolean motifNameMotifCouldBeCollection3to6 = motifName.contains("-");
+
+        if (motifNameMotifCouldBeCollection7) {
+            if (motifNameMotifCouldBeCollection3to6) {
+                /*
+                 * If the motif name contains both "__" and "-", check which one occurs first
+                 * to determine to which motif collection it belongs to.
+                 */
+                if (motifName.indexOf("__") < motifName.indexOf('-')) {
+                    return MC_V7_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                } else {
+                    return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                }
+            } else {
+                return MC_V7_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+            }
         } else {
             return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
         }

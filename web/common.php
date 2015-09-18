@@ -58,6 +58,101 @@ function get_mysql_connection_parameters() {
 
 
 
+function retrieve_get_or_post_value($request_type, $get_or_post_field, $can_be_null = true, $type = 'string') {
+    /*
+     * Do some sanity checks when retrieving values from GET or POST fields.
+     *   - Check if the GET or POST field exist.
+     *   - Check if the GET or POST value is a string (arrays can give unexpected results).
+     *   - Check if the GET or POST value is not empty.
+     *   - If one of the conditions is not met, the GET or POST value will be set to NULL.
+    */
+    if ($request_type === "GET") {
+        $get_or_post_value = ( isset($_GET["$get_or_post_field"])
+        && is_string($_GET["$get_or_post_field"])
+        && $_GET["$get_or_post_field"] !== ""
+            ? $_GET["$get_or_post_field"] : NULL );
+    } else if ($request_type === "POST") {
+        $get_or_post_value = ( isset($_POST["$get_or_post_field"])
+        && is_string($_POST["$get_or_post_field"])
+        && $_POST["$get_or_post_field"] !== ""
+            ? $_POST["$get_or_post_field"] : NULL );
+    } else {
+        echo("ERROR:\trequest_type should be 'GET or 'POST'.\n");
+        exit(1);
+    }
+
+    /*
+     * If we require the specified GET or POST field to be present ( $can_be_null = false ),
+     * error out if this is not the case.
+    */
+    if ($can_be_null === false && $get_or_post_value === NULL) {
+        echo("ERROR:\t'$get_or_post_field' must be specified.\n");
+        exit(1);
+    }
+
+    /* Don't try to convert to right type (int, float, string) but return the result directly. */
+    if ($can_be_null === true && $get_or_post_value === NULL) {
+        return $get_or_post_value;
+    }
+
+    /* Check if our field contains the right type (int, int_positive, float_positive or string). */
+    if ($type === 'int') {
+        if ($get_or_post_value != strval(intval($get_or_post_value))) {
+            echo("ERROR:\t'$get_or_post_field' must be an integer value.\n");
+            exit(1);
+        };
+
+        $get_or_post_value = intval($get_or_post_value);
+    } elseif ($type === 'int_positive') {
+        if ($get_or_post_value != strval(intval($get_or_post_value))) {
+            echo("ERROR:\t'$get_or_post_field' must be an integer value.\n");
+            exit(1);
+        };
+
+        $get_or_post_value = intval($get_or_post_value);
+
+        if ($get_or_post_value < 0) {
+            echo("ERROR:\t'$get_or_post_field' must be an integer value greater than or equal to 0.\n");
+            exit(1);
+        };
+    } elseif ($type === 'float_positive') {
+        if ($get_or_post_value != strval(floatval($get_or_post_value))) {
+            echo("ERROR:\t'$get_or_post_field' must be a float value.\n");
+            exit(1);
+        };
+
+        $get_or_post_value = floatval($get_or_post_value);
+
+        if ($get_or_post_value < 0) {
+            echo("ERROR:\t'$get_or_post_field' must be a float value greater than or equal to 0.\n");
+            exit(1);
+        };
+    } else {
+        $get_or_post_value = strval($get_or_post_value);
+    }
+
+    return $get_or_post_value;
+}
+
+
+
+function retrieve_get_value($get_field, $can_be_null = true, $type = 'string') {
+    /*
+     * Do some sanity checks when retrieving values from GET fields.
+     *   - Check if the GET field exist.
+     *   - Check if the GET value is a string (arrays can give unexpected results).
+     *   - Check if the GET value is not empty.
+     *   - If one of the conditions is not met, the GET value will be set to NULL.
+    */
+    return retrieve_get_or_post_value(
+        'GET',
+        $get_field,
+        $can_be_null,
+        $type
+    );
+}
+
+
 
 function retrieve_post_value($post_field, $can_be_null = true, $type = 'string') {
     /*
@@ -67,62 +162,12 @@ function retrieve_post_value($post_field, $can_be_null = true, $type = 'string')
      *   - Check if the POST value is not empty.
      *   - If one of the conditions is not met, the POST value will be set to NULL.
     */
-    $post_value = ( isset($_POST["$post_field"])
-    && is_string($_POST["$post_field"])
-    && $_POST["$post_field"] !== ""
-        ? $_POST["$post_field"] : NULL );
-
-    /*
-     * If we require the specified POST field to be present ( $can_be_null = false ),
-     * error out if this is not the case.
-    */
-    if ($can_be_null === false && $post_value === NULL) {
-        echo("ERROR:\t'$post_field' must be specified.\n");
-        exit(1);
-    }
-
-    /* Don't try to convert to right type (int, float, string) but return the result directly. */
-    if ($can_be_null === true && $post_value === NULL) {
-        return $post_value;
-    }
-
-    /* Check if our field contains the right type (int, int_positive, float_positive or string). */
-    if ($type === 'int') {
-        if ($post_value != strval(intval($post_value))) {
-            echo("ERROR:\t'$post_field' must be an integer value.\n");
-            exit(1);
-        };
-
-        $post_value = intval($post_value);
-    } elseif ($type === 'int_positive') {
-        if ($post_value != strval(intval($post_value))) {
-            echo("ERROR:\t'$post_field' must be an integer value.\n");
-            exit(1);
-        };
-
-        $post_value = intval($post_value);
-
-        if ($post_value < 0) {
-            echo("ERROR:\t'$post_field' must be an integer value greater than or equal to 0.\n");
-            exit(1);
-        };
-    } elseif ($type === 'float_positive') {
-        if ($post_value != strval(floatval($post_value))) {
-            echo("ERROR:\t'$post_field' must be a float value.\n");
-            exit(1);
-        };
-
-        $post_value = floatval($post_value);
-
-        if ($post_value < 0) {
-            echo("ERROR:\t'$post_field' must be a float value greater than or equal to 0.\n");
-            exit(1);
-        };
-    } else {
-        $post_value = strval($post_value);
-    }
-
-    return $post_value;
+    return retrieve_get_or_post_value(
+        'POST',
+        $post_field,
+        $can_be_null,
+        $type
+    );
 }
 
 ?>

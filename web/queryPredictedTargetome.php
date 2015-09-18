@@ -3,6 +3,15 @@
 include_once 'common.php';
 
 
+
+/* Only allow POST request to this page. */
+only_post_requests();
+
+/* Only allow iRegulon client to access this page. */
+only_iregulon_client($client_version);
+
+
+
 /* List of database sources that are accepted to be queried. */
 $accepted_database_sources = array(
     'ganesh' => 'ganesh',

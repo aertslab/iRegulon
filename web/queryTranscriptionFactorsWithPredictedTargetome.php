@@ -4,7 +4,15 @@ include_once 'common.php';
 
 
 
-/* Check if the a 'SpeciesNomenclatureCode' POST field exists and if it contains an integer. */
+/* Only allow POST request to this page. */
+only_post_requests();
+
+/* Only allow iRegulon client to access this page. */
+only_iregulon_client($client_version);
+
+
+
+/* Check if a 'SpeciesNomenclatureCode' POST field exists and if it contains an integer. */
 $species_nomenclature_code = retrieve_post_value('SpeciesNomenclatureCode', false, 'int');
 
 

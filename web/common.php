@@ -8,25 +8,6 @@ $client_version = $_SERVER['HTTP_USER_AGENT'];
 
 
 
-
-/* Only allow POST requests. */
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('HTTP/1.1 403 Forbidden');
-    exit(1);
-}
-
-
-
-
-/* Check if the page is requested by the iRegulon client. */
-if (strncmp($client_version, 'iRegulon', 8) !== 0) {
-    header('HTTP/1.1 403 Forbidden');
-    exit(1);
-}
-
-
-
-
 class Job_status_codes {
     const REQUESTED = '1';
     const RUNNING = '2';
@@ -34,6 +15,25 @@ class Job_status_codes {
     const ERROR = '-1';
 }
 
+
+
+function only_post_requests() {
+    /* Only allow POST requests. */
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('HTTP/1.1 403 Forbidden');
+        exit(1);
+    }
+}
+
+
+
+function only_iregulon_client($client_version) {
+    /* Check if the page is requested by the iRegulon client. */
+    if (strncmp($client_version, 'iRegulon', 8) !== 0) {
+        header('HTTP/1.1 403 Forbidden');
+        exit(1);
+    }
+}
 
 
 

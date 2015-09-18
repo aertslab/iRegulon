@@ -38,14 +38,15 @@ try {
 
 
 /* Build query. */
-$query = 'SELECT
-		          errorMessage
-          FROM
-		          jobQueue
-          WHERE
-		          ID = :jobID
-		      AND
-		          ip = :ip';
+$query = '
+    SELECT
+            errorMessage
+    FROM
+            jobQueue
+    WHERE
+            ID = :jobID
+    AND
+            ip = :ip';
 
 try {
     $stmt = $dbh->prepare($query);

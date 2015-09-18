@@ -38,14 +38,15 @@ try {
 
 
 /* Build query. */
-$query = 'SELECT
-		          jobStatusCode
-          FROM
-		          jobQueue
-          WHERE
-		          ID = :jobID
-		      AND
-		          ip = :ip';
+$query = '
+    SELECT
+            jobStatusCode
+    FROM
+            jobQueue
+    WHERE
+            ID = :jobID
+        AND
+            ip = :ip';
 
 try {
     $stmt = $dbh->prepare($query);
@@ -95,12 +96,13 @@ try {
 
 
 
-$query = 'SELECT
-                  name
-          FROM
-                  jobStatus
-          WHERE
-                  code = :jobStatusCode';
+$query = '
+    SELECT
+            name
+    FROM
+            jobStatus
+    WHERE
+            code = :jobStatusCode';
 
 try {
     $stmt = $dbh->prepare($query);
@@ -147,20 +149,21 @@ try {
 
 
 
-$query = 'SELECT
-                  COUNT(*)
-          FROM
-                  jobQueue  AS q1,
-                  jobQueue  AS q2,
-                  jobStatus	AS s
-          WHERE
-                  q1.ID = :jobID
-              AND
-                  q1.jobRequestTime > q2.jobRequestTime
-              AND
-                  q2.jobStatusCode = s.code
-              AND
-                  s.name = "Requested"';
+$query = '
+    SELECT
+            COUNT(*)
+    FROM
+            jobQueue  AS q1,
+            jobQueue  AS q2,
+            jobStatus AS s
+    WHERE
+            q1.ID = :jobID
+        AND
+            q1.jobRequestTime > q2.jobRequestTime
+        AND
+            q2.jobStatusCode = s.code
+        AND
+            s.name = "Requested"';
 
 try {
     $stmt = $dbh->prepare($query);

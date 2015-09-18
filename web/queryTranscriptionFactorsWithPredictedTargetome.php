@@ -38,12 +38,13 @@ try {
 
 
 /* Build query. */
-$query = 'SELECT DISTINCT
-		          tfName
-          FROM
-		          metatargetomeMetaData
-          WHERE
-		          speciesNomenclatureCode = :speciesNomenclatureCode';
+$query = '
+    SELECT DISTINCT
+            tfName
+    FROM
+            metatargetomeMetaData
+    WHERE
+            speciesNomenclatureCode = :speciesNomenclatureCode';
 
 try {
     $stmt = $dbh->prepare($query);

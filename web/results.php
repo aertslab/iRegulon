@@ -177,10 +177,10 @@ try {
                 orthologousIdentity,
                 orthologousGeneName,
                 orthologousSpecies
-			FROM
-				featureAnnotation
-			WHERE
-				featureID = :enrichedFeatureID';
+            FROM
+                featureAnnotation
+            WHERE
+                featureID = :enrichedFeatureID';
 
 
 

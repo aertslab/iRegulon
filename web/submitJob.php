@@ -76,23 +76,25 @@ try {
 
 
 
-$query = 'INSERT INTO jobQueue
-                  (
-                      name, jobStatusCode, jobRequestTime,
-                      nomenclatureCode, rankingDatabaseCode, conversionDelineation,
-                      conversionUpstreamRegionInBp, conversionDownstreamRegionInBp, conversionFractionOfOverlap,
-                      rankThreshold, AUCRankThresholdAsPercentage, NESThreshold,
-                      minOrthologousIdentity, maxMotifSimilarityFDR, geneIDs,
-                      ip, user_agent
-		          )
-          VALUES (
-                      :name, :jobStatusCode, NOW(),
-                      :nomenclatureCode, :rankingDatabaseCode, :conversionDelineation,
-                      :conversionUpstreamRegionInBp, :conversionDownstreamRegionInBp, :conversionFractionOfOverlap,
-                      :rankThreshold, :AUCRankThresholdAsPercentage, :NESThreshold,
-                      :minOrthologousIdentity, :maxMotifSimilarityFDR, :geneIDs,
-                      :ip, :user_agent
-                  )';
+$query = '
+    INSERT INTO jobQueue
+        (
+            name, jobStatusCode, jobRequestTime,
+            nomenclatureCode, rankingDatabaseCode, conversionDelineation,
+            conversionUpstreamRegionInBp, conversionDownstreamRegionInBp, conversionFractionOfOverlap,
+            rankThreshold, AUCRankThresholdAsPercentage, NESThreshold,
+            minOrthologousIdentity, maxMotifSimilarityFDR, geneIDs,
+            ip, user_agent
+        )
+    VALUES
+        (
+            :name, :jobStatusCode, NOW(),
+            :nomenclatureCode, :rankingDatabaseCode, :conversionDelineation,
+            :conversionUpstreamRegionInBp, :conversionDownstreamRegionInBp, :conversionFractionOfOverlap,
+            :rankThreshold, :AUCRankThresholdAsPercentage, :NESThreshold,
+            :minOrthologousIdentity, :maxMotifSimilarityFDR, :geneIDs,
+            :ip, :user_agent
+        )';
 
 try {
     $stmt = $dbh->prepare($query);

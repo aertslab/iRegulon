@@ -59,21 +59,22 @@ try {
 
 
 /* Build query. */
-$query = "SELECT
-		          geneName,
-		          SUM(occurenceCount)
-          FROM
-		          metatargetomeMetaData AS m,
-		          metatargetome AS t
-          WHERE
-		          m.sourceName IN (" . $database_sources_str . ")
-		     AND
-		          m.speciesNomenclatureCode = :speciesNomenclatureCode
-		     AND
-		          m.tfName = :gene_id
-		     AND
-		          m.ID = t.metaID
-		  GROUP BY geneName";
+$query = "
+    SELECT
+            geneName,
+            SUM(occurenceCount)
+    FROM
+            metatargetomeMetaData AS m,
+            metatargetome AS t
+    WHERE
+            m.sourceName IN (" . $database_sources_str . ")
+        AND
+            m.speciesNomenclatureCode = :speciesNomenclatureCode
+        AND
+            m.tfName = :gene_id
+        AND
+            m.ID = t.metaID
+    GROUP BY geneName";
 
 try {
     $stmt = $dbh->prepare($query);

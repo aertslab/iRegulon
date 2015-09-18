@@ -12,14 +12,19 @@ import java.util.ResourceBundle;
 public final class LogoUtilities {
     private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
 
-    private static final String LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("logo_folder");
+    private static final String MC_V3_V6_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v3_v6_logo_folder");
+    private static final String MC_V7_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v7_logo_folder");
     private static final String LOGO_EXTENSION = RESOURCE_BUNDLE.getString("logo_extension");
 
     private LogoUtilities() {
     }
 
     private static String getImagePath(String motifName) {
-        return LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+        if (motifName.indexOf("__") < motifName.indexOf('-')) {
+            return MC_V7_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+        } else {
+            return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+        }
     }
 
     public static java.net.URL getImageFileURL(final String motifName) {

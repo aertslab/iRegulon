@@ -66,7 +66,7 @@
     <target name="copy_resources_without_transfac" depends="compile">
         <copy todir="${build.folder}">
             <fileset dir="${source.folder}" includes="**/*.txt,**/*.png,**/*.xml"
-                     excludes="**/transfac_pro-*.png"/>
+                     excludes="**/transfac_pro*.png"/>
         </copy>
     </target>
 
@@ -189,7 +189,7 @@
         <zip destfile="${build.folder}/${plugin.src.without_transfac.filename}">
             <fileset dir="${basedir}"
                      includes="src/**/*.properties,src/**/*.png"
-                     excludes="**/transfac_pro-*.png"/>
+                     excludes="**/transfac_pro*.png"/>
 
             <fileset dir="${basedir}" includes="src/**/*.java"/>
 

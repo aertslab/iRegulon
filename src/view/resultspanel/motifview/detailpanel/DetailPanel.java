@@ -227,9 +227,11 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
     }
 
     private URI composeURI(final AbstractMotifAndTrack motifOrTrack) {
+        final int motifOrTrackLength = motifOrTrack.getName().length();
         try {
-            final String ID = motifOrTrack.getName().split("-")[1];
-            return new URI(TRANSFAC_URL + ID);
+            /* Extract the matrix ID from the TRANSFAC motif name and add it to the URL. */
+            return new URI(TRANSFAC_URL + motifOrTrack.getName().substring(
+                    motifOrTrackLength - 6, motifOrTrackLength));
         } catch (URISyntaxException e) {
             return null;
         }

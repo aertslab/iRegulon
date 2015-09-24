@@ -8,10 +8,7 @@ import view.resultspanel.guiwidgets.LogoThumbnail;
 import view.resultspanel.guiwidgets.TranscriptionFactorComboBox;
 import view.resultspanel.motifandtrackview.tablemodels.CandidateTargetGeneTableModel;
 import view.resultspanel.motifandtrackview.tablemodels.TranscriptionFactorTableModel;
-import view.resultspanel.renderers.CombinedRenderer;
-import view.resultspanel.renderers.DefaultRenderer;
-import view.resultspanel.renderers.FloatRenderer;
-import view.resultspanel.renderers.NetworkMembershipHighlightRenderer;
+import view.resultspanel.renderers.*;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -267,10 +264,9 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         for (int i = 0; i < this.transcriptionFactorTable.getModel().getColumnCount(); i++) {
             CombinedRenderer renderer = new CombinedRenderer();
 
-            /* Float renderer. */
             switch (i) {
                 case 1:
-                    renderer.addRenderer(new FloatRenderer("0.###E0", "N/A"));
+                    renderer.addRenderer(new PercentageRenderer("N/A"));
                     break;
                 case 2:
                     renderer.addRenderer(new FloatRenderer("0.###E0", "Direct"));

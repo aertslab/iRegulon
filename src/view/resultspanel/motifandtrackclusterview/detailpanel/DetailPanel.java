@@ -137,13 +137,13 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             final CombinedRenderer renderer = new CombinedRenderer();
             switch (i) {
                 case 0:
-                    renderer.addRenderer(new BooleanRenderer()); //float renderer
+                    renderer.addRenderer(new BooleanRenderer());
                     break;
                 case 3:
-                    renderer.addRenderer(new FloatRenderer("0.###E0", "N/A")); //float renderer
+                    renderer.addRenderer(new PercentageRenderer("N/A"));
                     break;
                 case 4:
-                    renderer.addRenderer(new FloatRenderer("0.###E0", "Direct")); //float renderer
+                    renderer.addRenderer(new FloatRenderer("0.###E0", "Direct"));
                     break;
                 default:
                     renderer.addRenderer(new DefaultRenderer());

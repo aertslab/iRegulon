@@ -11,6 +11,7 @@ import view.resultspanel.motifview.detailpanel.TFandMotifSelected;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.text.NumberFormat;
 
 
 public final class Motif2TFDetailFrame extends JDialog {
@@ -124,7 +125,7 @@ public final class Motif2TFDetailFrame extends JDialog {
         addTitle(idx, "Annotated for gene", cc, panel);
         addLabel("Name", factor.getOrthologousGeneName(), cc, panel);
         addLabel("Species", factor.getOrthologousSpecies(), cc, panel);
-        addLabel("Identity (fraction)", factor.getMinOrthologousIdentity(), cc, panel);
+        addLabel("Orthologous identity", NumberFormat.getPercentInstance().format(factor.getMinOrthologousIdentity()), cc, panel);
         addVerticalSpanner(cc, panel);
 
         return panel;

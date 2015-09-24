@@ -136,9 +136,11 @@ public final class Motif2TFDetailFrame extends JDialog {
         final GridBagConstraints cc = new GridBagConstraints();
         panel.setBorder(BorderFactory.createEtchedBorder());
 
-        if (prevComponent.equals("Enriched motif") || prevComponent.equals("Similar motif"))
+        if (prevComponent.equals("Enriched motif") || prevComponent.equals("Similar motif")) {
             addTitle(idx, "Annotated for transcription factor", cc, panel);
-        else addTitle(idx, "Orthologous to transcription factor", cc, panel);
+        } else {
+            addTitle(idx, "Orthologous to transcription factor", cc, panel);
+        }
         addLabel("Name", factor.getName(), cc, panel);
         addLabel("Species and nomenclature", factor.getSpeciesNomeclature().toString(), cc, panel);
 

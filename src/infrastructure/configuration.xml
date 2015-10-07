@@ -742,7 +742,7 @@
             <collection type="motif" refid="v3"/>
             <type>regions</type>
 
-            <species>dmel</species>
+            <species>dm3</species>
             <nomenclature refid="3">FlyBase</nomenclature>
 
             <number-of-species>11</number-of-species>
@@ -751,8 +751,8 @@
             <default-auc-threshold>0.01</default-auc-threshold>
 
             <mappings>
-                <mapping id="dm3_flybase_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
-                <mapping id="dm3_flybase_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
+                <mapping id="dm3_symbol_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
+                <mapping id="dm3_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
                 <mapping id="dm3_symbol_up5kb_full_transcript_down5kb">5kb upstream, full transcript and 5kb downstream</mapping>
                 <mapping id="dm3_symbol_up10kb_full_transcript_down10kb">10kb upstream, full transcript and 10kb downstream</mapping>
                 <mapping id="dm3_symbol_up5kb_5utr_intron1_ucsc">5kb upstream, 5'UTR and 1st intron (UCSC annotations)</mapping>
@@ -768,7 +768,7 @@
             <collection type="motif" refid="v6"/>
             <type>regions</type>
 
-            <species>dmel</species>
+            <species>dm3</species>
             <nomenclature refid="3">FlyBase</nomenclature>
 
             <number-of-species>11</number-of-species>
@@ -777,8 +777,8 @@
             <default-auc-threshold>0.01</default-auc-threshold>
 
             <mappings>
-                <mapping id="dm3_flybase_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
-                <mapping id="dm3_flybase_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
+                <mapping id="dm3_symbol_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
+                <mapping id="dm3_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
                 <mapping id="dm3_symbol_up5kb_full_transcript_down5kb">5kb upstream, full transcript and 5kb downstream</mapping>
                 <mapping id="dm3_symbol_up10kb_full_transcript_down10kb">10kb upstream, full transcript and 10kb downstream</mapping>
                 <mapping id="dm3_symbol_up5kb_5utr_intron1_ucsc">5kb upstream, 5'UTR and 1st intron (UCSC annotations)</mapping>
@@ -794,7 +794,7 @@
             <collection type="motif" refid="v7"/>
             <type>regions</type>
 
-            <species>dmel</species>
+            <species>dm3</species>
             <nomenclature refid="3">FlyBase</nomenclature>
 
             <number-of-species>11</number-of-species>
@@ -803,12 +803,35 @@
             <default-auc-threshold>0.01</default-auc-threshold>
 
             <mappings>
-                <mapping id="dm3_flybase_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
-                <mapping id="dm3_flybase_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
+                <mapping id="dm3_symbol_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
+                <mapping id="dm3_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
                 <mapping id="dm3_symbol_up5kb_full_transcript_down5kb">5kb upstream, full transcript and 5kb downstream</mapping>
                 <mapping id="dm3_symbol_up10kb_full_transcript_down10kb">10kb upstream, full transcript and 10kb downstream</mapping>
                 <mapping id="dm3_symbol_up5kb_5utr_intron1_ucsc">5kb upstream, 5'UTR and 1st intron (UCSC annotations)</mapping>
                 <mapping id="dm3_symbol_up5kb_introns_legacy">5kb upstream and all introns (legacy)</mapping>
+            </mappings>
+        </database>
+
+        <database id="dm6_regions_pwm_11sp_mc_v7">
+            <name>131K regions (11 species)</name>
+            <collection type="motif" refid="v7"/>
+            <type>regions</type>
+
+            <species>dm6</species>
+            <nomenclature refid="4">FlyBase</nomenclature>
+
+            <number-of-species>11</number-of-species>
+
+            <default-nes-threshold>2.50</default-nes-threshold>
+            <default-auc-threshold>0.01</default-auc-threshold>
+
+            <mappings>
+                <mapping id="dm6_symbol_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
+                <mapping id="dm6_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
+                <mapping id="dm6_symbol_up5kb_full_transcript_down5kb">5kb upstream, full transcript and 5kb downstream</mapping>
+                <mapping id="dm6_symbol_up10kb_full_transcript_down10kb">10kb upstream, full transcript and 10kb downstream</mapping>
+                <mapping id="dm6_symbol_up5kb_5utr_intron1_ucsc">5kb upstream, 5'UTR and 1st intron (UCSC annotations)</mapping>
+                <mapping id="dm6_symbol_up5kb_introns_legacy">5kb upstream and all introns (legacy)</mapping>
             </mappings>
         </database>
     </databases>

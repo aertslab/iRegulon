@@ -106,7 +106,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
             }
             for (int index = 0; index < geneIDArray.length; index++) {
                 if (index == 0) {
-                    data += "&SpeciesNomenclature=" + geneIDArray[index].getSpeciesNomenclature().getCode()
+                    data += "&SpeciesNomenclature=" + geneIDArray[index].getSpeciesNomenclature().getNomenclatureCode()
                             + "&genes=" + geneIDArray[index].getGeneName();
                 } else {
                     data += ";" + geneIDArray[index].getGeneName();
@@ -372,7 +372,9 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                      *    17	orthologousSpecies (separated by ;) of the corresponding TF
                      */
 
-                    SpeciesNomenclature sn = SpeciesNomenclature.getNomenclature(Integer.parseInt(motifOrTrackVariables[0]));
+                    String assembly = motifOrTrackVariables[1].split("_", 2)[0];
+                    SpeciesNomenclature sn = SpeciesNomenclature.getNomenclature(
+                            Integer.parseInt(motifOrTrackVariables[0]), assembly);
 
                     /* The candidate target genes. */
                     List<CandidateTargetGene> candidateTargetGenes = new ArrayList<CandidateTargetGene>();

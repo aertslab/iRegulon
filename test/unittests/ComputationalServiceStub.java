@@ -18,10 +18,10 @@ public class ComputationalServiceStub implements ComputationalService {
         //String[] proteinen2 = {"603627", "555134", "603627", "555134", "555135"};
 
 
-        GeneIdentifier geneID0 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID1 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID2 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID3 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        GeneIdentifier geneID0 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID1 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID2 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID3 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
 
         List<domainmodel.CandidateTargetGene> lctgs1 = new ArrayList<domainmodel.CandidateTargetGene>();
         List<domainmodel.CandidateTargetGene> lctgs2 = new ArrayList<domainmodel.CandidateTargetGene>();

@@ -58,7 +58,7 @@ public class QueryMetatargetomeAction extends ResourceAction implements Refresha
             final CyNetwork network = NetworkUtilities.getInstance().getCurrentNetwork();
             if (network == null) return null;
             final List<GeneIdentifier> ids = NetworkUtilities.getInstance().getSelectedNodesAsGeneIDs(
-                    network, getAttributeName(), SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+                    network, getAttributeName(), SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
             if (ids == null || ids.isEmpty()) return null;
             else return ids.get(0);
         }

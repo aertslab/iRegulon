@@ -39,7 +39,7 @@ public class SaveTest {
                 tf[index] = t;
                 index++;
             }
-            assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
+            assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC, tf[0].getSpeciesNomeclature());
         } catch (LoadException e) {
             e.printStackTrace();
         }
@@ -80,7 +80,7 @@ public class SaveTest {
                 tf[index] = t;
                 index++;
             }
-            assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HGNC, tf[0].getSpeciesNomeclature());
+            assertEquals(SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC, tf[0].getSpeciesNomeclature());
         } catch (LoadException e) {
             e.printStackTrace();
         }
@@ -94,20 +94,20 @@ public class SaveTest {
         String[] proteinen2 = {"603627", "555134", "603627", "555134", "555135"};
 
 
-        GeneIdentifier geneID0 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID1 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID2 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID3 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID4 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID5 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID6 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID7 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID8 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID9 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID10 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID11 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID12 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
-        GeneIdentifier geneID13 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        GeneIdentifier geneID0 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID1 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID2 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID3 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID4 = new GeneIdentifier("603627", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID5 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID6 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID7 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID8 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID9 = new GeneIdentifier("603626", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID10 = new GeneIdentifier("555135", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID11 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID12 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
+        GeneIdentifier geneID13 = new GeneIdentifier("555134", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
 
 
         List<domainmodel.CandidateTargetGene> lctgs1 = new ArrayList<domainmodel.CandidateTargetGene>();

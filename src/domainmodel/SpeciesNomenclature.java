@@ -8,6 +8,7 @@ import java.util.*;
 public final class SpeciesNomenclature extends IRegulonResourceBundle {
     private static final Map<Integer, SpeciesNomenclature> CODE2NOMENCLATURE = new HashMap<Integer, SpeciesNomenclature>();
     private static final Map<Integer, List<RankingsDatabase>> CODE2DATABASES = new HashMap<Integer, List<RankingsDatabase>>();
+    private static final Map<String, SpeciesNomenclature> NOMENCLATURECODEANDASSEMBLY2NOMENCLATURE = new HashMap<String, SpeciesNomenclature>();
 
     static {
         for (RankingsDatabase db : RankingsDatabase.loadFromConfiguration()) {
@@ -22,13 +23,18 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
         }
     }
 
-    public static SpeciesNomenclature HOMO_SAPIENS_HGNC = new SpeciesNomenclature(1, "Homo sapiens, HGNC symbols", "hg19");
-    public static SpeciesNomenclature MUS_MUSCULUS_MGI = new SpeciesNomenclature(2, "Mus musculus, MGI symbols", "mm9");
-    public static SpeciesNomenclature DROSOPHILA_FlyBase = new SpeciesNomenclature(3, "Drosophila melanogaster, FlyBase names", "dm3");
+    public static SpeciesNomenclature HOMO_SAPIENS_HG19_HGNC = new SpeciesNomenclature(1, 1, "Homo sapiens (hg19), HGNC symbols", "hg19");
+    public static SpeciesNomenclature MUS_MUSCULUS_MM9_MGI = new SpeciesNomenclature(2, 2, "Mus musculus (mm9), MGI symbols", "mm9");
+    public static SpeciesNomenclature DROSOPHILA_DM3_FLYBASE = new SpeciesNomenclature(3, 3, "Drosophila melanogaster (dm3), FlyBase names", "dm3");
+    public static SpeciesNomenclature DROSOPHILA_DM6_FLYBASE = new SpeciesNomenclature(4, 3, "Drosophila melanogaster (dm6), FlyBase names", "dm6");
     public static SpeciesNomenclature UNKNOWN = new SpeciesNomenclature();
 
     public static SpeciesNomenclature getNomenclature(final int code) {
         return CODE2NOMENCLATURE.get(code);
+    }
+
+    public static SpeciesNomenclature getNomenclature(final int nomenclatureCode, final String assembly) {
+        return NOMENCLATURECODEANDASSEMBLY2NOMENCLATURE.get(Integer.toString(nomenclatureCode) + "_" + assembly);
     }
 
     public static Collection<SpeciesNomenclature> getAllNomenclatures() {
@@ -42,20 +48,27 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
     }
 
     private final int code;
+    private final int nomenclatureCode;
     private final String name;
     private final String assembly;
     private final List<RankingsDatabase> rankingsDatabases;
 
     private SpeciesNomenclature() {
-        this(-1, "?", "?");
+        this(-1, -1, "?", "?");
     }
 
     private SpeciesNomenclature(final int code, final String name, final String assembly) {
+        this(code, code, name, assembly);
+    }
+
+    private SpeciesNomenclature(final int code, final int nomenclatureCode, final String name, final String assembly) {
         this.code = code;
+        this.nomenclatureCode = nomenclatureCode;
         this.name = name;
         this.assembly = assembly;
         this.rankingsDatabases = (this.code > 0) ? CODE2DATABASES.get(code) : Collections.<RankingsDatabase>emptyList();
         CODE2NOMENCLATURE.put(code, this);
+        NOMENCLATURECODEANDASSEMBLY2NOMENCLATURE.put(Integer.toString(nomenclatureCode) + "_" + assembly, this);
     }
 
     public String getName() {
@@ -64,6 +77,10 @@ public final class SpeciesNomenclature extends IRegulonResourceBundle {
 
     public int getCode() {
         return this.code;
+    }
+
+    public int getNomenclatureCode() {
+        return this.nomenclatureCode;
     }
 
     public String getAssembly() {

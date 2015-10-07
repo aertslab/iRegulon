@@ -65,7 +65,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             /* Send the nomenclature code. */
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");
-            builder.append(speciesNomenclature.getCode());
+            builder.append(speciesNomenclature.getNomenclatureCode());
             send(connection, builder.toString());
 
             /* Check if the requested page exists. */
@@ -117,7 +117,7 @@ public class ComputationalServiceHTTP extends IRegulonResourceBundle implements 
             /* Send the necessary information. */
             final StringBuilder builder = new StringBuilder();
             builder.append("SpeciesNomenclatureCode=");
-            builder.append(factor.getSpeciesNomenclature().getCode());
+            builder.append(factor.getSpeciesNomenclature().getNomenclatureCode());
             builder.append("&");
             builder.append("GeneIdentifier=");
             builder.append(factor.getGeneName());

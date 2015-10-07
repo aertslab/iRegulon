@@ -19,15 +19,15 @@ public class HttpTest {
         //fail("Not yet implemented");
         HTTPProtocol http = new HTTPProtocol();
         Collection<GeneIdentifier> geneIDs = new ArrayList<GeneIdentifier>();
-        GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
         geneIDs.add(gene);
         float AUCThreshold = 1f;
         int rankThreshold = 1000;
         float NESThreshold = 2f;
         //int followingID = http.sentJob("test job", geneIDs, AUCThreshold, rankThreshold, NESThreshold, 0, 0) + 1;
-        GeneIdentifier gene2 = new GeneIdentifier("CASP3", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        GeneIdentifier gene2 = new GeneIdentifier("CASP3", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
         geneIDs.add(gene2);
-        GeneIdentifier gene3 = new GeneIdentifier("CASP8", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        GeneIdentifier gene3 = new GeneIdentifier("CASP8", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
         geneIDs.add(gene3);
         //assertEquals(followingID, http.sentJob("test job", geneIDs, AUCThreshold, rankThreshold, NESThreshold, 0, 0));
     }
@@ -45,7 +45,7 @@ public class HttpTest {
     public void testIsReQuested() {
         HTTPProtocol http = new HTTPProtocol();
         Collection<GeneIdentifier> geneIDs = new ArrayList<GeneIdentifier>();
-        GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
         geneIDs.add(gene);
         float AUCThreshold = 1f;
         int rankThreshold = 1000;
@@ -66,7 +66,7 @@ public class HttpTest {
 	public void testWholeCircle(){
 		HTTPService http = new HTTPService();
 		Collection<GeneIdentifier> geneIDs = new ArrayList<GeneIdentifier>();
-		GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+		GeneIdentifier gene = new GeneIdentifier("TP53", SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
 		geneIDs.add(gene);
 		float AUCThreshold = 1f;
 		int rankThreshold = 1000;

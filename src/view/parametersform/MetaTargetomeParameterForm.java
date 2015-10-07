@@ -123,7 +123,7 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
 
     public void setSpeciesNomenclature(final SpeciesNomenclature speciesNomenclature) {
         unregisterListeners();
-        speciesNomenclatureCB.setSelectedItem(speciesNomenclature == null ? SpeciesNomenclature.HOMO_SAPIENS_HGNC : speciesNomenclature);
+        speciesNomenclatureCB.setSelectedItem(speciesNomenclature == null ? SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC : speciesNomenclature);
         refresh();
         registerListeners();
         fireParametersChanged();
@@ -234,7 +234,7 @@ public final class MetaTargetomeParameterForm extends JPanel implements MetaTarg
         final JLabel speciesNomenclatureLB = new JLabel("Species and Gene nomenclature:");
         /* Homo sapiens is the only species for now for which we have a meta targetome. */
         ArrayList supportedNomenclaturesForMetaTargetome = new ArrayList<SpeciesNomenclature>();
-        supportedNomenclaturesForMetaTargetome.add(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+        supportedNomenclaturesForMetaTargetome.add(SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
         speciesNomenclatureCB = new JComboBox(new SpeciesNomenclatureComboBoxModel(supportedNomenclaturesForMetaTargetome));
         speciesNomenclatureLB.setLabelFor(speciesNomenclatureCB);
 

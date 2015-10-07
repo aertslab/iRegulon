@@ -87,7 +87,7 @@ public final class ParametersCytoPanelComponent extends JPanel implements CytoPa
         if (network == null) return null;
         final java.util.List<GeneIdentifier> ids = NetworkUtilities.getInstance().getSelectedNodesAsGeneIDs(network,
                 metaTargetomeForm.getForm().getAttributeName(),
-                species == null ? SpeciesNomenclature.HOMO_SAPIENS_HGNC : species);
+                species == null ? SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC : species);
         if (ids == null || ids.isEmpty()) return null;
         return ids.get(0);
     }
@@ -140,7 +140,7 @@ public final class ParametersCytoPanelComponent extends JPanel implements CytoPa
                 parameterForm.setSpeciesNomenclature(factor.getSpeciesNomenclature());
                 parameterForm.setTranscriptionFactor(factor);
             } else {
-                parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HGNC);
+                parameterForm.setSpeciesNomenclature(SpeciesNomenclature.HOMO_SAPIENS_HG19_HGNC);
             }
             parameterForm.setTargetomeDatabases(TargetomeDatabase.getAllTargetomeDatabases());
         }

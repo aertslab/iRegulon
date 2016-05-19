@@ -8,6 +8,7 @@
     <track-collections>
         <track-collection id="v1" default="true">1120 ChIP-seq tracks (ENCODE raw signals)</track-collection>
         <track-collection id="v2">750 ChIP-seq tracks (ENCODE uniform signals)</track-collection>
+        <track-collection id="v3">1331 human ChIP-seq tracks (ENCODE, Taipale, inhouse) / 212 mouse ChIP-seq tracks (ENCODE)</track-collection>
     </track-collections>
 
     <regulatory-region-delineations>
@@ -672,6 +673,92 @@
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+        <database id="hg19_tss_up_500bp_chip_v3">
+            <name>500bp upstream (ChIP-seq-derived)</name>
+            <collection type="track" refid="v3"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg19_tss_centered_5kb_chip_v3">
+            <name>10kb centered around TSS (ChIP-seq-derived)</name>
+            <collection type="track" refid="v3"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered10kb"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg19_tss_centered_10kb_chip_v3">
+            <name>20kb centered around TSS (ChIP-seq-derived)</name>
+            <collection type="track" refid="v3"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+        <database id="mm9_tss_up_500bp_chip_v3">
+            <name>500bp upstream (ChIP-seq-derived)</name>
+            <collection type="track" refid="v3"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="mm9_tss_centered_5kb_chip_v3">
+            <name>10kb centered around TSS (ChIP-seq-derived)</name>
+            <collection type="track" refid="v3"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="centered10kb"/>
+            <number-of-species>1</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="mm9_tss_centered_10kb_chip_v3">
+            <name>20kb centered around TSS (ChIP-seq-derived)</name>
+            <collection type="track" refid="v3"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
 
             <delineation refid="centered20kb"/>
             <number-of-species>1</number-of-species>

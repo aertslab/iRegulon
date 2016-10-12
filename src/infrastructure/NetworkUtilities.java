@@ -495,8 +495,8 @@ public final class NetworkUtilities {
         final CyTable attributes = network.getDefaultNodeTable();
         for (CyColumn column : attributes.getColumns()) {
             final String attributeName = column.getName();
+
             if (column.getType().equals(String.class)
-                    && !column.getVirtualColumnInfo().isVirtual()
                     && !EXCLUDED_ATTRIBUTE_NAMES.contains(attributeName)) {
                 int nullCount = 0;
                 for (CyNode node : nodes) {

@@ -792,7 +792,8 @@ public class PredictedRegulatorsForm extends IRegulonResourceBundle
     }
 
     public String getAttributeName() {
-        return (String) this.attributeNameCB.getSelectedItem();
+        final Object selectedAttributeName = this.attributeNameCB.getSelectedItem();
+        return (selectedAttributeName == null) ? NetworkUtilities.ID_ATTRIBUTE_NAME : selectedAttributeName.toString();
     }
 
     public boolean isRegionBasedDatabase() {

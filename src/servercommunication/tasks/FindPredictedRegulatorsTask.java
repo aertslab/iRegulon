@@ -19,7 +19,6 @@ import java.util.List;
 
 public final class FindPredictedRegulatorsTask extends IRegulonResourceBundle implements Task, EnrichedMotifsAndTracksResults {
     private static final int WAITING_TIME_IN_MS = 3000;
-    private static final String lostGenesError = "The following genes were lost:<br>";
 
     private List<AbstractMotifAndTrack> motifsAndTracks = Collections.emptyList();
     private List<Motif> motifs = new ArrayList<Motif>();
@@ -123,7 +122,7 @@ public final class FindPredictedRegulatorsTask extends IRegulonResourceBundle im
                 }
 
                 if (this.motifsAndTracks.isEmpty()) {
-                    this.errorMessage = "<html>Not a single motif or track is enriched for your input gene signature.<br>Please change your input parameters.</html>";
+                    this.errorMessage = "Not a single motif or track is enriched for your input gene signature. Please change your input parameters.";
                 }
             } else if (State.ERROR.equals(this.state)) {
                 taskMonitor.setStatusMessage("Error.");
@@ -163,36 +162,5 @@ public final class FindPredictedRegulatorsTask extends IRegulonResourceBundle im
 
     public String getErrorMessage() {
         return this.errorMessage;
-    }
-
-    public boolean hasLostGenesError() {
-        return (this.errorMessage.indexOf(lostGenesError) >= 0);
-    }
-
-    public List<String> getLostGenesError() {
-        List<String> lostGenesErrorMessages = new ArrayList<String>();
-        final int lostGenesErrorLength = lostGenesError.length();
-        final int lostGenesErrorFoundIndex = this.errorMessage.indexOf(lostGenesError);
-        if (lostGenesErrorFoundIndex >= 0) {
-            // When the error message contains the string "The following genes were lost:<br>", separate the error
-            // message from the list of lost genes.
-            String errorMessageLostGenes = this.errorMessage.substring(0, lostGenesErrorFoundIndex + lostGenesErrorLength - 1) + "</html>";
-
-            // Get lost genes from the error message, so they can be displayed in a textarea.
-            String lostGenes = this.errorMessage.substring(lostGenesErrorFoundIndex + lostGenesErrorLength);
-            // Replace breaks by newlines.
-            lostGenes = lostGenes.replaceAll("<br>", " ");
-            // Remove "</html>" from the end of the lost genes string.
-            lostGenes = lostGenes.substring(0, lostGenes.length() - 7);
-
-            lostGenesErrorMessages.add(errorMessageLostGenes);
-            lostGenesErrorMessages.add(lostGenes);
-
-            return lostGenesErrorMessages;
-        } else {
-            lostGenesErrorMessages.add(getErrorMessage());
-            lostGenesErrorMessages.add("");
-        }
-        return lostGenesErrorMessages;
     }
 }

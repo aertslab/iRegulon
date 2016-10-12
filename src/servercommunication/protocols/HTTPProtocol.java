@@ -154,7 +154,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                         }
                     } else if (columns[0].equals("ERROR:")) {
                         rd.close();
-                        throw new ServerCommunicationException(columns[1]);
+                        throw new ServerCommunicationException(columns[1].replaceAll("\\\\n", " "));
                     }
                 }
             }
@@ -216,7 +216,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                         }
                     } else if (columns[0].equals("ERROR:")) {
                         rd.close();
-                        throw new ServerCommunicationException(columns[1]);
+                        throw new ServerCommunicationException(columns[1].replaceAll("\\\\n", " "));
                     }
                 }
             }
@@ -276,7 +276,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                         }
                     } else if (columns[0].equals("ERROR:")) {
                         rd.close();
-                        throw new ServerCommunicationException(columns[1]);
+                        throw new ServerCommunicationException(columns[1].replaceAll("\\\\n", " "));
                     }
                 }
             }
@@ -501,7 +501,7 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
                 } else if (motifOrTrackVariables.length == 2) {
                     if (motifOrTrackVariables[0].equals("ERROR:")) {
                         rd.close();
-                        throw new ServerCommunicationException(motifOrTrackVariables[1]);
+                        throw new ServerCommunicationException(motifOrTrackVariables[1].replaceAll("\\\\n", " "));
                     }
                 }
             }
@@ -551,10 +551,10 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
 
                 if (columns.length == 2) {
                     if (columns[0].equals("JOB_ERROR:")) {
-                        jobError = "<html>" + columns[1].replaceAll("\\\\n", "<br>") + "</html>";
+                        jobError = columns[1].replaceAll("\\\\n", " ");
                     } else if (columns[0].equals("ERROR:")) {
                         rd.close();
-                        throw new ServerCommunicationException(columns[1]);
+                        throw new ServerCommunicationException(columns[1].replaceAll("\\\\n", " "));
                     }
                 }
             }

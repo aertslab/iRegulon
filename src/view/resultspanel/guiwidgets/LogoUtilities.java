@@ -13,7 +13,7 @@ public final class LogoUtilities {
     private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
 
     private static final String MC_V3_V6_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v3_v6_logo_folder");
-    private static final String MC_V7_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v7_logo_folder");
+    private static final String MC_V7_V8_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v7_v8_logo_folder");
     private static final String LOGO_EXTENSION = RESOURCE_BUNDLE.getString("logo_extension");
 
     private LogoUtilities() {
@@ -30,12 +30,12 @@ public final class LogoUtilities {
                  * to determine to which motif collection it belongs to.
                  */
                 if (motifName.indexOf("__") < motifName.indexOf('-')) {
-                    return MC_V7_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                    return MC_V7_V8_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
                 } else {
                     return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
                 }
             } else {
-                return MC_V7_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                return MC_V7_V8_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
             }
         } else {
             return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;

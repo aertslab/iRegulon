@@ -4,13 +4,13 @@
 *.DS_Store
 
 # Ignore IntelliJ IDEA related files and directories.
-bin/
-out/
-.idea
-*.iml
+/bin/
+/out/
+/.idea/
+/*.iml
 
 # Ignore the final output files created when building the plugin.
-iRegulon-*-bin-with-transfac.jar
-iRegulon-*-bin-without-transfac.jar
-iRegulon-*-src-with-transfac.zip
-iRegulon-*-src-without-transfac.zip
+/iRegulon-*-bin-with-transfac.jar
+/iRegulon-*-bin-without-transfac.jar
+/iRegulon-*-src-with-transfac.zip
+/iRegulon-*-src-without-transfac.zip

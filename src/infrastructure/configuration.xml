@@ -3,6 +3,7 @@
         <motif-collection id="v3">6K (6383 PWMs)</motif-collection>
         <motif-collection id="v6">10K (9713 PWMs)</motif-collection>
         <motif-collection id="v7" default="true">19K (18832 PWMs)</motif-collection>
+        <motif-collection id="v8" default="true">20K (20003 PWMs)</motif-collection>
     </motif-collections>
 
     <track-collections>
@@ -593,6 +594,184 @@
         </database>
 
 
+        <!-- Motif databases made with motif collection version 8 for genes -->
+
+        <database id="hg19_tss_centered_10kb_7sp_mc_v8">
+            <name>20kb centered around TSS (7 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>7</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg19_tss_centered_10kb_10sp_mc_v8">
+            <name>20kb centered around TSS (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+        <database id="hg19_tss_centered_5kb_7sp_mc_v8">
+            <name>10kb centered around TSS (7 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered10kb"/>
+            <number-of-species>7</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg19_tss_centered_5kb_10sp_mc_v8">
+            <name>10kb centered around TSS (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="centered10kb"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+        <database id="hg19_tss_up_500bp_7sp_mc_v8">
+            <name>500bp upstream (7 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>7</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg19_tss_up_500bp_10sp_mc_v8">
+            <name>500bp upstream (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg19</species>
+            <nomenclature refid="1">HGNC</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+
+        <database id="mm9_tss_centered_10kb_7sp_mc_v8">
+            <name>20kb centered around TSS (7 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>7</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="mm9_tss_centered_10kb_10sp_mc_v8">
+            <name>20kb centered around TSS (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+        <database id="mm9_tss_centered_5kb_7sp_mc_v8">
+            <name>10kb centered around TSS (7 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="centered10kb"/>
+            <number-of-species>7</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="mm9_tss_centered_5kb_10sp_mc_v8">
+            <name>10kb centered around TSS (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="centered10kb"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+        <database id="mm9_tss_up_500bp_7sp_mc_v8">
+            <name>500bp upstream (7 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>7</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="mm9_tss_up_500bp_10sp_mc_v8">
+            <name>500bp upstream (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm9</species>
+            <nomenclature refid="2">MGI</nomenclature>
+
+            <delineation refid="up500bp"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+
         <!-- ChIP-seq databases for genes -->
 
         <database id="hg19_tss_up_500bp_chip_v1">
@@ -890,12 +1069,7 @@
             <default-auc-threshold>0.01</default-auc-threshold>
 
             <mappings>
-                <mapping id="dm3_symbol_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
                 <mapping id="dm3_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
-                <mapping id="dm3_symbol_up5kb_full_transcript_down5kb">5kb upstream, full transcript and 5kb downstream</mapping>
-                <mapping id="dm3_symbol_up10kb_full_transcript_down10kb">10kb upstream, full transcript and 10kb downstream</mapping>
-                <mapping id="dm3_symbol_up5kb_5utr_intron1_ucsc">5kb upstream, 5'UTR and 1st intron (UCSC annotations)</mapping>
-                <mapping id="dm3_symbol_up5kb_introns_legacy">5kb upstream and all introns (legacy)</mapping>
             </mappings>
         </database>
 
@@ -913,12 +1087,46 @@
             <default-auc-threshold>0.01</default-auc-threshold>
 
             <mappings>
-                <mapping id="dm6_symbol_up5kb_5utr_intron1">5kb upstream, 5'UTR and 1st intron</mapping>
                 <mapping id="dm6_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
-                <mapping id="dm6_symbol_up5kb_full_transcript_down5kb">5kb upstream, full transcript and 5kb downstream</mapping>
-                <mapping id="dm6_symbol_up10kb_full_transcript_down10kb">10kb upstream, full transcript and 10kb downstream</mapping>
-                <mapping id="dm6_symbol_up5kb_5utr_intron1_ucsc">5kb upstream, 5'UTR and 1st intron (UCSC annotations)</mapping>
-                <mapping id="dm6_symbol_up5kb_introns_legacy">5kb upstream and all introns (legacy)</mapping>
+            </mappings>
+        </database>
+
+
+        <!-- Motif databases made with motif collection version 8 for regions -->
+
+        <database id="dm3_regions_pwm_11sp_mc_v8">
+            <name>136K regions (11 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>regions</type>
+
+            <species>dm3</species>
+            <nomenclature refid="3">FlyBase</nomenclature>
+
+            <number-of-species>11</number-of-species>
+
+            <default-nes-threshold>2.50</default-nes-threshold>
+            <default-auc-threshold>0.01</default-auc-threshold>
+
+            <mappings>
+                <mapping id="dm3_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
+            </mappings>
+        </database>
+
+        <database id="dm6_regions_pwm_11sp_mc_v8">
+            <name>131K regions (11 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>regions</type>
+
+            <species>dm6</species>
+            <nomenclature refid="4">FlyBase</nomenclature>
+
+            <number-of-species>11</number-of-species>
+
+            <default-nes-threshold>2.50</default-nes-threshold>
+            <default-auc-threshold>0.01</default-auc-threshold>
+
+            <mappings>
+                <mapping id="dm6_symbol_up5kb_full_transcript" default="true">5kb upstream and full transcript</mapping>
             </mappings>
         </database>
     </databases>

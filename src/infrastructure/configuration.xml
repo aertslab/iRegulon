@@ -2,14 +2,14 @@
     <motif-collections>
         <motif-collection id="v3">6K (6383 PWMs)</motif-collection>
         <motif-collection id="v6">10K (9713 PWMs)</motif-collection>
-        <motif-collection id="v7" default="true">19K (18832 PWMs)</motif-collection>
+        <motif-collection id="v7">19K (18832 PWMs)</motif-collection>
         <motif-collection id="v8" default="true">20K (20003 PWMs)</motif-collection>
     </motif-collections>
 
     <track-collections>
-        <track-collection id="v1" default="true">1120 ChIP-seq tracks (ENCODE raw signals)</track-collection>
+        <track-collection id="v1">1120 ChIP-seq tracks (ENCODE raw signals)</track-collection>
         <track-collection id="v2">750 ChIP-seq tracks (ENCODE uniform signals)</track-collection>
-        <track-collection id="v3">1331 human ChIP-seq tracks (ENCODE, Taipale, inhouse) / 212 mouse ChIP-seq tracks (ENCODE)</track-collection>
+        <track-collection id="v3" default="true">1331 human ChIP-seq tracks (ENCODE, Taipale, inhouse) / 212 mouse ChIP-seq tracks (ENCODE)</track-collection>
     </track-collections>
 
     <regulatory-region-delineations>

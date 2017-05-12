@@ -28,8 +28,8 @@ public class HTTPProtocol extends IRegulonResourceBundle implements Protocol {
     public HttpURLConnection createConnection(String urlString) throws IOException {
         final URL url = new URL(urlString);
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setConnectTimeout(5000);
-        connection.setReadTimeout(5000);
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(30000);
         connection.setRequestProperty("User-Agent", userAgent);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

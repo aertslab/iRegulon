@@ -13,29 +13,29 @@ public final class LogoUtilities {
     private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
 
     private static final String MC_V3_V6_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v3_v6_logo_folder");
-    private static final String MC_V7_V8_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v7_v8_logo_folder");
+    private static final String MC_V7_AND_HIGHER_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v7_and_higher_logo_folder");
     private static final String LOGO_EXTENSION = RESOURCE_BUNDLE.getString("logo_extension");
 
     private LogoUtilities() {
     }
 
     private static String getImagePath(String motifName) {
-        final boolean motifNameMotifCouldBeCollection7 = motifName.contains("__");
-        final boolean motifNameMotifCouldBeCollection3to6 = motifName.contains("-");
+        final boolean motifNameMotifCouldBeCollection7OrHigher = motifName.contains("__");
+        final boolean motifNameMotifCouldBeCollection3To6 = motifName.contains("-");
 
-        if (motifNameMotifCouldBeCollection7) {
-            if (motifNameMotifCouldBeCollection3to6) {
+        if (motifNameMotifCouldBeCollection7OrHigher) {
+            if (motifNameMotifCouldBeCollection3To6) {
                 /*
                  * If the motif name contains both "__" and "-", check which one occurs first
                  * to determine to which motif collection it belongs to.
                  */
                 if (motifName.indexOf("__") < motifName.indexOf('-')) {
-                    return MC_V7_V8_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                    return MC_V7_AND_HIGHER_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
                 } else {
                     return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
                 }
             } else {
-                return MC_V7_V8_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                return MC_V7_AND_HIGHER_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
             }
         } else {
             return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;

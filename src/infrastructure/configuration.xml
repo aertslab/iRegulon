@@ -16,6 +16,7 @@
         <delineation id="centered20kb">20kb centered around TSS</delineation>
         <delineation id="centered10kb">10kb centered around TSS</delineation>
         <delineation id="up500bp">500bp upstream</delineation>
+        <delineation id="up500bpdown100bp">500bp upstream and 100bp downstream</delineation>
     </regulatory-region-delineations>
 
     <databases>
@@ -596,6 +597,36 @@
 
         <!-- Motif databases made with motif collection version 8 for genes -->
 
+        <database id="hg38__refseq-r80__10kb_up_and_down_tss__mc_v8">
+            <name>20kb centered around TSS (9 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg38</species>
+            <nomenclature refid="5">HGNC</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>9</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="hg38__refseq-r80__500bp_up_and_100bp_down_tss__mc_v8">
+            <name>500bp upstream and 100bp downstream of TSS (9 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>hg38</species>
+            <nomenclature refid="5">HGNC</nomenclature>
+
+            <delineation refid="up500bpdown100bp"/>
+            <number-of-species>9</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+
         <database id="hg19_tss_centered_10kb_7sp_mc_v8">
             <name>20kb centered around TSS (7 species)</name>
             <collection type="motif" refid="v8"/>
@@ -684,6 +715,36 @@
         </database>
 
 
+        <database id="mm10__refseq-r80__10kb_up_and_down_tss__mc_v8">
+            <name>20kb centered around TSS (9 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm10</species>
+            <nomenclature refid="6">MGI</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>9</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="mm10__refseq-r80__500bp_up_and_100bp_down_tss__mc_v8">
+            <name>500bp upstream and 100bp downstream of TSS (9 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>mm10</species>
+            <nomenclature refid="6">MGI</nomenclature>
+
+            <delineation refid="up500bpdown100bp"/>
+            <number-of-species>9</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+
         <database id="mm9_tss_centered_10kb_7sp_mc_v8">
             <name>20kb centered around TSS (7 species)</name>
             <collection type="motif" refid="v8"/>
@@ -765,6 +826,36 @@
             <nomenclature refid="2">MGI</nomenclature>
 
             <delineation refid="up500bp"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+
+
+        <database id="danrer10__refseq-r80__10kb_up_and_down_tss__mc_v8">
+            <name>20kb centered around TSS (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>danrer10</species>
+            <nomenclature refid="7">ZFIN</nomenclature>
+
+            <delineation refid="centered20kb"/>
+            <number-of-species>10</number-of-species>
+
+            <default-nes-threshold>3.00</default-nes-threshold>
+            <default-auc-threshold>0.03</default-auc-threshold>
+        </database>
+        <database id="danrer10__refseq-r80__500bp_up_and_100bp_down_tss__mc_v8">
+            <name>500bp upstream and 100bp downstream of TSS (10 species)</name>
+            <collection type="motif" refid="v8"/>
+            <type>genes</type>
+
+            <species>danrer10</species>
+            <nomenclature refid="7">ZFIN</nomenclature>
+
+            <delineation refid="up500bpdown100bp"/>
             <number-of-species>10</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>

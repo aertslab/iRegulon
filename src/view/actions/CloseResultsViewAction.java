@@ -32,7 +32,7 @@ public final class CloseResultsViewAction extends ResourceAction {
             if (result == 0) {
                 PersistenceViewUtilities.saveToSelectedFile(
                         persistence.PersistenceUtilities.convertResultsToXML(view.getResults()),
-                        FileTypes.IRF);
+                        FileTypes.IRF_GZ);
             }
         }
         view.unregisterRefreshListeners();

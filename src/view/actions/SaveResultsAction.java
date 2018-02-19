@@ -24,7 +24,7 @@ public final class SaveResultsAction extends ResourceAction {
     public void actionPerformed(ActionEvent e) {
         boolean saved = PersistenceViewUtilities.saveToSelectedFile(
                 PersistenceUtilities.convertResultsToXML(getView().getResults()),
-                FileTypes.IRF);
+                FileTypes.IRF_GZ);
 
         if (saved && !view.isSaved()) {
             getView().setSaved();

@@ -13,6 +13,10 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipException;
 
 
 public class PersistenceViewUtilities {
@@ -80,9 +84,16 @@ public class PersistenceViewUtilities {
 
         /* Write the data to the file. */
         try {
-            final BufferedWriter output = new BufferedWriter(new FileWriter(selectedFile));
-            output.write(data);
-            output.close();
+            if (fileChooserFilter == FileTypes.IRF_GZ) {
+                final GZIPOutputStream output = new GZIPOutputStream(new FileOutputStream(selectedFile));
+                output.write(data.getBytes(), 0, data.getBytes().length);
+                output.close();
+            } else {
+                final BufferedWriter output = new BufferedWriter(new FileWriter(selectedFile));
+                output.write(data);
+                output.close();
+            }
+
         } catch (IOException e) {
             JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
                     "<html> " +
@@ -98,9 +109,12 @@ public class PersistenceViewUtilities {
 
     public String selectIRegulonFile() {
         final FileUtil fileUtil = CytoscapeEnvironment.getInstance().getServiceRegistrar().getService(FileUtil.class);
+        LinkedHashSet<FileChooserFilter> IRFfileChooserFilters = new LinkedHashSet<FileChooserFilter>();
+        IRFfileChooserFilters.add(FileTypes.IRF);
+        IRFfileChooserFilters.add(FileTypes.IRF_GZ);
         final File selectedFile = fileUtil.getFile(CytoscapeEnvironment.getInstance().getJFrame(),
                 "Select IRF file to load",
-                FileUtil.LOAD, Collections.singleton(FileTypes.IRF));
+                FileUtil.LOAD, IRFfileChooserFilters);
 
         if (selectedFile != null) {
             if (FileTypes.IRF.accept(selectedFile)) {
@@ -111,10 +125,10 @@ public class PersistenceViewUtilities {
                 if (!selectedFile.isFile()) {
                     JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
                             "<html> " +
-                            "<body>" +
-                            "File '" + filename + "' does not exist." +
-                            "</body>" +
-                            "</html>");
+                                    "<body>" +
+                                    "File '" + filename + "' does not exist." +
+                                    "</body>" +
+                                    "</html>");
                     return null;
                 }
 
@@ -132,23 +146,80 @@ public class PersistenceViewUtilities {
                     CharBuffer cb = decoder.decode(bb);
 
                     String xml = cb.toString();
+                    fileChannel.close();
+                    fis.close();
                     return xml;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
                             "<html> " +
-                            "<body>" +
-                            "File '" + filename + "' could not be found." +
-                            "</body>" +
-                            "</html>");
+                                    "<body>" +
+                                    "File '" + filename + "' could not be found." +
+                                    "</body>" +
+                                    "</html>");
                 } catch (IOException e) {
                     JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
                             "<html> " +
-                            "<body>" +
-                            "An error has occurred while opening the file '" + filename + "'." +
-                            "</body>" +
-                            "</html>");
+                                    "<body>" +
+                                    "An error has occurred while opening the file '" + filename + "'." +
+                                    "</body>" +
+                                    "</html>");
                 }
+            } else if (FileTypes.IRF_GZ.accept(selectedFile)) {
+                String filename = selectedFile.getName();
+                /* Strip off the extension of the selected file. */
+                this.iregulonJobName = filename.substring(0, filename.length() - FileTypes.IRF_GZ.getExtensions()[0].length() - 1);
+
+                if (!selectedFile.isFile()) {
+                    JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                            "<html> " +
+                                    "<body>" +
+                                    "File '" + filename + "' does not exist." +
+                                    "</body>" +
+                                    "</html>");
+                    return null;
+                }
+
+                try {
+                    FileInputStream fis = new FileInputStream(selectedFile);
+                    GZIPInputStream gis = new GZIPInputStream(fis);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(gis, "UTF8"));
+                    StringBuilder sbxml = new StringBuilder();
+
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sbxml.append(line);
+                    }
+                    br.close();
+                    gis.close();
+                    fis.close();
+
+                    String xml = sbxml.toString();
+                    return xml;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                            "<html> " +
+                                    "<body>" +
+                                    "File '" + filename + "' could not be found." +
+                                    "</body>" +
+                                    "</html>");
+                } catch (ZipException e) {
+                    JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                            "<html> " +
+                                    "<body>" +
+                                    "An error has occurred while decompressing the file '" + filename + "'." +
+                                    "</body>" +
+                                    "</html>");
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
+                            "<html> " +
+                                    "<body>" +
+                                    "An error has occurred while opening the file '" + filename + "'." +
+                                    "</body>" +
+                                    "</html>");
+                }
+
             } else {
                 JOptionPane.showMessageDialog(CytoscapeEnvironment.getInstance().getJFrame(),
                         "Wrong file type selected.");

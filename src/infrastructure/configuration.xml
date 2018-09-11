@@ -833,36 +833,6 @@
         </database>
 
 
-        <database id="danrer10__refseq-r80__10kb_up_and_down_tss__mc_v8">
-            <name>20kb centered around TSS (10 species)</name>
-            <collection type="motif" refid="v8"/>
-            <type>genes</type>
-
-            <species>danrer10</species>
-            <nomenclature refid="7">ZFIN</nomenclature>
-
-            <delineation refid="centered20kb"/>
-            <number-of-species>10</number-of-species>
-
-            <default-nes-threshold>3.00</default-nes-threshold>
-            <default-auc-threshold>0.03</default-auc-threshold>
-        </database>
-        <database id="danrer10__refseq-r80__500bp_up_and_100bp_down_tss__mc_v8">
-            <name>500bp upstream and 100bp downstream of TSS (10 species)</name>
-            <collection type="motif" refid="v8"/>
-            <type>genes</type>
-
-            <species>danrer10</species>
-            <nomenclature refid="7">ZFIN</nomenclature>
-
-            <delineation refid="up500bpdown100bp"/>
-            <number-of-species>10</number-of-species>
-
-            <default-nes-threshold>3.00</default-nes-threshold>
-            <default-auc-threshold>0.03</default-auc-threshold>
-        </database>
-
-
         <!-- Motif databases made with motif collection version 9 for genes -->
 
         <database id="hg38__refseq-r80__10kb_up_and_down_tss__mc_v9">

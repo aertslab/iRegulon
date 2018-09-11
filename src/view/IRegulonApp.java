@@ -157,7 +157,7 @@ public class IRegulonApp extends AbstractCySwingApp {
                             "<b>Build ID:</b> " + RESOURCE_BUNDLE.getString("build_ID") + "<br/>" +
                             "<b>Released:</b> " + RESOURCE_BUNDLE.getString("release_date") + "<br/>" +
                             "<b>Developers:</b> Gert Hulselmans (&ge;0.97); Rekin's Janky (0.97&le;1.2); Bram Van de Sande (&le;0.96); Koen Herten (&le;0.2)." + "<br/>" +
-                            "<b>Copyright:</b> 2012-2015 KU Leuven." + "<br/>" +
+                            "<b>Copyright:</b> 2012-" + RESOURCE_BUNDLE.getString("copyright_end_year") + " KU Leuven." + "<br/>" +
                             "<b>Website:</b> " + RESOURCE_BUNDLE.getString("website") + "<br/>" +
                             "<b>Download:</b> " + RESOURCE_BUNDLE.getString("download_page") + "<br/>" +
                             "<b>Contact:</b> " + RESOURCE_BUNDLE.getString("contact") + "<br/>" +

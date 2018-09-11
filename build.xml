@@ -26,6 +26,7 @@
     <property name="jars.paxlogging" value="${lib.folder}/pax-logging-api-1.7.2.jar"/>
 
     <tstamp>
+        <format property="CURRENT_YEAR" pattern="yyyy" locale="us,US"/>
         <format property="TODAY" pattern="yyyy-MM-dd" locale="us,US"/>
         <format property="TODAY_long" pattern="MMMM d, yyyy" locale="us,US"/>
     </tstamp>
@@ -108,6 +109,7 @@
                     <token key="pluginName" value="${plugin.name}"/>
                     <token key="pluginVersion" value="${plugin.version}"/>
                     <token key="releaseDate" value="${TODAY}"/>
+                    <token key="copyrightEndYear" value="${CURRENT_YEAR}"/>
                     <token key="websiteUrl" value="${website.url}"/>
                     <token key="webclientBaseUrl" value="${webclient.baseurl}"/>
                     <token key="buildNumber" value="${build.number}"/>

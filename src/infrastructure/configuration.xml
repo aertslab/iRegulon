@@ -3,7 +3,8 @@
         <motif-collection id="v3">6K (6383 PWMs)</motif-collection>
         <motif-collection id="v6">10K (9713 PWMs)</motif-collection>
         <motif-collection id="v7">19K (18832 PWMs)</motif-collection>
-        <motif-collection id="v8" default="true">20K (20003 PWMs)</motif-collection>
+        <motif-collection id="v8">20K (20003 PWMs)</motif-collection>
+        <motif-collection id="v9" default="true">24K (24453 PWMs)</motif-collection>
     </motif-collections>
 
     <track-collections>

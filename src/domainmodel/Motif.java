@@ -1,10 +1,18 @@
 package domainmodel;
 
+import infrastructure.IRegulonResourceBundle;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class Motif extends AbstractMotif implements Comparable<Motif> {
+    private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
+    private static final String MC_V3_V6_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v3_v6_logo_folder");
+    private static final String MC_V7_AND_HIGHER_LOGO_FOLDERNAME = RESOURCE_BUNDLE.getString("mc_v7_and_higher_logo_folder");
+    private static final String LOGO_EXTENSION = RESOURCE_BUNDLE.getString("logo_extension");
+
     final private String name;
     final private int rank;
     final private String description;
@@ -57,6 +65,29 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
 
     public List<Motif> getMotifs() {
         return Collections.singletonList(this);
+    }
+
+    static public String getLogoPath(String motifName) {
+        final int motifNameMotifCollectionCouldBe7OrHigherIndex = motifName.indexOf("__");
+        final int motifNameMotifCollectionCouldBe3To6Index = motifName.indexOf("-");
+
+        if (motifNameMotifCollectionCouldBe7OrHigherIndex != -1) {
+            if (motifNameMotifCollectionCouldBe3To6Index != -1) {
+                /*
+                 * If the motif name contains both "__" and "-", check which one occurs first
+                 * to determine to which motif collection it belongs to.
+                 */
+                if (motifNameMotifCollectionCouldBe7OrHigherIndex < motifNameMotifCollectionCouldBe3To6Index) {
+                    return MC_V7_AND_HIGHER_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                } else {
+                    return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+                }
+            } else {
+                return MC_V7_AND_HIGHER_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+            }
+        } else {
+            return MC_V3_V6_LOGO_FOLDERNAME + "/" + motifName + "." + LOGO_EXTENSION;
+        }
     }
 
     @Override

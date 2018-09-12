@@ -67,6 +67,29 @@ public class Motif extends AbstractMotif implements Comparable<Motif> {
         return Collections.singletonList(this);
     }
 
+    public String getMotifNameWithoutMotifCollection() {
+        final int motifNameMotifCollectionCouldBe7OrHigherIndex = this.name.indexOf("__");
+        final int motifNameMotifCollectionCouldBe3To6Index = this.name.indexOf("-");
+
+        if (motifNameMotifCollectionCouldBe7OrHigherIndex != -1) {
+            if (motifNameMotifCollectionCouldBe3To6Index != -1) {
+                /*
+                 * If the motif name contains both "__" and "-", check which one occurs first
+                 * to determine to which motif collection it belongs to.
+                 */
+                if (motifNameMotifCollectionCouldBe7OrHigherIndex < motifNameMotifCollectionCouldBe3To6Index) {
+                    return this.name.substring(motifNameMotifCollectionCouldBe7OrHigherIndex + 2);
+                } else {
+                    return this.name.substring(motifNameMotifCollectionCouldBe3To6Index + 1);
+                }
+            } else {
+                return this.name.substring(motifNameMotifCollectionCouldBe7OrHigherIndex + 2);
+            }
+        } else {
+            return this.name.substring(motifNameMotifCollectionCouldBe3To6Index + 1);
+        }
+    }
+
     static public String getLogoPath(String motifName) {
         final int motifNameMotifCollectionCouldBe7OrHigherIndex = motifName.indexOf("__");
         final int motifNameMotifCollectionCouldBe3To6Index = motifName.indexOf("-");

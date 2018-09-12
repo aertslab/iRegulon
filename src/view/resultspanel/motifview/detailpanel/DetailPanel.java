@@ -15,13 +15,27 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.util.ResourceBundle;
 
 
 public class DetailPanel extends JPanel implements DetailPanelIF {
-    private static final String TRANSFAC_PREFIX = "transfac_";
-    private static final String TRANSFAC_URL = IRegulonResourceBundle.getBundle().getString("transfac_url");
+    private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
+
+    private static final String JASPAR_PREFIX = "jaspar";
+    private static final String JASPAR_URL = RESOURCE_BUNDLE.getString("jaspar_url");
+    private static final String HOCOMOCO_PREFIX = "hocomoco";
+    private static final String HOCOMOCO_v10_SUBSTRING = RESOURCE_BUNDLE.getString("hocomoco_v10_substring");
+    private static final String HOCOMOCO_v11_SUBSTRING = RESOURCE_BUNDLE.getString("hocomoco_v11_substring");
+    private static final String HOCOMOCO_v10_URL = RESOURCE_BUNDLE.getString("hocomoco_v10_url");
+    private static final String HOCOMOCO_v11_URL = RESOURCE_BUNDLE.getString("hocomoco_v11_url");
+    private static final String SWISSREGULON_PREFIX = "swissregulon";
+    private static final String SWISSREGULON_URL = RESOURCE_BUNDLE.getString("swissregulon_url");
+    private static final String TRANSFAC_PREFIX = "transfac";
+    private static final String TRANSFAC_URL = RESOURCE_BUNDLE.getString("transfac_url");
 
     private JTable targetGeneTable;
     private LinkTextField jtfMotif;
@@ -223,21 +237,51 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         refresh(getSelectedMotifOrTrack());
     }
 
-    private URI composeURI(final AbstractMotifAndTrack motifOrTrack) {
-        final int motifOrTrackLength = motifOrTrack.getName().length();
+    private URI createMotifURI(final Motif motif) {
         try {
-            /* Extract the matrix ID from the TRANSFAC motif name and add it to the URL. */
-            return new URI(TRANSFAC_URL + motifOrTrack.getName().substring(
-                    motifOrTrackLength - 6, motifOrTrackLength));
+            if (motif.getName().startsWith(JASPAR_PREFIX)) {
+                return new URI(JASPAR_URL + motif.getMotifNameWithoutMotifCollection() + "/");
+            } else if (motif.getName().startsWith(HOCOMOCO_PREFIX)) {
+                if (motif.getMotifNameWithoutMotifCollection().contains(HOCOMOCO_v10_SUBSTRING)) {
+                    return new URI(HOCOMOCO_v10_URL + motif.getMotifNameWithoutMotifCollection());
+                } else if (motif.getMotifNameWithoutMotifCollection().contains(HOCOMOCO_v11_SUBSTRING)) {
+                    return new URI(HOCOMOCO_v11_URL + motif.getMotifNameWithoutMotifCollection());
+                } else {
+                    /* HOCOMOCO v9 does not have a useful link. */
+                    return null;
+                }
+            } else if (motif.getName().startsWith(SWISSREGULON_PREFIX)) {
+                try {
+                    /* The motif description for swissregulon motifs contains the names used on the swissregulon website.
+                     * The motif description needs to be encoded as it can contain characters which are invalid in URLs.
+                     */
+                    String encodedMotifID = URLEncoder.encode(motif.getDescription(), "UTF-8");
+
+                    if (motif.getMotifNameWithoutMotifCollection().startsWith("hs__")) {
+                        return new URI(SWISSREGULON_URL + encodedMotifID.substring(4) + "&org=hg18");
+                    } else if (motif.getMotifNameWithoutMotifCollection().startsWith("mm__")) {
+                        return new URI(SWISSREGULON_URL + encodedMotifID.substring(4)  + "&org=mm9");
+                    } else {
+                        return null;
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    return null;
+                }
+            } else if (motif.getName().startsWith(TRANSFAC_PREFIX)) {
+                return new URI(TRANSFAC_URL + motif.getMotifNameWithoutMotifCollection());
+            }
         } catch (URISyntaxException e) {
             return null;
         }
+
+        return null;
     }
 
     private void refresh(AbstractMotifAndTrack motifOrTrack) {
         this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motifOrTrack));
         this.transcriptionFactorTable.setModel(new TranscriptionFactorTableModel(motifOrTrack, AbstractMotifAndTrack.TrackType.MOTIF));
-        this.tfMotif.setMotif((Motif) motifOrTrack);
+        final Motif motif = (Motif) motifOrTrack;
+        this.tfMotif.setMotif(motif);
 
         if (motifOrTrack == null) {
             this.jtfMotif.disableLink("");
@@ -245,8 +289,14 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             this.jtfDescription.setToolTipText("");
             this.jlbLogo.setMotif(null);
         } else {
-            if (motifOrTrack.getName().startsWith(TRANSFAC_PREFIX)) {
-                this.jtfMotif.enableLink(motifOrTrack.getName(), composeURI(motifOrTrack));
+            if (motifOrTrack.getTrackType() == AbstractMotifAndTrack.TrackType.MOTIF) {
+                URI motifURI = createMotifURI(motif);
+
+                if (motifURI != null) {
+                    this.jtfMotif.enableLink(motif.getName(), motifURI);
+                } else {
+                    this.jtfMotif.disableLink(motif.getName());
+                }
             } else {
                 this.jtfMotif.disableLink(motifOrTrack.getName());
             }
@@ -254,7 +304,7 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             this.jtfDescription.setText(motifOrTrack.getDescription());
             this.jtfDescription.setToolTipText("Description: " + motifOrTrack.getDescription());
 
-            this.jlbLogo.setMotif((Motif) motifOrTrack);
+            this.jlbLogo.setMotif(motif);
 
             /* Refresh highlighting. */
             refreshHighlighting();

@@ -10,6 +10,9 @@ only_post_requests();
 /* Only allow iRegulon client to access this page. */
 only_iregulon_client($client_version);
 
+/* Set Content-type to plain text. */
+header('Content-Type: text/plain');
+
 
 
 /* List of database sources that are accepted to be queried. */

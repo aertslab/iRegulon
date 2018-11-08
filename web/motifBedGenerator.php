@@ -2,6 +2,9 @@
 
 include_once 'common.php';
 
+/* Set Content-type to plain text. */
+header('Content-Type: text/plain');
+
 
 
 /* Check if a 'featureIDandTarget' GET filed exists. */

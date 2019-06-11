@@ -22,7 +22,7 @@
     <property name="jars.cytoscape" value="${lib.folder}/cytoscape-swing-app-api-3.6.1-jar-with-dependencies.jar"/>
     <property name="jars.jarjar" value="${lib.folder}/jarjar-1.4-bin.jar"/>
     <property name="jars.kxml2" value="${lib.folder}/kxml2-2.3.0.jar"/>
-    <property name="jars.xstream" value="${lib.folder}/xstream-1.4.7.jar"/>
+    <property name="jars.xstream" value="${lib.folder}/xstream-1.4.11.1.jar"/>
     <property name="jars.paxlogging" value="${lib.folder}/pax-logging-api-1.7.2.jar"/>
 
     <tstamp>

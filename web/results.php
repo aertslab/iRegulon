@@ -20,6 +20,70 @@ $jobID = retrieve_post_value('jobID', false, 'int_positive');
 
 
 
+/* Load ChIP-seq annotation files. */
+$chip_annotation_loaded = false;
+
+$chipCollection_to_description = array();
+$chipCollection_to_cluster = array();
+$chipCollection_to_TF = array();
+
+function load_chip_annotation($chip_version) {
+    global $chipCollection_to_description;
+    global $chipCollection_to_cluster;
+    global $chipCollection_to_TF;
+
+    if ($chip_version === 'chip_v1') {
+        $chipCollection_annotation_file = 'chipCollection-v1.tsv';
+        $chipCollection_cluster_file = 'chipCollection-v1.clusters';
+    } else if ($chip_version === 'chip_v2') {
+        $chipCollection_annotation_file = 'chipCollection-v2.tsv';
+        $chipCollection_cluster_file = 'chipCollection-v2.clusters';
+    } else if ($chip_version === 'chip_v3') {
+        $chipCollection_annotation_file = 'chipCollection-v3.tsv';
+        $chipCollection_cluster_file = 'chipCollection-v3.clusters';
+    } else {
+        return false;
+    }
+
+    $chipCollection_to_description = array();
+    $chipCollection_to_cluster = array();
+    $chipCollection_to_TF = array();
+
+    if ($fh = fopen($chipCollection_annotation_file, 'r')) {
+        while (!feof($fh)) {
+            $line = fgets($fh);
+            $columns = explode("\t", $line);
+
+            if (count($columns) === 4) {
+                if ($columns[0][0] != "#") {
+                    /* Get track description. */
+                    $chipCollection_to_description[$columns[2]] = rtrim($columns[3]);
+                }
+            }
+        }
+    }
+
+    if ($fh = fopen($chipCollection_cluster_file, 'r')) {
+        while (!feof($fh)) {
+            $line = fgets($fh);
+            $columns = explode("\t", $line);
+
+            if (count($columns) === 3) {
+                if ($columns[0][0] != "#") {
+                    /* Get cluster code and add 1000 so it doesn't clash with the motif cluster numbers. */
+                    $chipCollection_to_cluster[$columns[0]] = $columns[1] + 1000;
+                    /* Get corresponding TF. */
+                    $chipCollection_to_TF[$columns[0]] = rtrim($columns[2]);
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+
+
 /* Get MySQL connection parameters from configuration file. */
 $mysql_connection_parameters = get_mysql_connection_parameters();
 
@@ -108,6 +172,7 @@ try {
 $query_allfeatures = '
     SELECT
             enrichedFeature.ID,
+            enrichedFeature.rankingsdb,
             enrichedFeature.rank,
             enrichedFeature.name,
             enrichedFeature.description,
@@ -255,6 +320,29 @@ try {
             }
         }
 
+        /* Update results from ChIP-seq database with correct data from ChIP-seq annotation files. */
+        if (substr($row_enrichedFeature['rankingsdb'], -7, 4) === 'chip') {
+            if ($chip_annotation_loaded === false) {
+                /* Load ChIP-seq database annotation only on the first encounter of the rankings database name. */
+                if (substr($row_enrichedFeature['rankingsdb'], -7) === 'chip_v1') {
+                    $chip_annotation_loaded = load_chip_annotation('chip_v1');
+                } else if (substr($row_enrichedFeature['rankingsdb'], -7) === 'chip_v2') {
+                    $chip_annotation_loaded = load_chip_annotation('chip_v2');
+                } else if (substr($row_enrichedFeature['rankingsdb'], -7) === 'chip_v3') {
+                    $chip_annotation_loaded = load_chip_annotation('chip_v3');
+                }
+            }
+
+            $row_enrichedFeature['description'] = $chipCollection_to_description[$row_enrichedFeature['name']];
+            $row_enrichedFeature['clusterNumber'] = $chipCollection_to_cluster[$row_enrichedFeature['name']];
+            $TF_names[0] = $chipCollection_to_TF[$row_enrichedFeature['name']];
+            $TF_motifSimilarityFDR[0] = '-1';
+            $TF_orthologousIdentity[0] = '-1';
+            $TF_similarMotifName[0] = 'null';
+            $TF_similarMotifDescription[0] = 'null';
+            $TF_orthologousGeneName[0] = 'null';
+            $TF_orthologousSpecies[0] = 'null';
+        }
 
         /* Combine all the retrieved info to one line and append to the output so we get a TAB-separated file. */
         $output .= $nomenclature . "\t" .

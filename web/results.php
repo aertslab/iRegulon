@@ -41,6 +41,9 @@ function load_chip_annotation($chip_version) {
     } else if ($chip_version === 'chip_v3') {
         $chipCollection_annotation_file = 'chipCollection-v3.tsv';
         $chipCollection_cluster_file = 'chipCollection-v3.clusters';
+    } else if ($chip_version === 'tc_v1') {
+        $chipCollection_annotation_file = 'trackCollection-v1.tsv';
+        $chipCollection_cluster_file = 'trackCollection-v1.clusters';
     } else {
         return false;
     }
@@ -321,7 +324,7 @@ try {
         }
 
         /* Update results from ChIP-seq database with correct data from ChIP-seq annotation files. */
-        if (substr($row_enrichedFeature['rankingsdb'], -7, 4) === 'chip') {
+        if (substr($row_enrichedFeature['rankingsdb'], -7, 4) === 'chip' || substr($row_enrichedFeature['rankingsdb'], -6, 5) === '_tc_v') {
             if ($chip_annotation_loaded === false) {
                 /* Load ChIP-seq database annotation only on the first encounter of the rankings database name. */
                 if (substr($row_enrichedFeature['rankingsdb'], -7) === 'chip_v1') {
@@ -330,6 +333,8 @@ try {
                     $chip_annotation_loaded = load_chip_annotation('chip_v2');
                 } else if (substr($row_enrichedFeature['rankingsdb'], -7) === 'chip_v3') {
                     $chip_annotation_loaded = load_chip_annotation('chip_v3');
+                } else if (substr($row_enrichedFeature['rankingsdb'], -6) === '_tc_v1') {
+                    $chip_annotation_loaded = load_chip_annotation('tc_v1');
                 }
             }
 

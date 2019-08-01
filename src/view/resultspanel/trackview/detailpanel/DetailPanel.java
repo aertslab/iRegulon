@@ -1,6 +1,7 @@
 package view.resultspanel.trackview.detailpanel;
 
 import domainmodel.*;
+import infrastructure.IRegulonResourceBundle;
 import view.resultspanel.*;
 import view.resultspanel.guiwidgets.LinkTextField;
 import view.resultspanel.guiwidgets.LogoThumbnail;
@@ -17,9 +18,17 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseListener;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ResourceBundle;
 
 
 public class DetailPanel extends JPanel implements DetailPanelIF {
+    private static final ResourceBundle RESOURCE_BUNDLE = IRegulonResourceBundle.getBundle();
+
+    private static final String ENCODE_EXPERIMENT_PREFIX = "ENCFF";
+    private static final String ENCODE_EXPERIMENTS_URL = RESOURCE_BUNDLE.getString("encode_experiments_url");
+
     private JTable targetGeneTable;
     private LinkTextField jtfTrack;
     private JTextField jtfDescription;
@@ -220,10 +229,23 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
         refresh(getSelectedMotifOrTrack());
     }
 
+    private URI createTrackURI(final Track track) {
+        try {
+            if (track.getName().startsWith(ENCODE_EXPERIMENT_PREFIX)) {
+                return new URI(ENCODE_EXPERIMENTS_URL + track.getName() + "/");
+            }
+        } catch (URISyntaxException e) {
+            return null;
+        }
+
+        return null;
+    }
+
     private void refresh(AbstractMotifAndTrack motifOrTrack) {
         this.targetGeneTable.setModel(new CandidateTargetGeneTableModel(motifOrTrack));
         this.transcriptionFactorTable.setModel(new TranscriptionFactorTableModel(motifOrTrack, AbstractMotifAndTrack.TrackType.TRACK));
-        this.tfTrack.setTrack((Track) motifOrTrack);
+        final Track track = (Track) motifOrTrack;
+        this.tfTrack.setTrack(track);
 
         if (motifOrTrack == null) {
             this.jtfTrack.disableLink("");
@@ -231,6 +253,17 @@ public class DetailPanel extends JPanel implements DetailPanelIF {
             this.jtfDescription.setToolTipText("");
         } else {
             this.jtfTrack.disableLink(motifOrTrack.getName());
+            if (motifOrTrack.getTrackType() == AbstractMotifAndTrack.TrackType.TRACK) {
+                URI trackURI = createTrackURI(track);
+
+                if (trackURI != null) {
+                    this.jtfTrack.enableLink(track.getName(), trackURI);
+                } else {
+                    this.jtfTrack.disableLink(track.getName());
+                }
+            } else {
+                this.jtfTrack.disableLink(motifOrTrack.getName());
+            }
 
             this.jtfDescription.setText(motifOrTrack.getDescription());
             this.jtfDescription.setToolTipText("Description: " + motifOrTrack.getDescription());

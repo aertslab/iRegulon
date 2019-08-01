@@ -1146,15 +1146,15 @@
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
 
-        <database id="hg19_tss_up_500bp_chip_v1">
-            <name>500bp upstream (ChIP-seq-derived)</name>
+        <database id="hg19_tss_centered_10kb_chip_v1">
+            <name>20kb centered around TSS (ChIP-seq-derived)</name>
             <collection type="track" refid="v1"/>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
-            <delineation refid="up500bp"/>
+            <delineation refid="centered20kb"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
@@ -1174,30 +1174,31 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_10kb_chip_v1">
-            <name>20kb centered around TSS (ChIP-seq-derived)</name>
+        <database id="hg19_tss_up_500bp_chip_v1">
+            <name>500bp upstream (ChIP-seq-derived)</name>
             <collection type="track" refid="v1"/>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
-            <delineation refid="centered20kb"/>
+            <delineation refid="up500bp"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
 
-        <database id="hg19_tss_up_500bp_chip_v2">
-            <name>500bp upstream (ChIP-seq-derived)</name>
+
+        <database id="hg19_tss_centered_10kb_chip_v2">
+            <name>20kb centered around TSS (ChIP-seq-derived)</name>
             <collection type="track" refid="v2"/>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
-            <delineation refid="up500bp"/>
+            <delineation refid="centered20kb"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
@@ -1217,30 +1218,30 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_10kb_chip_v2">
-            <name>20kb centered around TSS (ChIP-seq-derived)</name>
+        <database id="hg19_tss_up_500bp_chip_v2">
+            <name>500bp upstream (ChIP-seq-derived)</name>
             <collection type="track" refid="v2"/>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
-            <delineation refid="centered20kb"/>
+            <delineation refid="up500bp"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
 
-        <database id="hg19_tss_up_500bp_chip_v3">
-            <name>500bp upstream (ChIP-seq-derived)</name>
+        <database id="hg19_tss_centered_10kb_chip_v3">
+            <name>20kb centered around TSS (ChIP-seq-derived)</name>
             <collection type="track" refid="v3"/>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
-            <delineation refid="up500bp"/>
+            <delineation refid="centered20kb"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
@@ -1260,30 +1261,30 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="hg19_tss_centered_10kb_chip_v3">
-            <name>20kb centered around TSS (ChIP-seq-derived)</name>
+        <database id="hg19_tss_up_500bp_chip_v3">
+            <name>500bp upstream (ChIP-seq-derived)</name>
             <collection type="track" refid="v3"/>
             <type>genes</type>
 
             <species>hg19</species>
             <nomenclature refid="1">HGNC</nomenclature>
 
-            <delineation refid="centered20kb"/>
+            <delineation refid="up500bp"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
 
-        <database id="mm9_tss_up_500bp_chip_v3">
-            <name>500bp upstream (ChIP-seq-derived)</name>
+        <database id="mm9_tss_centered_10kb_chip_v3">
+            <name>20kb centered around TSS (ChIP-seq-derived)</name>
             <collection type="track" refid="v3"/>
             <type>genes</type>
 
             <species>mm9</species>
             <nomenclature refid="2">MGI</nomenclature>
 
-            <delineation refid="up500bp"/>
+            <delineation refid="centered20kb"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
@@ -1303,20 +1304,21 @@
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
-        <database id="mm9_tss_centered_10kb_chip_v3">
-            <name>20kb centered around TSS (ChIP-seq-derived)</name>
+        <database id="mm9_tss_up_500bp_chip_v3">
+            <name>500bp upstream (ChIP-seq-derived)</name>
             <collection type="track" refid="v3"/>
             <type>genes</type>
 
             <species>mm9</species>
             <nomenclature refid="2">MGI</nomenclature>
 
-            <delineation refid="centered20kb"/>
+            <delineation refid="up500bp"/>
             <number-of-species>1</number-of-species>
 
             <default-nes-threshold>3.00</default-nes-threshold>
             <default-auc-threshold>0.03</default-auc-threshold>
         </database>
+
 
         <!-- Motif databases made with motif collection version 3 for regions -->
         <!--
